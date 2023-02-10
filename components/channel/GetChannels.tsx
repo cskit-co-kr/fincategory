@@ -10,6 +10,7 @@ type Props = {
   channels: Channel,
 }
 
+
 const GetChannels:FunctionComponent<Props> = ({channels}) => {
   const router = useRouter()
   const { locale } = router
