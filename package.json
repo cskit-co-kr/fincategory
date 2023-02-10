@@ -6,9 +6,24 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@heroicons/react": "^2.0.14",
+    "@mui/material": "^5.11.7",
+    "axios": "^1.2.6",
+    "formik": "^2.2.9",
+    "i18next": "^22.4.9",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-chained-backend": "^4.2.0",
+    "i18next-localstorage-backend": "^4.1.0",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-i18next": "^12.1.4",
+    "react-onclickoutside": "^6.12.2",
+    "react-select": "^5.7.0",
+    "recoil": "^0.7.6",
+    "rsuite": "^5.25.0"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

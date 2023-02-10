@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@layer components {
+    .bg-primary {
+        @apply bg-[#3886E2]
+    }
+    .text-primary {
+        @apply text-[#3886E2]
+    }
+    .border-primary {
+        @apply border-[#3886E2]
+    }
+}
