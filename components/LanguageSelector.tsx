@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { enUS } from '../lang/en-US'
 import { koKR } from '../lang/ko-KR'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
-import onClickOutside from "react-onclickoutside";
 
 function LanguageSelector() {
   const router = useRouter()
@@ -13,14 +12,24 @@ function LanguageSelector() {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  LanguageSelector.handleClickOutside = () => {
-    setIsOpen(false);
-  };
+  const browseRef = useRef<HTMLButtonElement>(null)
+
+    useEffect(() => {
+        if (!isOpen) return
+        function handleClick(event: any) {
+            if (browseRef.current && !browseRef.current.contains(event.target)) {
+                setIsOpen(false)
+            }
+        }
+        window.addEventListener("click", handleClick, true)
+        return () => window.removeEventListener("click", handleClick, true)
+    }, [isOpen])
 
   return (
     <div className='relative'>
         <button
             onClick={() => setIsOpen((prev) => !prev)}
+            ref={browseRef}
             className='flex gap-1 min-w-[66px] items-center text-[12px] font-bold'>
             {locale!=='en'
                 ? <><Image src="/south-korea.png" width={20} height={20} alt="" />{t['korean']}</>
@@ -55,9 +64,5 @@ function LanguageSelector() {
     </div>
   )
 }
-
-const clickOutsideConfig = {
-    handleClickOutside: () => LanguageSelector.handleClickOutside,
-  };
   
-  export default onClickOutside(LanguageSelector, clickOutsideConfig);
+export default LanguageSelector
