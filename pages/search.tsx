@@ -130,7 +130,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [subscribersTo, setSubscribersTo] = useState<any | null>('')
 
   const [searchResult, setSearchResult] = useState<any | null>(null);
-  const [searchResultText, setSearchResultText] = useState(t['empty-search-text'])
+  const [searchResultText, setSearchResultText] = useState<any>(t['empty-search-text'])
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more'])
 
   const [searchEvent, setSearchEvent] = useState<any | null>(null)
@@ -147,7 +147,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     setLoadMore(true)
     goToTop()
     setSearchResult(null)
-    setSearchResultText(t['loading-text']);
+    setSearchResultText(<Loader content={t['loading-text']} />);
     
     const data = {
         query: q.length > 0 ? q : searchText === '' ? null : searchText,
@@ -164,7 +164,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     }
     setSearchEvent(data)
 
-    const response = await axios.post(`http://client.fincategory.com/client/client/telegram/searchChannel`, data)
+    const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
     const result = await response.data.channel
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result)
     result.length < 21 && setLoadMore(false)
@@ -173,7 +173,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleLoadMore = async (data: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />)
     data['paginate'].limit = data['paginate'].limit + 21
-    const response = await axios.post(`http://client.fincategory.com/client/client/telegram/searchChannel`, data)
+    const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
     const result = await response.data.channel
     result.length - searchResult.length !== 21 && setLoadMore(false)
     setSearchResult(result)
