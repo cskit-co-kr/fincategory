@@ -72,16 +72,6 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       )
   })
 
-  useEffect(() => {
-    setOptions(cats)
-    setOptionsCountries(countries)
-    setOptionsLanguages(languages)
-
-    setIsLoading(false)
-    setIsLoadingCountries(false)
-    setIsLoadingLanguages(false)
-  }, [locale, props])
-
   const colorStyles = {
       multiValue: (styles:any, { data }:any) => {
           return {
@@ -142,6 +132,18 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       doSearch(router.query.q as string)
     }
   }, [router])
+
+  useEffect(() => {
+    setOptions(cats)
+    setOptionsCountries(countries)
+    setOptionsLanguages(languages)
+
+    setIsLoading(false)
+    setIsLoadingCountries(false)
+    setIsLoadingLanguages(false)
+    setLoadMoreText(t['load-more'])
+    setSearchResultText(t['empty-search-text'])
+  }, [locale, props])
 
   const doSearch = async (q:string) => {
     setLoadMore(true)

@@ -27,7 +27,7 @@ export const koKR = {
     "empty-search-text": "채널 검색에 필요한 필터 지정",
     "no-search-results": "에 대한 검색결과가 없습니다.",
     "loading-text": "로드 중...",
-    "load-more": "더 로드",
+    "load-more": "더보기",
     "category": "카테고리",
     "channel-region-and-language": "채널의 지역 및 언어"
 }
