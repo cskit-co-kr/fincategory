@@ -45,7 +45,9 @@ import { koKR } from '../../lang/ko-KR'
                         </div>
                         <div className="flex flex-col gap-4">
                             <div className='text-xl font-bold'>{channel.title}</div>
-                            <button className='w-min border border-gray-400 px-4 py-2 rounded-md text-primary text-sm'>@{channel.username}</button>
+                            <a href={`https://t.me/${channel.username}`} target='_blank'
+                                className='w-min border border-gray-400 px-4 py-2 rounded-md text-primary text-sm hover:no-underline'
+                            >@{channel.username}</a>
                             <p>{channel.description}</p>
                         </div>
                     </div>
