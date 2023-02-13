@@ -19,7 +19,7 @@ const GetChannels:FunctionComponent<Props> = ({channels}) => {
   const [error, setError] = useState<boolean>(false)
 
   return (
-    <Link href={{ pathname: "/telegram/"+channels.username }} className='hover:no-underline'>
+    <Link href={{ pathname: "/channel/"+channels.username }} className='hover:no-underline'>
       <div className='flex items-start border border-gray-200 rounded-md bg-white p-4 gap-[10px] text-black max-h-[140px]'>
         <Image
           src={error ? '/telegram-icon-96.png' : avatar}

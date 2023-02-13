@@ -164,7 +164,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     }
     setSearchEvent(data)
 
-    const response = await fetch('https://fincategory.com/api/search', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(data)
@@ -179,11 +179,22 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleLoadMore = async (data: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />)
     data['paginate'].limit = data['paginate'].limit + 21
-    const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
-    const result = await response.data.channel
+    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/searchChannel`, data)
+    //const result = await response.data.channel
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    const result = await response.json();
     result.length - searchResult.length !== 21 && setLoadMore(false)
     setSearchResult(result)
     setLoadMoreText(t['load-more'])
+  }
+  const handleKeyDown = (e:any) => {
+    if(e.key === 'Enter') {
+        doSearch('')
+    }
   }
 
   return (
@@ -202,6 +213,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
                 <input 
                     value={searchText}
                     onChange={(e: any) => setSearchText(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder={t['type-here']}
                     type='text'
                     className='py-3 px-3 text-xs outline-none rounded-lg border border-gray-200'
@@ -408,13 +420,13 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 export const getServerSideProps = async () => {
 
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/getCategory`)
+  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`)
   const categories = await result.data
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/getCountry`)
+  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`)
   const countries = await resCountry.data
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/getLanguages`)
+  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`)
   const languages = await resLanguage.data
 
   return {
