@@ -29,5 +29,10 @@ export const koKR = {
     "loading-text": "로드 중...",
     "load-more": "더보기",
     "category": "카테고리",
-    "channel-region-and-language": "채널의 지역 및 언어"
+    "channel-region-and-language": "채널의 지역 및 언어",
+    "contact-us": "연락처",
+    "customer-support": "고객지원",
+    "email": "이메일",
+    "our-channels": "우리의 채널",
+    "our-bots": "우리의 봇"
 }

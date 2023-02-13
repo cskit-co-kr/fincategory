@@ -29,5 +29,10 @@ export const enUS = {
     "loading-text": "Loading...",
     "load-more": "Load More",
     "category": "Category",
-    "channel-region-and-language": "Region and language"
+    "channel-region-and-language": "Region and language",
+    "contact-us": "Contact Us",
+    "customer-support": "Customer Support",
+    "email": "E-mail",
+    "our-channels": "Our Channels",
+    "our-bots": "Our Bots"
 }

@@ -1,7 +1,13 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { enUS } from '../lang/en-US'
+import { koKR } from '../lang/ko-KR'
 
 function Footer() {
+  const router = useRouter()
+  const { locale } = router
+  const t = locale === 'ko' ? koKR : enUS
   return (
     <div className='bg-white py-8 bottom-0 absolute w-full'>
         <div className='mx-auto max-w-7xl grid grid-cols-5'>
@@ -12,21 +18,20 @@ function Footer() {
                         Category
                     </a>
                 </div>
-                <h2 className='font-bold text-base'>Contact Us</h2>
+                <h2 className='font-bold text-base'>{t['contact-us']}</h2>
                 <ul className='list-none mt-3 leading-7'>
-                    <li><Link href='/'>Support</Link></li>
-                    <li><Link href='/'>E-mail</Link></li>
+                    <li><Link href='/'>{t['customer-support']}</Link></li>
+                    <li><Link href='/'>{t['email']}: jopaint@naver.com</Link></li>
                 </ul>
             </div>
             <div>
-                <h2 className='font-bold text-base'>Miscellaneous</h2>
+                <h2 className='font-bold text-base'>{t['our-channels']}</h2>
                 <ul className='list-none mt-3 leading-7'>
-                    <li><Link href='/'>Terms and conditions</Link></li>
-                    <li><Link href='/'>Privacy policy</Link></li>
+                    <li><Link href='/'>코인 상승 얼럿 Coin Pump Alert</Link></li>
                 </ul>
             </div>
             <div>
-                <h2 className='font-bold text-base'>Our bots</h2>
+                <h2 className='font-bold text-base'>{t['our-bots']}</h2>
                 <ul className='list-none mt-3 leading-7'>
                     <li><Link href='/'>@HHGYSBot</Link></li>
                     <li><Link href='/'>@cskitjopaint_bot</Link></li>
