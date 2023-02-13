@@ -41,7 +41,7 @@ const Home: NextPage = ({ channels }: InferGetServerSidePropsType<typeof getServ
                       className='object-contain rounded-full'
                       onError={() => setError(true)}
                     />
-                    <div className='flex flex-col items-center text-[12px]'>
+                    <div className='flex flex-col items-center text-[12px] text-gray-400'>
                       {t['subscribers']}
                       <span className='font-bold'>{channel.subscription}</span>
                     </div>
@@ -49,6 +49,9 @@ const Home: NextPage = ({ channels }: InferGetServerSidePropsType<typeof getServ
                   <div className='flex flex-col'>
                     <h1 className='font-semibold text-sm truncate'>{channel.title}</h1>
                     <p className='text-[12px]'>{channel.description}</p>
+                    <div>
+                      {channel.country.nicename}, {channel.language && channel.language.value}
+                    </div>
                   </div>
                 </div>
               </div>
