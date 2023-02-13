@@ -21,7 +21,11 @@ const Home: NextPage = () => {
       <Header />
 
       <div className='max-w-7xl mx-auto'>
-
+        <div className='grid grid-cols-3 gap-5'>
+          <div className='border border-gray-200 rounded-md bg-white'>1</div>
+          <div className='border border-gray-200 rounded-md bg-white'>2</div>
+          <div className='border border-gray-200 rounded-md bg-white'>3</div>
+        </div>
       </div>
 
       <Footer />
