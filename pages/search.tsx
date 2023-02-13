@@ -164,8 +164,14 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     }
     setSearchEvent(data)
 
-    const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
-    const result = await response.data.channel
+    const response = await fetch('http://localhost:3000/api/search', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    // const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
+    // const result = await response.data.channel
+    const result = await response.json();
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result)
     result.length < 21 && setLoadMore(false)
   }
