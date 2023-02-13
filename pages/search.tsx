@@ -164,7 +164,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     }
     setSearchEvent(data)
 
-    const response = await fetch('https://localhost:3000/api/search', {
+    const response = await fetch('https://fincategory.com/api/search', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(data)
