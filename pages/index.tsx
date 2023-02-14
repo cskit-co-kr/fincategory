@@ -82,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     paginate: {limit: 3, offset: 0}
   }
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
   const channels = await response.data.channel
 
   return {

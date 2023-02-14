@@ -20,7 +20,8 @@ const GetChannels:FunctionComponent<Props> = ({channels}) => {
 
   return (
     <Link href={{ pathname: "/channel/"+channels.username }} className='hover:no-underline'>
-      <div className='flex items-start border border-gray-200 rounded-md bg-white p-4 gap-[10px] text-black max-h-[140px]'>
+      <div className='flex items-start border border-gray-200 rounded-md bg-white p-4 gap-[10px] text-black max-h-[140px]
+                      transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:shadow-lg'>
         <Image
           src={error ? '/telegram-icon-96.png' : avatar}
           alt={ 'avatar of '+channels.title }
@@ -32,7 +33,7 @@ const GetChannels:FunctionComponent<Props> = ({channels}) => {
         <div className='flex flex-col gap-2'>
           <h2 className='font-semibold text-sm truncate w-[213px]'>{ channels.title }</h2>
           <p className='text-[12px] h-9 w-[213px] overflow-hidden'>{ channels.description }</p>
-          <p className='text-[12px] m-0 text-gray-400'>{t['subscribers']} <b>{ channels.subscription }</b></p>
+          <p className='text-[12px] m-0 text-gray-500'>{t['subscribers']} <b>{ channels.subscription }</b></p>
         </div>
       </div>
     </Link>

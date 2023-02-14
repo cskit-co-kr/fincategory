@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const Loaders = () => {
   return (
-      <div className='absolute top-0 left-0 flex justify-center items-center p-4 bg-gray-400 rounded-md'>
+      <div className='absolute top-0 left-0 flex justify-center items-center p-4 bg-gray-400 rounded-md -z-50'>
         <Loader />
       </div>
    )

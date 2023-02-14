@@ -20,13 +20,14 @@ function Header() {
     console.log(searchField)
     if(searchField !== null) {
         router.replace(`/search?q=${searchField}`)
-        setSearchField(null)
+        //setSearchField(null)
     }
   }
 
   const handleKeyDown = (e:any) => {
     if(e.key === 'Enter') {
         handleSubmit()
+        e.target.blur()
     }
   }
 

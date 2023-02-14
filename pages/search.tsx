@@ -196,6 +196,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleKeyDown = (e:any) => {
     if(e.key === 'Enter') {
         doSearch('')
+        e.target.blur()
     }
   }
 
@@ -206,7 +207,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Header />
-        <div className='flex w-[1280px] mx-auto'>
+        <div className='flex lg:w-[1280px] mx-auto'>
 
         <div className='flex flex-col w-[310px]'>
 
@@ -384,14 +385,14 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
             */}
             <button
                 onClick={() => doSearch('')}
-                className='bg-primary px-10 rounded-lg text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'>
+                className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'>
                     {t['search']}
             </button>
         </div>
 
     </div>
 
-          <div className='w-[954px] grid grid-cols-3 gap-4 ml-4 justify-items-stretch content-start'>
+          <div className='lg:w-[954px] grid grid-cols-3 gap-4 ml-4 justify-items-stretch content-start'>
             { 
               searchResult ? (
                 searchResult.map((channel:any, index:number) => {
@@ -405,7 +406,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
               <div className='flex justify-center col-span-3'>
                 <button 
                   onClick={() => handleLoadMore(searchEvent)}
-                  className='bg-primary px-5 rounded-lg text-sm font-semibold py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'>
+                  className='bg-primary px-5 rounded-full text-sm font-semibold py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'>
                     {loadMoreText}
                 </button>
               </div>

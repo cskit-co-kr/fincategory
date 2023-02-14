@@ -11,8 +11,7 @@ export default function handler(  req: NextApiRequest,  res: NextApiResponse) {
     }
 
     async function getToday() {
-        console.log('data: ', req.body.query);
-        
+       
         const resp = await axios.post('https://api.fincategory.com/client/telegram/searchChannel', {
             query: req.body.query,
             withDesc: req.body.withDesc,

@@ -7,6 +7,7 @@ import Footer from "../../components/Footer"
 import Header from "../../components/Header"
 import { enUS } from '../../lang/en-US'
 import { koKR } from '../../lang/ko-KR'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 
 
  
@@ -46,8 +47,12 @@ import { koKR } from '../../lang/ko-KR'
                         <div className="flex flex-col gap-4">
                             <div className='text-xl font-bold'>{channel.title}</div>
                             <a href={`https://t.me/${channel.username}`} target='_blank'
-                                className='w-min border border-gray-400 px-4 py-2 rounded-md text-primary text-sm hover:no-underline'
-                            >@{channel.username}</a>
+                                className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
+                                transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
+                            >
+                                @{channel.username}
+                                <ArrowTopRightOnSquareIcon className="h-4" />
+                            </a>
                             <p>{channel.description}</p>
                         </div>
                     </div>
@@ -60,7 +65,7 @@ import { koKR } from '../../lang/ko-KR'
                         <img src='/image-8.png' alt='fake graphic' />
                         <div className="flex justify-between text-[12px]">
                             <span className="text-gray-400">{t['category']}</span>
-                            <span className="text-primary">{JSON.parse(channel.category.name)[locale]}</span>
+                            <span className="text-primary">{channel.category && JSON.parse(channel.category.name)[locale]}</span>
                         </div>
                         <div className="flex justify-between text-[12px]">
                             <span className="text-gray-400">{t['channel-region-and-language']}</span>
