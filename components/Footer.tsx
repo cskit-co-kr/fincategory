@@ -21,13 +21,13 @@ function Footer() {
                 <h2 className='font-bold text-base'>{t['contact-us']}</h2>
                 <ul className='list-none mt-3 leading-7'>
                     <li><Link href='/'>{t['customer-support']}</Link></li>
-                    <li><Link href='/'>{t['email']}: jopaint@naver.com</Link></li>
+                    <li><Link href='mailto:jopaint@naver.com'>{t['email']}: jopaint@naver.com</Link></li>
                 </ul>
             </div>
             <div>
                 <h2 className='font-bold text-base'>{t['our-channels']}</h2>
                 <ul className='list-none mt-3 leading-7'>
-                    <li><Link href='/'>코인 상승 얼럿 Coin Pump Alert</Link></li>
+                    <li><Link href='https://t.me/comaps' target='_blank'>코인 상승 얼럿 Coin Pump Alert</Link></li>
                 </ul>
             </div>
             <div>
@@ -41,7 +41,7 @@ function Footer() {
             </div>
         </div>
         <div className='mx-auto max-w-7xl mt-10 font-semibold'>
-            © 2023 FinCategory. All rights reserved
+            © 2023 FinCategory. All Rights Reserved.
         </div>
     </div>
   )

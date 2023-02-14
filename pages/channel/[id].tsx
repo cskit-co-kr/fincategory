@@ -57,7 +57,7 @@ import { koKR } from '../../lang/ko-KR'
                     <div className='flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white min-h-[262px]'>
                         <h2 className='text-sm font-bold'>{t['subscribers']}</h2>
                         <span className="font-bold text-xl">{channel.subscription}</span>
-                        
+                        <img src='/image-8.png' alt='fake graphic' />
                         <div className="flex justify-between text-[12px]">
                             <span className="text-gray-400">{t['category']}</span>
                             <span className="text-primary">{JSON.parse(channel.category.name)[locale]}</span>

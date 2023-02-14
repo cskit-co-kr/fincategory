@@ -63,7 +63,7 @@ function Header() {
         </div>
         <nav className='flex mx-auto max-w-7xl'>
             <ul className='flex'>
-                <li>
+                <li className='hidden'>
                     <button className={getPath === '/' ? activePath : normalPath } onClick={() => router.push('/')}>
                         {t['home']}
                     </button>
