@@ -57,7 +57,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
                             <p>{channel.description}</p>
                         </div>
                     </div>
-
+                    {/*
                     <div className="px-[30px] py-4 gap-4 border flex flex-col border-gray-200 rounded-md bg-white">
                         <div className="flex gap-4 border-b border-gray-200 pb-2 w-full">
                             <div className="border border-gray-200 p-1 rounded-full">
@@ -94,6 +94,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
                             </div>
                         </div>
                     </div>
+                    */}
                 </div>
 
                 <div className='flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:ml-4 '>
