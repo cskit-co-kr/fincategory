@@ -22,6 +22,6 @@ export type Channel = {
     channel_lang: string,
 }
 export type MultiValueOptions = {
-    value: string,
+    value: any,
     label: any,
 }
