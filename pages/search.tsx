@@ -432,15 +432,13 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
                 <div className='md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-3 border border-gray-200 mt-4 md:mt-0'>
                     <span className='text-xs'>{t['total-search-results1']}{totalChannels}{t['total-search-results2']}</span>
                     <div className='ml-auto'>
-                        <span className='mr-2'>Sort by:</span>
+                        <span className='mr-2'>{t['sort-by']}</span>
                         <select onChange={e => {
                                 setSelectedSorting(e.target.value)
                                 doFilter(e.target.value)
                             }} value={selectedSorting} className='border rounded-md pl-2 pr-5 py-1 mt-4 md:mt-0'>
-                            <option value='subscription_desc'>Subscribers &darr;</option>
-                            <option value='subscription_asc'>Subscribers &uarr;</option>
-                            <option value='name_asc'>Name A-Z</option>
-                            <option value='name_desc'>Name Z-A</option>
+                            <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
+                            <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
                         </select>
                     </div>
                 </div>

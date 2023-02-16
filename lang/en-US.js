@@ -38,5 +38,8 @@ export const enUS = {
     "our-channels": "Our Channels",
     "our-bots": "Our Bots",
     "total-search-results1": "Search result: ",
-    "total-search-results2": " channels found."
+    "total-search-results2": " channels found.",
+    "sort-by": "Sort by: ",
+    "subscribers-desc": "Subscribers ",
+    "subscribers-asc": "Subscribers "
 }

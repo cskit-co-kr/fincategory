@@ -38,5 +38,8 @@ export const koKR = {
     "our-channels": "우리의 채널",
     "our-bots": "우리의 봇",
     "total-search-results1": "검색 결과: ",
-    "total-search-results2": " 채널을 찾았습니다."
+    "total-search-results2": " 채널을 찾았습니다.",
+    "sort-by": "정렬 기준",
+    "subscribers-desc": "구독자순 ",
+    "subscribers-asc": "구독자순 "
 }
