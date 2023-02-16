@@ -6,6 +6,8 @@ export const enUS = {
     "sign-in": "Sign in",
     "home": "Home",
     "search": "Search",
+    "new-channel-registration": "New channel registration",
+    "see-more": "See more",
     "by-keyword": "By Keyword",
     "type-here": "Type here...",
     "search-also-in-description": "Search also in description",
@@ -34,5 +36,7 @@ export const enUS = {
     "customer-support": "Customer Support",
     "email": "E-mail",
     "our-channels": "Our Channels",
-    "our-bots": "Our Bots"
+    "our-bots": "Our Bots",
+    "total-search-results1": "Search result: ",
+    "total-search-results2": " channels found."
 }

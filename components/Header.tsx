@@ -32,15 +32,15 @@ function Header() {
   }
 
   return (
-    <div className='absolute w-full top-0 h-[117px] bg-white'>
-        <div className='flex pt-4 justify-between items-center border-b pb-4 mx-auto max-w-7xl'>
+    <div className='absolute w-full top-0 h-[108px] md:h-[117px] bg-white'>
+        <div className='flex pt-4 justify-between items-center border-b pb-4 xl:mx-auto max-w-7xl mx-4'>
             <div className='font-raleway text-lg'>
                 <a href='/' className='hover:no-underline hover:text-current'>
                     <span className='font-bold text-primary'>Fin</span>
                     Category
                 </a>
             </div>
-            <div className='relative flex bg-neutral-100 items-center py-2 px-3 rounded-full'>
+            <div className='relative bg-neutral-100 items-center py-2 px-3 rounded-full hidden md:inline-flex'>
                 <MagnifyingGlassIcon className='h-5 text-neutral-500' />
                 <input 
                     type='text'
@@ -75,6 +75,9 @@ function Header() {
                     </button>
                 </li>
             </ul>
+            <button className={getPath === '/new-channel' ? activePath+' ml-auto' : normalPath+' ml-auto' } onClick={() => router.push('/')}>
+                {t['new-channel-registration']}
+            </button>
         </nav>
     </div>
   )

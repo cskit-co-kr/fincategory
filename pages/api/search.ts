@@ -28,7 +28,7 @@ export default function handler(  req: NextApiRequest,  res: NextApiResponse) {
 
         const data = await resp.data;
         if(resp.status === 200) {
-            res.status(200).json(data.channel);
+            res.status(200).json(data);
         } else {
             res.status(resp.status).json('Unexpected status code: ' + resp.status);
         }

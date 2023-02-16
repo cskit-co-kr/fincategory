@@ -8,6 +8,7 @@ import Header from "../../components/Header"
 import { enUS } from '../../lang/en-US'
 import { koKR } from '../../lang/ko-KR'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
+import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
 
  
@@ -23,7 +24,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
     const [error, setError] = useState<boolean>(false)
     
     return (
-        <div className='flex flex-col pt-36 bg-gray-50'>
+        <div className='pt-36 bg-gray-50'>
             <Head>
             <title>FinCategory - {channel.title}</title>
             <link rel="icon" href="/favicon.ico" />
@@ -31,16 +32,16 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
 
             <Header />
 
-            <div className='flex w-[1280px] mx-auto'>
-                <div className='w-[954px] flex flex-col gap-4 justify-items-stretch content-start'>
+            <div className='md:flex xl:w-[1280px] mx-auto'>
+                <div className='w-full md:w-[954px] flex flex-col gap-4 justify-items-stretch content-start'>
                     <div className='p-[30px] gap-4 border flex border-gray-200 rounded-md bg-white min-h-[262px]'>
-                        <div className='p-1 border border-gray-200 rounded-full justify-center items-center flex box-border min-w-fit'>
+                        <div className='p-1 border border-gray-200 rounded-full justify-center items-center hidden md:inline-flex box-border min-w-fit'>
                             <Image
                                 src={error ? '/telegram-icon-96.png' : avatar}
                                 alt={ channel.title }
                                 width={190}
                                 height={190}
-                                className='rounded-full object-contain'
+                                className='rounded-full object-contain w-6 h-6 md:w-[190px] md:h-[190px]'
                                 onError={() => setError(true)}
                             />
                         </div>
@@ -56,9 +57,46 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
                             <p>{channel.description}</p>
                         </div>
                     </div>
+
+                    <div className="px-[30px] py-4 gap-4 border flex flex-col border-gray-200 rounded-md bg-white">
+                        <div className="flex gap-4 border-b border-gray-200 pb-2 w-full">
+                            <div className="border border-gray-200 p-1 rounded-full">
+                                <Image
+                                    src={error ? '/telegram-icon-96.png' : avatar}
+                                    alt={ channel.title }
+                                    width={30}
+                                    height={30}
+                                    className='rounded-full object-contain'
+                                    onError={() => setError(true)}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-0.5">
+                                <div className='text-sm font-bold'>{channel.title}</div>
+                                <div className="text-xs text-gray-500">1월 8, 07:50</div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-2.5">
+                            <div>Image</div>
+                            <div>
+                                <h2>Title</h2>
+                                <p>Description</p>
+                            </div>
+                            <div className="flex gap-2 border-t border-gray-200 pt-3">
+                                <a href="" className="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 hover:no-underline">
+                                    <EyeIcon className="h-4" />100
+                                </a>
+                                <a href="" className="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 hover:no-underline">
+                                    <ShareIcon className="h-4" />100
+                                </a>
+                                <a href="" className="flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 hover:no-underline ml-auto">
+                                    <LinkIcon className="h-4" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className='flex flex-col w-[310px] ml-4 '>
+                <div className='flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:ml-4 '>
                     <div className='flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white min-h-[262px]'>
                         <h2 className='text-sm font-bold'>{t['subscribers']}</h2>
                         <span className="font-bold text-xl">{channel.subscription}</span>

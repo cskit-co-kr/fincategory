@@ -4,6 +4,8 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
+import AsyncSelect from 'react-select/async';
+
 import { MultiValueOptions } from '../typings'
 import { enUS } from '../lang/en-US'
 import { koKR } from '../lang/ko-KR'
@@ -13,6 +15,7 @@ import Slider from '@mui/material/Slider'
 import GetChannels from '../components/channel/GetChannels'
 import Head from 'next/head'
 import { Loader } from 'rsuite';
+import ChannelFilter from '../components/channel/ChannelFilter'
 
 type Options = {
     options: Array<MultiValueOptions>,
@@ -55,19 +58,23 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   })
 
   const countries = props.countries?.map((item:any) => {
+    const disable = item.nicename === 'Korea, Republic of' ? false : true
       return (
           {
           value: item.id,
-          label: item.nicename
+          label: item.nicename,
+          isDisabled: disable
           }
       )
   })
 
   const languages = props.languages?.map((item:any) => {
+    const disable = item.value === 'Korean' ? false : true
       return (
           {
           value: item.id,
-          label: item.value
+          label: item.value,
+          isDisabled: disable
           }
       )
   })
@@ -111,8 +118,8 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [searchText, setSearchText] = useState<any>('')
   const [selectDesc, setSelectDesc] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null)
-  const [selectedCountry, setSelectedCountry] = useState<any | null>(null)
-  const [selectedLanguage, setSelectedLanguage] = useState<any | null>(null)
+  const [selectedCountry, setSelectedCountry] = useState<any | null>([{value: 113, label: "Korea, Republic of"}])
+  const [selectedLanguage, setSelectedLanguage] = useState<any | null>([{value: "ko", label: "Korean"}])
   const [channelType, setChannelType] = useState<any | null>(null)
   const [channelsAge, setChannelsAge] = useState<number>(0)
   const [channelsERP, setChannelsERP] = useState<number>(0)
@@ -125,7 +132,13 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const [searchEvent, setSearchEvent] = useState<any | null>(null)
 
+  const [totalChannels, setTotalChannels] = useState<number>(0)
+
   const [loadMore, setLoadMore] = useState<boolean>(false)
+
+  useEffect(() => {
+    doSearch('')
+  }, [])
 
   useEffect(() => {
     if(router.query.q !== undefined) {
@@ -173,7 +186,9 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     })
     // const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
     // const result = await response.data.channel
-    const result = await response.json();
+    const resultData = await response.json();
+    const result = resultData.channel
+    setTotalChannels(resultData.total)
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result)
     result.length < 21 && setLoadMore(false)
   }
@@ -188,7 +203,8 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(data)
     })
-    const result = await response.json();
+    const resultData = await response.json();
+    const result = resultData.channel
     result.length - searchResult.length !== 21 && setLoadMore(false)
     setSearchResult(result)
     setLoadMoreText(t['load-more'])
@@ -207,7 +223,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Header />
-        <div className='flex lg:w-[1280px] mx-auto'>
+        <div className='md:flex xl:w-[1280px] mx-auto'>
 
         <div className='flex flex-col w-[310px]'>
 
@@ -244,6 +260,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
             </label>
             <label className='flex flex-col gap-2'>{t['channel-country']}
                 <Select 
+                    value={{value: 113, label: 'Korea, Republic of'}}
                     instanceId='country'
                     onChange={setSelectedCountry}
                     name='country' 
@@ -256,14 +273,15 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
             </label>
             <label className='flex flex-col gap-2'>{t['channel-language']}
                 <Select 
+                    value={{value: 'ko', label: 'Korean'}}
                     instanceId={'language'}
                     onChange={setSelectedLanguage}
                     name='language' 
                     isLoading={isLoadingLanguages} 
                     styles={colorStyles} 
-                    options={optionsLanguages} 
+                    options={optionsLanguages}
                     placeholder={t['select-language']} 
-                    isMulti 
+                    isMulti
                 />
             </label>
             <label className='flex flex-col gap-2'>{t['channel-type']}
@@ -392,7 +410,8 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     </div>
 
-          <div className='lg:w-[954px] grid grid-cols-3 gap-4 ml-4 justify-items-stretch content-start'>
+          <div className='xl:w-[954px] flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 md:ml-4 justify-items-stretch content-start'>
+            {searchResult ? (<ChannelFilter total={totalChannels} />) : null}
             { 
               searchResult ? (
                 searchResult.map((channel:any, index:number) => {
@@ -400,7 +419,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
                     <GetChannels channels={channel} key={index} />
                   )
                 })
-                ) : <div className='text-center p-10 border border-gray-200 rounded-md ml-4 bg-white col-span-3'>{searchResultText}</div>
+                ) : <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>{searchResultText}</div>
             }
             {loadMore && (
               <div className='flex justify-center col-span-3'>

@@ -6,6 +6,8 @@ export const koKR = {
     "sign-in": "로그인",
     "home": "홈",
     "search": "검색",
+    "new-channel-registration": "신규채널등록+",
+    "see-more": "더보기",
     "by-keyword": "키워드",
     "type-here": "여기에 입력...",
     "search-also-in-description": "설명도 함께 검색",
@@ -34,5 +36,7 @@ export const koKR = {
     "customer-support": "고객지원",
     "email": "이메일",
     "our-channels": "우리의 채널",
-    "our-bots": "우리의 봇"
+    "our-bots": "우리의 봇",
+    "total-search-results1": "검색 결과: ",
+    "total-search-results2": " 채널을 찾았습니다."
 }
