@@ -45,7 +45,7 @@ export const GetChannelsByCategory = ( { value, label }:any ) => {
                     alt={channel.title} src={`${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`} 
                 />
                 <span className='truncate'>{channel.title}</span>
-                <span className='ml-auto text-xs'>{channel.subscription}</span>
+                <span className='ml-auto text-xs'>{channel.subscription?.toLocaleString()}</span>
             </div>
             </Link>
         </div>

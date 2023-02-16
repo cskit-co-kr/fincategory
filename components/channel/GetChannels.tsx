@@ -34,7 +34,7 @@ const GetChannels:FunctionComponent<Props> = ({channels}) => {
           <h2 className='font-semibold text-sm truncate w-[213px]'>{ channels.title }</h2>
           <p className='text-[12px] h-9 w-[213px] overflow-hidden'>{ channels.description }</p>
           <div className='flex'>
-            <p className='text-[12px] m-0 text-gray-500'>{t['subscribers']} <b>{ channels.subscription }</b></p>
+            <p className='text-[12px] m-0 text-gray-500'>{t['subscribers']} <b>{ channels.subscription?.toLocaleString() }</b></p>
             <p className='text-[12px] m-0 text-gray-500 ml-auto'></p>
           </div>
         </div>

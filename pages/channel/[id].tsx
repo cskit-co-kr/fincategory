@@ -100,7 +100,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
                 <div className='flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:ml-4 '>
                     <div className='flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white min-h-[262px]'>
                         <h2 className='text-sm font-bold'>{t['subscribers']}</h2>
-                        <span className="font-bold text-xl">{channel.subscription}</span>
+                        <span className="font-bold text-xl">{channel.subscription?.toLocaleString()}</span>
                         <img src='/image-8.png' alt='fake graphic' />
                         <div className="flex justify-between text-[12px]">
                             <span className="text-gray-400">{t['category']}</span>

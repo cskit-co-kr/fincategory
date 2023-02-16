@@ -117,7 +117,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     subscribers_from: null,
     subscribers_to: null,
     paginate: {limit: 3, offset: 0},
-    sort: {field: 'subscription', order: 'desc'}
+    sort: {field: 'created_at', order: 'desc'}
   }
 
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
