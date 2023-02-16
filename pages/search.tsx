@@ -4,8 +4,6 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
-import AsyncSelect from 'react-select/async';
-
 import { MultiValueOptions } from '../typings'
 import { enUS } from '../lang/en-US'
 import { koKR } from '../lang/ko-KR'
@@ -15,7 +13,6 @@ import Slider from '@mui/material/Slider'
 import GetChannels from '../components/channel/GetChannels'
 import Head from 'next/head'
 import { Loader } from 'rsuite';
-import ChannelFilter from '../components/channel/ChannelFilter'
 
 type Options = {
     options: Array<MultiValueOptions>,
@@ -125,6 +122,8 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [channelsERP, setChannelsERP] = useState<number>(0)
   const [subscribersFrom, setSubscribersFrom] = useState<any | null>('')
   const [subscribersTo, setSubscribersTo] = useState<any | null>('')
+  const [sorting, setSorting] = useState({field: 'subscription', order: 'desc'})
+  const [selectedSorting, setSelectedSorting] = useState<string>('subscription_desc')
 
   const [searchResult, setSearchResult] = useState<any | null>(null);
   const [searchResultText, setSearchResultText] = useState<any>(t['empty-search-text'])
@@ -139,6 +138,9 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   useEffect(() => {
     doSearch('')
   }, [])
+  useEffect(() => {
+    doSearch('')
+  }, [sorting])
 
   useEffect(() => {
     if(router.query.q !== undefined) {
@@ -175,7 +177,8 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
         erp: channelsERP,
         subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
         subscribers_to: subscribersTo === '' ? null : subscribersTo,
-        paginate: {limit: 21, offset: 0}
+        paginate: {limit: 60, offset: 0},
+        sort: sorting
     }
     setSearchEvent(data)
 
@@ -190,12 +193,12 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const result = resultData.channel
     setTotalChannels(resultData.total)
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result)
-    result.length < 21 && setLoadMore(false)
+    result.length < 60 && setLoadMore(false)
   }
 
   const handleLoadMore = async (data: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />)
-    data['paginate'].limit = data['paginate'].limit + 21
+    data['paginate'].limit = data['paginate'].limit + 60
     //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/searchChannel`, data)
     //const result = await response.data.channel
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
@@ -205,7 +208,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     })
     const resultData = await response.json();
     const result = resultData.channel
-    result.length - searchResult.length !== 21 && setLoadMore(false)
+    result.length - searchResult.length !== 60 && setLoadMore(false)
     setSearchResult(result)
     setLoadMoreText(t['load-more'])
   }
@@ -213,6 +216,20 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     if(e.key === 'Enter') {
         doSearch('')
         e.target.blur()
+    }
+  }
+  function doFilter(e:any){
+    switch(e) {
+        case 'subscription_desc':
+            return setSorting({field: 'subscription', order: 'desc'});
+        case 'subscription_asc':
+            return setSorting({field: 'subscription', order: 'asc'});
+        case 'name_asc':
+            return setSorting({field: 'title', order: 'asc'});
+        case 'name_desc':
+            return setSorting({field: 'title', order: 'desc'});
+        default:
+            return 'foo';
     }
   }
 
@@ -411,7 +428,23 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     </div>
 
           <div className='xl:w-[954px] flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 md:ml-4 justify-items-stretch content-start'>
-            {searchResult ? (<ChannelFilter total={totalChannels} />) : null}
+            {searchResult ? (
+                <div className='md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-3 border border-gray-200 mt-4 md:mt-0'>
+                    <span className='text-xs'>{t['total-search-results1']}{totalChannels}{t['total-search-results2']}</span>
+                    <div className='ml-auto'>
+                        <span className='mr-2'>Sort by:</span>
+                        <select onChange={e => {
+                                setSelectedSorting(e.target.value)
+                                doFilter(e.target.value)
+                            }} value={selectedSorting} className='border rounded-md pl-2 pr-5 py-1 mt-4 md:mt-0'>
+                            <option value='subscription_desc'>Subscribers &darr;</option>
+                            <option value='subscription_asc'>Subscribers &uarr;</option>
+                            <option value='name_asc'>Name A-Z</option>
+                            <option value='name_desc'>Name Z-A</option>
+                        </select>
+                    </div>
+                </div>
+            ) : null}
             { 
               searchResult ? (
                 searchResult.map((channel:any, index:number) => {

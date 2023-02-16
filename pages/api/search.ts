@@ -24,6 +24,7 @@ export default function handler(  req: NextApiRequest,  res: NextApiResponse) {
             subscribers_from: req.body.subscribers_from,
             subscribers_to: req.body.subscribers_to,
             paginate: req.body.paginate,
+            sort: req.body.sort,
         })
 
         const data = await resp.data;
