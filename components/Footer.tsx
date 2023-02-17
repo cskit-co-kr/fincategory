@@ -10,7 +10,7 @@ function Footer() {
   const t = locale === 'ko' ? koKR : enUS
   return (
     <div className='bg-white py-8 bottom-0 absolute w-full'>
-        <div className='mx-auto xl:max-w-7xl md:grid md:grid-cols-5'>
+        <div className='mx-auto xl:max-w-7xl md:grid md:grid-cols-5 p-4 md:p-0'>
             <div>
                 <div className='mb-8 font-raleway text-lg'>
                     <a href='/' className='hover:no-underline hover:text-current'>

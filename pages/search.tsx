@@ -243,7 +243,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
         <div className='md:flex xl:w-[1280px] mx-auto'>
 
         <div className='flex flex-col w-[310px]'>
-
+<div className='sticky top-4'>
         <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
             <label className='flex flex-col gap-2'>{t['by-keyword']}
                 <input 
@@ -424,7 +424,7 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
                     {t['search']}
             </button>
         </div>
-
+</div>
     </div>
 
           <div className='xl:w-[954px] flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 md:ml-4 justify-items-stretch content-start'>

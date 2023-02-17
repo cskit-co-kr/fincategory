@@ -41,5 +41,15 @@ export const enUS = {
     "total-search-results2": " channels found.",
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
-    "subscribers-asc": "Subscribers "
+    "subscribers-asc": "Subscribers ",
+    /* add a channel */
+    "add-channel": "Add a channel",
+    "link-to": "Link to the channel or @username",
+    "country": "Country",
+    "choose-country": "Choose a country...",
+    "channel-language": "Channel content language",
+    "choose-language": "Choose a language...",
+    "channel-category": "Channel's category",
+    "choose-category": "Choose a category...",
+    "send": "Send"
 }

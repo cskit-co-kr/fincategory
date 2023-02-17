@@ -41,5 +41,15 @@ export const koKR = {
     "total-search-results2": " 채널을 찾았습니다.",
     "sort-by": "정렬 기준",
     "subscribers-desc": "구독자순 ",
-    "subscribers-asc": "구독자순 "
+    "subscribers-asc": "구독자순 ",
+    /* add a channel */
+    "add-channel": "채널 추가",
+    "link-to": "채널 또는 @username에 대한 링크",
+    "country": "국가",
+    "choose-country": "국가를 선택하세요...",
+    "channel-language": "채널 콘텐츠 언어",
+    "choose-language": "언어를 선택하세요...",
+    "channel-category": "채널 카테고리",
+    "choose-category": "카테고리를 선택하세요...",
+    "send": "보내다"
 }

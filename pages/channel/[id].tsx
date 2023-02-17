@@ -26,7 +26,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
     return (
         <div className='pt-36 bg-gray-50'>
             <Head>
-            <title>FinCategory - {channel.title}</title>
+            <title>{`FinCategory - ${channel.title}`}</title>
             <link rel="icon" href="/favicon.ico" />
             </Head>
 

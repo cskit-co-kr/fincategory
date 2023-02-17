@@ -75,7 +75,7 @@ function Header() {
                     </button>
                 </li>
             </ul>
-            <button className={getPath === '/new-channel' ? activePath+' ml-auto' : normalPath+' ml-auto' } onClick={() => router.push('/search')}>
+            <button className={getPath === '/new-channel' ? activePath+' ml-auto' : normalPath+' ml-auto' } onClick={() => router.push('/add')}>
                 {t['new-channel-registration']}
             </button>
         </nav>
