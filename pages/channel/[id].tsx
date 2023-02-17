@@ -12,7 +12,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
 
  
- function Channel({ channel }: any) {
+ function Channel({ channel, counter }: any) {
     const router = useRouter()
     
     const { locale }:any = router
@@ -123,11 +123,12 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
  export const getServerSideProps = async (context: any) => {
     const getId = context.query["id"]
     const result = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { "detail": getId })
-    const channel = result.data
+    const channel = result.data.detail
+    const counter = result.data.counter
 
     return {
         props: {
-            channel
+            channel, counter
         },
     }
   }
