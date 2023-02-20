@@ -51,5 +51,10 @@ export const enUS = {
     "choose-language": "Choose a language...",
     "channel-category": "Channel's category",
     "choose-category": "Choose a category...",
-    "send": "Send"
+    "send": "Send",
+    "please-username": "* Please input username",
+    "please-country": "* Please select a country",
+    "please-language": "* Please select a language",
+    "please-category": "* Please select a category",
+    "channel-add": " channel is successfully added!"
 }

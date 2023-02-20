@@ -51,5 +51,10 @@ export const koKR = {
     "choose-language": "언어를 선택하세요...",
     "channel-category": "채널 카테고리",
     "choose-category": "카테고리를 선택하세요...",
-    "send": "보내다"
+    "send": "보내다",
+    "please-username": "* 사용자 이름을 입력하세요",
+    "please-country": "* 국가를 선택하세요.",
+    "please-language": "* 언어를 선택하세요",
+    "please-category": "* 카테고리를 선택해주세요",
+    "channel-add": " 채널이 성공적으로 추가되었습니다!"
 }

@@ -34,18 +34,18 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
             <div className='md:flex xl:w-[1280px] mx-auto'>
                 <div className='w-full md:w-[954px] flex flex-col gap-4 justify-items-stretch content-start'>
-                    <div className='p-[30px] gap-4 border flex border-gray-200 rounded-md bg-white min-h-[262px]'>
-                        <div className='p-1 border border-gray-200 rounded-full justify-center items-center hidden md:inline-flex box-border min-w-fit'>
+                    <div className='p-[30px] gap-4 border md:flex border-gray-200 rounded-md bg-white min-h-[262px]'>
+                        <div className='p-1 border border-gray-200 rounded-full justify-center items-center md:inline-flex box-border min-w-fit w-fit mb-4 md:mb-0'>
                             <Image
                                 src={error ? '/telegram-icon-96.png' : avatar}
                                 alt={ channel.title }
                                 width={190}
                                 height={190}
-                                className='rounded-full object-contain w-6 h-6 md:w-[190px] md:h-[190px]'
+                                className='rounded-full object-contain w-20 h-20 md:w-[190px] md:h-[190px]'
                                 onError={() => setError(true)}
                             />
                         </div>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-4 w-full">
                             <div className='text-xl font-bold'>{channel.title}</div>
                             <a href={`https://t.me/${channel.username}`} target='_blank'
                                 className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
@@ -55,6 +55,17 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
                                 <ArrowTopRightOnSquareIcon className="h-4" />
                             </a>
                             <p>{channel.description}</p>
+                        </div>
+                        <div className="md:w-96 text-end flex md:flex-col gap-4 md:place-content-end mt-4 md:mt-0">
+                            <div className="flex flex-col justify-between text-[12px]">
+                                <span className="text-gray-400 font-semibold">{t['category']}</span>
+                                <span className="text-primary">{channel.category && JSON.parse(channel.category.name)[locale]}</span>
+                            </div>
+                            <div className="flex flex-col justify-between text-[12px] ml-auto md:m-0">
+                                <span className="text-gray-400 font-semibold">{t['channel-region-and-language']}</span>
+                                <span>{channel.country.nicename}, {channel.language && channel.language.value}</span>
+                            </div>
+                            
                         </div>
                     </div>
                     {/*
@@ -99,23 +110,21 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
                 <div className='flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:ml-4 '>
                     <div className='flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white min-h-[262px]'>
-                        <h2 className='text-sm font-bold'>{t['subscribers']}</h2>
-                        <span className="font-bold text-xl">{channel.subscription?.toLocaleString()}</span>
+                        <div className="flex space-between items-center">
+                            <h2 className='text-sm font-bold'>{t['subscribers']}</h2>
+                            <span className="font-bold text-base ml-auto">{channel.subscription?.toLocaleString()}</span>
+                        </div>
                         <img src='/image-8.png' alt='fake graphic' />
-                        <div className="flex justify-between text-[12px]">
-                            <span className="text-gray-400">{t['category']}</span>
-                            <span className="text-primary">{channel.category && JSON.parse(channel.category.name)[locale]}</span>
-                        </div>
-                        <div className="flex justify-between text-[12px]">
-                            <span className="text-gray-400">{t['channel-region-and-language']}</span>
-                            <span>{channel.country.nicename}, {channel.language && channel.language.value}</span>
-                        </div>
+                    </div>
+                    <div className='flex gap-4 border border-gray-200 rounded-md p-[30px] bg-white mt-4'>
+                        <span>Views:</span>
+                        <span className="ml-auto">오늘{counter.today}/누적{counter.total}</span>
                     </div>
                 </div>
             </div>
-            <div className='relative flex pt-[450px]'>
+            
                 <Footer />
-            </div>
+            
         </div>
     )
  }

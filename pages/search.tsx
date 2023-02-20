@@ -464,9 +464,9 @@ function Search(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
             }
           </div>
         </div>
-        <div className='relative flex pt-[320px]'>
+        
           <Footer />
-        </div>
+        
     </div>
   )
 }
