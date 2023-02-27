@@ -20,6 +20,7 @@ export type Channel = {
     category_id: string,
     country_id: string,
     channel_lang: string,
+    counter: any
 }
 export type MultiValueOptions = {
     value: any,

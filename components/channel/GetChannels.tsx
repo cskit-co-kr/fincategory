@@ -35,7 +35,7 @@ const GetChannels:FunctionComponent<Props> = ({channels}) => {
           <p className='text-[12px] h-9 w-[213px] overflow-hidden'>{ channels.description }</p>
           <div className='flex'>
             <p className='text-[12px] m-0 text-gray-500'>{t['subscribers']} <b>{ channels.subscription?.toLocaleString() }</b></p>
-            <p className='text-[12px] m-0 text-gray-500 ml-auto'></p>
+            <p className='text-[12px] m-0 text-gray-500 ml-auto'>오늘{channels.counter.today}/누적{channels.counter.total}</p>
           </div>
         </div>
       </div>
