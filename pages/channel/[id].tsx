@@ -12,7 +12,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
 
  
- function Channel({ channel, counter }: any) {
+ function Channel({ channel }: any) {
     const router = useRouter()
     
     const { locale }:any = router
@@ -118,7 +118,7 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
                     </div>
                     <div className='flex gap-4 border border-gray-200 rounded-md p-[30px] bg-white mt-4'>
                         <span>Views:</span>
-                        <span className="ml-auto">오늘{counter.today}/누적{counter.total}</span>
+                        <span className="ml-auto">오늘{channel.counter.today}/누적{channel.counter.total}</span>
                     </div>
                 </div>
             </div>
@@ -131,13 +131,12 @@ import { EyeIcon, ShareIcon, LinkIcon } from "@heroicons/react/24/outline"
 
  export const getServerSideProps = async (context: any) => {
     const getId = context.query["id"]
-    const result = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { "detail": getId })
-    const channel = result.data.detail
-    const counter = result.data.counter
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { "detail": getId })
+    const channel = response.data
 
     return {
         props: {
-            channel, counter
+            channel
         },
     }
   }
