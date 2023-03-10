@@ -21,6 +21,9 @@ import {
 } from 'recharts';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import SubscriberGrowthTable from '../../../components/channel/SubscriberGrowthTable';
+import { Pagination } from 'rsuite';
+
+const ITEMS_PER_PAGE = 30;
 
 const subscribers = ({ channel, sub }: any) => {
   const router = useRouter();
@@ -79,7 +82,7 @@ const subscribers = ({ channel, sub }: any) => {
     .map((val: any, idx: any) => ({ name: val.name, sub: val.sub - data[idx].sub }));
   const growthData2 = data.slice(1).map((val: any, idx: any) => ({
     name: val.name,
-    sub: data[idx].sub,
+    sub: val.sub,
     diff: val.sub - data[idx].sub,
   }));
   const gradientOffset = () => {
@@ -95,8 +98,13 @@ const subscribers = ({ channel, sub }: any) => {
 
     return dataMax / (dataMax - dataMin);
   };
-
   const off = gradientOffset();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = growthData2.reverse().slice(startIndex, endIndex);
+
   return (
     <div className='pt-36 bg-gray-50'>
       <Head>
@@ -181,7 +189,7 @@ const subscribers = ({ channel, sub }: any) => {
             <span className='font-semibold text-lg mb-1'>{t['by-days']}</span>
             <div className=''>
               {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
-              {growthData2.reverse().map((item: any, index: number) => (
+              {currentItems.map((item: any, index: number) => (
                 <div className='flex space-between w-full p-2.5 border-t' key={index}>
                   <div className='basis-1/3 text-gray-400'>
                     {new Date(item.name).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
@@ -200,6 +208,12 @@ const subscribers = ({ channel, sub }: any) => {
                   </div>
                 </div>
               ))}
+              <Pagination
+                total={growthData2.length}
+                limit={ITEMS_PER_PAGE}
+                activePage={currentPage}
+                onChangePage={(page) => setCurrentPage(page)}
+              />
             </div>
           </div>
         </div>
