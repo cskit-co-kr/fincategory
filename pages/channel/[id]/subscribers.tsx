@@ -181,8 +181,8 @@ const subscribers = ({ channel, sub }: any) => {
             <span className='font-semibold text-lg mb-1'>{t['by-days']}</span>
             <div className=''>
               {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
-              {growthData2.reverse().map((item: any) => (
-                <div className='flex space-between w-full p-2.5 border-t'>
+              {growthData2.reverse().map((item: any, index: number) => (
+                <div className='flex space-between w-full p-2.5 border-t' key={index}>
                   <div className='basis-1/3 text-gray-400'>
                     {new Date(item.name).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
                       day: 'numeric',
