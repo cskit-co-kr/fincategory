@@ -1,3 +1,4 @@
+// prettier-ignore
 export const koKR = {
     "fincategory": "핀카테고리",
     "quick-search": "Quick search...",
@@ -56,5 +57,29 @@ export const koKR = {
     "please-country": "* 국가를 선택하세요.",
     "please-language": "* 언어를 선택하세요",
     "please-category": "* 카테고리를 선택해주세요",
-    "channel-add": " 채널이 성공적으로 추가되었습니다!"
+    "channel-add": " 채널이 성공적으로 추가되었습니다!",
+    /* detail */
+    "views-per-post": "조회수 게시",
+    "posts-per-month": "월별 게시물",
+    "ERR": "ERR",
+    "Summary": "요약",
+    "Subscribers": "구독자",
+    "Citation-index": "인용 색인",
+    "Citation": "소환",
+    "Posts-reach": "게시물 도달",
+    "Views-analysis": "뷰 분석",
+    "Advertising-efficiency": "광고 효율성",
+    "Attracting-subscribers": "구독자 유치",
+    "Invite-links": "초대 링크",
+    "External-traffic": "외부 트래픽",
+    "Top-posts": "상위 게시물",
+    "Posts-schedule": "게시물 일정",
+    "statistics": "통계",
+    "Show-more": "더보기",
+    "Author": "작가",
+    /* detail - subscribers*/
+    "count": "세다",
+    "gain": "증가",
+    "by-days": "일 단위",
+    "no-posts": "채널에 게시물이 없습니다.",
 }

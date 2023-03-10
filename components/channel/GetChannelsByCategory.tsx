@@ -1,3 +1,4 @@
+import { Skeleton } from '@mui/material'
 import axios from 'axios'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -34,7 +35,7 @@ export const GetChannelsByCategory = ( { value, label }:any ) => {
     
   return (
     <div className='w-[386px] gap-2 flex flex-col'>
-      {channels.map((channel:any, index:number) => (
+      {channels ? (channels.map((channel:any, index:number) => (
         <div key={index} className='flex flex-col gap-4'>
             <Link href={"/channel/"+channel.username} className='hover:no-underline'>
             <div className='flex items-center gap-2'>
@@ -49,7 +50,7 @@ export const GetChannelsByCategory = ( { value, label }:any ) => {
             </div>
             </Link>
         </div>
-      ))}
+      ))) : (<div className='flex'><Skeleton variant="circular" width={28} height={28} /><Skeleton variant="rectangular" width={210} height={28} /></div>)}
     </div>
   )
 }

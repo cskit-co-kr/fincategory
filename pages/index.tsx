@@ -96,9 +96,9 @@ const Home: NextPage = ({ channels, categories }: InferGetServerSidePropsType<ty
         </div>
 
       </div>
-      <div className='relative flex pt-[320px]'>
+
         <Footer />
-      </div>
+
     </div>
   )
 }

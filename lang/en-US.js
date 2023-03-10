@@ -1,3 +1,4 @@
+// prettier-ignore
 export const enUS = {
     "fincategory": "Fincategory",
     "quick-search": "Quick search...",
@@ -56,5 +57,29 @@ export const enUS = {
     "please-country": "* Please select a country",
     "please-language": "* Please select a language",
     "please-category": "* Please select a category",
-    "channel-add": " channel is successfully added!"
+    "channel-add": " channel is successfully added!",
+    /* detail */
+    "views-per-post": "Views per post",
+    "posts-per-month": "Posts per month",
+    "ERR": "ERR",
+    "Summary": "Summary",
+    "Subscribers": "Subscribers",
+    "Citation-index": "Citation index",
+    "Citation": "Citation",
+    "Posts-reach": "Posts reach",
+    "Views-analysis": "Views analysis",
+    "Advertising-efficiency": "Advertising efficiency",
+    "Attracting-subscribers": "Attracting subscribers",
+    "Invite-links": "Invite links",
+    "External-traffic": "External traffic",
+    "Top-posts": "Top posts",
+    "Posts-schedule": "Posts schedule",
+    "statistics": "statistics",
+    "Show-more": "Show more",
+    "Author": "Author",
+    /* detail - subscribers*/
+    "count": "count",
+    "gain": "gain",
+    "by-days": "By days",
+    "no-posts": "There are no posts in the channel",
 }
