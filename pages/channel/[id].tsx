@@ -7,13 +7,7 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import {
-  UsersIcon,
-  ClipboardDocumentListIcon,
-  CalendarDaysIcon,
-  BoltIcon,
-  ChartBarSquareIcon,
-} from '@heroicons/react/24/outline';
+import { UsersIcon, ClipboardDocumentListIcon, CalendarDaysIcon, BoltIcon, ChartBarSquareIcon } from '@heroicons/react/24/outline';
 import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
 import Post from '../../components/channel/Post';
 import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, YAxis } from 'recharts';
@@ -100,34 +94,12 @@ function Channel({ channel, sub }: any) {
 
       <Header />
 
-      <div className='md:flex xl:w-[1280px] mx-auto'>
+      <div className='md:flex xl:w-[1280px] w-full mx-auto'>
         <ChannelDetailLeftSidebar channel={channel} />
         <div className='w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
-          <div className='flex gap-4'>
-            <div className='w-full md:w-[648px] gap-4 flex flex-col'>
-              {posts ? (
-                posts.messages.map((post: any, index: number) => {
-                  return <Post channel={channel} post={post} key={index} />;
-                })
-              ) : (
-                <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>
-                  {t['no-posts']}
-                </div>
-              )}
-              {loadMore && (
-                <div className='flex justify-center col-span-3'>
-                  <button
-                    onClick={() => handleLoadMore(searchEvent)}
-                    className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
-                  >
-                    {loadMoreText}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div>
-              <div className='w-full md:w-[310px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
+          <div className='flex-col lg:flex-row-reverse flex gap-4'>
+            <div className='gap-4 flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-col'>
+              <div className='w-full lg:w-[310px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
                 <div className='font-bold'>{t['subscribers']}</div>
                 <ResponsiveContainer width='100%' height={120}>
                   <AreaChart width={270} height={120} data={data.slice(-30)}>
@@ -140,14 +112,7 @@ function Channel({ channel, sub }: any) {
                     <Tooltip content={<CustomTooltip />} />
                     <XAxis dataKey='name' hide />
                     <YAxis type='number' domain={['dataMin', 'dataMax']} hide />
-                    <Area
-                      type='monotone'
-                      dataKey='sub'
-                      stroke='#3886E2'
-                      strokeWidth={2}
-                      fillOpacity={1}
-                      fill='url(#color)'
-                    />
+                    <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' />
                   </AreaChart>
                 </ResponsiveContainer>
                 <a
@@ -159,31 +124,29 @@ function Channel({ channel, sub }: any) {
                 </a>
               </div>
 
-              <div className='flex flex-wrap w-full md:w-[310px] mt-4 gap-4 h-fit'>
-                <div className='w-full md:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
+              <div className='grid grid-cols-2 lg:flex lg:flex-wrap w-full lg:w-[310px] gap-4 h-fit mt-4 md:mt-0 '>
+                <div className='w-full lg:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
                   <div className='flex items-center justify-between text-gray-400'>
                     <UsersIcon className='w-6 h-6 text-primary' />
                     {t['subscribers']}
                   </div>
-                  <div className='text-end font-semibold text-2xl'>
-                    {channel.subscription.toLocaleString()}
-                  </div>
+                  <div className='text-end font-semibold text-2xl'>{channel.subscription.toLocaleString()}</div>
                 </div>
-                <div className='w-full md:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
+                <div className='w-full lg:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
                   <div className='flex items-center justify-between text-gray-400'>
                     <ClipboardDocumentListIcon className='w-6 h-6 text-[#55A348]' />
                     {t['views-per-post']}
                   </div>
                   <div className='text-end font-semibold text-2xl'>~3,056</div>
                 </div>
-                <div className='w-full md:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
+                <div className='w-full lg:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
                   <div className='flex items-center justify-between text-gray-400'>
                     <CalendarDaysIcon className='w-6 h-6 text-[#9B7C0C]' />
                     {t['posts-per-month']}
                   </div>
                   <div className='text-end font-semibold text-2xl'>~82</div>
                 </div>
-                <div className='w-full md:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
+                <div className='w-full lg:w-[147px] flex flex-col gap-1 border border-gray-200 rounded-md p-[20px] bg-white'>
                   <div className='flex items-center justify-between text-gray-400'>
                     <BoltIcon className='w-6 h-6 text-[#CD5066]' />
                     {t['ERR']}
@@ -191,6 +154,26 @@ function Channel({ channel, sub }: any) {
                   <div className='text-end font-semibold text-2xl'>20.41%</div>
                 </div>
               </div>
+            </div>
+
+            <div className='w-full lg:w-[648px] gap-4 flex flex-col'>
+              {posts ? (
+                posts.messages.map((post: any, index: number) => {
+                  return <Post channel={channel} post={post} key={index} />;
+                })
+              ) : (
+                <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>{t['no-posts']}</div>
+              )}
+              {loadMore && (
+                <div className='flex justify-center col-span-3'>
+                  <button
+                    onClick={() => handleLoadMore(searchEvent)}
+                    className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                  >
+                    {loadMoreText}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -203,15 +186,9 @@ function Channel({ channel, sub }: any) {
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query['id'];
-  const response = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
-    { detail: getId }
-  );
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
   const channel = response.data;
-  const responseSub = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`,
-    { id: channel.channel_id }
-  );
+  const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
   const sub = responseSub.data;
 
   return {

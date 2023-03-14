@@ -78,6 +78,7 @@ export const enUS = {
     "Show-more": "Show more",
     "Author": "Author",
     /* detail - subscribers*/
+    "Subscribers-count": "Subscribers count",
     "count": "count",
     "gain": "gain",
     "by-days": "By days",

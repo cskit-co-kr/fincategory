@@ -78,6 +78,7 @@ export const koKR = {
     "Show-more": "더보기",
     "Author": "작가",
     /* detail - subscribers*/
+    "Subscribers-count": "구독자수",
     "count": "세다",
     "gain": "증가",
     "by-days": "일 단위",

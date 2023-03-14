@@ -7,18 +7,7 @@ import Footer from '../../../components/Footer';
 import Header from '../../../components/Header';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
-import {
-  AreaChart,
-  Area,
-  Tooltip,
-  XAxis,
-  ResponsiveContainer,
-  Brush,
-  YAxis,
-  Label,
-  Text,
-  CartesianGrid,
-} from 'recharts';
+import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, Label, Text, CartesianGrid } from 'recharts';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import SubscriberGrowthTable from '../../../components/channel/SubscriberGrowthTable';
 import { Pagination } from 'rsuite';
@@ -77,9 +66,7 @@ const subscribers = ({ channel, sub }: any) => {
     };
   });
 
-  const growthData = data
-    .slice(1)
-    .map((val: any, idx: any) => ({ name: val.name, sub: val.sub - data[idx].sub }));
+  const growthData = data.slice(1).map((val: any, idx: any) => ({ name: val.name, sub: val.sub - data[idx].sub }));
   const growthData2 = data.slice(1).map((val: any, idx: any) => ({
     name: val.name,
     sub: val.sub,
@@ -116,11 +103,9 @@ const subscribers = ({ channel, sub }: any) => {
 
       <div className='md:flex xl:w-[1280px] mx-auto'>
         <ChannelDetailLeftSidebar channel={channel} />
-        <div className='w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
-          <div className='w-full md:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
-            <div className='text-xl mx-auto text-black font-semibold'>
-              {t['Subscribers']} {t['count']}
-            </div>
+        <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
+            <div className='text-xl mx-auto text-black font-semibold'>{t['Subscribers-count']}</div>
             <ResponsiveContainer width='100%' height={420}>
               <AreaChart width={270} height={420} data={data}>
                 <defs>
@@ -133,54 +118,29 @@ const subscribers = ({ channel, sub }: any) => {
                 <XAxis dataKey='name' tick={<CustomizedAxisTick />} />
                 <YAxis type='number' domain={['dataMin', 'dataMax']} hide />
 
-                <Brush
-                  dataKey='name'
-                  stroke='#3886E2'
-                  startIndex={data.length - 30}
-                  endIndex={data.length - 1}
-                />
+                <Brush dataKey='name' stroke='#3886E2' startIndex={data.length - 30} endIndex={data.length - 1} />
 
-                <Area
-                  type='monotone'
-                  dataKey='sub'
-                  stroke='#3886E2'
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill='url(#color)'
-                  baseValue='dataMin'
-                />
+                <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
-          <div className='w-full md:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
+          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
             <div className='text-xl mx-auto text-black font-semibold'>
               {t['Subscribers']} {t['gain']}
             </div>
             <ResponsiveContainer width='100%' height={420}>
-              <AreaChart width={974} height={420} data={growthData}>
+              <AreaChart width={270} height={420} data={growthData}>
                 <Tooltip content={<CustomTooltip />} />
                 <XAxis dataKey='name' tick={<CustomizedAxisTick />} />
-                <Brush
-                  dataKey='name'
-                  stroke='#3886E2'
-                  startIndex={growthData.length - 30}
-                  endIndex={growthData.length - 1}
-                />
+                <Brush dataKey='name' stroke='#3886E2' startIndex={growthData.length - 30} endIndex={growthData.length - 1} />
                 <defs>
                   <linearGradient id='splitColor' x1='0' y1='0' x2='0' y2='1'>
                     <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
                     <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
                   </linearGradient>
                 </defs>
-                <Area
-                  type='monotone'
-                  dataKey='sub'
-                  stroke='#3886E2'
-                  strokeWidth={2}
-                  fillOpacity={0.5}
-                  fill='url(#splitColor)'
-                />
+                <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={0.5} fill='url(#splitColor)' />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -199,21 +159,12 @@ const subscribers = ({ channel, sub }: any) => {
                     })}
                   </div>
                   <div className='basis-1/3 text-center'>{item.sub.toLocaleString()}</div>
-                  <div
-                    className={`basis-1/3 text-right pr-2 ${
-                      item.diff < 0 ? 'text-red-400' : 'text-green-500'
-                    }`}
-                  >
-                    {item.diff}
-                  </div>
+                  <div className={`basis-1/3 text-right pr-2 ${item.diff < 0 ? 'text-red-400' : 'text-green-500'}`}>{item.diff}</div>
                 </div>
               ))}
-              <Pagination
-                total={growthData2.length}
-                limit={ITEMS_PER_PAGE}
-                activePage={currentPage}
-                onChangePage={(page) => setCurrentPage(page)}
-              />
+              <div className='mt-2.5 border p-2.5 rounded-md'>
+                <Pagination total={growthData2.length} limit={ITEMS_PER_PAGE} activePage={currentPage} onChangePage={(page) => setCurrentPage(page)} />
+              </div>
             </div>
           </div>
         </div>
@@ -226,15 +177,9 @@ const subscribers = ({ channel, sub }: any) => {
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query['id'];
-  const response = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
-    { detail: getId }
-  );
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
   const channel = response.data;
-  const responseSub = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`,
-    { id: channel.channel_id }
-  );
+  const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
   const sub = responseSub.data;
 
   return {

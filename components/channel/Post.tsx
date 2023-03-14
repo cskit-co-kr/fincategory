@@ -1,4 +1,5 @@
 import { EyeIcon, LinkIcon, ShareIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -56,6 +57,9 @@ const Post = ({ channel, post }: any) => {
           className='object-fill h-fit'
           onError={() => setError(true)}
           />*/}
+        <div className='bg-gray-100 w-full h-44 flex place-content-center items-center rounded-md'>
+          <PhotoIcon className='h-14 w-14 text-gray-300' />
+        </div>
         <div className={descHeight}>
           <div>{<RenderPost message={post.message} entities={post.entities} />}</div>
         </div>
@@ -71,11 +75,7 @@ const Post = ({ channel, post }: any) => {
             <EyeIcon className='h-4' />
             {post.views}
           </div>
-          <a
-            href={`https://t.me/${channel.username}/${post.id}`}
-            target='_blank'
-            className='flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 hover:no-underline ml-auto'
-          >
+          <a href={`https://t.me/${channel.username}/${post.id}`} target='_blank' className='flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 hover:no-underline ml-auto'>
             <LinkIcon className='h-4' />
           </a>
           <span className='text-xs'>
