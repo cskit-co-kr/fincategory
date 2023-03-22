@@ -11,12 +11,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function getPosts() {
-    const resp = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
-      username: req.body.username,
-      offset: req.body.offset,
-      limit: req.body.limit,
+    // const resp = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
+    //   username: req.body.username,
+    //   offset: req.body.offset,
+    //   limit: req.body.limit,
+    // });
+    const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${req.body.username}/posts`, {
+      paginate: {
+        limit: req.body.limit,
+        offset: req.body.offset,
+      },
     });
-    const data = await resp.data;
+    const data = await JSON.parse(JSON.stringify(resp.data));
 
     if (resp.status === 200) {
       res.status(200).json(data);

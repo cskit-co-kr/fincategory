@@ -83,4 +83,15 @@ export const koKR = {
     "gain": "증가",
     "by-days": "일 단위",
     "no-posts": "채널에 게시물이 없습니다.",
+    "Week": "일주",
+    "Month": "한달",
+    "Year": "년도",
+    "All-time": "항상",
+    "The-graph-above": "위 그래프는 \"%{channel.title}\" 채널 구독자 수의 일별 증가/감소를 보여줍니다.",
+    /* detail - posts-views */
+    "Average-post-reach": "평균 게시물 도달",
+    "The-average-number": "채널 게시물의 평균 조회수입니다.",
+    "Views-of-the": "일별 총 게시물 조회수",
+    "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
+    "Views": "조회 수",
 }

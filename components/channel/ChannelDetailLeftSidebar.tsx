@@ -29,7 +29,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   return (
     <div className='flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:mr-4 '>
-      <div className='sticky top-4'>
+      <div className='sticky inset-y-4'>
         <div className='flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white items-center'>
           <Image
             src={error ? '/telegram-icon-96.png' : avatar}
@@ -87,8 +87,8 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               {t['Citation']}
             </a>
           </li> */}
-            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
-              <a href='' className='hover:no-underline flex gap-2 items-center'>
+            <li className={`py-3 px-4 rounded-xl ${router.pathname == '/channel/[id]/posts-views' ? 'bg-[#F5F7F9]' : 'hover:bg-[#F5F7F9]'}`}>
+              <a href={`${menuPath}channel/${channel.username}/posts-views`} className='hover:no-underline flex gap-2 items-center'>
                 <EyeIcon className='h-3' />
                 {t['Posts-reach']}
               </a>

@@ -83,4 +83,15 @@ export const enUS = {
     "gain": "gain",
     "by-days": "By days",
     "no-posts": "There are no posts in the channel",
+    "Week": "Week",
+    "Month": "Month",
+    "Year": "Year",
+    "All-time": "All time",
+    "The-graph-above": "The graph above shows the subscribers of the channel \"%{channel.title}\".",
+    /* detail - posts-views */
+    "Average-post-reach": "Average post reach",
+    "The-average-number": "The average number of views that the channel's posts gain.",
+    "Views-of-the": "Views of the posts in total by day",
+    "Total-number-of": "Total number of views that all posts of the channel gain per day.",
+    "Views": "Views",
 }
