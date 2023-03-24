@@ -37,7 +37,6 @@ const RenderPost = ({ message, entities }: any) => {
       case 'messageEntityBold':
         styledMessage = styledMessage.slice(0, start) + '<b>' + styledMessage.slice(start, end) + '</b>' + styledMessage.slice(end);
         addedPosition = addedPosition + 7;
-        console.log(styledMessage);
         break;
 
       case 'messageEntityItalic':
