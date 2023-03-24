@@ -94,4 +94,12 @@ export const enUS = {
     "Views-of-the": "Views of the posts in total by day",
     "Total-number-of": "Total number of views that all posts of the channel gain per day.",
     "Views": "Views",
+    "ERR-engagement-by-views": "ERR — engagement by views",
+    "Percentage-of-subscribers": "Percentage of subscribers who read channel posts",
+    /* detail - attraction */
+    "attraction-text-1": "Table below shows how \"%{channel.title}\" channel attracts traffic from other Telegram channels: the number of mentions of the channel, the total monthly reach of these mentions, and the increase of new subscribers for the specified month.",
+    "attraction-text-2": "This data will help you to evaluate how the channel's admin attracts the audience to the channel, the performance of the promo and an approximate volume of money spent on promotion.",
+    /* detail - top-posts */
+    "The-most-popular-posts": "The most popular posts",
+    "top-posts-text-1": "This page shows the most popular posts of the \"%{channel.title}\" channel since the last 30 days by number of views / forwards / reposts / comments / reactions.",
 }

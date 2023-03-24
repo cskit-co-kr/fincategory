@@ -61,7 +61,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             </span>
           </div>
         </div>
-        <div className='flex gap-4 border border-gray-200 rounded-md p-4 bg-white mt-4'>
+        {/* <div className='flex gap-4 border border-gray-200 rounded-md p-4 bg-white mt-4'>
           <ul className='w-full text-[0.813rem] font-semibold'>
             <li className={`py-3 px-4 rounded-xl ${router.pathname == '/channel/[id]' ? 'bg-[#F5F7F9]' : 'hover:bg-[#F5F7F9]'}`}>
               <a href={`${menuPath}channel/${channel.username}`} className='hover:no-underline flex gap-2 items-center'>
@@ -75,7 +75,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 {t['Subscribers']}
               </a>
             </li>
-            {/* <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
+            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
             <a href='' className='hover:no-underline flex gap-2 items-center'>
               <AtSymbolIcon className='h-3' />
               {t['Citation-index']}
@@ -86,7 +86,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               <ChatBubbleLeftRightIcon className='h-3' />
               {t['Citation']}
             </a>
-          </li> */}
+          </li>
             <li className={`py-3 px-4 rounded-xl ${router.pathname == '/channel/[id]/posts-views' ? 'bg-[#F5F7F9]' : 'hover:bg-[#F5F7F9]'}`}>
               <a href={`${menuPath}channel/${channel.username}/posts-views`} className='hover:no-underline flex gap-2 items-center'>
                 <EyeIcon className='h-3' />
@@ -99,44 +99,44 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 {t['Views-analysis']}
               </a>
             </li>
-            {/* <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
+            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
             <a href='' className='hover:no-underline flex gap-2 items-center'>
               <RocketLaunchIcon className='h-3' />
               {t['Advertising-efficiency']}
             </a>
-          </li> */}
-            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
-              <a href='' className='hover:no-underline flex gap-2 items-center'>
+          </li>
+            <li className={`py-3 px-4 rounded-xl ${router.pathname == '/channel/[id]/attraction' ? 'bg-[#F5F7F9]' : 'hover:bg-[#F5F7F9]'}`}>
+              <a href={`${menuPath}channel/${channel.username}/attraction`} className='hover:no-underline flex gap-2 items-center'>
                 <ArrowTrendingUpIcon className='h-3' />
                 {t['Attracting-subscribers']}
               </a>
             </li>
-            {/* <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
+            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
             <a href='' className='hover:no-underline flex gap-2 items-center'>
               <LinkIcon className='h-3' />
               {t['Invite-links']}
             </a>
-          </li> */}
-            {/* <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
+          </li>
+            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
             <a href='' className='hover:no-underline flex gap-2 items-center'>
               <ArrowsRightLeftIcon className='h-3' />
               {t['External-traffic']}
             </a>
-          </li> */}
+          </li>
             <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
               <a href='' className='hover:no-underline flex gap-2 items-center'>
                 <HandThumbUpIcon className='h-3' />
                 {t['Top-posts']}
               </a>
             </li>
-            {/* <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
+            <li className='py-3 px-4 hover:bg-[#F5F7F9] rounded-xl'>
             <a href='' className='hover:no-underline flex gap-2 items-center'>
               <CalendarDaysIcon className='h-3' />
               {t['Posts-schedule']}
             </a>
-          </li> */}
+          </li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeft
 import Post from '../../components/channel/Post';
 import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, YAxis } from 'recharts';
 import { Loader } from 'rsuite';
+import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
+import { Channel } from '../../typings';
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -25,7 +27,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-function Channel({ channel, sub }: any) {
+function ChannelDetail({ channel, sub, averageViews, averagePosts, averageErr }: any) {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -95,6 +97,7 @@ function Channel({ channel, sub }: any) {
       <div className='md:flex xl:w-[1280px] w-full mx-auto'>
         <ChannelDetailLeftSidebar channel={channel} />
         <div className='w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <ChannelDetailNav channel={channel} />
           <div className='flex-col lg:flex-row-reverse flex gap-4'>
             <div>
               <div className='sticky inset-y-4 gap-4 flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-col'>
@@ -136,33 +139,33 @@ function Channel({ channel, sub }: any) {
                       <ClipboardDocumentListIcon className='w-5 h-5 text-[#55A348]' />
                       {t['views-per-post']}
                     </div>
-                    <div className='text-center font-semibold text-base'>~3,056</div>
+                    <div className='text-center font-semibold text-base'>~{averageViews.toLocaleString()}</div>
                   </div>
                   <div className='flex flex-col gap-1 border-r'>
                     <div className='flex items-center gap-2 text-gray-400'>
                       <CalendarDaysIcon className='w-5 h-5 text-[#9B7C0C]' />
                       {t['posts-per-month']}
                     </div>
-                    <div className='text-center font-semibold text-base'>~82</div>
+                    <div className='text-center font-semibold text-base'>~{averagePosts}</div>
                   </div>
                   <div className='flex flex-col gap-1'>
                     <div className='flex items-center gap-2 text-gray-400'>
                       <BoltIcon className='w-5 h-5 text-[#CD5066]' />
                       {t['ERR']}
                     </div>
-                    <div className='text-center font-semibold text-base'>20.41%</div>
+                    <div className='text-center font-semibold text-base'>{parseFloat(averageErr).toFixed(2)}%</div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className='w-full lg:w-[648px] gap-4 flex flex-col'>
-              {posts ? (
+              {posts !== null ? (
                 posts.map((post: any, index: number) => {
                   return <Post channel={channel} post={post} key={index} />;
                 })
               ) : (
-                <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>{t['no-posts']}</div>
+                <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>
               )}
               {loadMore && (
                 <div className='flex justify-center col-span-3'>
@@ -194,11 +197,42 @@ export const getServerSideProps = async (context: any) => {
   const channel = response.data;
   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
   const sub = responseSub.data;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ channel_id: channel.channel_id }),
+  });
+  const combinedReturn = await res.json();
+  let averageViews = 0;
+  let averagePosts = 0;
+  let averageErr = 0;
+  if (combinedReturn[0].total.length > 0) {
+    averageViews = Math.round(
+      combinedReturn[0].average.reduce((a: any, b: any) => {
+        return a + b.average;
+      }, 0) / combinedReturn[0].average.length
+    );
+    averagePosts = Math.round(
+      combinedReturn[0].average.reduce((a: any, b: any) => {
+        return a + b.views.length;
+      }, 0) / combinedReturn[0].average.length
+    );
+    const errPercent = combinedReturn[0].average.map((item: any) => ({ date: item.date, views: Math.round((item.average * 100) / channel.subscription) }));
+    averageErr =
+      errPercent.reduce((a: any, b: any) => {
+        return a + b.views;
+      }, 0) / errPercent.length;
+  }
+
   if (channel !== '') {
     return {
       props: {
         channel,
         sub,
+        averageViews,
+        averagePosts,
+        averageErr,
       },
     };
   } else {
@@ -208,4 +242,4 @@ export const getServerSideProps = async (context: any) => {
   }
 };
 
-export default Channel;
+export default ChannelDetail;

@@ -14,4 +14,7 @@
   .border-primary {
     @apply border-[#3886E2];
   }
+  .bg-secondary {
+    @apply bg-[#F3F9FF];
+  }
 }

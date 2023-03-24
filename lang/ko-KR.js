@@ -94,4 +94,12 @@ export const koKR = {
     "Views-of-the": "일별 총 게시물 조회수",
     "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
     "Views": "조회 수",
+    "ERR-engagement-by-views": "ERR — 조회수 참여",
+    "Percentage-of-subscribers": "채널 게시물을 읽는 구독자 비율",
+    /* detail - attraction */
+    "attraction-text-1": "Table below shows how \"%{channel.title}\" channel attracts traffic from other Telegram channels: the number of mentions of the channel, the total monthly reach of these mentions, and the increase of new subscribers for the specified month.",
+    "attraction-text-2": "This data will help you to evaluate how the channel's admin attracts the audience to the channel, the performance of the promo and an approximate volume of money spent on promotion.",
+    /* detail - top-posts */
+    "The-most-popular-posts": "가장 인기있는 게시물",
+    "top-posts-text-1": "이 페이지는 지난 30일 이후 \"%{channel.title}\" 채널의 가장 인기 있는 게시물을 조회/전달/재게시/댓글/반응 수별로 보여줍니다.",
 }

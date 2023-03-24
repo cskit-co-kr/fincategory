@@ -9,15 +9,27 @@ import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, CartesianGrid } from 'recharts';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
+import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 
-const postsViews = ({ channel, totalViews, averageViews }: any) => {
+const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
   const CustomTooltip = ({ active, payload, label, which }: any) => {
     if (active && payload && payload.length) {
-      const tooltipName = which === '1' ? t['Average-post-reach'] : t['Views'];
+      let tooltipName;
+      switch (which) {
+        case '1':
+          tooltipName = t['Average-post-reach'];
+          break;
+        case '2':
+          tooltipName = t['Views'];
+          break;
+        case '3':
+          tooltipName = t['ERR'];
+          break;
+      }
       return (
         <div className='flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md'>
           <span className='bg-gray-200 p-1.5'>
@@ -30,6 +42,7 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
           <span className='p-1.5 flex gap-1'>
             <UserCircleIcon className='h-4 text-primary' />
             <b>{tooltipName}:</b> {payload[0].value.toLocaleString()}
+            {which === '3' && '%'}
           </span>
         </div>
       );
@@ -52,11 +65,12 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
     );
   };
 
-  const CustomizedYAxisTick = ({ x, y, payload }: any) => {
+  const CustomizedYAxisTick = ({ x, y, payload, which }: any) => {
     return (
       <g transform={`translate(${x},${y})`}>
         <text x={0} y={0} textAnchor='end' fill='#a3a3a3' className='text-xs'>
           {payload.value.toLocaleString()}
+          {which === '3' && '%'}
         </text>
       </g>
     );
@@ -90,34 +104,36 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
     }
   };
 
-  const [subscribersGrowth, setSubscribersGrowth] = useState<number>(totalViews.length - 30);
-  const [subscribersGrowthWMYA, setSubscribersGrowthWMYA] = useState<string>('month');
+  const [totalCount, setTotalCount] = useState<number>(totalViews.length - 30);
+  const [totalWMYA, setTotalWMYA] = useState<string>('month');
 
-  const setSubscribersGrowthRange = (range: any) => {
+  const setTotalViewsRange = (range: any) => {
     switch (range) {
       case 'week':
-        setSubscribersGrowth(totalViews.length - 7);
-        setSubscribersGrowthWMYA('week');
+        setTotalCount(totalViews.length - 7);
+        setTotalWMYA('week');
         break;
       case 'month':
-        setSubscribersGrowth(totalViews.length - 30);
-        setSubscribersGrowthWMYA('month');
+        setTotalCount(totalViews.length - 30);
+        setTotalWMYA('month');
         break;
       case 'year':
-        setSubscribersGrowth(totalViews.length - 365);
-        setSubscribersGrowthWMYA('year');
+        setTotalCount(totalViews.length - 365);
+        setTotalWMYA('year');
         break;
       case 'all':
-        setSubscribersGrowth(0);
-        setSubscribersGrowthWMYA('all');
+        setTotalCount(0);
+        setTotalWMYA('all');
         break;
     }
   };
 
+  const [errPercentCount, setErrPercentCount] = useState<number>(errPercent.length - 30);
+
   return (
     <div className='pt-36 bg-gray-50'>
       <Head>
-        <title>{`${router.query.id} - ${t['Subscribers']} ${t['statistics']}`}</title>
+        <title>{`${router.query.id} - ${t['Posts-reach']}`}</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
@@ -126,8 +142,9 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
       <div className='md:flex xl:w-[1280px] mx-auto text-black'>
         <ChannelDetailLeftSidebar channel={channel} />
         <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <ChannelDetailNav channel={channel} />
           <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold mb-4'>{t['Average-post-reach']}</div>
+            <div className='text-xl mx-auto font-semibold my-4'>{t['Average-post-reach']}</div>
             {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
                 onClick={() => setAveragesCountRange('week')}
@@ -184,13 +201,13 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
           </div>
 
           <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold mb-4'>{t['Views-of-the']}</div>
+            <div className='text-xl mx-auto font-semibold my-4'>{t['Views-of-the']}</div>
             <ResponsiveContainer width='100%' height={420}>
               <AreaChart width={270} height={420} data={totalViews}>
                 <defs>
-                  <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
-                    <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
+                  <linearGradient id='color2' x1='0' y1='0' x2='0' y2='1'>
+                    <stop offset='5%' stopColor='#55A348' stopOpacity={0.3} />
+                    <stop offset='95%' stopColor='#55A348' stopOpacity={0.2} />
                   </linearGradient>
                 </defs>
                 <Tooltip content={<CustomTooltip which='2' />} />
@@ -198,12 +215,35 @@ const postsViews = ({ channel, totalViews, averageViews }: any) => {
                 <YAxis type='number' domain={[0, 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
                 <CartesianGrid vertical={false} />
 
-                <Brush dataKey='date' stroke='#3886E2' startIndex={totalViews.length - 30} endIndex={totalViews.length - 1} />
+                <Brush dataKey='date' stroke='#55A348' startIndex={totalCount} endIndex={totalViews.length - 1} />
 
-                <Area type='monotone' dataKey='views' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                <Area type='monotone' dataKey='views' stroke='#55A348' strokeWidth={2} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
               </AreaChart>
             </ResponsiveContainer>
             <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Total-number-of']}</div>
+          </div>
+
+          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='text-xl mx-auto font-semibold my-4'>{t['ERR-engagement-by-views']}</div>
+            <ResponsiveContainer width='100%' height={420}>
+              <AreaChart width={270} height={420} data={errPercent}>
+                <defs>
+                  <linearGradient id='color3' x1='0' y1='0' x2='0' y2='1'>
+                    <stop offset='5%' stopColor='#CD5066' stopOpacity={0.3} />
+                    <stop offset='95%' stopColor='#CD5066' stopOpacity={0.2} />
+                  </linearGradient>
+                </defs>
+                <Tooltip content={<CustomTooltip which='3' />} />
+                <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
+                <YAxis type='number' domain={[0, 'dataMax']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick which='3' />} />
+                <CartesianGrid vertical={false} />
+
+                <Brush dataKey='date' stroke='#CD5066' startIndex={errPercentCount} endIndex={errPercent.length - 1} />
+
+                <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={2} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
+              </AreaChart>
+            </ResponsiveContainer>
+            <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Percentage-of-subscribers']}</div>
           </div>
         </div>
       </div>
@@ -225,13 +265,17 @@ export const getServerSideProps = async (context: any) => {
   });
   const combinedReturn = await res.json();
   const totalViews = combinedReturn[0].total.reverse();
-  const averageViews = combinedReturn[0].average.reverse();
+  const averageViews = combinedReturn[0].average;
+  const errPercent = combinedReturn[0].average
+    .reverse()
+    .map((item: any) => ({ date: item.date, views: Math.round((item.average * 100) / channel.subscription) }));
 
   return {
     props: {
       channel,
       totalViews,
       averageViews,
+      errPercent,
     },
   };
 };

@@ -11,6 +11,7 @@ import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, Lab
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import SubscriberGrowthTable from '../../../components/channel/SubscriberGrowthTable';
 import { Pagination } from 'rsuite';
+import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -161,6 +162,7 @@ const subscribers = ({ channel, sub }: any) => {
       <div className='md:flex xl:w-[1280px] mx-auto text-black'>
         <ChannelDetailLeftSidebar channel={channel} />
         <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <ChannelDetailNav channel={channel} />
           <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
             <div className='ml-5 gap-4 items-center'>
               <div className='pb-2 text-lg font-semibold text-center'>{t['Subscribers-count']}</div>
