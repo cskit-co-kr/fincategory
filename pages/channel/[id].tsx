@@ -94,14 +94,14 @@ function ChannelDetail({ channel, sub, averageViews, averagePosts, averageErr }:
 
       <Header />
 
-      <div className='md:flex xl:w-[1280px] w-full mx-auto'>
+      <div className='md:flex xl:w-[1280px] w-full mx-auto px-3 md:px-0'>
         <ChannelDetailLeftSidebar channel={channel} />
         <div className='w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
           <ChannelDetailNav channel={channel} />
           <div className='flex-col lg:flex-row-reverse flex gap-4'>
             <div>
               <div className='sticky inset-y-4 gap-4 flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-col'>
-                <div className='w-full lg:w-[310px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-[20px] bg-white'>
+                <div className='w-full lg:w-[310px] gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white'>
                   <div className='font-bold'>{t['subscribers']}</div>
                   <ResponsiveContainer width='100%' height={120}>
                     <AreaChart width={270} height={120} data={data.slice(-30)}>
@@ -126,7 +126,7 @@ function ChannelDetail({ channel, sub, averageViews, averagePosts, averageErr }:
                   </a>
                 </div>
 
-                <div className='text-xs grid grid-cols-2 w-full lg:w-[310px] gap-4 h-fit mt-4 md:mt-0 border border-gray-200 rounded-md p-4 bg-white'>
+                <div className='text-xs grid grid-cols-2 w-full lg:w-[310px] gap-4 h-fit border border-gray-200 rounded-md p-4 bg-white'>
                   <div className='flex flex-col gap-1 border-r'>
                     <div className='flex items-center gap-2 text-gray-400'>
                       <UsersIcon className='w-5 h-5 text-primary' />

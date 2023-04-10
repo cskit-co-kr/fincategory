@@ -7,6 +7,10 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Dialog from '@mui/material/Dialog';
 
 const Post = ({ channel, post }: any) => {
   const router = useRouter();
@@ -18,8 +22,6 @@ const Post = ({ channel, post }: any) => {
 
   const postMedia = post.media && JSON.parse(post.media);
 
-  if (post.media?.photo) {
-  }
   /*const [show, setShow] = useState(false);
   const showMore = () => {
     show === false ? setDescHeight('h-fit') : setDescHeight('h-[150px] overflow-hidden');
@@ -53,25 +55,7 @@ const Post = ({ channel, post }: any) => {
         </div>
       </div>
       <div className='flex flex-col gap-2.5 justify-center'>
-        {/*<Image
-          src='/photo_2023-03-02_06-38-42.jpg'
-          alt={channel.title}
-          width={606}
-          height={360}
-          className='object-fill h-fit'
-          onError={() => setError(true)}
-          />*/}
-        {postMedia && postMedia._ === 'messageMediaPhoto' && (
-          <div className='bg-gray-100 w-full h-44 flex place-content-center items-center rounded-md'>
-            <PhotoIcon className='h-14 w-14 text-gray-300' />
-          </div>
-        )}
-        {postMedia && postMedia._ === 'messageMediaDocument' && (
-          <div className='bg-gray-100 w-full h-44 flex place-content-center items-center rounded-md'>
-            <PhotoIcon className='h-14 w-14 text-gray-300' />
-            <VideoCameraIcon className='h-14 w-14 text-gray-300' />
-          </div>
-        )}
+        {(postMedia?._ === 'messageMediaPhoto' || postMedia?._ === 'messageMediaDocument') && <Media channel={channel} post={post} />}
 
         <div className={descHeight}>
           <div>{<RenderPost message={post.message} entities={JSON.parse(post.entities)} />}</div>
@@ -116,6 +100,76 @@ const Post = ({ channel, post }: any) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Media = ({ channel, post }: any) => {
+  const [images, setImages] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const getMediaData = { channel: channel, post: post };
+  useEffect(() => {
+    async function fetchMedia() {
+      try {
+        if (post.media.includes('photo') || post.media.includes('video')) {
+          await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/media`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(getMediaData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              setImages(data.backgroundImageUrls);
+              setVideos(data.srcValues);
+            });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchMedia();
+  }, []);
+
+  const [selectedImage, setSelectedImage] = useState(undefined);
+  const handleImageClick = (event: any, image: any) => {
+    setSelectedImage(image);
+  };
+
+  return (
+    <>
+      {images?.length !== 0 || videos?.length !== 0 ? (
+        <Box>
+          <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
+            {images?.map((url: any, index: number) => (
+              <ImageListItem key={index}>
+                <img
+                  src={`${url}?w=248&fit=crop&auto=format`}
+                  srcSet={`${url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt=''
+                  loading='lazy'
+                  className='max-h-[360px] aspect-auto !object-contain cursor-pointer'
+                  onClick={(event) => handleImageClick(event, url)}
+                />
+              </ImageListItem>
+            ))}
+            {videos?.length > 0 &&
+              videos?.map((url: any, index: number) => (
+                <ImageListItem key={index}>
+                  <video src={url}></video>
+                </ImageListItem>
+              ))}
+          </ImageList>
+          <Dialog open={selectedImage !== undefined} onClose={() => setSelectedImage(undefined)}>
+            <img src={selectedImage} alt='' />
+          </Dialog>
+        </Box>
+      ) : (
+        <div></div>
+        // <div className='bg-gray-100 w-full h-44 flex place-content-center items-center rounded-md'>
+        //   <PhotoIcon className='h-14 w-14 text-gray-300' />
+        // </div>
+      )}
+    </>
   );
 };
 

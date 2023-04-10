@@ -49,7 +49,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             @{channel.username}
             <ArrowTopRightOnSquareIcon className='h-4' />
           </a>
-          <p>{channel.description}</p>
+          <p className='break-words'>{channel.description}</p>
           <div className='flex flex-col justify-between w-full'>
             <span className='text-gray-400'>{t['category']}</span>
             <span className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</span>

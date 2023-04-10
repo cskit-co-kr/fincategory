@@ -71,7 +71,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (resp.status === 200) {
       res.status(200).json(combinedReturn);
     } else {
-      res.status(resp.status).json('NO');
+      res.status(resp.status).json([{ total: '0', average: '0' }]);
     }
   }
 }
