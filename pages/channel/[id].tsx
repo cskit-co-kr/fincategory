@@ -27,8 +27,6 @@ import {
 import { Loader } from "rsuite";
 import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
 import { Channel } from "../../typings";
-import { GetChannelsId } from "../../components/channel/GetChannelsId";
-import { GetStaticPaths, GetStaticPropsContext } from "next";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
