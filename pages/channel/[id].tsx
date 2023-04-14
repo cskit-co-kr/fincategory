@@ -27,6 +27,8 @@ import {
 import { Loader } from "rsuite";
 import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
 import { Channel } from "../../typings";
+import { GetChannelsId } from "../../components/channel/GetChannelsId";
+import { GetStaticPaths, GetStaticPropsContext } from "next";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -42,7 +44,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 function ChannelDetail({
   channel,
-  //sub,
+  sub,
   averageViews,
   averagePosts,
   averageErr,
@@ -54,28 +56,28 @@ function ChannelDetail({
   const [posts, setPosts] = useState<any | null>(null);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
-  const [data, setData] = useState<Array<any> | null>(null);
+  // const [data, setData] = useState<Array<any> | null>(null);
 
   useEffect(() => {
     getPosts();
-    getSub();
+    //getSub();
   }, []);
 
-  const getSub = async () => {
-    const getSubsData = { username: channel.channel_id, locale: locale };
+  // const getSub = async () => {
+  //   const getSubsData = { username: channel.channel_id, locale: locale };
 
-    const responseSub = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(getSubsData),
-      }
-    );
-    const data = await responseSub.json();
-    setData(data);
-    // const sub = await responseSub.data;
-  };
+  //   const responseSub = await fetch(
+  //     `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs`,
+  //     {
+  //       method: "POST",
+  //       headers: { "content-type": "application/json" },
+  //       body: JSON.stringify(getSubsData),
+  //     }
+  //   );
+  //   const data = await responseSub.json();
+  //   setData(data);
+  //   // const sub = await responseSub.data;
+  // };
 
   const getPosts = async () => {
     const getPostData = { username: channel.channel_id, limit: 20, offset: 0 };
@@ -115,33 +117,32 @@ function ChannelDetail({
     setLoadMoreText(t["load-more"]);
   };
 
-  // const data = sub?.map((item: any) => {
-  //   const date = new Date(item.created_at);
-  //   const formattedDate = date.toLocaleDateString(
-  //     locale === "ko" ? "ko-KR" : "en-US",
-  //     {
-  //       day: "numeric",
-  //       month: "long",
-  //       year: "numeric",
-  //     }
-  //   );
-  //   return {
-  //     name: formattedDate,
-  //     sub: item.count,
-  //   };
-  // });
+  const data = sub?.map((item: any) => {
+    const date = new Date(item.created_at);
+    const formattedDate = date.toLocaleDateString(
+      locale === "ko" ? "ko-KR" : "en-US",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
+    return {
+      name: formattedDate,
+      sub: item.count,
+    };
+  });
 
   return (
     <div className="pt-36 bg-gray-50">
       <Head>
-        <title>{`FinCategory - ${channel.title}`}</title>
+        {/* <title>{`FinCategory - ${channel.title}`}</title> */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
 
       <div className="md:flex xl:w-[1280px] w-full mx-auto px-3 md:px-0">
-        y
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
           <ChannelDetailNav channel={channel} />
@@ -271,18 +272,35 @@ function ChannelDetail({
   );
 }
 
+// export async function getStaticPaths() {
+//   const path = await GetChannelsId();
+//   const paths = path?.map((channel: any, idx: number) => ({
+//     params: {
+//       id: channel.username,
+//     },
+//   }));
+//   // const paths = [
+//   //   {
+//   //     params: { id: "1" },
+//   //   },
+//   // ];
+//   return { paths, fallback: true };
+// }
+
 export const getServerSideProps = async (context: any) => {
   const getId = context.query["id"];
+  // const getId = params?.id;
+
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
     { detail: getId }
   );
   const channel = response.data;
-  // const responseSub = await axios.post(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`,
-  //   { id: channel.channel_id }
-  // );
-  // const sub = responseSub.data;
+  const responseSub = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`,
+    { id: channel.channel_id }
+  );
+  const sub = responseSub.data;
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
@@ -321,7 +339,7 @@ export const getServerSideProps = async (context: any) => {
     return {
       props: {
         channel,
-        //sub,
+        sub,
         averageViews,
         averagePosts,
         averageErr,
