@@ -4,7 +4,6 @@ import {
   LinkIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
-import { PhotoIcon, VideoCameraIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
@@ -145,7 +144,6 @@ const Media = ({ channel, post }: any) => {
           })
             .then((response) => response.json())
             .then((data) => {
-              // console.log(data);
               setImages(data.backgroundImageUrls);
               setVideos(data.srcValues);
             });

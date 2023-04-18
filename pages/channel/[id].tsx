@@ -1,6 +1,5 @@
 import axios from "axios";
 import Head from "next/head";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
@@ -26,7 +25,6 @@ import {
 } from "recharts";
 import { Loader } from "rsuite";
 import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
-import { Channel } from "../../typings";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -40,13 +38,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-function ChannelDetail({
+const ChannelDetail = ({
   channel,
   sub,
   averageViews,
   averagePosts,
   averageErr,
-}: any) {
+}: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
@@ -83,15 +81,25 @@ function ChannelDetail({
     setLoadMore(true);
     //setPosts(null);
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/posts`,
+    // const response = await fetch(
+    //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/posts`,
+    //   {
+    //     method: "POST",
+    //     headers: { "content-type": "application/json" },
+    //     body: JSON.stringify(getPostData),
+    //   }
+    // );
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`,
       {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(getPostData),
+        paginate: {
+          limit: getPostData.limit,
+          offset: getPostData.offset,
+        },
       }
     );
-    const result = await response.json();
+
+    const result = await response?.data;
     result.length === 0 ? null : setPosts(result);
     result.length < 20 && setLoadMore(false);
   };
@@ -100,15 +108,26 @@ function ChannelDetail({
     setLoadMoreText(<Loader content={t["loading-text"]} />);
     getPostData.offset = getPostData.offset + 20;
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/posts`,
+    // const response = await fetch(
+    //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/posts`,
+    //   {
+    //     method: "POST",
+    //     headers: { "content-type": "application/json" },
+    //     body: JSON.stringify(getPostData),
+    //   }
+    // );
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`,
       {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(getPostData),
+        paginate: {
+          limit: getPostData.limit,
+          offset: getPostData.offset,
+        },
       }
     );
-    const result = await response.json();
+    const result = await response?.data;
+    // const result = await response.json();
     result.length < 20 && setLoadMore(false);
 
     setPosts(posts.concat(result));
@@ -268,27 +287,10 @@ function ChannelDetail({
       /> */}
     </div>
   );
-}
-
-// export async function getStaticPaths() {
-//   const path = await GetChannelsId();
-//   const paths = path?.map((channel: any, idx: number) => ({
-//     params: {
-//       id: channel.username,
-//     },
-//   }));
-//   // const paths = [
-//   //   {
-//   //     params: { id: "1" },
-//   //   },
-//   // ];
-//   return { paths, fallback: true };
-// }
+};
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query["id"];
-  // const getId = params?.id;
-
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
     { detail: getId }
