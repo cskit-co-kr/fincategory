@@ -73,7 +73,7 @@ const Media = ({ channel, post }: any) => {
         </Box>
       ) : (
         <div className="md:animate-spin w-full h-[300px] flex items-center justify-center">
-          <div className=" w-[80px] h-[80px]">
+          <div className=" w-[60px] h-[60px]">
             <Loader />
           </div>
         </div>
