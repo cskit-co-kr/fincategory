@@ -13,8 +13,13 @@ import {
   BoltIcon,
   ChartBarSquareIcon,
 } from "@heroicons/react/24/outline";
+import dynamic from "next/dynamic";
 import ChannelDetailLeftSidebar from "../../components/channel/ChannelDetailLeftSidebar";
-import Post from "../../components/channel/Post";
+import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
+const Post = dynamic(() => import("../../components/channel/Post"), {
+  ssr: false,
+});
+// import Post from "../../components/channel/Post";
 import {
   AreaChart,
   Area,
@@ -24,7 +29,6 @@ import {
   YAxis,
 } from "recharts";
 import { Loader } from "rsuite";
-import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
