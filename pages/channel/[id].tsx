@@ -76,7 +76,7 @@ const ChannelDetail = ({
   // };
 
   const getPosts = async () => {
-    const getPostData = { username: channel.channel_id, limit: 20, offset: 0 };
+    const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
     setSearchEvent(getPostData);
     setLoadMore(true);
     //setPosts(null);
@@ -101,7 +101,7 @@ const ChannelDetail = ({
 
     const result = await response?.data;
     result.length === 0 ? null : setPosts(result);
-    result.length < 20 && setLoadMore(false);
+    result.length < 10 && setLoadMore(false);
   };
 
   const handleLoadMore = async (getPostData: any) => {
@@ -128,7 +128,7 @@ const ChannelDetail = ({
     );
     const result = await response?.data;
     // const result = await response.json();
-    result.length < 20 && setLoadMore(false);
+    result.length < 10 && setLoadMore(false);
 
     setPosts(posts.concat(result));
     setLoadMoreText(t["load-more"]);
