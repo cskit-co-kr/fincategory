@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Dialog from "@mui/material/Dialog";
+import Loader from "../../public/loader.svg";
 
 const Media = ({ channel, post }: any) => {
   const [images, setImages] = useState([]);
@@ -71,8 +72,10 @@ const Media = ({ channel, post }: any) => {
           </Dialog>
         </Box>
       ) : (
-        <div className="w-full h-[300px] bg-gray-500 flex items-center justify-center">
-          ...Loading
+        <div className="md:animate-spin w-full h-[300px] flex items-center justify-center">
+          <div className=" w-[80px] h-[80px]">
+            <Loader />
+          </div>
         </div>
         // <div className='bg-gray-100 w-full h-44 flex place-content-center items-center rounded-md'>
         //   <PhotoIcon className='h-14 w-14 text-gray-300' />
