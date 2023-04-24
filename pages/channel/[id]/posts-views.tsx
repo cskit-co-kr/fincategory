@@ -1,48 +1,60 @@
-import axios from 'axios';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
-import Footer from '../../../components/Footer';
-import Header from '../../../components/Header';
-import { enUS } from '../../../lang/en-US';
-import { koKR } from '../../../lang/ko-KR';
-import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, CartesianGrid } from 'recharts';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
-import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
+import Footer from "../../../components/Footer";
+import Header from "../../../components/Header";
+import { enUS } from "../../../lang/en-US";
+import { koKR } from "../../../lang/ko-KR";
+import {
+  AreaChart,
+  Area,
+  Tooltip,
+  XAxis,
+  ResponsiveContainer,
+  Brush,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import ChannelDetailNav from "../../../components/channel/ChannelDetailNav";
 
 const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const CustomTooltip = ({ active, payload, label, which }: any) => {
     if (active && payload && payload.length) {
       let tooltipName;
       switch (which) {
-        case '1':
-          tooltipName = t['Average-post-reach'];
+        case "1":
+          tooltipName = t["Average-post-reach"];
           break;
-        case '2':
-          tooltipName = t['Views'];
+        case "2":
+          tooltipName = t["Views"];
           break;
-        case '3':
-          tooltipName = t['ERR'];
+        case "3":
+          tooltipName = t["ERR"];
           break;
       }
       return (
-        <div className='flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md'>
-          <span className='bg-gray-200 p-1.5'>
-            {new Date(label).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric',
-            })}
+        <div className="flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md">
+          <span className="bg-gray-200 p-1.5">
+            {new Date(label).toLocaleDateString(
+              locale === "ko" ? "ko-KR" : "en-US",
+              {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              }
+            )}
           </span>
-          <span className='p-1.5 flex gap-1'>
-            <UserCircleIcon className='h-4 text-primary' />
+          <span className="p-1.5 flex gap-1">
+            <UserCircleIcon className="h-4 text-primary" />
             <b>{tooltipName}:</b> {payload[0].value.toLocaleString()}
-            {which === '3' && '%'}
+            {which === "3" && "%"}
           </span>
         </div>
       );
@@ -54,11 +66,11 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
     const date = new Date(payload.value);
     return (
       <g transform={`translate(${x},${y})`}>
-        <text dy={16} textAnchor='middle' fill='#a3a3a3' className='text-xs'>
-          {date.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-            year: '2-digit',
-            month: 'short',
-            day: 'numeric',
+        <text dy={16} textAnchor="middle" fill="#a3a3a3" className="text-xs">
+          {date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
+            year: "2-digit",
+            month: "short",
+            day: "numeric",
           })}
         </text>
       </g>
@@ -68,83 +80,86 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   const CustomizedYAxisTick = ({ x, y, payload, which }: any) => {
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} textAnchor='end' fill='#a3a3a3' className='text-xs'>
+        <text x={0} y={0} textAnchor="end" fill="#a3a3a3" className="text-xs">
           {payload.value.toLocaleString()}
-          {which === '3' && '%'}
+          {which === "3" && "%"}
         </text>
       </g>
     );
   };
 
-  const [averagesCount, setAveragesCount] = useState<number>(averageViews.length - 30);
-  const [averagesCountWMYA, setAveragesCountWMYA] = useState<string>('month');
+  const [averagesCount, setAveragesCount] = useState<number>(
+    averageViews.length - 30
+  );
+  const [averagesCountWMYA, setAveragesCountWMYA] = useState<string>("month");
 
   const setAveragesCountRange = (range: any) => {
     switch (range) {
-      case 'week':
+      case "week":
         setAveragesCount(averageViews.length - 7);
-        setAveragesCountWMYA('week');
-        console.log(averagesCount);
+        setAveragesCountWMYA("week");
         break;
-      case 'month':
+      case "month":
         setAveragesCount(averageViews.length - 30);
-        setAveragesCountWMYA('month');
-        console.log(averagesCount);
+        setAveragesCountWMYA("month");
         break;
-      case 'year':
+      case "year":
         setAveragesCount(averageViews.length - 365);
-        setAveragesCountWMYA('year');
-        console.log(averagesCount);
+        setAveragesCountWMYA("year");
         break;
-      case 'all':
+      case "all":
         setAveragesCount(0);
-        setAveragesCountWMYA('all');
-        console.log(averagesCount);
+        setAveragesCountWMYA("all");
+        // console.log(averagesCount);
         break;
     }
   };
 
   const [totalCount, setTotalCount] = useState<number>(totalViews.length - 30);
-  const [totalWMYA, setTotalWMYA] = useState<string>('month');
+  const [totalWMYA, setTotalWMYA] = useState<string>("month");
 
   const setTotalViewsRange = (range: any) => {
     switch (range) {
-      case 'week':
+      case "week":
         setTotalCount(totalViews.length - 7);
-        setTotalWMYA('week');
+        setTotalWMYA("week");
         break;
-      case 'month':
+      case "month":
         setTotalCount(totalViews.length - 30);
-        setTotalWMYA('month');
+        setTotalWMYA("month");
         break;
-      case 'year':
+      case "year":
         setTotalCount(totalViews.length - 365);
-        setTotalWMYA('year');
+        setTotalWMYA("year");
         break;
-      case 'all':
+      case "all":
         setTotalCount(0);
-        setTotalWMYA('all');
+        setTotalWMYA("all");
         break;
     }
   };
 
-  const [errPercentCount, setErrPercentCount] = useState<number>(errPercent.length - 30);
+  const [errPercentCount, setErrPercentCount] = useState<number>(
+    errPercent.length - 30
+  );
 
   return (
-    <div className='pt-36 bg-gray-50'>
+    <div className="pt-36 bg-gray-50">
       <Head>
-        <title>{`${router.query.id} - ${t['Posts-reach']}`}</title>
-        <link rel='icon' href='/favicon.ico' />
+        <title>{`${router.query.id} - ${t["Posts-reach"]}`}</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
 
-      <div className='md:flex xl:w-[1280px] mx-auto text-black'>
+      <div className="md:flex xl:w-[1280px] mx-auto text-black">
         <ChannelDetailLeftSidebar channel={channel} />
-        <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+        <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
           <ChannelDetailNav channel={channel} />
-          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold my-4'>{t['Average-post-reach']}</div>
+          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+            <div className="text-xl mx-auto font-semibold my-4">
+              {t["Average-post-reach"]}
+            </div>
             {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
                 onClick={() => setAveragesCountRange('week')}
@@ -179,71 +194,138 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                 {t['All-time']}
               </button>
             </div> */}
-            <ResponsiveContainer width='100%' height={420}>
+            <ResponsiveContainer width="100%" height={420}>
               <AreaChart width={270} height={420} data={averageViews}>
                 <defs>
-                  <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
-                    <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
+                  <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#3886E2" stopOpacity={0.2} />
                   </linearGradient>
                 </defs>
-                <Tooltip content={<CustomTooltip which='1' />} />
-                <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                <YAxis type='number' domain={[0, 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                <Tooltip content={<CustomTooltip which="1" />} />
+                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                <YAxis
+                  type="number"
+                  domain={[0, "dataMax + 100"]}
+                  tickCount={6}
+                  fontSize={12}
+                  tick={<CustomizedYAxisTick />}
+                />
                 <CartesianGrid vertical={false} />
 
-                <Brush dataKey='date' stroke='#3886E2' startIndex={averagesCount} endIndex={averageViews.length - 1} />
+                <Brush
+                  dataKey="date"
+                  stroke="#3886E2"
+                  startIndex={averagesCount}
+                  endIndex={averageViews.length - 1}
+                />
 
-                <Area type='monotone' dataKey='average' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                <Area
+                  type="monotone"
+                  dataKey="average"
+                  stroke="#3886E2"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#color)"
+                  baseValue="dataMin"
+                />
               </AreaChart>
             </ResponsiveContainer>
-            <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['The-average-number']}</div>
+            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+              {t["The-average-number"]}
+            </div>
           </div>
 
-          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold my-4'>{t['Views-of-the']}</div>
-            <ResponsiveContainer width='100%' height={420}>
+          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+            <div className="text-xl mx-auto font-semibold my-4">
+              {t["Views-of-the"]}
+            </div>
+            <ResponsiveContainer width="100%" height={420}>
               <AreaChart width={270} height={420} data={totalViews}>
                 <defs>
-                  <linearGradient id='color2' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset='5%' stopColor='#55A348' stopOpacity={0.3} />
-                    <stop offset='95%' stopColor='#55A348' stopOpacity={0.2} />
+                  <linearGradient id="color2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#55A348" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#55A348" stopOpacity={0.2} />
                   </linearGradient>
                 </defs>
-                <Tooltip content={<CustomTooltip which='2' />} />
-                <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                <YAxis type='number' domain={[0, 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                <Tooltip content={<CustomTooltip which="2" />} />
+                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                <YAxis
+                  type="number"
+                  domain={[0, "dataMax + 100"]}
+                  tickCount={6}
+                  fontSize={12}
+                  tick={<CustomizedYAxisTick />}
+                />
                 <CartesianGrid vertical={false} />
 
-                <Brush dataKey='date' stroke='#55A348' startIndex={totalCount} endIndex={totalViews.length - 1} />
+                <Brush
+                  dataKey="date"
+                  stroke="#55A348"
+                  startIndex={totalCount}
+                  endIndex={totalViews.length - 1}
+                />
 
-                <Area type='monotone' dataKey='views' stroke='#55A348' strokeWidth={2} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
+                <Area
+                  type="monotone"
+                  dataKey="views"
+                  stroke="#55A348"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#color2)"
+                  baseValue="dataMin"
+                />
               </AreaChart>
             </ResponsiveContainer>
-            <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Total-number-of']}</div>
+            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+              {t["Total-number-of"]}
+            </div>
           </div>
 
-          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold my-4'>{t['ERR-engagement-by-views']}</div>
-            <ResponsiveContainer width='100%' height={420}>
+          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+            <div className="text-xl mx-auto font-semibold my-4">
+              {t["ERR-engagement-by-views"]}
+            </div>
+            <ResponsiveContainer width="100%" height={420}>
               <AreaChart width={270} height={420} data={errPercent}>
                 <defs>
-                  <linearGradient id='color3' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset='5%' stopColor='#CD5066' stopOpacity={0.3} />
-                    <stop offset='95%' stopColor='#CD5066' stopOpacity={0.2} />
+                  <linearGradient id="color3" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#CD5066" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#CD5066" stopOpacity={0.2} />
                   </linearGradient>
                 </defs>
-                <Tooltip content={<CustomTooltip which='3' />} />
-                <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                <YAxis type='number' domain={[0, 'dataMax']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick which='3' />} />
+                <Tooltip content={<CustomTooltip which="3" />} />
+                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                <YAxis
+                  type="number"
+                  domain={[0, "dataMax"]}
+                  tickCount={6}
+                  fontSize={12}
+                  tick={<CustomizedYAxisTick which="3" />}
+                />
                 <CartesianGrid vertical={false} />
 
-                <Brush dataKey='date' stroke='#CD5066' startIndex={errPercentCount} endIndex={errPercent.length - 1} />
+                <Brush
+                  dataKey="date"
+                  stroke="#CD5066"
+                  startIndex={errPercentCount}
+                  endIndex={errPercent.length - 1}
+                />
 
-                <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={2} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
+                <Area
+                  type="monotone"
+                  dataKey="views"
+                  stroke="#CD5066"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#color3)"
+                  baseValue="dataMin"
+                />
               </AreaChart>
             </ResponsiveContainer>
-            <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Percentage-of-subscribers']}</div>
+            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+              {t["Percentage-of-subscribers"]}
+            </div>
           </div>
         </div>
       </div>
@@ -254,21 +336,30 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
 };
 
 export const getServerSideProps = async (context: any) => {
-  const getId = context.query['id'];
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
+  const getId = context.query["id"];
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
+    { detail: getId }
+  );
   const channel = response.data;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ channel_id: channel.channel_id }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ channel_id: channel.channel_id }),
+    }
+  );
   const combinedReturn = await res.json();
   const totalViews = combinedReturn[0].total.reverse();
   const averageViews = combinedReturn[0].average;
   const errPercent = combinedReturn[0].average
     .reverse()
-    .map((item: any) => ({ date: item.date, views: Math.round((item.average * 100) / channel.subscription) }));
+    .map((item: any) => ({
+      date: item.date,
+      views: Math.round((item.average * 100) / channel.subscription),
+    }));
 
   return {
     props: {
