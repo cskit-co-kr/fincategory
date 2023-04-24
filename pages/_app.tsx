@@ -3,23 +3,27 @@ import '../styles/globals.css'
 
 import type { AppProps } from 'next/app';
 import { DefaultSeo } from 'next-seo';
+import { GoogleAnalytics } from 'nextjs-google-analytics';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const env = process.env.NODE_ENV;
+
+  console.log('env: ', env);
 
   return (
     <>
       <DefaultSeo
         title='Title'
         titleTemplate='%s | FinCategory'
-        description="2500명의 금융 유튜브가 매일 업데이트, 150명의 미녀 룩북 섹시 컨텐트가 있습니다."
+        description="가장 큰 한국 텔레그램 채널들 및 그룹 카탈로그 fincategory."
         additionalMetaTags={[
           {
             name: 'author',
-            content: 'FinCategory CSKIT'
+            content: 'FinCategory'
           },
           {
             name: 'keywords',
-            content: 'fincategory, telegram, channel, crypto, stock, finance, currencies, exchange'
+            content: 'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더'
           },
           {
             property: 'og:locale',
@@ -87,6 +91,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           site: 'fincategory.com'
         }}
       />
+
+      {env === 'development' ? '' : <GoogleAnalytics />}
       <Component {...pageProps} />
     </>
   )
