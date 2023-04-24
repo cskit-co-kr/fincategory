@@ -1,22 +1,7 @@
-import {
-  ArrowsRightLeftIcon,
-  ArrowTopRightOnSquareIcon,
-  ArrowTrendingUpIcon,
-  AtSymbolIcon,
-  CalendarDaysIcon,
-  ChartBarIcon,
-  ChatBubbleLeftRightIcon,
-  EyeIcon,
-  HandThumbUpIcon,
-  LinkIcon,
-  RectangleGroupIcon,
-  RocketLaunchIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline';
+import { EyeIcon, HandThumbUpIcon, RectangleGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { Channel } from '../../typings';
 
 const ChannelDetailNav = ({ channel }: any) => {
   const router = useRouter();

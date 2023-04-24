@@ -197,6 +197,9 @@ export const getServerSideProps = async (context: any) => {
   const channel = response.data;
   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
   const sub = responseSub.data;
+  sub.forEach(function (v: any) {
+    delete v.id, delete v.channel_id, delete v.updated_at;
+  });
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
     method: 'POST',
