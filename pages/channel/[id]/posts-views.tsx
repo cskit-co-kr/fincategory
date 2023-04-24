@@ -1,24 +1,17 @@
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
+import { useState } from "react";
+import { Area, AreaChart, Brush, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import Footer from "../../../components/Footer";
 import Header from "../../../components/Header";
+import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
+import ChannelDetailNav from "../../../components/channel/ChannelDetailNav";
+
+import { NextSeo } from "next-seo";
 import { enUS } from "../../../lang/en-US";
 import { koKR } from "../../../lang/ko-KR";
-import {
-  AreaChart,
-  Area,
-  Tooltip,
-  XAxis,
-  ResponsiveContainer,
-  Brush,
-  YAxis,
-  CartesianGrid,
-} from "recharts";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
-import ChannelDetailNav from "../../../components/channel/ChannelDetailNav";
 
 const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   const router = useRouter();
@@ -39,17 +32,13 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           tooltipName = t["ERR"];
           break;
       }
+
       return (
         <div className="flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md">
           <span className="bg-gray-200 p-1.5">
-            {new Date(label).toLocaleDateString(
-              locale === "ko" ? "ko-KR" : "en-US",
-              {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              }
-            )}
+            {new Date(label).toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
+              day: "numeric", month: "short", year: "numeric"
+            })}
           </span>
           <span className="p-1.5 flex gap-1">
             <UserCircleIcon className="h-4 text-primary" />
@@ -60,7 +49,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
       );
     }
     return null;
-  };
+  }
 
   const CustomizedAxisTick = ({ x, y, payload }: any) => {
     const date = new Date(payload.value);
@@ -68,14 +57,12 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
       <g transform={`translate(${x},${y})`}>
         <text dy={16} textAnchor="middle" fill="#a3a3a3" className="text-xs">
           {date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
-            year: "2-digit",
-            month: "short",
-            day: "numeric",
+            year: "2-digit", month: "short", day: "numeric"
           })}
         </text>
       </g>
     );
-  };
+  }
 
   const CustomizedYAxisTick = ({ x, y, payload, which }: any) => {
     return (
@@ -86,81 +73,85 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
         </text>
       </g>
     );
-  };
+  }
 
-  const [averagesCount, setAveragesCount] = useState<number>(
-    averageViews.length - 30
-  );
+  const [averagesCount, setAveragesCount] = useState<number>(averageViews.length - 30);
+
   const [averagesCountWMYA, setAveragesCountWMYA] = useState<string>("month");
 
-  const setAveragesCountRange = (range: any) => {
-    switch (range) {
-      case "week":
-        setAveragesCount(averageViews.length - 7);
-        setAveragesCountWMYA("week");
-        break;
-      case "month":
-        setAveragesCount(averageViews.length - 30);
-        setAveragesCountWMYA("month");
-        break;
-      case "year":
-        setAveragesCount(averageViews.length - 365);
-        setAveragesCountWMYA("year");
-        break;
-      case "all":
-        setAveragesCount(0);
-        setAveragesCountWMYA("all");
-        // console.log(averagesCount);
-        break;
-    }
-  };
+  // const setAveragesCountRange = (range: any) => {
+  //   switch (range) {
+  //     case "week":
+  //       setAveragesCount(averageViews.length - 7);
+  //       setAveragesCountWMYA("week");
+  //       break;
+  //     case "month":
+  //       setAveragesCount(averageViews.length - 30);
+  //       setAveragesCountWMYA("month");
+  //       break;
+  //     case "year":
+  //       setAveragesCount(averageViews.length - 365);
+  //       setAveragesCountWMYA("year");
+  //       break;
+  //     case "all":
+  //       setAveragesCount(0);
+  //       setAveragesCountWMYA("all");
+  //       // console.log(averagesCount);
+  //       break;
+  //   }
+  // };
 
   const [totalCount, setTotalCount] = useState<number>(totalViews.length - 30);
   const [totalWMYA, setTotalWMYA] = useState<string>("month");
 
-  const setTotalViewsRange = (range: any) => {
-    switch (range) {
-      case "week":
-        setTotalCount(totalViews.length - 7);
-        setTotalWMYA("week");
-        break;
-      case "month":
-        setTotalCount(totalViews.length - 30);
-        setTotalWMYA("month");
-        break;
-      case "year":
-        setTotalCount(totalViews.length - 365);
-        setTotalWMYA("year");
-        break;
-      case "all":
-        setTotalCount(0);
-        setTotalWMYA("all");
-        break;
-    }
-  };
+  // const setTotalViewsRange = (range: any) => {
+  //   switch (range) {
+  //     case "week":
+  //       setTotalCount(totalViews.length - 7);
+  //       setTotalWMYA("week");
+  //       break;
+  //     case "month":
+  //       setTotalCount(totalViews.length - 30);
+  //       setTotalWMYA("month");
+  //       break;
+  //     case "year":
+  //       setTotalCount(totalViews.length - 365);
+  //       setTotalWMYA("year");
+  //       break;
+  //     case "all":
+  //       setTotalCount(0);
+  //       setTotalWMYA("all");
+  //       break;
+  //   }
+  // }
 
   const [errPercentCount, setErrPercentCount] = useState<number>(
     errPercent.length - 30
   );
 
   return (
-    <div className="pt-36 bg-gray-50">
-      <Head>
-        <title>{`${router.query.id} - ${t["Posts-reach"]}`}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Header />
-
-      <div className="md:flex xl:w-[1280px] mx-auto text-black">
-        <ChannelDetailLeftSidebar channel={channel} />
-        <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
-          <ChannelDetailNav channel={channel} />
-          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
-            <div className="text-xl mx-auto font-semibold my-4">
-              {t["Average-post-reach"]}
-            </div>
-            {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
+    <>
+      <NextSeo
+        title={channel.title}
+        description={channel.description}
+        additionalMetaTags={[
+          { name: 'og:title', content: channel.title },
+          { name: 'og:description', content: channel.description },
+          { name: 'twitter:title', content: channel.title },
+          { name: 'twitter:description', content: channel.description }
+        ]}
+      />
+      <div className="pt-36 bg-gray-50">
+        <Header />
+        <div className="md:flex xl:w-[1280px] mx-auto text-black">
+          <ChannelDetailLeftSidebar channel={channel} />
+          <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
+            <ChannelDetailNav channel={channel} />
+            <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+              <div className="text-xl mx-auto font-semibold my-4">
+                {t["Average-post-reach"]}
+              </div>
+              {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
                 onClick={() => setAveragesCountRange('week')}
                 className={`rounded-md px-1 py-0.5 border hover:border-primary ${
@@ -194,146 +185,83 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                 {t['All-time']}
               </button>
             </div> */}
-            <ResponsiveContainer width="100%" height={420}>
-              <AreaChart width={270} height={420} data={averageViews}>
-                <defs>
-                  <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3886E2" stopOpacity={0.2} />
-                  </linearGradient>
-                </defs>
-                <Tooltip content={<CustomTooltip which="1" />} />
-                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-                <YAxis
-                  type="number"
-                  domain={[0, "dataMax + 100"]}
-                  tickCount={6}
-                  fontSize={12}
-                  tick={<CustomizedYAxisTick />}
-                />
-                <CartesianGrid vertical={false} />
-
-                <Brush
-                  dataKey="date"
-                  stroke="#3886E2"
-                  startIndex={averagesCount}
-                  endIndex={averageViews.length - 1}
-                />
-
-                <Area
-                  type="monotone"
-                  dataKey="average"
-                  stroke="#3886E2"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#color)"
-                  baseValue="dataMin"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
-              {t["The-average-number"]}
+              <ResponsiveContainer width="100%" height={420}>
+                <AreaChart width={270} height={420} data={averageViews}>
+                  <defs>
+                    <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3886E2" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <Tooltip content={<CustomTooltip which="1" />} />
+                  <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                  <YAxis type="number" domain={[0, "dataMax + 100"]} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <CartesianGrid vertical={false} />
+                  <Brush dataKey="date" stroke="#3886E2" startIndex={averagesCount} endIndex={averageViews.length - 1} />
+                  <Area type="monotone" dataKey="average" stroke="#3886E2" strokeWidth={2} fillOpacity={1} fill="url(#color)" baseValue="dataMin" />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+                {t["The-average-number"]}
+              </div>
             </div>
-          </div>
 
-          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
-            <div className="text-xl mx-auto font-semibold my-4">
-              {t["Views-of-the"]}
+            <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+              <div className="text-xl mx-auto font-semibold my-4">
+                {t["Views-of-the"]}
+              </div>
+              <ResponsiveContainer width="100%" height={420}>
+                <AreaChart width={270} height={420} data={totalViews}>
+                  <defs>
+                    <linearGradient id="color2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#55A348" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#55A348" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <Tooltip content={<CustomTooltip which="2" />} />
+                  <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                  <YAxis type="number" domain={[0, "dataMax + 100"]} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <CartesianGrid vertical={false} />
+                  <Brush dataKey="date" stroke="#55A348" startIndex={totalCount} endIndex={totalViews.length - 1} />
+                  <Area type="monotone" dataKey="views" stroke="#55A348" strokeWidth={2} fillOpacity={1} fill="url(#color2)" baseValue="dataMin" />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+                {t["Total-number-of"]}
+              </div>
             </div>
-            <ResponsiveContainer width="100%" height={420}>
-              <AreaChart width={270} height={420} data={totalViews}>
-                <defs>
-                  <linearGradient id="color2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#55A348" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#55A348" stopOpacity={0.2} />
-                  </linearGradient>
-                </defs>
-                <Tooltip content={<CustomTooltip which="2" />} />
-                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-                <YAxis
-                  type="number"
-                  domain={[0, "dataMax + 100"]}
-                  tickCount={6}
-                  fontSize={12}
-                  tick={<CustomizedYAxisTick />}
-                />
-                <CartesianGrid vertical={false} />
 
-                <Brush
-                  dataKey="date"
-                  stroke="#55A348"
-                  startIndex={totalCount}
-                  endIndex={totalViews.length - 1}
-                />
-
-                <Area
-                  type="monotone"
-                  dataKey="views"
-                  stroke="#55A348"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#color2)"
-                  baseValue="dataMin"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
-              {t["Total-number-of"]}
-            </div>
-          </div>
-
-          <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
-            <div className="text-xl mx-auto font-semibold my-4">
-              {t["ERR-engagement-by-views"]}
-            </div>
-            <ResponsiveContainer width="100%" height={420}>
-              <AreaChart width={270} height={420} data={errPercent}>
-                <defs>
-                  <linearGradient id="color3" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#CD5066" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#CD5066" stopOpacity={0.2} />
-                  </linearGradient>
-                </defs>
-                <Tooltip content={<CustomTooltip which="3" />} />
-                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-                <YAxis
-                  type="number"
-                  domain={[0, "dataMax"]}
-                  tickCount={6}
-                  fontSize={12}
-                  tick={<CustomizedYAxisTick which="3" />}
-                />
-                <CartesianGrid vertical={false} />
-
-                <Brush
-                  dataKey="date"
-                  stroke="#CD5066"
-                  startIndex={errPercentCount}
-                  endIndex={errPercent.length - 1}
-                />
-
-                <Area
-                  type="monotone"
-                  dataKey="views"
-                  stroke="#CD5066"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#color3)"
-                  baseValue="dataMin"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-            <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
-              {t["Percentage-of-subscribers"]}
+            <div className="w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+              <div className="text-xl mx-auto font-semibold my-4">
+                {t["ERR-engagement-by-views"]}
+              </div>
+              <ResponsiveContainer width="100%" height={420}>
+                <AreaChart width={270} height={420} data={errPercent}>
+                  <defs>
+                    <linearGradient id="color3" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#CD5066" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#CD5066" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <Tooltip content={<CustomTooltip which="3" />} />
+                  <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                  <YAxis type="number" domain={[0, "dataMax"]} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick which="3" />} />
+                  <CartesianGrid vertical={false} />
+                  <Brush dataKey="date" stroke="#CD5066" startIndex={errPercentCount} endIndex={errPercent.length - 1} />
+                  <Area type="monotone" dataKey="views" stroke="#CD5066" strokeWidth={2} fillOpacity={1} fill="url(#color3)" baseValue="dataMin" />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md">
+                {t["Percentage-of-subscribers"]}
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </>
   );
-};
+}
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query["id"];
@@ -362,13 +290,8 @@ export const getServerSideProps = async (context: any) => {
     }));
 
   return {
-    props: {
-      channel,
-      totalViews,
-      averageViews,
-      errPercent,
-    },
-  };
-};
+    props: { channel, totalViews, averageViews, errPercent }
+  }
+}
 
 export default postsViews;
