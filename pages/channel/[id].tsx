@@ -1,23 +1,21 @@
+import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIcon, UsersIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import Head from "next/head";
+import { NextSeo } from 'next-seo';
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { enUS } from "../../lang/en-US";
-import { koKR } from "../../lang/ko-KR";
-import { UsersIcon, ClipboardDocumentListIcon, CalendarDaysIcon, BoltIcon, ChartBarSquareIcon } from "@heroicons/react/24/outline";
-import dynamic from "next/dynamic";
-import ChannelDetailLeftSidebar from "../../components/channel/ChannelDetailLeftSidebar";
-import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
-const Post = dynamic(() => import("../../components/channel/Post"), {
-  ssr: false,
-});
-// import Post from "../../components/channel/Post";
-import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, YAxis, } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, } from "recharts";
 import { Loader } from "rsuite";
 
-import { DefaultSeo, NextSeo } from 'next-seo';
+import ChannelDetailLeftSidebar from "../../components/channel/ChannelDetailLeftSidebar";
+import ChannelDetailNav from "../../components/channel/ChannelDetailNav";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+
+const Post = dynamic(() => import("../../components/channel/Post"), { ssr: false });
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -29,7 +27,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
-};
+}
 
 const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }: any) => {
   const router = useRouter();
@@ -68,36 +66,27 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     getPostData.offset = getPostData.offset + 20;
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`,
-      {
-        paginate: {
-          limit: getPostData.limit,
-          offset: getPostData.offset,
-        },
-      }
-    );
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+      paginate: {
+        limit: getPostData.limit,
+        offset: getPostData.offset,
+      },
+    });
     const result = await response?.data;
     result.length < 10 && setLoadMore(false);
 
     setPosts(posts.concat(result));
     setLoadMoreText(t["load-more"]);
-  };
+  }
 
   const data = sub?.map((item: any) => {
     const date = new Date(item.created_at);
-    const formattedDate = date.toLocaleDateString(
-      locale === "ko" ? "ko-KR" : "en-US",
-      {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }
-    );
-    return {
-      name: formattedDate,
-      sub: item.count,
-    };
-  });
+    const formattedDate = date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
+      day: "numeric", month: "long", year: "numeric"
+    });
+
+    return { name: formattedDate, sub: item.count }
+  })
 
   return (
     <>
@@ -105,22 +94,10 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          {
-            name: 'og:title',
-            content: channel.title
-          },
-          {
-            name: 'og:description',
-            content: channel.description
-          },
-          {
-            name: 'twitter:title',
-            content: channel.title
-          },
-          {
-            name: 'twitter:description',
-            content: channel.description
-          }
+          { name: 'og:title', content: channel.title },
+          { name: 'og:description', content: channel.description },
+          { name: 'twitter:title', content: channel.title },
+          { name: 'twitter:description', content: channel.description }
         ]}
       />
       <div className="pt-36 bg-gray-50">
@@ -219,8 +196,8 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
         <Footer />
       </div>
     </>
-  );
-};
+  )
+}
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query["id"];
@@ -274,11 +251,9 @@ export const getServerSideProps = async (context: any) => {
   if (channel !== "") {
     return {
       props: { channel, sub, averageViews, averagePosts, averageErr }
-    };
-  } else {
-    return {
-      notFound: true,
     }
+  } else {
+    return { notFound: true }
   }
 }
 
