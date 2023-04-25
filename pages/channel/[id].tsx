@@ -1,10 +1,23 @@
-import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIcon, UsersIcon } from "@heroicons/react/24/outline";
+import {
+  BoltIcon,
+  CalendarDaysIcon,
+  ChartBarSquareIcon,
+  ClipboardDocumentListIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
-import { NextSeo } from 'next-seo';
+import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, } from "recharts";
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { Loader } from "rsuite";
 
 import ChannelDetailLeftSidebar from "../../components/channel/ChannelDetailLeftSidebar";
@@ -15,7 +28,9 @@ import Header from "../../components/Header";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 
-const Post = dynamic(() => import("../../components/channel/Post"), { ssr: false });
+const Post = dynamic(() => import("../../components/channel/Post"), {
+  ssr: false,
+});
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -27,9 +42,15 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
-}
+};
 
-const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }: any) => {
+const ChannelDetail = ({
+  channel,
+  sub,
+  averageViews,
+  averagePosts,
+  averageErr,
+}: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
@@ -66,27 +87,34 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     getPostData.offset = getPostData.offset + 20;
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-      paginate: {
-        limit: getPostData.limit,
-        offset: getPostData.offset,
-      },
-    });
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`,
+      {
+        paginate: {
+          limit: getPostData.limit,
+          offset: getPostData.offset,
+        },
+      }
+    );
     const result = await response?.data;
     result.length < 10 && setLoadMore(false);
 
     setPosts(posts.concat(result));
     setLoadMoreText(t["load-more"]);
-  }
+  };
 
   const data = sub?.map((item: any) => {
     const date = new Date(item.created_at);
-    const formattedDate = date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
-      day: "numeric", month: "long", year: "numeric"
-    });
+    const formattedDate = date.toLocaleDateString(
+      locale === "ko" ? "ko-KR" : "en-US",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
 
-    return { name: formattedDate, sub: item.count }
-  })
+    return { name: formattedDate, sub: item.count };
+  });
 
   return (
     <>
@@ -94,14 +122,13 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'og:title', content: channel.title },
-          { name: 'og:description', content: channel.description },
-          { name: 'twitter:title', content: channel.title },
-          { name: 'twitter:description', content: channel.description }
+          { name: "og:title", content: channel.title },
+          { name: "og:description", content: channel.description },
+          { name: "twitter:title", content: channel.title },
+          { name: "twitter:description", content: channel.description },
         ]}
       />
-      <div className="pt-36 bg-gray-50">
-        <Header />
+      <div className="pt-7 bg-gray-50">
         <div className="md:flex xl:w-[1280px] w-full mx-auto px-3 md:px-0">
           <ChannelDetailLeftSidebar channel={channel} />
           <div className="w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -112,20 +139,52 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                   <div className="w-full lg:w-[310px] gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white">
                     <div className="font-bold">{t["subscribers"]}</div>
                     <ResponsiveContainer width="100%" height={120}>
-                      <AreaChart width={270} height={120} data={data && data !== null ? data.slice(-30) : []}>
+                      <AreaChart
+                        width={270}
+                        height={120}
+                        data={data && data !== null ? data.slice(-30) : []}
+                      >
                         <defs>
-                          <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#3886E2" stopOpacity={0.2} />
+                          <linearGradient
+                            id="color"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor="#3886E2"
+                              stopOpacity={0.3}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor="#3886E2"
+                              stopOpacity={0.2}
+                            />
                           </linearGradient>
                         </defs>
                         <Tooltip content={<CustomTooltip />} />
                         <XAxis dataKey="name" hide />
-                        <YAxis type="number" domain={["dataMin", "dataMax"]} hide />
-                        <Area type="monotone" dataKey="sub" stroke="#3886E2" strokeWidth={2} fillOpacity={1} fill="url(#color)" />
+                        <YAxis
+                          type="number"
+                          domain={["dataMin", "dataMax"]}
+                          hide
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="sub"
+                          stroke="#3886E2"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#color)"
+                        />
                       </AreaChart>
                     </ResponsiveContainer>
-                    <a href={`${router.asPath}/subscribers`} className="flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5">
+                    <a
+                      href={`${router.asPath}/subscribers`}
+                      className="flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5"
+                    >
                       <ChartBarSquareIcon className="h-5" />
                       {t["Subscribers"]} {t["statistics"]}
                     </a>
@@ -173,18 +232,21 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
               </div>
 
               <div className="w-full lg:w-[648px] gap-4 flex flex-col">
-                {posts !== null ?
+                {posts !== null ? (
                   posts.map((post: any, index: number) => {
                     return <Post channel={channel} post={post} key={index} />;
                   })
-                  :
+                ) : (
                   <div className="text-center p-10 border border-gray-200 rounded-md bg-white">
                     {t["no-posts"]}
                   </div>
-                }
+                )}
                 {loadMore && (
                   <div className="flex justify-center col-span-3">
-                    <button onClick={() => handleLoadMore(searchEvent)} className="bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]">
+                    <button
+                      onClick={() => handleLoadMore(searchEvent)}
+                      className="bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
+                    >
                       {loadMoreText}
                     </button>
                   </div>
@@ -193,11 +255,14 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
             </div>
           </div>
         </div>
-        <Footer />
+        {/* <img
+        id='base64image'
+        src='data:image/jpeg;base64, '
+      /> */}
       </div>
     </>
-  )
-}
+  );
+};
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query["id"];
@@ -231,14 +296,16 @@ export const getServerSideProps = async (context: any) => {
   const combinedReturn = await res.json();
 
   if (combinedReturn[0].total.length > 0) {
-    averageViews = Math.round(combinedReturn[0].average.reduce((a: any, b: any) => {
-      return a + b.average;
-    }, 0) / combinedReturn[0].average.length
+    averageViews = Math.round(
+      combinedReturn[0].average.reduce((a: any, b: any) => {
+        return a + b.average;
+      }, 0) / combinedReturn[0].average.length
     );
 
-    averagePosts = Math.round(combinedReturn[0].average.reduce((a: any, b: any) => {
-      return a + b.views.length;
-    }, 0) / combinedReturn[0].average.length
+    averagePosts = Math.round(
+      combinedReturn[0].average.reduce((a: any, b: any) => {
+        return a + b.views.length;
+      }, 0) / combinedReturn[0].average.length
     );
 
     const errPercent = combinedReturn[0].average.map((item: any) => ({
@@ -246,18 +313,19 @@ export const getServerSideProps = async (context: any) => {
       views: Math.round((item.average * 100) / channel.subscription),
     }));
 
-    averageErr = errPercent.reduce((a: any, b: any) => {
-      return a + b.views;
-    }, 0) / errPercent.length;
+    averageErr =
+      errPercent.reduce((a: any, b: any) => {
+        return a + b.views;
+      }, 0) / errPercent.length;
   }
 
   if (channel !== "") {
     return {
-      props: { channel, sub, averageViews, averagePosts, averageErr }
-    }
+      props: { channel, sub, averageViews, averagePosts, averageErr },
+    };
   } else {
-    return { notFound: true }
+    return { notFound: true };
   }
-}
+};
 
 export default ChannelDetail;
