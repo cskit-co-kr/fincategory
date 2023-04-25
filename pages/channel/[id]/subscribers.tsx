@@ -8,9 +8,10 @@ import Header from '../../../components/Header';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, CartesianGrid } from 'recharts';
-import { UserCircleIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Pagination } from 'rsuite';
 import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import { NextSeo } from 'next-seo';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -39,6 +40,7 @@ const subscribers = ({ channel, sub }: any) => {
     }
     return null;
   };
+
   const CustomizedAxisTick = ({ x, y, payload }: any) => {
     const date = new Date(payload.value);
     return (
@@ -71,15 +73,16 @@ const subscribers = ({ channel, sub }: any) => {
     name: val.name,
     sub: val.sub - data[idx].sub,
   }));
+
   const growthData2 = data.slice(1).map((val: any, idx: any) => ({
     name: val.name,
     sub: val.sub,
     diff: val.sub - data[idx].sub,
   }));
+
   const gradientOffset = () => {
     const dataMax = Math.max(...growthData.map((i: any) => i.sub));
     const dataMin = Math.min(...growthData.map((i: any) => i.sub));
-
     if (dataMax <= 0) {
       return 0;
     }
@@ -89,6 +92,7 @@ const subscribers = ({ channel, sub }: any) => {
 
     return dataMax / (dataMax - dataMin);
   };
+
   const off = gradientOffset();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -171,55 +175,136 @@ const subscribers = ({ channel, sub }: any) => {
   };
 
   return (
-    <div className='pt-36 bg-gray-50'>
-      <Head>
-        <title>{`${router.query.id} - ${t['Subscribers']} ${t['statistics']}`}</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
+    <>
+      <NextSeo
+        title={channel.title}
+        description={channel.description}
+        additionalMetaTags={[
+          { name: 'og:title', content: channel.title },
+          { name: 'og:description', content: channel.description },
+          { name: 'twitter:title', content: channel.title },
+          { name: 'twitter:description', content: channel.description },
+        ]}
+      />
+      <div className='pt-36 bg-gray-50'>
+        <Header />
+        <div className='md:flex xl:w-[1280px] mx-auto text-black'>
+          <ChannelDetailLeftSidebar channel={channel} />
+          <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+            <ChannelDetailNav channel={channel} />
+            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+              <div className='ml-5 gap-4 items-center'>
+                <div className='pb-2 text-lg font-semibold text-center'>{t['Subscribers-count']}</div>
+                <div className='flex gap-0.5 text-xs my-4 h-fit'>
+                  <button
+                    className={`rounded-md px-1 py-0.5 border hover:border-primary ${
+                      subscribersCountWMYA === 'week' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    }`}
+                    onClick={() => setSubscribersCountRange('week')}
+                  >
+                    {t['Week']}
+                  </button>
+                  <button
+                    className={`rounded-md px-1 py-0.5 border hover:border-primary ${
+                      subscribersCountWMYA === 'month' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    }`}
+                    onClick={() => setSubscribersCountRange('month')}
+                  >
+                    {t['Month']}
+                  </button>
+                  <button
+                    className={`rounded-md px-1 py-0.5 border hover:border-primary ${
+                      subscribersCountWMYA === 'year' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    }`}
+                    onClick={() => setSubscribersCountRange('year')}
+                  >
+                    {t['Year']}
+                  </button>
+                  <button
+                    className={`rounded-md px-1 py-0.5 border hover:border-primary whitespace-nowrap ${
+                      subscribersCountWMYA === 'all' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    }`}
+                    onClick={() => setSubscribersCountRange('all')}
+                  >
+                    {t['All-time']}
+                  </button>
+                </div>
+              </div>
+              <ResponsiveContainer width='100%' height={420}>
+                <AreaChart width={270} height={420} data={data}>
+                  <defs>
+                    <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
+                      <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <Tooltip content={<CustomTooltip />} />
+                  <XAxis dataKey='name' tick={<CustomizedAxisTick />} axisLine={false} />
+                  <YAxis type='number' domain={['dataMin - 100', 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <CartesianGrid vertical={false} />
+                  <Brush dataKey='name' stroke='#3886E2' startIndex={subscribersCount} endIndex={data.length - 1} />
+                  <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>
+                {t['The-graph-above'].replace('%{channel.title}', channel.title)}
+              </div>
+            </div>
 
-      <Header />
-
-      <div className='md:flex xl:w-[1280px] mx-auto text-black'>
-        <ChannelDetailLeftSidebar channel={channel} />
-        <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
-          <ChannelDetailNav channel={channel} />
-          <div className='relative w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='ml-5 gap-4 items-center'>
-              <div className='pb-2 text-lg font-semibold text-center'>{t['Subscribers-count']}</div>
-              <div className='flex gap-0.5 text-xs my-4 h-fit'>
+            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+              <div className='text-xl mx-auto font-semibold'>
+                {t['Subscribers']} {t['gain']}
+              </div>
+              <div className='flex gap-0.5 text-xs m-4 h-fit'>
                 <button
-                  onClick={() => setSubscribersCountRange('week')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                    subscribersCountWMYA === 'week' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    subscribersGrowthWMYA === 'week' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
+                  onClick={() => setSubscribersGrowthRange('week')}
                 >
                   {t['Week']}
                 </button>
                 <button
-                  onClick={() => setSubscribersCountRange('month')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                    subscribersCountWMYA === 'month' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    subscribersGrowthWMYA === 'month' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
+                  onClick={() => setSubscribersGrowthRange('month')}
                 >
                   {t['Month']}
                 </button>
                 <button
-                  onClick={() => setSubscribersCountRange('year')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                    subscribersCountWMYA === 'year' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    subscribersGrowthWMYA === 'year' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
+                  onClick={() => setSubscribersGrowthRange('year')}
                 >
                   {t['Year']}
                 </button>
                 <button
-                  onClick={() => setSubscribersCountRange('all')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary whitespace-nowrap ${
-                    subscribersCountWMYA === 'all' ? 'border border-primary bg-white' : 'bg-gray-100'
+                    subscribersGrowthWMYA === 'all' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
+                  onClick={() => setSubscribersGrowthRange('all')}
                 >
                   {t['All-time']}
                 </button>
               </div>
+              <ResponsiveContainer width='100%' height={420}>
+                <AreaChart width={270} height={420} data={growthData}>
+                  <Tooltip content={<CustomTooltip />} />
+                  <XAxis dataKey='name' tick={<CustomizedAxisTick />} />
+                  <YAxis type='number' domain={['dataMin', 'dataMax']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <CartesianGrid vertical={false} />
+                  <Brush dataKey='name' stroke='#3886E2' startIndex={subscribersGrowth} endIndex={growthData.length - 1} />
+                  <defs>
+                    <linearGradient id='splitColor' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
+                      <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
+                    </linearGradient>
+                  </defs>
+                  <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={0.5} fill='url(#splitColor)' />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
             <ResponsiveContainer width='100%' height={420}>
               <AreaChart width={270} height={420} data={data}>
@@ -374,10 +459,9 @@ const subscribers = ({ channel, sub }: any) => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </>
   );
 };
 
@@ -389,10 +473,7 @@ export const getServerSideProps = async (context: any) => {
   const sub = responseSub.data;
 
   return {
-    props: {
-      channel,
-      sub,
-    },
+    props: { channel, sub },
   };
 };
 

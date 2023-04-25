@@ -19,6 +19,8 @@
     "i18next-chained-backend": "^4.2.0",
     "i18next-localstorage-backend": "^4.1.0",
     "next": "latest",
+    "next-seo": "^6.0.0",
+    "nextjs-google-analytics": "^2.3.3",
     "puppeteer": "^19.8.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
