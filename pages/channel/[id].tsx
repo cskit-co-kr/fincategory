@@ -122,14 +122,13 @@ const ChannelDetail = ({
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'og:title', content: channel.title },
-          { name: 'og:description', content: channel.description },
-          { name: 'twitter:title', content: channel.title },
-          { name: 'twitter:description', content: channel.description }
+          { name: "og:title", content: channel.title },
+          { name: "og:description", content: channel.description },
+          { name: "twitter:title", content: channel.title },
+          { name: "twitter:description", content: channel.description },
         ]}
       />
-      <div className="pt-36 bg-gray-50">
-        <Header />
+      <div className="pt-7 bg-gray-50">
         <div className="md:flex xl:w-[1280px] w-full mx-auto px-3 md:px-0">
           <ChannelDetailLeftSidebar channel={channel} />
           <div className="w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -140,95 +139,128 @@ const ChannelDetail = ({
                   <div className="w-full lg:w-[310px] gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white">
                     <div className="font-bold">{t["subscribers"]}</div>
                     <ResponsiveContainer width="100%" height={120}>
-                      <AreaChart width={270} height={120} data={data && data !== null ? data.slice(-30) : []}>
+                      <AreaChart
+                        width={270}
+                        height={120}
+                        data={data && data !== null ? data.slice(-30) : []}
+                      >
                         <defs>
-                          <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#3886E2" stopOpacity={0.2} />
+                          <linearGradient
+                            id="color"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor="#3886E2"
+                              stopOpacity={0.3}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor="#3886E2"
+                              stopOpacity={0.2}
+                            />
                           </linearGradient>
                         </defs>
                         <Tooltip content={<CustomTooltip />} />
                         <XAxis dataKey="name" hide />
-                        <YAxis type="number" domain={["dataMin", "dataMax"]} hide />
-                        <Area type="monotone" dataKey="sub" stroke="#3886E2" strokeWidth={2} fillOpacity={1} fill="url(#color)" />
+                        <YAxis
+                          type="number"
+                          domain={["dataMin", "dataMax"]}
+                          hide
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="sub"
+                          stroke="#3886E2"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#color)"
+                        />
                       </AreaChart>
                     </ResponsiveContainer>
-                    <a href={`${router.asPath}/subscribers`} className="flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5">
+                    <a
+                      href={`${router.asPath}/subscribers`}
+                      className="flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5"
+                    >
                       <ChartBarSquareIcon className="h-5" />
                       {t["Subscribers"]} {t["statistics"]}
                     </a>
                   </div>
 
-                <div className="text-xs grid grid-cols-2 w-full lg:w-[310px] gap-4 h-fit border border-gray-200 rounded-md p-4 bg-white">
-                  <div className="flex flex-col gap-1 border-r">
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <UsersIcon className="w-5 h-5 text-primary" />
-                      {t["subscribers"]}
+                  <div className="text-xs grid grid-cols-2 w-full lg:w-[310px] gap-4 h-fit border border-gray-200 rounded-md p-4 bg-white">
+                    <div className="flex flex-col gap-1 border-r">
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <UsersIcon className="w-5 h-5 text-primary" />
+                        {t["subscribers"]}
+                      </div>
+                      <div className="text-center font-semibold text-base">
+                        {channel.subscription?.toLocaleString()}
+                      </div>
                     </div>
-                    <div className="text-center font-semibold text-base">
-                      {channel.subscription?.toLocaleString()}
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <ClipboardDocumentListIcon className="w-5 h-5 text-[#55A348]" />
+                        {t["views-per-post"]}
+                      </div>
+                      <div className="text-center font-semibold text-base">
+                        ~{averageViews.toLocaleString()}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <ClipboardDocumentListIcon className="w-5 h-5 text-[#55A348]" />
-                      {t["views-per-post"]}
+                    <div className="flex flex-col gap-1 border-r">
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <CalendarDaysIcon className="w-5 h-5 text-[#9B7C0C]" />
+                        {t["posts-per-month"]}
+                      </div>
+                      <div className="text-center font-semibold text-base">
+                        ~{averagePosts}
+                      </div>
                     </div>
-                    <div className="text-center font-semibold text-base">
-                      ~{averageViews.toLocaleString()}
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1 border-r">
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <CalendarDaysIcon className="w-5 h-5 text-[#9B7C0C]" />
-                      {t["posts-per-month"]}
-                    </div>
-                    <div className="text-center font-semibold text-base">
-                      ~{averagePosts}
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <BoltIcon className="w-5 h-5 text-[#CD5066]" />
-                      {t["ERR"]}
-                    </div>
-                    <div className="text-center font-semibold text-base">
-                      {parseFloat(averageErr).toFixed(2)}%
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <BoltIcon className="w-5 h-5 text-[#CD5066]" />
+                        {t["ERR"]}
+                      </div>
+                      <div className="text-center font-semibold text-base">
+                        {parseFloat(averageErr).toFixed(2)}%
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="w-full lg:w-[648px] gap-4 flex flex-col">
-              {posts !== null ? (
-                posts.map((post: any, index: number) => {
-                  return <Post channel={channel} post={post} key={index} />;
-                })
-              ) : (
-                <div className="text-center p-10 border border-gray-200 rounded-md bg-white">
-                  {t["no-posts"]}
-                </div>
-              )}
-              {loadMore && (
-                <div className="flex justify-center col-span-3">
-                  <button
-                    onClick={() => handleLoadMore(searchEvent)}
-                    className="bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
-                  >
-                    {loadMoreText}
-                  </button>
-                </div>
-              )}
+              <div className="w-full lg:w-[648px] gap-4 flex flex-col">
+                {posts !== null ? (
+                  posts.map((post: any, index: number) => {
+                    return <Post channel={channel} post={post} key={index} />;
+                  })
+                ) : (
+                  <div className="text-center p-10 border border-gray-200 rounded-md bg-white">
+                    {t["no-posts"]}
+                  </div>
+                )}
+                {loadMore && (
+                  <div className="flex justify-center col-span-3">
+                    <button
+                      onClick={() => handleLoadMore(searchEvent)}
+                      className="bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
+                    >
+                      {loadMoreText}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* <img
+        {/* <img
         id='base64image'
         src='data:image/jpeg;base64, '
       /> */}
-    </div>
+      </div>
+    </>
   );
 };
 

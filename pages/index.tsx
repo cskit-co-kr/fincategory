@@ -39,7 +39,7 @@ const Home: NextPage = ({
   }, [locale]);
 
   return (
-    <div className="flex flex-col pt-36 bg-gray-50 min-h-screen">
+    <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
       <Head>
         <title>FinCategory</title>
         <link rel="icon" href="/favicon.ico" />

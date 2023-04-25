@@ -96,10 +96,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
     averageViews.length - 30
   );
 
-  const [averagesCount, setAveragesCount] = useState<number>(
-    averageViews.length - 30
-  );
-
   const [averagesCountWMYA, setAveragesCountWMYA] = useState<string>("month");
 
   // const setAveragesCountRange = (range: any) => {
@@ -164,7 +160,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           { name: "twitter:description", content: channel.description },
         ]}
       />
-      <div className="pt-36 bg-gray-50">
+      <div className="pt-7 bg-gray-50">
         <Head>
           <title>{`${router.query.id} - ${t["Posts-reach"]}`}</title>
           <link rel="icon" href="/favicon.ico" />

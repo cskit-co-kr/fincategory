@@ -17,7 +17,7 @@ function attraction(
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
   return (
-    <div className="pt-36 bg-gray-50">
+    <div className="pt-7 bg-gray-50">
       <Head>
         <title>{`${router.query.id} - ${t["Posts-reach"]}`}</title>
         <link rel="icon" href="/favicon.ico" />

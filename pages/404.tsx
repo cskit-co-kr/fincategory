@@ -1,8 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
 
@@ -11,14 +9,11 @@ export default function PageNotFound() {
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
   return (
-    <div className="flex flex-col pt-36 bg-gray-50">
-      {/* <Head>
+    <div className="flex flex-col pt-7 bg-gray-50">
+      <Head>
         <title>FinCategory - Add channel</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header /> */}
-
       <div className='w-full md:flex xl:w-[1280px] mx-auto bg-[url("/404_bg.png")] bg-no-repeat bg-right'>
         <div className="flex flex-col w-1/2 gap-6 my-10">
           <span className="font-bold">404 error</span>
@@ -53,8 +48,6 @@ export default function PageNotFound() {
           </button>
         </div>
       </div>
-
-      {/* <Footer /> */}
     </div>
   );
 }

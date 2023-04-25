@@ -190,7 +190,7 @@ const subscribers = ({ channel, sub }: any) => {
   };
 
   return (
-    <div className="pt-36 bg-gray-50">
+    <div className="pt-7 bg-gray-50">
       <Head>
         <title>{`${router.query.id} - ${t["Subscribers"]} ${t["statistics"]}`}</title>
         <link rel="icon" href="/favicon.ico" />

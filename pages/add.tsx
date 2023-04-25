@@ -1,8 +1,6 @@
 import axios from "axios";
 import Head from "next/head";
 import React, { useState } from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
 import { useRouter } from "next/router";
@@ -89,14 +87,11 @@ const add = ({ categories, countries, languages }: any) => {
   }
 
   return (
-    <div className="flex flex-col pt-36 bg-gray-50 min-h-screen">
-      {/* <Head>
+    <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
+      <Head>
         <title>FinCategory - Add channel</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header /> */}
-
       <div className="md:flex md:flex-col w-full xl:w-[1280px] mx-auto">
         <div className="text-xl font-bold text-center">{t["add-channel"]}</div>
         <div className="p-5 gap-3 border flex flex-col border-gray-200 rounded-md bg-white md:w-2/4 mx-auto mt-4">
@@ -191,8 +186,6 @@ const add = ({ categories, countries, languages }: any) => {
           </button>
         </div>
       </div>
-
-      {/* <Footer /> */}
     </div>
   );
 };

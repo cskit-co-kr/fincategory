@@ -250,7 +250,7 @@ const Search = (
   };
   return (
     <>
-      <div className="flex flex-1 flex-col pt-5">
+      <div className="flex flex-1 flex-col pt-7">
         <Head>
           <title>FinCategory - Search</title>
           <link rel="icon" href="/favicon.ico" />
