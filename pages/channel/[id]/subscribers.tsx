@@ -230,6 +230,7 @@ const subscribers = ({ channel, sub }: any) => {
                   </button>
                 </div>
               </div>
+
               <ResponsiveContainer width='100%' height={420}>
                 <AreaChart width={270} height={420} data={data}>
                   <defs>
@@ -240,9 +241,36 @@ const subscribers = ({ channel, sub }: any) => {
                   </defs>
                   <Tooltip content={<CustomTooltip />} />
                   <XAxis dataKey='name' tick={<CustomizedAxisTick />} axisLine={false} />
-                  <YAxis type='number' domain={['dataMin - 100', 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <YAxis
+                    axisLine={false}
+                    tickCount={5}
+                    tickLine={false}
+                    type='number'
+                    domain={['dataMin-100', 'dataMax+100']}
+                    fontSize={12}
+                    tick={<CustomizedYAxisTick />}
+                  />
                   <CartesianGrid vertical={false} />
-                  <Brush dataKey='name' stroke='#3886E2' startIndex={subscribersCount} endIndex={data.length - 1} />
+                  <Brush
+                    dataKey='name'
+                    stroke='#3886E2'
+                    startIndex={subscribersCount}
+                    endIndex={data.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={data}>
+                      <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
+                      <defs>
+                        <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                          <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
+                          <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                    </AreaChart>
+                  </Brush>
                   <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
                 </AreaChart>
               </ResponsiveContainer>
@@ -257,34 +285,34 @@ const subscribers = ({ channel, sub }: any) => {
               </div>
               <div className='flex gap-0.5 text-xs m-4 h-fit'>
                 <button
+                  onClick={() => setSubscribersGrowthRange('week')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
                     subscribersGrowthWMYA === 'week' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
-                  onClick={() => setSubscribersGrowthRange('week')}
                 >
                   {t['Week']}
                 </button>
                 <button
+                  onClick={() => setSubscribersGrowthRange('month')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
                     subscribersGrowthWMYA === 'month' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
-                  onClick={() => setSubscribersGrowthRange('month')}
                 >
                   {t['Month']}
                 </button>
                 <button
+                  onClick={() => setSubscribersGrowthRange('year')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary ${
                     subscribersGrowthWMYA === 'year' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
-                  onClick={() => setSubscribersGrowthRange('year')}
                 >
                   {t['Year']}
                 </button>
                 <button
+                  onClick={() => setSubscribersGrowthRange('all')}
                   className={`rounded-md px-1 py-0.5 border hover:border-primary whitespace-nowrap ${
                     subscribersGrowthWMYA === 'all' ? 'border border-primary bg-white' : 'bg-gray-100'
                   }`}
-                  onClick={() => setSubscribersGrowthRange('all')}
                 >
                   {t['All-time']}
                 </button>
@@ -293,9 +321,36 @@ const subscribers = ({ channel, sub }: any) => {
                 <AreaChart width={270} height={420} data={growthData}>
                   <Tooltip content={<CustomTooltip />} />
                   <XAxis dataKey='name' tick={<CustomizedAxisTick />} />
-                  <YAxis type='number' domain={['dataMin', 'dataMax']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <YAxis
+                    axisLine={false}
+                    tickCount={5}
+                    tickLine={false}
+                    type='number'
+                    domain={['dataMin-10', 'dataMax+10']}
+                    fontSize={12}
+                    tick={<CustomizedYAxisTick />}
+                  />
                   <CartesianGrid vertical={false} />
-                  <Brush dataKey='name' stroke='#3886E2' startIndex={subscribersGrowth} endIndex={growthData.length - 1} />
+                  <Brush
+                    dataKey='name'
+                    stroke='#3886E2'
+                    startIndex={subscribersGrowth}
+                    endIndex={growthData.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={data}>
+                      <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
+                      <defs>
+                        <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                          <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
+                          <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                    </AreaChart>
+                  </Brush>
                   <defs>
                     <linearGradient id='splitColor' x1='0' y1='0' x2='0' y2='1'>
                       <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
@@ -306,155 +361,27 @@ const subscribers = ({ channel, sub }: any) => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-            <ResponsiveContainer width='100%' height={420}>
-              <AreaChart width={270} height={420} data={data}>
-                <defs>
-                  <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
-                    <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
-                  </linearGradient>
-                </defs>
-                <Tooltip content={<CustomTooltip />} />
-                <XAxis dataKey='name' tick={<CustomizedAxisTick />} axisLine={false} />
-                <YAxis
-                  axisLine={false}
-                  tickCount={5}
-                  tickLine={false}
-                  type='number'
-                  domain={['dataMin-100', 'dataMax+100']}
-                  fontSize={12}
-                  tick={<CustomizedYAxisTick />}
-                />
-                <CartesianGrid vertical={false} />
-                <Brush
-                  dataKey='name'
-                  stroke='#3886E2'
-                  startIndex={subscribersCount}
-                  endIndex={data.length - 1}
-                  height={35}
-                  travellerWidth={15}
-                  traveller={<CustomTraveller />}
-                >
-                  <AreaChart height={35} data={data}>
-                    <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
-                    <defs>
-                      <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                        <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
-                        <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
-                  </AreaChart>
-                </Brush>
-                <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
-              </AreaChart>
-            </ResponsiveContainer>
 
-            <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['The-graph-above'].replace('%{channel.title}', channel.title)}</div>
-          </div>
-
-          <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-            <div className='text-xl mx-auto font-semibold'>
-              {t['Subscribers']} {t['gain']}
-            </div>
-            <div className='flex gap-0.5 text-xs m-4 h-fit'>
-              <button
-                onClick={() => setSubscribersGrowthRange('week')}
-                className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                  subscribersGrowthWMYA === 'week' ? 'border border-primary bg-white' : 'bg-gray-100'
-                }`}
-              >
-                {t['Week']}
-              </button>
-              <button
-                onClick={() => setSubscribersGrowthRange('month')}
-                className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                  subscribersGrowthWMYA === 'month' ? 'border border-primary bg-white' : 'bg-gray-100'
-                }`}
-              >
-                {t['Month']}
-              </button>
-              <button
-                onClick={() => setSubscribersGrowthRange('year')}
-                className={`rounded-md px-1 py-0.5 border hover:border-primary ${
-                  subscribersGrowthWMYA === 'year' ? 'border border-primary bg-white' : 'bg-gray-100'
-                }`}
-              >
-                {t['Year']}
-              </button>
-              <button
-                onClick={() => setSubscribersGrowthRange('all')}
-                className={`rounded-md px-1 py-0.5 border hover:border-primary whitespace-nowrap ${
-                  subscribersGrowthWMYA === 'all' ? 'border border-primary bg-white' : 'bg-gray-100'
-                }`}
-              >
-                {t['All-time']}
-              </button>
-            </div>
-            <ResponsiveContainer width='100%' height={420}>
-              <AreaChart width={270} height={420} data={growthData}>
-                <Tooltip content={<CustomTooltip />} />
-                <XAxis dataKey='name' tick={<CustomizedAxisTick />} />
-                <YAxis
-                  axisLine={false}
-                  tickCount={5}
-                  tickLine={false}
-                  type='number'
-                  domain={['dataMin-10', 'dataMax+10']}
-                  fontSize={12}
-                  tick={<CustomizedYAxisTick />}
-                />
-                <CartesianGrid vertical={false} />
-                <Brush
-                  dataKey='name'
-                  stroke='#3886E2'
-                  startIndex={subscribersGrowth}
-                  endIndex={growthData.length - 1}
-                  height={35}
-                  travellerWidth={15}
-                  traveller={<CustomTraveller />}
-                >
-                  <AreaChart height={35} data={data}>
-                    <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
-                    <defs>
-                      <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                        <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
-                        <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
-                  </AreaChart>
-                </Brush>
-                <defs>
-                  <linearGradient id='splitColor' x1='0' y1='0' x2='0' y2='1'>
-                    <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
-                    <stop offset={off} stopColor='#3886E2' stopOpacity={1} />
-                  </linearGradient>
-                </defs>
-                <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={0.5} fill='url(#splitColor)' />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white'>
-            <span className='font-semibold text-lg mb-1'>{t['by-days']}</span>
-            <div className=''>
-              {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
-              {currentItems.map((item: any, index: number) => (
-                <div className='flex space-between w-full p-2.5 border-t' key={index}>
-                  <div className='basis-1/3 text-gray-400'>
-                    {new Date(item.name).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white'>
+              <span className='font-semibold text-lg mb-1'>{t['by-days']}</span>
+              <div className=''>
+                {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
+                {currentItems.map((item: any, index: number) => (
+                  <div className='flex space-between w-full p-2.5 border-t' key={index}>
+                    <div className='basis-1/3 text-gray-400'>
+                      {new Date(item.name).toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </div>
+                    <div className='basis-1/3 text-center'>{item.sub.toLocaleString()}</div>
+                    <div className={`basis-1/3 text-right pr-2 ${item.diff < 0 ? 'text-red-400' : 'text-green-500'}`}>{item.diff}</div>
                   </div>
-                  <div className='basis-1/3 text-center'>{item.sub.toLocaleString()}</div>
-                  <div className={`basis-1/3 text-right pr-2 ${item.diff < 0 ? 'text-red-400' : 'text-green-500'}`}>{item.diff}</div>
+                ))}
+                <div className='mt-2.5 bg-gray-100 p-2 rounded-md'>
+                  <Pagination total={growthData2.length} limit={ITEMS_PER_PAGE} activePage={currentPage} onChangePage={(page) => setCurrentPage(page)} />
                 </div>
-              ))}
-              <div className='mt-2.5 bg-gray-100 p-2 rounded-md'>
-                <Pagination total={growthData2.length} limit={ITEMS_PER_PAGE} activePage={currentPage} onChangePage={(page) => setCurrentPage(page)} />
               </div>
             </div>
           </div>
