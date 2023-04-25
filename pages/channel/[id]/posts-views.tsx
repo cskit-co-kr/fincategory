@@ -4,8 +4,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Area, AreaChart, Brush, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import Footer from '../../../components/Footer';
-import Header from '../../../components/Header';
 import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
 import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 
@@ -143,8 +141,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           { name: 'twitter:description', content: channel.description },
         ]}
       />
-      <div className='pt-36 bg-gray-50'>
-        <Header />
+      <div className='pt-7 bg-gray-50'>
         <div className='md:flex xl:w-[1280px] mx-auto text-black'>
           <ChannelDetailLeftSidebar channel={channel} />
           <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
@@ -247,7 +244,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </>
   );
