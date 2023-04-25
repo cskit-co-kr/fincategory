@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext } from 'react';
 
 interface IDataContext {
   sideBar: boolean;
@@ -17,12 +17,7 @@ export const DataProvider = (props: any) => {
 
   const toggleSideBar = (status: boolean) => {
     setSideBar(status);
-    console.log("context: ", status);
   };
 
-  return (
-    <ActionContext.Provider value={{ sideBar, toggleSideBar }}>
-      {props.children}
-    </ActionContext.Provider>
-  );
+  return <ActionContext.Provider value={{ sideBar, toggleSideBar }}>{props.children}</ActionContext.Provider>;
 };

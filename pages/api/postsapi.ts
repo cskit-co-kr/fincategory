@@ -73,6 +73,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const averages = data.map((item: any) => ({
       date: item.date,
       views: item.total,
+      posts: item.posts,
       average: item.total / item.posts,
     }));
 
