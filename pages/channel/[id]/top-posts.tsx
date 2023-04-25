@@ -7,6 +7,8 @@ import React from "react";
 import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
 import ChannelDetailNav from "../../../components/channel/ChannelDetailNav";
 import PostMini from "../../../components/channel/PostMini";
+import Footer from "../../../components/Footer";
+import Header from "../../../components/Header";
 import { enUS } from "../../../lang/en-US";
 import { koKR } from "../../../lang/ko-KR";
 import { Channel } from "../../../typings";
@@ -19,12 +21,16 @@ function TopPosts(
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
+  const t = locale === 'ko' ? koKR : enUS;
+
   return (
     <div className="pt-36 bg-gray-50">
       <Head>
         <title>{`${router.query.id} - ${t["Top-posts"]}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Header />
       <div className="md:flex xl:w-[1280px] mx-auto text-black">
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -47,9 +53,10 @@ function TopPosts(
             )}
           </div>
         </div>
+        <Footer />
       </div>
-    </div>
-  );
+    </>
+  )
 }
 
 export const getServerSideProps = async (context: any) => {
@@ -74,10 +81,7 @@ export const getServerSideProps = async (context: any) => {
   const lastMonthData = await res.json();
 
   return {
-    props: {
-      channel,
-      lastMonthData,
-    },
+    props: { channel, lastMonthData },
   };
 };
 
