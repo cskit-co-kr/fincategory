@@ -3,8 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
 import { enUS } from "../../../lang/en-US";
 import { koKR } from "../../../lang/ko-KR";
 import {
@@ -197,9 +195,6 @@ const subscribers = ({ channel, sub }: any) => {
         <title>{`${router.query.id} - ${t["Subscribers"]} ${t["statistics"]}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header />
-
       <div className="md:flex xl:w-[1280px] mx-auto text-black">
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -325,50 +320,51 @@ const subscribers = ({ channel, sub }: any) => {
               </ResponsiveContainer>
             </div>
 
-          <div className="w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white">
-            <span className="font-semibold text-lg mb-1">{t["by-days"]}</span>
-            <div className="">
-              {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
-              {currentItems.map((item: any, index: number) => (
-                <div
-                  className="flex space-between w-full p-2.5 border-t"
-                  key={index}
-                >
-                  <div className="basis-1/3 text-gray-400">
-                    {new Date(item.name).toLocaleDateString(
-                      locale === "ko" ? "ko-KR" : "en-US",
-                      {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      }
-                    )}
-                  </div>
-                  <div className="basis-1/3 text-center">
-                    {item.sub.toLocaleString()}
-                  </div>
+            <div className="w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white">
+              <span className="font-semibold text-lg mb-1">{t["by-days"]}</span>
+              <div className="">
+                {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
+                {currentItems.map((item: any, index: number) => (
                   <div
-                    className={`basis-1/3 text-right pr-2 ${
-                      item.diff < 0 ? "text-red-400" : "text-green-500"
-                    }`}
+                    className="flex space-between w-full p-2.5 border-t"
+                    key={index}
                   >
-                    {item.diff}
+                    <div className="basis-1/3 text-gray-400">
+                      {new Date(item.name).toLocaleDateString(
+                        locale === "ko" ? "ko-KR" : "en-US",
+                        {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )}
+                    </div>
+                    <div className="basis-1/3 text-center">
+                      {item.sub.toLocaleString()}
+                    </div>
+                    <div
+                      className={`basis-1/3 text-right pr-2 ${
+                        item.diff < 0 ? "text-red-400" : "text-green-500"
+                      }`}
+                    >
+                      {item.diff}
+                    </div>
                   </div>
+                ))}
+                <div className="mt-2.5 bg-gray-100 p-2 rounded-md">
+                  <Pagination
+                    total={growthData2.length}
+                    limit={ITEMS_PER_PAGE}
+                    activePage={currentPage}
+                    onChangePage={(page) => setCurrentPage(page)}
+                  />
                 </div>
-              ))}
-              <div className="mt-2.5 bg-gray-100 p-2 rounded-md">
-                <Pagination
-                  total={growthData2.length}
-                  limit={ITEMS_PER_PAGE}
-                  activePage={currentPage}
-                  onChangePage={(page) => setCurrentPage(page)}
-                />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
