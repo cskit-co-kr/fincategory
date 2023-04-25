@@ -13,7 +13,7 @@ const Layout = ({ children }: any) => {
     } else {
       document.body.classList.remove('overflow-y-hidden');
     }
-  });
+  }, []);
 
   return (
     <>
