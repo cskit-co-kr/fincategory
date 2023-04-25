@@ -216,6 +216,9 @@ export const getServerSideProps = async (context: any) => {
     { id: channel.channel_id }
   );
   const sub = responseSub.data;
+  sub.forEach(function (v: any) {
+    delete v.id, delete v.channel_id, delete v.updated_at;
+  });
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
