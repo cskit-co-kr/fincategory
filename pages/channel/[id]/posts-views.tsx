@@ -3,8 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
 import { enUS } from "../../../lang/en-US";
 import { koKR } from "../../../lang/ko-KR";
 import {
@@ -149,9 +147,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
         <title>{`${router.query.id} - ${t["Posts-reach"]}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header />
-
       <div className="md:flex xl:w-[1280px] mx-auto text-black">
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -329,8 +324,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
@@ -354,12 +347,10 @@ export const getServerSideProps = async (context: any) => {
   const combinedReturn = await res.json();
   const totalViews = combinedReturn[0].total.reverse();
   const averageViews = combinedReturn[0].average;
-  const errPercent = combinedReturn[0].average
-    .reverse()
-    .map((item: any) => ({
-      date: item.date,
-      views: Math.round((item.average * 100) / channel.subscription),
-    }));
+  const errPercent = combinedReturn[0].average.reverse().map((item: any) => ({
+    date: item.date,
+    views: Math.round((item.average * 100) / channel.subscription),
+  }));
 
   return {
     props: {

@@ -3,8 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import ChannelDetailLeftSidebar from "../../../components/channel/ChannelDetailLeftSidebar";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
 import { enUS } from "../../../lang/en-US";
 import { koKR } from "../../../lang/ko-KR";
 import {
@@ -176,9 +174,6 @@ const subscribers = ({ channel, sub }: any) => {
         <title>{`${router.query.id} - ${t["Subscribers"]} ${t["statistics"]}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header />
-
       <div className="md:flex xl:w-[1280px] mx-auto text-black">
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -402,8 +397,6 @@ const subscribers = ({ channel, sub }: any) => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

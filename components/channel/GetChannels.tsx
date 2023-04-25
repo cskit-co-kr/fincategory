@@ -21,7 +21,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
   return (
     <Link
       href={{ pathname: '/channel/' + channels.username }}
-      className='hover:no-underline group'
+      className='hover:no-underline group col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-4'
       target={'_blank'}
     >
       <div

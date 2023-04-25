@@ -157,12 +157,9 @@ const ChannelDetail = ({
   return (
     <div className="pt-36 bg-gray-50">
       <Head>
-        {/* <title>{`FinCategory - ${channel.title}`}</title> */}
+        <title>{`FinCategory - ${channel.title}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Header />
-
       <div className="md:flex xl:w-[1280px] w-full mx-auto px-3 md:px-0">
         <ChannelDetailLeftSidebar channel={channel} />
         <div className="w-full md:w-[974px] flex flex-col gap-4 justify-items-stretch content-start">
@@ -283,8 +280,6 @@ const ChannelDetail = ({
           </div>
         </div>
       </div>
-
-      <Footer />
       {/* <img
         id='base64image'
         src='data:image/jpeg;base64, '

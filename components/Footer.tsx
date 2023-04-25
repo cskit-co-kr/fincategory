@@ -9,8 +9,8 @@ function Footer() {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
   return (
-    <div className='bg-white py-8 bottom-0 w-full mt-10'>
-      <div className='mx-auto xl:max-w-7xl md:grid md:grid-cols-5 p-4 xl:p-0'>
+    <footer className='bg-white py-8 bottom-0 w-full mt-10'>
+      <div className='md:grid md:grid-cols-5 py-4 xl:p-0'>
         <div className='mb-4'>
           <div className='mb-8 font-raleway text-lg'>
             <a href='/' className='hover:no-underline hover:text-current'>
@@ -56,8 +56,8 @@ function Footer() {
           </ul>
         </div>
       </div>
-      <div className='mx-auto max-w-7xl mt-0 md:mt-10 pl-4 xl:pl-0 text-sm'>© 2023 FinCategory. All Rights Reserved.</div>
-    </div>
+      <div className='mt-0 md:mt-10 text-sm'>© 2023 FinCategory. All Rights Reserved.</div>
+    </footer>
   );
 }
 
