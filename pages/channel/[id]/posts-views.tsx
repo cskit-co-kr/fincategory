@@ -358,9 +358,9 @@ export const getServerSideProps = async (context: any) => {
     body: JSON.stringify({ channel_id: channel.channel_id }),
   });
   const combinedReturn = await res.json();
-  const totalViews = combinedReturn[0].total.reverse();
+  const totalViews = combinedReturn[0].total;
   const averageViews = combinedReturn[0].average;
-  const errPercent = combinedReturn[0].average.reverse().map((item: any) => ({
+  const errPercent = combinedReturn[0].average.map((item: any) => ({
     date: item.date,
     views: Math.round((item.average * 100) / channel.subscription),
   }));
