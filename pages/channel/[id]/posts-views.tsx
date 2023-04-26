@@ -129,6 +129,23 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
 
   const [errPercentCount, setErrPercentCount] = useState<number>(errPercent.length - 30);
 
+  let tx = 1;
+  const CustomTraveller = ({ x, y }: any) => {
+    if (tx++ % 2 === 0) {
+      return (
+        <g transform={`translate(${x - 5},${y})`}>
+          <image href='/handles-right-svg.svg' width={20} height={35} />
+        </g>
+      );
+    } else {
+      return (
+        <g transform={`translate(${x + 1},${y})`}>
+          <image href='/handles-left-svg.svg' width={20} height={35} />
+        </g>
+      );
+    }
+  };
+
   return (
     <>
       <NextSeo
@@ -192,9 +209,36 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   </defs>
                   <Tooltip content={<CustomTooltip which='1' />} />
                   <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                  <YAxis type='number' domain={[0, 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <YAxis
+                    type='number'
+                    domain={[0, 'dataMax + 100']}
+                    axisLine={false}
+                    tickCount={5}
+                    tickLine={false}
+                    fontSize={12}
+                    tick={<CustomizedYAxisTick />}
+                  />
                   <CartesianGrid vertical={false} />
-                  <Brush dataKey='date' stroke='#3886E2' startIndex={averagesCount} endIndex={averageViews.length - 1} />
+                  <Brush
+                    dataKey='date'
+                    stroke='#3886E2'
+                    startIndex={averagesCount}
+                    endIndex={averageViews.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={averageViews}>
+                      <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
+                      <defs>
+                        <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                          <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
+                          <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type='monotone' dataKey='average' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                    </AreaChart>
+                  </Brush>
                   <Area type='monotone' dataKey='average' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
                 </AreaChart>
               </ResponsiveContainer>
@@ -213,9 +257,36 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   </defs>
                   <Tooltip content={<CustomTooltip which='2' />} />
                   <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                  <YAxis type='number' domain={[0, 'dataMax + 100']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick />} />
+                  <YAxis
+                    type='number'
+                    domain={[0, 'dataMax + 100']}
+                    axisLine={false}
+                    tickCount={5}
+                    tickLine={false}
+                    fontSize={12}
+                    tick={<CustomizedYAxisTick />}
+                  />
                   <CartesianGrid vertical={false} />
-                  <Brush dataKey='date' stroke='#55A348' startIndex={totalCount} endIndex={totalViews.length - 1} />
+                  <Brush
+                    dataKey='date'
+                    stroke='#55A348'
+                    startIndex={totalCount}
+                    endIndex={totalViews.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={totalViews}>
+                      <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
+                      <defs>
+                        <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                          <stop offset='5%' stopColor='#55A348' stopOpacity={0.8} />
+                          <stop offset='95%' stopColor='#55A348' stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type='monotone' dataKey='total' stroke='#55A348' strokeWidth={1} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
+                    </AreaChart>
+                  </Brush>
                   <Area type='monotone' dataKey='total' stroke='#55A348' strokeWidth={2} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
                 </AreaChart>
               </ResponsiveContainer>
@@ -234,9 +305,36 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   </defs>
                   <Tooltip content={<CustomTooltip which='3' />} />
                   <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
-                  <YAxis type='number' domain={[0, 'dataMax']} tickCount={6} fontSize={12} tick={<CustomizedYAxisTick which='3' />} />
+                  <YAxis
+                    type='number'
+                    domain={[0, 'dataMax']}
+                    axisLine={false}
+                    tickCount={5}
+                    tickLine={false}
+                    fontSize={12}
+                    tick={<CustomizedYAxisTick which='3' />}
+                  />
                   <CartesianGrid vertical={false} />
-                  <Brush dataKey='date' stroke='#CD5066' startIndex={errPercentCount} endIndex={errPercent.length - 1} />
+                  <Brush
+                    dataKey='date'
+                    stroke='#CD5066'
+                    startIndex={errPercentCount}
+                    endIndex={errPercent.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={errPercent}>
+                      <rect x={0} y={0} width='100%' height='100%' fill='#f2f2f2' />
+                      <defs>
+                        <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
+                          <stop offset='5%' stopColor='#CD5066' stopOpacity={0.8} />
+                          <stop offset='95%' stopColor='#CD5066' stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={1} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
+                    </AreaChart>
+                  </Brush>
                   <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={2} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
                 </AreaChart>
               </ResponsiveContainer>
@@ -261,7 +359,6 @@ export const getServerSideProps = async (context: any) => {
   });
   const combinedReturn = await res.json();
   const totalViews = combinedReturn[0].total.reverse();
-  console.log(totalViews);
   const averageViews = combinedReturn[0].average;
   const errPercent = combinedReturn[0].average.reverse().map((item: any) => ({
     date: item.date,
