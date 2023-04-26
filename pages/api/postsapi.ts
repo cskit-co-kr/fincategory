@@ -26,16 +26,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const itemDate = new Date(item.date.replace(/-/g, '/'));
       return itemDate >= startDate && itemDate < currentDate;
     });
+    console.log(last30DaysData);
     const v = last30DaysData.sort((a: any, b: any) => b.views - a.views);
     if (resp.status === 200) {
       res.status(200).json(v);
     } else {
       res.status(resp.status).json('NO');
     }
-
-    // console.log("====================================");
-    // console.log(v);
-    // console.log("====================================");
   }
 
   async function getPosts() {
