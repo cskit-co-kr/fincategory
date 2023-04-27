@@ -480,7 +480,7 @@ const Search = (
             </div>
           </div>
 
-          <div className="xl:w-[954px] grid lg:grid-cols-12 xl:grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full">
+          <div className="xl:w-[954px] grid grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full">
             {searchResult ? (
               <div className="sorting md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-12 border border-gray-200 mt-4 md:mt-0">
                 <span className="text-xs">
