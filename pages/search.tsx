@@ -256,7 +256,7 @@ const Search = (
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="flex ">
-          <div className="flex flex-col w-0 lg:w-[310px]">
+          <div className="flex flex-col w-0 lg:min-w-[314px]">
             <div className="lg:sticky lg:top-4">
               <div
                 className={`${
@@ -480,7 +480,7 @@ const Search = (
             </div>
           </div>
 
-          <div className="xl:w-[954px] grid grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full">
+          <div className="grid grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full">
             {searchResult ? (
               <div className="sorting md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-12 border border-gray-200 mt-4 md:mt-0">
                 <span className="text-xs">
