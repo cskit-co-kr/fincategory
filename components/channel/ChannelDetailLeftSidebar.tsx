@@ -14,9 +14,9 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const [error, setError] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col w-full md:w-[310px] mt-4 md:mt-0 md:mr-4 ">
+    <div className="flex flex-col md:w-[250px] md:min-w-[250px] lg:w-[310px] mt-4 md:mt-0 md:mr-4">
       <div className="sticky inset-y-4">
-        <div className="flex flex-col gap-4 border border-gray-200 rounded-md p-[30px] bg-white items-center">
+        <div className="flex flex-col gap-y-[30px] border border-gray-200 rounded-md p-[15px] overflow-hidden bg-white items-center">
           <Image
             src={error ? "/telegram-icon-96.png" : avatar}
             alt={channel.title}
@@ -37,7 +37,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             @{channel.username}
             <ArrowTopRightOnSquareIcon className="h-4" />
           </a>
-          <p className="break-words">{channel.description}</p>
+          <p className="overflow-hidden block">{channel.description}</p>
           <div className="flex flex-col justify-between w-full">
             <span className="text-gray-400">{t["category"]}</span>
             <span className="text-primary">
