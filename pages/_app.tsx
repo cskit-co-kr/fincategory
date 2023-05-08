@@ -9,9 +9,6 @@ import { DataProvider } from "../context/context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
-
-  console.log("env: ", env);
-
   return (
     <>
       <DefaultSeo
