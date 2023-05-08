@@ -239,9 +239,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <div className='flex '>
-          <div className='flex flex-col w-0 lg:w-[310px]'>
+          <div className='flex flex-col w-0 lg:min-w-[314px]'>
             <div className='lg:sticky lg:top-4'>
-              <div className={`${sideBar ? 'absolute' : 'hidden'} left-0 top-0 w-full h-full bg-white/50 z-[1000]`} onClick={() => toggleSideBar(false)}></div>
               <div
                 className={`${
                   sideBar ? 'left-0' : '-left-full'
@@ -434,7 +433,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </div>
             </label>
             */}
-                  <button onClick={() => doSearch('')} className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'>
+                  <button
+                    onClick={() => doSearch('')}
+                    className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
+                  >
                     {t['search']}
                   </button>
                 </div>
@@ -442,7 +444,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             </div>
           </div>
 
-          <div className='xl:w-[954px] grid lg:grid-cols-12 xl:grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+          <div className='grid grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {searchResult ? (
               <div className='sorting md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-12 border border-gray-200 mt-4 md:mt-0'>
                 <span className='text-xs'>
@@ -471,7 +473,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 return <GetChannels channels={channel} key={index} />;
               })
             ) : (
-              <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>{searchResultText}</div>
+              <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>
+                {searchResultText}
+              </div>
             )}
             {loadMore && (
               <div className='flex justify-center col-span-12'>
