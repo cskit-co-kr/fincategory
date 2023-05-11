@@ -6,16 +6,28 @@ import { DefaultSeo } from "next-seo";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import Layout from "../components/layout";
 import { DataProvider } from "../context/context";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
   return (
     <>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <DefaultSeo
         title="핀카테고리"
         titleTemplate="%s | FinCategory"
         description="가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory."
         additionalMetaTags={[
+          {
+            name: "title",
+            content: "핀카테고리 | FinCategory",
+          },
+          {
+            name: "description",
+            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
+          },
           {
             name: "author",
             content: "FinCategory",
