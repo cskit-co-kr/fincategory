@@ -7,6 +7,8 @@ export const enUS = {
     "sign-in": "Sign in",
     "home": "Home",
     "search": "Search",
+    "board": "Board",
+    "view-all-articles": "View all articles",
     "new-channel-registration": "New channel registration",
     "see-more": "See more",
     "by-keyword": "By Keyword",

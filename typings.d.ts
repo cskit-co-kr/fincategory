@@ -56,3 +56,25 @@ export type MultiValueOptions = {
   value: any;
   label: any;
 };
+export type Board = {
+  id: number;
+  name: string;
+  title: string;
+  list_level: number;
+  read_level: number;
+  write_level: number;
+  comment_level: number;
+  upload_level: number;
+  download_level: number;
+  html_level: number;
+  new_duration: number;
+  hot_low: number;
+  count_delete: number;
+  count_modify: number;
+  created_at: date;
+  updated_at: date;
+  deleted_at: date | null;
+  category_total: number;
+  post_total: number;
+  comment_total: number;
+};
