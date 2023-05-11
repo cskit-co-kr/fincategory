@@ -101,35 +101,6 @@ const Header = () => {
                   {t['search']}
                 </button>
               </li>
-              <li className='relative'>
-                <button
-                  className={`group ${getPath === '/board' ? activePath : normalPath}`}
-                  onClick={() => setBoardsPopupMenuShow((prev) => !prev)}
-                >
-                  {t['board']}{' '}
-                  {boardsPopupMenuShow ? (
-                    <FaChevronUp size={12} className='group-hover:animate-bounce' />
-                  ) : (
-                    <FaChevronDown size={12} className='group-hover:animate-bounce' />
-                  )}
-                </button>
-                {boardsPopupMenuShow && (
-                  <div className='absolute left-4 top-11 min-w-[100px] z-20 bg-white border border-gray-200 rounded-lg shadow-md divide-y font-normal text-xs'>
-                    <div>
-                      <Link href='/board' className='block px-3 py-2'>
-                        {t['view-all-articles']}
-                      </Link>
-                    </div>
-                    {allBoards.map((board: Board) => (
-                      <div key={board.id}>
-                        <Link href={`/board/${board.name}`} className='block px-3 py-2'>
-                          {board.title}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </li>
             </ul>
             <button
               className={getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}
