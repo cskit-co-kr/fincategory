@@ -6,10 +6,12 @@ const Board: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   const name = props.name
   return (
     <>
-      <div className="flex flex-col pt-36 bg-gray-50">
-        <NextSeo
-          title={name}
-        />
+      <NextSeo
+        title={name}
+      />
+      <div className="grid grid-cols-12">
+        <div className="col-span-3">Left side</div>
+        <div className="col-span-9">Right Side</div>
       </div>
     </>
   )
@@ -26,7 +28,7 @@ export const getServerSideProps = async (context: any) => {
   const board = await res.data;
 
   console.log('board: ', board);
-  
+
   return {
     props: { name }
   }
