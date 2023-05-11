@@ -1,22 +1,28 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import React, { useContext, useEffect, useState } from 'react';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
 import LanguageSelector from './LanguageSelector';
 import { useData } from '../context/context';
+import { Board } from '../typings';
+import Link from 'next/link';
 
-const Header: FunctionComponent = () => {
+const Header = () => {
   const router = useRouter();
   const getPath = useRouter().pathname;
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
   const { toggleSideBar, sideBar } = useData();
 
-  const normalPath = 'px-5 py-3 font-bold text-[14px] hover:text-primary';
-  const activePath = normalPath + ' border-b-2 border-primary';
+  const normalPath = 'px-5 py-3 font-bold text-[14px] hover:text-primary flex items-center gap-1';
+  // const activePath = normalPath + ' border-b-2 border-primary';
+  const activePath = normalPath + ' text-primary';
 
   const [searchField, setSearchField] = useState<string | null>(null);
+  const [allBoards, setAllBoards] = useState([]);
+  const [boardsPopupMenuShow, setBoardsPopupMenuShow] = useState(false);
 
   const handleSubmit = () => {
     console.log(searchField);
@@ -32,9 +38,22 @@ const Header: FunctionComponent = () => {
       e.target.blur();
     }
   };
+
+  useEffect(() => {
+    const getBoards = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board`, {
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+      });
+      const allBoards = await response.json();
+      setAllBoards(allBoards.boards);
+    };
+    getBoards();
+  }, []);
+
   return (
     <>
-      <header className='h-[108px] md:h-[117px] bg-white'>
+      <header className=' bg-white z-20'>
         <div className='container mx-auto px-4'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
             <div className='font-raleway text-lg'>
@@ -62,7 +81,7 @@ const Header: FunctionComponent = () => {
               </div>
             </div>
           </div>
-          <nav className='flex'>
+          <nav className='flex text-sm font-bold'>
             <ul className='flex'>
               <li className='hidden'>
                 <button className={getPath === '/' ? activePath : normalPath} onClick={() => router.push('/')}>
@@ -82,8 +101,40 @@ const Header: FunctionComponent = () => {
                   {t['search']}
                 </button>
               </li>
+              <li className='relative'>
+                <button
+                  className={`group ${getPath === '/board' ? activePath : normalPath}`}
+                  onClick={() => setBoardsPopupMenuShow((prev) => !prev)}
+                >
+                  {t['board']}{' '}
+                  {boardsPopupMenuShow ? (
+                    <FaChevronUp size={12} className='group-hover:animate-bounce' />
+                  ) : (
+                    <FaChevronDown size={12} className='group-hover:animate-bounce' />
+                  )}
+                </button>
+                {boardsPopupMenuShow && (
+                  <div className='absolute left-4 top-11 min-w-[100px] z-20 bg-white border border-gray-200 rounded-lg shadow-md divide-y font-normal text-xs'>
+                    <div>
+                      <Link href='/board' className='block px-3 py-2'>
+                        {t['view-all-articles']}
+                      </Link>
+                    </div>
+                    {allBoards.map((board: Board) => (
+                      <div key={board.id}>
+                        <Link href={`/board/${board.name}`} className='block px-3 py-2'>
+                          {board.title}
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
             </ul>
-            <button className={getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'} onClick={() => router.push('/add')}>
+            <button
+              className={getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}
+              onClick={() => router.push('/add')}
+            >
               {t['new-channel-registration']}
             </button>
           </nav>

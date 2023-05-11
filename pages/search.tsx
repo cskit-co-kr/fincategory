@@ -244,7 +244,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               <div
                 className={`${
                   sideBar ? 'left-0' : '-left-full'
-                } bg-gray-50 px-4 py-6 lg:bg-transparent lg:px-0 lg:py-0 fixed top-0 h-full transition-all transform duration-500 w-[80%] lg:w-full z-[10000] lg:sticky lg:top-4 overflow-y-auto lg:overflow-hidden`}
+                } bg-gray-50 px-4 py-6 lg:bg-transparent lg:px-0 lg:py-0 fixed top-0 h-full transition-all transform duration-500 w-[80%] lg:w-full z-10 lg:sticky lg:top-4 overflow-y-auto lg:overflow-hidden`}
               >
                 <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
                   <label className='flex flex-col gap-2'>
