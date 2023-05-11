@@ -25,7 +25,7 @@ const Layout = ({ children }: any) => {
       var hs = document.createElement('script');
       hs.type = 'text/javascript';
       hs.async = true;
-      hs.src = 'http://s10.histats.com/js15_as.js';
+      hs.src = 'https://s10.histats.com/js15_as.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
     })();
   }, []);
@@ -43,7 +43,7 @@ const Layout = ({ children }: any) => {
       </div>
       <noscript>
         <a href='/' target='_blank'>
-          <img src='http://sstatic1.histats.com/0.gif?4764338&101' alt='free web page counters' />
+          <img src='https://sstatic1.histats.com/0.gif?4764338&101' alt='free web page counters' />
         </a>
       </noscript>
     </>
