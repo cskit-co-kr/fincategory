@@ -55,15 +55,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
           {
             property: "og:title",
-            content: "Fincategory",
+            content: "핀카테고리 | Fincategory",
           },
           {
             property: "og:description",
-            content: "keywords",
+            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
           },
           {
             property: "og:keywords",
-            content: "keywords ",
+            content: "telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더 ",
           },
           {
             property: "og:url",
@@ -87,15 +87,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
           {
             name: "twitter:title",
-            content: "Fincategory",
+            content: "핀카테고리 | Fincategory",
           },
           {
             name: "twitter:description",
-            content: "Fincategory",
+            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
           },
           {
             name: "twitter:keywords",
-            content: "twitter keywords",
+            content: "telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더",
           },
           {
             name: "twitter:image",
