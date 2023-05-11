@@ -12,9 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo
-        title="Title"
+        title="핀카테고리"
         titleTemplate="%s | FinCategory"
-        description="가장 큰 한국 텔레그램 채널들 및 그룹 카탈로그 fincategory."
+        description="가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory."
         additionalMetaTags={[
           {
             name: "author",
@@ -58,6 +58,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             content: "https://fincategory.com",
           },
           {
+            property: "og:image",
+            content: "https://fincategory.com/logo.png",
+          },
+          {
+            property: "og:image:type",
+            content: "png",
+          },
+          {
             name: "twitter:card",
             content: "summary_large_image",
           },
@@ -79,7 +87,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
           {
             name: "twitter:image",
-            content: "",
+            content: "https://fincategory.com/logo.png",
           },
           {
             name: "twitter:creator",
