@@ -18,10 +18,9 @@ const Layout = ({ children }: any) => {
 
   return (
     <>
-      {/* <Head>
-        <title>FinCategory - Search</title>
+      <Head>
         <link rel="icon" href="/favicon.ico" />
-      </Head> */}
+      </Head>
 
       <div className="wrapper bg-gray-50">
         <Header />
