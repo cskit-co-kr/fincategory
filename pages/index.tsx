@@ -41,10 +41,6 @@ const Home: NextPage = ({
 
   return (
     <>
-      <NextSeo
-        title="핀카테고리"
-        description="가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory."
-      />
       <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
         <div className="px-4 lg:px-0 md:flex md:flex-col xl:w-[1280px] mx-auto text-black">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
