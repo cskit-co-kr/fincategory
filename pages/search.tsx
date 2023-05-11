@@ -234,10 +234,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   return (
     <>
       <div className='flex flex-1 flex-col pt-7'>
-        <Head>
-          <title>FinCategory - Search</title>
-          <link rel='icon' href='/favicon.ico' />
-        </Head>
         <div className='flex '>
           <div className='flex flex-col w-0 lg:min-w-[314px]'>
             <div className='lg:sticky lg:top-4'>
