@@ -104,4 +104,6 @@ export const enUS = {
     /* detail - top-posts */
     "The-most-popular-posts": "The most popular posts",
     "top-posts-text-1": "This page shows the most popular posts of the \"%{channel.title}\" channel since the last 30 days by number of views / forwards / reposts / comments / reactions.",
+    /* boards */
+    "board-list": "Board List"
 }
