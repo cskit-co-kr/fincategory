@@ -469,7 +469,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 return <GetChannels channels={channel} key={index} />;
               })
             ) : (
-              <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-3'>
+              <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-12'>
                 {searchResultText}
               </div>
             )}

@@ -41,9 +41,21 @@ const Header = () => {
 
   useEffect(() => {
     const getBoards = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board`, {
-        method: 'GET',
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/read`, {
+        method: 'POST',
         headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          query: null,
+          mode: 'full',
+          paginate: {
+            offset: 0,
+            limit: 20,
+          },
+          sort: {
+            field: 'hot_low',
+            order: 'ASC',
+          },
+        }),
       });
       const allBoards = await response.json();
       setAllBoards(allBoards.boards);
