@@ -16,6 +16,7 @@ const Layout = ({ children }: any) => {
     }
   });
 
+
   // useEffect(() => {
   //   var _Hasync: any = _Hasync || [];
   //   _Hasync.push(['Histats.start', '1,4764338,4,0,0,0,00010000']);
