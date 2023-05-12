@@ -18,7 +18,7 @@ const Layout = ({ children }: any) => {
 
   useEffect(() => {
     var _Hasync: any = _Hasync || [];
-    _Hasync.push(['Histats.start', '1,4764338,4,0,0,0,00010000']);
+    _Hasync.push(['Histats.start', '1,4764338,4,428,112,75,00011111']);
     _Hasync.push(['Histats.fasi', '1']);
     _Hasync.push(['Histats.track_hits', '']);
     (function () {
@@ -43,7 +43,7 @@ const Layout = ({ children }: any) => {
       </div>
       <noscript>
         <a href='/' target='_blank'>
-          <img src='https://sstatic1.histats.com/0.gif?4764338&101' alt='free web page counters' />
+          <img src='https://sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
         </a>
       </noscript>
     </>
