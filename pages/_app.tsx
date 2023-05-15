@@ -8,9 +8,27 @@ import Layout from "../components/layout";
 import { DataProvider } from "../context/context";
 import Head from "next/head";
 import Script from "next/script";
+import { useEffect } from "react";
+import { setCookie, getCookie, hasCookie } from "cookies-next";
+import axios from "axios";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
+  const setVisit = async () => {
+    if (env !== 'development') {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
+      const data = await res.data;
+      if (data.code === 200) {
+        const today = new Date();
+        setCookie('visit', today.getTime());
+      }
+    }
+  }
+  useEffect(() => {
+    if (!hasCookie('visit')) {
+      setVisit();
+    }
+  }, [])
   return (
     <>
       <Head>
