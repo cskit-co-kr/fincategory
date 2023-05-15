@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import Footer from './Footer';
-import Header from './Header';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { useData } from '../context/context';
-import Script from 'next/script';
+import Footer from './Footer';
+import Header from './Header';
 
 const Layout = ({ children }: any) => {
   const { sideBar } = useData();
@@ -21,7 +21,6 @@ const Layout = ({ children }: any) => {
       <Head>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-
       <div className='wrapper bg-gray-50'>
         <Header />
         <div className='container px-4 mx-auto'>{children}</div>
