@@ -1,16 +1,16 @@
 import "rsuite/dist/rsuite.min.css";
 import "../styles/globals.css";
 
-import type { AppProps } from "next/app";
+import axios from "axios";
+import { hasCookie, setCookie } from "cookies-next";
 import { DefaultSeo } from "next-seo";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-import Layout from "../components/layout";
-import { DataProvider } from "../context/context";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import { useEffect } from "react";
-import { setCookie, getCookie, hasCookie } from "cookies-next";
-import axios from "axios";
+import Layout from "../components/layout";
+import { DataProvider } from "../context/context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
@@ -24,11 +24,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     }
   }
+  
   useEffect(() => {
     if (!hasCookie('visit')) {
       setVisit();
     }
-  }, [])
+  }, []);
+
   return (
     <>
       <Head>
