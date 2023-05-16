@@ -18,6 +18,7 @@ module.exports = {
   },
   env: {
     API_GET_CATEGORY: process.env.API_GET_CATEGORY,
+    PUBLIC_URL: '/'
   },
   async redirects() {
     return [
