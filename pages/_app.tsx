@@ -1,18 +1,19 @@
-import "rsuite/dist/rsuite.min.css";
-import "../styles/globals.css";
+import 'rsuite/dist/rsuite.min.css';
+import '../styles/globals.css';
 
-import axios from "axios";
-import { hasCookie, setCookie } from "cookies-next";
-import { DefaultSeo } from "next-seo";
-import type { AppProps } from "next/app";
-import Head from "next/head";
-import Script from "next/script";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-import { useEffect } from "react";
-import Layout from "../components/layout";
-import { DataProvider } from "../context/context";
+import axios from 'axios';
+import { hasCookie, setCookie } from 'cookies-next';
+import { DefaultSeo } from 'next-seo';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import Script from 'next/script';
+import { GoogleAnalytics } from 'nextjs-google-analytics';
+import { useEffect } from 'react';
+import Layout from '../components/layout';
+import { DataProvider } from '../context/context';
+import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const env = process.env.NODE_ENV;
   const setVisit = async () => {
     if (env !== 'development') {
@@ -23,8 +24,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         setCookie('visit', today.getTime());
       }
     }
-  }
-  
+  };
+
   useEffect(() => {
     if (!hasCookie('visit')) {
       setVisit();
@@ -34,110 +35,114 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <DefaultSeo
-        title="핀카테고리"
-        titleTemplate="%s | FinCategory"
-        description="가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory."
+        title='핀카테고리'
+        titleTemplate='%s | FinCategory'
+        description='가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.'
         additionalMetaTags={[
           {
-            name: "title",
-            content: "핀카테고리 | FinCategory",
+            name: 'title',
+            content: '핀카테고리 | FinCategory',
           },
           {
-            name: "description",
-            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
+            name: 'description',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
           },
           {
-            name: "author",
-            content: "FinCategory",
+            name: 'author',
+            content: 'FinCategory',
           },
           {
-            name: "keywords",
+            name: 'keywords',
             content:
-              "telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더",
+              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더',
           },
           {
-            property: "og:locale",
-            content: "ko_KR",
+            property: 'og:locale',
+            content: 'ko_KR',
           },
           {
-            property: "og:type",
-            content: "website",
+            property: 'og:type',
+            content: 'website',
           },
           {
-            property: "og:rich_attachment",
-            content: "true",
+            property: 'og:rich_attachment',
+            content: 'true',
           },
           {
-            property: "og:site_name",
-            content: "FinCategory",
+            property: 'og:site_name',
+            content: 'FinCategory',
           },
           {
-            property: "og:title",
-            content: "핀카테고리 | Fincategory",
+            property: 'og:title',
+            content: '핀카테고리 | Fincategory',
           },
           {
-            property: "og:description",
-            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
+            property: 'og:description',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
           },
           {
-            property: "og:keywords",
-            content: "telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더 ",
+            property: 'og:keywords',
+            content:
+              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더 ',
           },
           {
-            property: "og:url",
-            content: "https://fincategory.com",
+            property: 'og:url',
+            content: 'https://fincategory.com',
           },
           {
-            property: "og:image",
-            content: "https://fincategory.com/logo.png",
+            property: 'og:image',
+            content: 'https://fincategory.com/logo.png',
           },
           {
-            property: "og:image:type",
-            content: "png",
+            property: 'og:image:type',
+            content: 'png',
           },
           {
-            name: "twitter:card",
-            content: "summary_large_image",
+            name: 'twitter:card',
+            content: 'summary_large_image',
           },
           {
-            name: "twitter:site",
-            content: "Fincategory",
+            name: 'twitter:site',
+            content: 'Fincategory',
           },
           {
-            name: "twitter:title",
-            content: "핀카테고리 | Fincategory",
+            name: 'twitter:title',
+            content: '핀카테고리 | Fincategory',
           },
           {
-            name: "twitter:description",
-            content: "가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.",
+            name: 'twitter:description',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
           },
           {
-            name: "twitter:keywords",
-            content: "telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더",
+            name: 'twitter:keywords',
+            content:
+              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더',
           },
           {
-            name: "twitter:image",
-            content: "https://fincategory.com/logo.png",
+            name: 'twitter:image',
+            content: 'https://fincategory.com/logo.png',
           },
           {
-            name: "twitter:creator",
-            content: "FinCategory",
+            name: 'twitter:creator',
+            content: 'FinCategory',
           },
         ]}
         twitter={{
-          site: "fincategory.com",
+          site: 'fincategory.com',
         }}
       />
 
-      {env === "development" ? "" : <GoogleAnalytics />}
-      <DataProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </DataProvider>
+      {env === 'development' ? '' : <GoogleAnalytics />}
+      <SessionProvider session={session}>
+        <DataProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </DataProvider>
+      </SessionProvider>
       <Script
         id='hi-stat'
         dangerouslySetInnerHTML={{
@@ -151,10 +156,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             hs.src = ('//s10.histats.com/js15_as.js');
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
             })();
-          `
+          `,
         }}
       />
-      <noscript><a href="/" target="_blank"><img src="//sstatic1.histats.com/0.gif?4764338&101" alt="free stats" /></a></noscript>
+      <noscript>
+        <a href='/' target='_blank'>
+          <img src='//sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
+        </a>
+      </noscript>
     </>
   );
 }

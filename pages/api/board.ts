@@ -51,6 +51,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
           field: 'created_at',
           order: 'DESC',
         },
+        filter: {
+          field: null,
+          value: null,
+        },
       }),
     });
 
