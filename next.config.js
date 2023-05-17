@@ -25,9 +25,9 @@ module.exports = {
       {
         source: "/",
         destination: "/search",
-        permanent: true,
-      },
-    ];
+        permanent: true
+      }
+    ]
   },
   async headers() {
     return [
