@@ -9,6 +9,7 @@ export const config = {
 
 export async function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith('/uploads')) {
+    console.log('pathname: ', req.nextUrl.pathname);
     return NextResponse.next()
   }
 
