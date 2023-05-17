@@ -88,7 +88,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   {postList?.posts?.map((post: PostType) => (
                     <div className='border-b border-gray-200 flex' key={post.id}>
                       <div className='text-center p-2 min-w-[80px]'>{post.board ? post.board.title : post.category.category}</div>
-                      <div className='p-2 flex-grow'>{post.title}</div>
+                      <div className='p-2 flex-grow'>
+                        <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                      </div>
                       <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
                       <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
                       <div className='text-center p-2 min-w-[48px]'>{post.views}</div>

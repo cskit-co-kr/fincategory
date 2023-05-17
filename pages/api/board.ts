@@ -6,6 +6,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return getBoardList();
     case 'getpostlist':
       return getPostList();
+    case 'getpost':
+      return getPost();
     case 'savepost':
       return savePost();
     default:
@@ -61,6 +63,16 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     const result = await response.json();
 
     if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
+  async function getPost() {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/get/${req.body.id}`);
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result.post);
 
     return res.status(500);
   }
