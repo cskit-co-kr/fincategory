@@ -1,16 +1,36 @@
 import "rsuite/dist/rsuite.min.css";
 import "../styles/globals.css";
 
-import type { AppProps } from "next/app";
+import axios from "axios";
+import { hasCookie, setCookie } from "cookies-next";
 import { DefaultSeo } from "next-seo";
-import { GoogleAnalytics } from "nextjs-google-analytics";
-import Layout from "../components/layout";
-import { DataProvider } from "../context/context";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
+import { GoogleAnalytics } from "nextjs-google-analytics";
+import { useEffect } from "react";
+import Layout from "../components/layout";
+import { DataProvider } from "../context/context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
+  const setVisit = async () => {
+    if (env !== 'development') {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
+      const data = await res.data;
+      if (data.code === 200) {
+        const today = new Date();
+        setCookie('visit', today.getTime());
+      }
+    }
+  }
+  
+  useEffect(() => {
+    if (!hasCookie('visit')) {
+      setVisit();
+    }
+  }, []);
+
   return (
     <>
       <Head>

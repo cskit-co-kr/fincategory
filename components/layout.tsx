@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import Footer from './Footer';
-import Header from './Header';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { useData } from '../context/context';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
+import Footer from './Footer';
+import Header from './Header';
 
 const Layout = ({ children, session }: any) => {
   const { sideBar } = useData();
