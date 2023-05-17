@@ -5,6 +5,7 @@ export const koKR = {
     "korean": "한국어",
     "english": "English",
     "sign-in": "로그인",
+    "sign-up": "가입하기",
     "home": "홈",
     "search": "검색",
     "board": "게시판",

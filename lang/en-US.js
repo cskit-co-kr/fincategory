@@ -5,6 +5,7 @@ export const enUS = {
     "korean": "한국어",
     "english": "English",
     "sign-in": "Sign in",
+    "sign-up": "Sign up",
     "home": "Home",
     "search": "Search",
     "board": "Board",

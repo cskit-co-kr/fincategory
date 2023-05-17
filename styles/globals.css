@@ -23,4 +23,7 @@
   .perpage {
     @apply block px-[18px] py-1.5 hover:bg-[#C6DCF5] hover:text-primary;
   }
+  .input_field {
+    @apply w-full border border-gray-200 rounded-md px-4 py-2;
+  }
 }
