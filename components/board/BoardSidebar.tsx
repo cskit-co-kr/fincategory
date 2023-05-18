@@ -58,7 +58,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
           <div>
             {allBoards?.boards.map((board: BoardType) => (
               <div key={board.id}>
-                <Link href={`/board?board=${board.name}`} className='block px-2 py-1 text-sm'>
+                <Link href={`/board/${board.name}`} className='block px-2 py-1 text-sm'>
                   {board.title}
                 </Link>
               </div>

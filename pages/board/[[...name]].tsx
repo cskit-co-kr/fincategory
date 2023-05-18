@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { enUS } from '../lang/en-US';
-import { koKR } from '../lang/ko-KR';
+import { enUS } from '../../lang/en-US';
+import { koKR } from '../../lang/ko-KR';
 import { ArrowPathIcon, ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { BoardType, PostType } from '../typings';
+import { BoardType, PostType } from '../../typings';
 import Link from 'next/link';
 import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { signIn, signOut, useSession, getSession } from 'next-auth/react';
-import BoardSidebar from '../components/board/BoardSidebar';
+import BoardSidebar from '../../components/board/BoardSidebar';
 
 const Board = ({ allBoards, postList, memberInfo }: any) => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
         {/* Sidebar */}
         <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
         {/* Main */}
-        <div className='w-full border border-gray-200 bg-white rounded-md p-[30px]'>
+        <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
           <div className='text-xl font-bold'>{postList.board ? postList.board.title : t['view-all-articles']}</div>
           <div className='flex justify-between items-center text-xs mt-4 pb-2.5'>
             <div>{postList.total} 개의 글</div>
@@ -87,7 +87,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 <div className='text-xs'>
                   {postList?.posts?.map((post: PostType) => (
                     <div className='border-b border-gray-200 flex' key={post.id}>
-                      <div className='text-center p-2 min-w-[80px]'>{post.board ? post.board.title : post.category.category}</div>
+                      <div className='text-center p-2 min-w-[80px]'>
+                        {router.query.name && router.query.name?.length > 0 ? (
+                          <Link href={`/board/${postList.board.name}/${post.category.id}`}>{post.category.category}</Link>
+                        ) : (
+                          <Link href={`/board/${post.board.name}`}>{post.board.title}</Link>
+                        )}
+                      </div>
                       <div className='p-2 flex-grow'>
                         <Link href={`/board/post/${post.id}`}>{post.title}</Link>
                       </div>
@@ -150,12 +156,16 @@ export const getServerSideProps = async (context: any) => {
   });
   const allBoards = await response.json();
   // Get Posts List
-  const boardQuery = context.query['board'];
-  const board = boardQuery === undefined ? 'null' : boardQuery;
-  const responsePost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-  });
+  const boardQuery = context.query.name;
+  const board = boardQuery === undefined ? 'null' : boardQuery[0];
+  const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+  const responsePost = await fetch(
+    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    }
+  );
   const postList = await responsePost.json();
   // Return
   return {
