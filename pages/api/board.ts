@@ -54,8 +54,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
           order: 'DESC',
         },
         filter: {
-          field: null,
-          value: null,
+          field: req.query.category === 'null' ? null : 'category_id',
+          value: req.query.category === 'null' ? null : req.query.category,
         },
       }),
     });
