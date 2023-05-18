@@ -4,8 +4,15 @@ import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
+import { InferGetServerSidePropsType, NextPage } from 'next';
+import { BoardType } from '../../../typings';
 
-const Post = ({ allBoards, memberInfo, post }: any) => {
+const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const allBoards: Array<BoardType> = props.allBoards;
+  const memberInfo = props.memberInfo;
+  const post = props.post;
+  const comments = props.comments;
+
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -17,12 +24,17 @@ const Post = ({ allBoards, memberInfo, post }: any) => {
         {/* Sidebar */}
         <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
         {/* Main */}
-        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
-          <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
-            <div className='text-xl font-bold'>{post.title}</div>
-            <div>{session?.user.username}</div>
+        <div className='flex flex-col'>
+          <div className='flex justify-end'>
+            djf dfa a
           </div>
-          <div>{post.content}</div>
+          <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
+            <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
+              <div className='text-xl font-bold'>{post.title}</div>
+              <div>{session?.user.username}</div>
+            </div>
+            <div>{post.content}</div>
+          </div>
         </div>
       </div>
     </>
@@ -64,9 +76,11 @@ export const getServerSideProps = async (context: any) => {
   });
   const post = await response2.json();
 
+  const comments: any = []
+
   // Return
   return {
-    props: { allBoards, post, memberInfo },
+    props: { allBoards, post, memberInfo, comments },
   };
 };
 
