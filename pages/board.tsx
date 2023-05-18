@@ -26,7 +26,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
         {/* Sidebar */}
         <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
         {/* Main */}
-        <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
+        <div className='w-full border border-gray-200 bg-white rounded-md p-[30px]'>
           <div className='text-xl font-bold'>{postList.board ? postList.board.title : t['view-all-articles']}</div>
           <div className='flex justify-between items-center text-xs mt-4 pb-2.5'>
             <div>{postList.total} 개의 글</div>
