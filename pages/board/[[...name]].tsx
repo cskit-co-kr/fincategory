@@ -316,7 +316,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 ref={inputRef}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
-              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline'>{t['search']}</button>
+              <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'>{t['search']}</button>
             </div>
           </div>
         </div>
