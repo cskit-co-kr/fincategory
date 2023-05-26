@@ -164,7 +164,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                 </div>
               </div>
 
-              <div className='gap-4 flex flex-col'>
+              <div className='gap-4 flex flex-col w-full'>
                 {posts !== null ? (
                   posts.map((post: any, index: number) => {
                     return <Post channel={channel} post={post} key={index} />;
