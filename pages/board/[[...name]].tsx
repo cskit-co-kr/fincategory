@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { signIn, signOut, useSession, getSession } from 'next-auth/react';
 import BoardSidebar from '../../components/board/BoardSidebar';
+import { formatDate } from '../../lib/utils';
 
 const Board = ({ allBoards, postList, memberInfo }: any) => {
   const router = useRouter();
@@ -125,18 +126,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     </>
   );
 };
-
-function formatDate(dateString: string) {
-  const date: any = new Date(dateString);
-  const currentDate: any = new Date();
-  const timeDifference: any = currentDate - date;
-  const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
-  const isWithin24Hours = timeDifference < oneDay;
-  const formattedDateTime = isWithin24Hours
-    ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-    : date.getFullYear() + '.' + date.getMonth() + '.' + date.getDate();
-  return formattedDateTime;
-}
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information

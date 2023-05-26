@@ -1,14 +1,15 @@
+import { getSession, useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import BoardSidebar from '../../components/board/BoardSidebar';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { BoardType } from '../../typings';
+
 import 'react-quill/dist/quill.snow.css';
 
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
-import { getSession, useSession } from 'next-auth/react';
-import BoardSidebar from '../../components/board/BoardSidebar';
-import Link from 'next/link';
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
@@ -45,6 +46,7 @@ const formats = [
   'color',
   'background',
 ];
+
 const WritePost = ({ allBoards, memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;

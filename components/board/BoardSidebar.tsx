@@ -13,7 +13,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
 
   const { data: session } = useSession();
   return (
-    <div className='hidden lg:block lg:min-w-[314px]'>
+    <div className='hidden lg:block lg:min-w-[310px]'>
       <div className='lg:sticky lg:top-4'>
         <div className='flex flex-col gap-3 border border-gray-200 rounded-md p-[30px] bg-white'>
           {session?.user ? (
