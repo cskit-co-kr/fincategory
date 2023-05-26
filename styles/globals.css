@@ -21,9 +21,12 @@
     @apply max-w-[1312px];
   }
   .perpage {
-    @apply block px-[18px] py-1.5 hover:bg-[#C6DCF5] hover:text-primary;
+    @apply block px-[18px] py-1.5 hover:bg-[#C6DCF5] hover:text-primary hover:underline;
   }
   .input_field {
     @apply w-full border border-gray-200 rounded-md px-4 py-2;
+  }
+  .dot {
+    @apply before:content-[''] before:inline-block before:w-[2px] before:h-[2px] before:mt-0 before:mr-[5px] before:mb-[4px] before:ml-[2px] before:border-2 before:bg-gray-600 before:text-gray-600;
   }
 }

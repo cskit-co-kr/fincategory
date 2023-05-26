@@ -87,16 +87,16 @@ export type PostType = {
   board_id: number;
   created_at: timestamp;
   updated_at: timestamp;
-  extra_01: null;
-  extra_02: null;
-  extra_03: null;
-  extra_04: null;
-  extra_05: null;
-  extra_06: null;
-  extra_07: null;
-  extra_08: null;
-  extra_09: null;
-  extra_10: null;
+  extra_01: string;
+  extra_02: string;
+  extra_03: string;
+  extra_04: string;
+  extra_05: string;
+  extra_06: string;
+  extra_07: string;
+  extra_08: string;
+  extra_09: string;
+  extra_10: string;
   user: {
     id: number;
     nickname: string;

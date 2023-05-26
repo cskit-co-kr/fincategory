@@ -22,7 +22,7 @@ const Post = ({ allBoards, memberInfo, post }: any) => {
             <div className='text-xl font-bold'>{post.title}</div>
             <div>{session?.user.username}</div>
           </div>
-          <div>{post.content}</div>
+          <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
       </div>
     </>
