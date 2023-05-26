@@ -134,8 +134,8 @@ type CommentChildType = {
   id: number
   comment: string
   reaction: null
-  created_at: Date
-  updated_at: Date
+  created_at: timestamp
+  updated_at: timestamp
   user: {
     id: number
     nickname: string
@@ -147,8 +147,8 @@ export type CommentType = {
   id: number
   comment: string
   reaction: null
-  created_at: Date
-  updated_at: Date
+  created_at: timestamp
+  updated_at: timestamp
   user: {
     id: number
     nickname: string

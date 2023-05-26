@@ -76,7 +76,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({ comment, userID, reply
         {comment.user.nickname.slice(0, 1)}
       </Avatar>
       <div className='flex flex-1 flex-col'>
-        <p className='p-0 m-0 mb-[5px] text-[13px]'>{comment.user.nickname} | <span className='text-xs text-[#7A8486]'>{toDateTimeformat(comment.created_at.toString(), '.')}</span></p>
+        <p className='p-0 m-0 mb-[5px] text-[13px]'>{comment.user.nickname} | <span className='text-xs text-[#7A8486]'>{toDateTimeformat(comment.created_at, '.')}</span></p>
         <p className='p-0 m-0 mb-[10px] text-[13px] font-medium'>{comment.comment}</p>
         <p className='flex p-0 m-0 text-xs text-[#7A8486]'>
           <span className='mr-[7px] cursor-pointer hover:text-blue-700' onClick={() => handleCommentReaction(comment.id, (checkCommentReaction('like') ? 'remove' : 'add'), 'like')}><HandThumbUpIcon className={`w-[16px] ${checkCommentReaction('like') ? 'text-blue-600' : ''}`} /></span>

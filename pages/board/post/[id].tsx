@@ -20,7 +20,7 @@ import { toDateTimeformat } from '../../../lib/utils';
 import { BoardType, CommentType, PostType } from '../../../typings';
 
 import 'react-quill/dist/quill.snow.css';
-import BoardComment from '../../../components/board/commen';
+import BoardComment from '../../../components/board/comment';
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
@@ -29,6 +29,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const memberInfo = props.memberInfo;
   const [post, setPost] = useState<PostType>(props.post);
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
+  const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
 
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(null);
@@ -39,7 +40,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [placement, setPlacement] = useState<PlacementType>('topEnd');
 
   const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(20);
+  const [perPage, setPerPage] = useState<number>(2);
 
   const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
@@ -102,6 +103,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     const data = await responseComment.json();
 
     setCommenTotal(data.total);
+    setCommentTopTotal(data.topTotal);
     setCommentList(data.comments);
     setCommentLoading(false);
   }
@@ -267,9 +269,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 </div>
               }
               <div className={`flex flex-col bg-[#F9F9F9] rounded-lg p-[20px] mt-[30px]`}>
-                {commentTotal > 0 ?
+                {commentTopTotal > 0 ?
                   <div className='paginate flex w-full border-b border-[#E4E4E4] justify-center pb-[20px]'>
-                    <Pagination prev last next first total={commentTotal} limit={perPage} activePage={page} onChangePage={setPage} disabled={commentLoading} />
+                    <Pagination prev last next first total={commentTopTotal} limit={perPage} activePage={page} onChangePage={setPage} disabled={commentLoading} />
                   </div>
                   :
                   <></>
@@ -339,7 +341,7 @@ export const getServerSideProps = async (context: any) => {
       query: null,
       paginate: {
         offset: 0,
-        limit: 20,
+        limit: 2,
       },
       sort: {
         field: 'created_at',
