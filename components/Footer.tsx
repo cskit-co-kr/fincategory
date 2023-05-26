@@ -57,7 +57,7 @@ function Footer() {
             </ul>
           </div>
           <div className='mb-4'>
-            <div id="histats_counter"></div>
+            <div id='histats_counter'></div>
           </div>
         </div>
         <div className='mt-0 md:mt-10 text-sm'>© 2023 FinCategory. All Rights Reserved.</div>

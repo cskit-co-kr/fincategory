@@ -61,6 +61,7 @@ export const koKR = {
     "please-language": "* 언어를 선택하세요",
     "please-category": "* 카테고리를 선택해주세요",
     "channel-add": " 채널이 성공적으로 추가되었습니다!",
+    "channel-add-error": " channel is not added!",
     /* detail */
     "views-per-post": "조회수 게시",
     "posts-per-month": "월별 게시물",
