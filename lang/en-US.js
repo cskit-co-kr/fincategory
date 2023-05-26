@@ -61,6 +61,7 @@ export const enUS = {
     "please-language": "* Please select a language",
     "please-category": "* Please select a category",
     "channel-add": " channel is successfully added!",
+    "channel-add-error": " channel is not added!",
     /* detail */
     "views-per-post": "Views per post",
     "posts-per-month": "Posts per month",
