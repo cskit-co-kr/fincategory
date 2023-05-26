@@ -40,7 +40,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [placement, setPlacement] = useState<PlacementType>('topEnd');
 
   const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(2);
+  const [perPage, setPerPage] = useState<number>(10);
 
   const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
@@ -341,7 +341,7 @@ export const getServerSideProps = async (context: any) => {
       query: null,
       paginate: {
         offset: 0,
-        limit: 2,
+        limit: 10,
       },
       sort: {
         field: 'created_at',
