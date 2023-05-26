@@ -56,7 +56,7 @@ export type MultiValueOptions = {
   value: any;
   label: any;
 };
-export type Board = {
+export type BoardType = {
   id: number;
   name: string;
   title: string;
@@ -77,4 +77,50 @@ export type Board = {
   category_total: number;
   post_total: number;
   comment_total: number;
+};
+export type PostType = {
+  id: number;
+  title: string;
+  reaction: null | number;
+  views: number;
+  comment: number;
+  board_id: number;
+  created_at: timestamp;
+  updated_at: timestamp;
+  extra_01: string;
+  extra_02: string;
+  extra_03: string;
+  extra_04: string;
+  extra_05: string;
+  extra_06: string;
+  extra_07: string;
+  extra_08: string;
+  extra_09: string;
+  extra_10: string;
+  user: {
+    id: number;
+    nickname: string;
+  };
+  board: {
+    id: number;
+    name: string;
+    title: string;
+    list_level: number;
+    read_level: number;
+    write_level: number;
+    comment_level: number;
+    upload_level: number;
+    download_level: number;
+    html_level: number;
+    new_duration: number;
+    hot_low: number;
+    count_delete: number;
+    count_modify: number;
+    created_at: timestamp;
+    updated_at: timestamp;
+  };
+  category: {
+    id: number;
+    category: string;
+  };
 };

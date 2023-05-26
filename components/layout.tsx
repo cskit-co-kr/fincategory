@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useEffect } from 'react';
 import { useData } from '../context/context';
 import Footer from './Footer';
@@ -21,6 +20,7 @@ const Layout = ({ children }: any) => {
       <Head>
         <link rel='icon' href='/favicon.ico' />
       </Head>
+
       <div className='wrapper bg-gray-50'>
         <Header />
         <div className='container px-4 mx-auto'>{children}</div>

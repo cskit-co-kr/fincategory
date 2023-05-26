@@ -5,6 +5,7 @@ export const koKR = {
     "korean": "한국어",
     "english": "English",
     "sign-in": "로그인",
+    "sign-up": "가입하기",
     "home": "홈",
     "search": "검색",
     "board": "게시판",
@@ -104,4 +105,21 @@ export const koKR = {
     /* detail - top-posts */
     "The-most-popular-posts": "가장 인기있는 게시물",
     "top-posts-text-1": "이 페이지는 지난 30일 이후 \"%{channel.title}\" 채널의 가장 인기 있는 게시물을 조회/전달/재게시/댓글/반응 수별로 보여줍니다.",
+    /* boards */
+    "board-list": "게시판 리스트",
+    "write":"글쓰기",
+    "connected-members": "접속멤버",
+    "no-connected-members": "연결된 구성원 없음",
+    "whole-period": "전체기간",
+    "1-day":"1일",
+    "1-week":"1주",
+    "1-month":"1개월",
+    "6-months":"6개월",
+    "1-year":"1년",
+    "st-title":"제목만",
+    "st-author":"글작성자",
+    "st-comment":"댓글내용",
+    "st-commenter":"댓글작성자",
+    "enter-period":"기간 입력",
+    "enter-search-term":"검색어를 입력해주세요"
 }
