@@ -57,8 +57,8 @@ const Header = () => {
 
   return (
     <>
-      <header className=' bg-white z-20'>
-        <div className='container mx-auto px-4'>
+      <header className='bg-white z-20'>
+        <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
             <div className='font-raleway text-lg'>
               <a href='/' className='hover:no-underline hover:text-current'>

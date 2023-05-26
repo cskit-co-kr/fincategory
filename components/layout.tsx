@@ -23,7 +23,9 @@ const Layout = ({ children }: any) => {
 
       <div className='wrapper bg-gray-50'>
         <Header />
-        <div className='container px-4 mx-auto'>{children}</div>
+        <main>
+          <div className='container'>{children}</div>
+        </main>
         <Footer />
       </div>
     </>

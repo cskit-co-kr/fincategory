@@ -16,6 +16,14 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return getPost();
     case 'savepost':
       return savePost();
+    case 'getcomments':
+      return getComments();
+    case 'insertcomment':
+      return insertComment();
+    case 'postReaction':
+      return postReaction();
+    case 'commentReaction':
+      return commentReaction();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
@@ -107,6 +115,111 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     if (result) return res.status(200).json(result);
 
     return res.status(500);
+  }
+
+  async function getComments() {
+    console.log('body: ', req.body);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        post: req.body.id,
+        query: req.body.query,
+        paginate: {
+          offset: req.body.paginate.offset,
+          limit: req.body.paginate.limit
+        },
+        sort: {
+          field: req.body.sort.field,
+          order: req.body.sort.value
+        }
+      })
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
+  // GET LIST
+  async function insertComment() {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/insert`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          comment: req.body.comment,
+          parent: req.body.parent,
+          user: req.body.user,
+          post: req.body.post,
+          board: req.body.board
+        })
+      });
+
+      const data = await response.json();
+
+      res.status(200).json(data)
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message })
+      } else {
+        res.status(500).json({ error: 'Unexpected error' })
+      }
+    }
+  }
+
+  // GET LIST
+  async function postReaction() {
+    try {
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/reaction/${req.body.post}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          user: req.body.user,
+          action: req.body.action
+        })
+      });
+
+      const data = await response.json();
+
+      res.status(200).json(data)
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message })
+      } else {
+        res.status(500).json({ error: 'Unexpected error' })
+      }
+    }
+  }
+
+  // GET LIST
+  async function commentReaction() {
+    try {
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/reaction/${req.body.comment}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          user: req.body.user,
+          action: req.body.action,
+          type: req.body.type
+        })
+      });
+
+      const data = await response.json();
+
+      res.status(200).json(data)
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ error: error.message })
+      } else {
+        res.status(500).json({ error: 'Unexpected error' })
+      }
+    }
   }
 };
 
