@@ -107,6 +107,19 @@ export const enUS = {
     "top-posts-text-1": "This page shows the most popular posts of the \"%{channel.title}\" channel since the last 30 days by number of views / forwards / reposts / comments / reactions.",
     /* boards */
     "board-list": "Board List",
+    "write":"Write",
     "connected-members": "Connected Members",
-    "no-connected-members": "No connected members"
+    "no-connected-members": "No connected members",
+    "whole-period": "Whole Period",
+    "1-day":"1 day",
+    "1-week":"1 week",
+    "1-month":"1 month",
+    "6-months":"6 months",
+    "1-year":"1 year",
+    "st-title":"Title",
+    "st-author":"Author",
+    "st-comment":"Comment",
+    "st-commenter":"Commenter",
+    "enter-period":"Enter period",
+    "enter-search-term":"Please enter a search term"
 }
