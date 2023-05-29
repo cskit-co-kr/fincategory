@@ -343,7 +343,29 @@ export const getServerSideProps = async (context: any) => {
   const page = getCookie('page', { req }) as string;
   const perPage = getCookie('perPage', { req }) as string;
 
-  console.log('id: ', context.query.id);
+  // Get Post
+  const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      id: context.query.id,
+    }),
+  });
+  const post = await resPost.json();
+
+  if (!post) {
+    return {
+      redirect: {
+        destination: '/board',
+        permanent: false
+      }
+    };
+  }
+
+  let reactionTotal: number = 0;
+  if (post.reaction !== null) {
+    reactionTotal = JSON.parse(post.reaction).length;
+  }
 
   // Get Member Information
   let memberInfo = '';
@@ -368,21 +390,6 @@ export const getServerSideProps = async (context: any) => {
     headers: { 'content-type': 'application/json' },
   });
   const allBoards = await response.json();
-
-  // Get Post
-  const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      id: context.query.id,
-    }),
-  });
-  const post = await resPost.json();
-
-  let reactionTotal: number = 0;
-  if (post.reaction !== null) {
-    reactionTotal = JSON.parse(post.reaction).length;
-  }
 
   // Get Comments
   const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
