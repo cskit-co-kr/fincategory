@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
+import { getCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -16,7 +17,7 @@ import ButtonLink from '../../../components/board/buttonLink';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
-import { toDateTimeformat } from '../../../lib/utils';
+import { formatDate, toDateTimeformat } from '../../../lib/utils';
 import { BoardType, CommentType, PostType } from '../../../typings';
 
 import 'react-quill/dist/quill.snow.css';
@@ -27,6 +28,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const allBoards: Array<BoardType> = props.allBoards;
   const memberInfo = props.memberInfo;
+  const [postList, setPostList] = useState(props.postList);
+
   const [post, setPost] = useState<PostType>(props.post);
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
@@ -39,8 +42,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const [placement, setPlacement] = useState<PlacementType>('topEnd');
 
-  const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(10);
+  const [commentPage, setCommentPage] = useState<number>(1);
+  const [commentPerPage, setCommentPerPage] = useState<number>(10);
+  const [postPage, setPostPage] = useState<number>(parseInt(props.page));
+  const [postPerPage, setPostPerPage] = useState<number>(parseInt(props.perPage));
 
   const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
@@ -56,7 +61,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>{message}</Message>
-  )
+  );
+
+  const handleScrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   useEffect(() => {
     if (post.reaction === null) {
@@ -75,7 +84,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   useEffect(() => {
     loadComments();
-  }, [page]);
+  }, [commentPage]);
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
     toaster.push(message(type, txt), { placement, duration: 5000 });
@@ -91,8 +100,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         id: router.query.id,
         query: null,
         paginate: {
-          offset: (page - 1) * perPage,
-          limit: perPage,
+          offset: (commentPage - 1) * commentPerPage,
+          limit: commentPerPage,
         },
         sort: {
           field: 'created_at',
@@ -267,7 +276,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               <div className={`flex flex-col bg-[#F9F9F9] rounded-lg p-[20px] mt-[30px]`}>
                 {commentTopTotal > 0 ?
                   <div className='paginate flex w-full border-b border-[#E4E4E4] justify-center pb-[20px]'>
-                    <Pagination prev last next first total={commentTopTotal} limit={perPage} activePage={page} onChangePage={setPage} disabled={commentLoading} />
+                    <Pagination prev last next first total={commentTopTotal} limit={commentPerPage} activePage={commentPage} onChangePage={setCommentPage} disabled={commentLoading} />
                   </div>
                   :
                   <></>
@@ -281,6 +290,48 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               </div>
             </div>
           </div>
+          <div className='flex justify-end gap-[10px] mt-[16px]'>
+            <ButtonLink url={`/board/${post.board.name}`} text='목록' />
+            <span onClick={handleScrollTop} className="flex gap-[10px] items-center h-[35px] px-[10px] bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] cursor-pointer hover:text-[#0a5dc2] hover:no-underline">
+              <ChevronUpIcon className='h-3' />
+              <span className="flex-1">TOP</span>
+            </span>
+          </div>
+          <div className='post-list-wrapper'>
+            <p className='font-bold text-[17px] mb-[20px]'>전체글</p>
+            <div className='post-list border-t border-gray-400'>
+              <div className='w-full'>
+                <div className='border-b border-gray-200 flex font-bold'>
+                  <div className='text-center p-2 min-w-[80px]'>{postList.board ? '말머리' : ''}</div>
+                  <div className='text-center p-2 flex-grow'>제목</div>
+                  <div className='text-left p-2 min-w-[128px]'>작성자</div>
+                  <div className='text-center p-2 min-w-[96px]'>작성일</div>
+                  <div className='text-center p-2 min-w-[48px]'>조회</div>
+                </div>
+                <div className='text-xs'>
+                  {postList?.posts?.map((post: PostType, idx: number) => {
+                    const current = post.id === parseInt(router.query.id as string) ? true : false;
+                    return (
+                      <div className={`border-b border-gray-200 flex ${current ? 'font-bold text-[#0a5dc2]' : ''}`} key={post.id}>
+                        <div className='text-center p-2 min-w-[80px]'>
+                          <Link href={`/board/${postList.board.name}/${post.category.id}`}>{post.category.category}</Link>
+                        </div>
+                        <div className='p-2 flex-grow'>
+                          {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title}</Link>}
+                        </div>
+                        <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
+                        <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
+                        <div className='text-center p-2 min-w-[48px]'>{post.views}</div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className='post-paginate flex justify-center p-5'>
+              <Pagination first next prev last total={postList?.total} limit={postPerPage} activePage={postPage} onChangePage={setPostPage} />
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -288,6 +339,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 };
 
 export const getServerSideProps = async (context: any) => {
+  const req = context.req;
+  const page = getCookie('page', { req }) as string;
+  const perPage = getCookie('perPage', { req }) as string;
+
   // Get Member Information
   let memberInfo = '';
   const session = await getSession(context);
@@ -346,9 +401,20 @@ export const getServerSideProps = async (context: any) => {
   });
   const comments = await responseComment.json();
 
+  // Get Posts List
+  const board = post.board.name;
+  const category = null;
+  const responsePost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    }
+  );
+  const postList = await responsePost.json();
+
   // Return
   return {
-    props: { allBoards, post, memberInfo, comments, reactionTotal },
+    props: { allBoards, post, memberInfo, comments, postList, reactionTotal, page, perPage },
   };
 };
 
