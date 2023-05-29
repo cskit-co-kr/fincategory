@@ -31,7 +31,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
-  
+
   const [selectedComment, setSelectedComment] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
   const [reaction, setReaction] = useState<boolean>(false);
@@ -181,10 +181,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
-          <div className='flex justify-end gap-[10px] mb-4'>
-            <ButtonLink url='dff' text='이전글' icon={<ChevronUpIcon className='h-3' />} />
-            <ButtonLink url='dff' text='다음글' icon={<ChevronDownIcon className='h-3' />} />
-            <ButtonLink url={`/board/${post.board.name}`} text='목록' />
+          <div className='flex items-center justify-between mb-4'>
+            <div className='text-xl font-bold'>{post.board.title}</div>
+            <div className='flex justify-end gap-[10px]'>
+              <ButtonLink url='dff' text='이전글' icon={<ChevronUpIcon className='h-3' />} />
+              <ButtonLink url='dff' text='다음글' icon={<ChevronDownIcon className='h-3' />} />
+              <ButtonLink url={`/board/${post.board.name}`} text='목록' />
+            </div>
           </div>
           <div className='border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
             <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
@@ -237,14 +240,14 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                           <ul className='ml-[50px]'>
                             {comment.child?.map((child: CommentType, idxx: number) => (
                               <li key={idxx} className='mt-4'>
-                                <BoardComment comment={child} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id}  reply={true} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
+                                <BoardComment comment={child} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id} reply={true} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
                                 {child.child?.length === 0 ?
                                   <></>
                                   :
                                   <ul className='ml-[50px]'>
                                     {child.child?.map((grandchild: CommentType, idxx: number) => (
                                       <li key={idxx} className='mt-4'>
-                                        <BoardComment comment={grandchild} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id}  reply={false} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
+                                        <BoardComment comment={grandchild} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id} reply={false} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
                                       </li>
                                     ))}
                                   </ul>
