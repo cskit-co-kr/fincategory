@@ -31,8 +31,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
-
-  const [selectedComment, setSelectedComment] = useState<CommentType | null>(null);
+  
+  const [selectedComment, setSelectedComment] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
   const [reaction, setReaction] = useState<boolean>(false);
   const [reactionTotal, setReactionTotal] = useState<number>(props.reactionTotal);
@@ -125,7 +125,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         comment: comment,
-        parent: selectedComment === null ? 0 : selectedComment.id,
+        parent: 0,
         user: Number(session?.user.id),
         post: router.query.id,
         board: post.board.id
@@ -136,7 +136,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     if (response.status === 200) {
       if (result.code === 201 && result.message === 'Inserted') {
         toastShow('info', 'Your comment has been successfully saved.');
-        setSelectedComment(null);
         setComment('');
         loadComments();
       }
@@ -148,12 +147,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   // Go to Comment List
   const handleGotoComment = () => {
     commentListRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // Click Comment Reply 
-  const handleSelectComment = (comment: CommentType) => {
-    setSelectedComment(comment);
-    commentWriteRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   const handleReaction = async (action: string) => {
@@ -237,21 +230,21 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                   <ul className='relative overflow-hidden'>
                     {commentList.map((comment: CommentType, idx: number) => (
                       <li key={idx} className='border-b border-[#e4e4e4] pb-4 mb-4'>
-                        <BoardComment comment={comment} userID={Number(session?.user.id)} reply={true} fncComment={handleSelectComment} fncToast={toastShow} />
+                        <BoardComment comment={comment} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id} reply={true} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
                         {comment.child?.length === 0 ?
                           <></>
                           :
                           <ul className='ml-[50px]'>
                             {comment.child?.map((child: CommentType, idxx: number) => (
                               <li key={idxx} className='mt-4'>
-                                <BoardComment comment={child} userID={Number(session?.user.id)} reply={true} fncComment={handleSelectComment} fncToast={toastShow} />
+                                <BoardComment comment={child} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id}  reply={true} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
                                 {child.child?.length === 0 ?
                                   <></>
                                   :
                                   <ul className='ml-[50px]'>
                                     {child.child?.map((grandchild: CommentType, idxx: number) => (
                                       <li key={idxx} className='mt-4'>
-                                        <BoardComment comment={grandchild} userID={Number(session?.user.id)} reply={false} fncComment={handleSelectComment} fncToast={toastShow} />
+                                        <BoardComment comment={grandchild} selectedComment={selectedComment} userID={Number(session?.user.id)} postID={post.id} boardID={post.board.id}  reply={false} fncToast={toastShow} fncLoadComment={loadComments} fncSelectComment={setSelectedComment} />
                                       </li>
                                     ))}
                                   </ul>
@@ -277,7 +270,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                   <></>
                 }
                 <div className='comment-write text-center mt-[20px] mx-[140px]' ref={commentWriteRef}>
-                  {selectedComment !== null ? <div className='text-left text-[12px] pl-1 mb-1 italic'>Reply of: {selectedComment.comment} : <span className='cursor-pointer text-red-500' onClick={() => setSelectedComment(null)}>Cancel</span></div> : <></>}
                   <textarea className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none' onChange={(e) => setComment(e.currentTarget.value)} value={comment} />
                   <Button appearance='primary' className='bg-primary text-white py-2 px-5 text-center hover:text-white' disabled={comment.trim().length > 0 ? false : true} onClick={saveComment}>
                     글쓰기

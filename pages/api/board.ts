@@ -146,6 +146,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 
   // GET LIST
   async function insertComment() {
+    console.log('body: ', req.body);
+    
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/insert`, {
         method: 'POST',
