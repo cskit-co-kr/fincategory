@@ -116,8 +116,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getComments() {
-    console.log('body: ', req.body);
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

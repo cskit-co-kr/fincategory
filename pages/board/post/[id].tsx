@@ -30,7 +30,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const memberInfo = props.memberInfo;
   const [postList, setPostList] = useState(props.postList);
 
-  const [post, setPost] = useState<PostType>(props.post);
+  const post: PostType = props.post;
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
@@ -343,6 +343,8 @@ export const getServerSideProps = async (context: any) => {
   const page = getCookie('page', { req }) as string;
   const perPage = getCookie('perPage', { req }) as string;
 
+  console.log('id: ', context.query.id);
+
   // Get Member Information
   let memberInfo = '';
   const session = await getSession(context);
@@ -368,14 +370,14 @@ export const getServerSideProps = async (context: any) => {
   const allBoards = await response.json();
 
   // Get Post
-  const response2 = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
+  const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       id: context.query.id,
     }),
   });
-  const post = await response2.json();
+  const post = await resPost.json();
 
   let reactionTotal: number = 0;
   if (post.reaction !== null) {
