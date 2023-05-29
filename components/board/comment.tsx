@@ -130,7 +130,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({ comment, selectedComme
               <>
                 <span className='bg-[#e5e5ea] h-[16px] mx-[12px] w-[1px]' />
                 <span onClick={() => { setShowReply(true); fncSelectComment(comment.id) }} className='cursor-pointer hover:text-[#000]'>댓글</span>
-                {showReply ? <span onClick={() => { setShowReply(false); setContent('') }} className='cursor-pointer hover:text-[#000] ml-[12px]'>Cancel</span> : <></>}
+                {showReply ? <span onClick={() => { setShowReply(false); setContent('') }} className='cursor-pointer hover:text-[#000] ml-[12px]'>취소</span> : <></>}
               </>
               :
               <></>
