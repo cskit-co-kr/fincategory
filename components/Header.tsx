@@ -82,10 +82,10 @@ const Header = () => {
               </div>
               <div>
                 {session?.user ? (
-                  <button className='flex gap-1 items-center text-xs border borde-gray-200 rounded-full px-2 py-1'>
+                  <Link href='/member/profile' className='flex gap-1 items-center text-xs border borde-gray-200 rounded-full px-2 py-1'>
                     <UserCircleIcon className='h-4' />
                     {session?.user.nickname}
-                  </button>
+                  </Link>
                 ) : (
                   <Link
                     href='/member/signin'
@@ -136,13 +136,13 @@ const Header = () => {
                 {boardsPopupMenuShow && (
                   <div className='absolute left-4 top-11 min-w-[100px] z-20 bg-white border border-gray-200 rounded-lg shadow-md divide-y font-normal text-xs'>
                     <div>
-                      <Link href='/board' className='block px-3 py-2'>
+                      <Link href='/board' className='block px-3 py-2' onClick={() => setBoardsPopupMenuShow(false)}>
                         {t['view-all-articles']}
                       </Link>
                     </div>
                     {allBoards.map((board: BoardType) => (
                       <div key={board.id}>
-                        <Link href={`/board/${board.name}`} className='block px-3 py-2'>
+                        <Link href={`/board/${board.name}`} className='block px-3 py-2' onClick={() => setBoardsPopupMenuShow(false)}>
                           {board.title}
                         </Link>
                       </div>

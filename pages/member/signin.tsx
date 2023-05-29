@@ -6,28 +6,33 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { getSession } from 'next-auth/react';
+import { Loader } from 'rsuite';
 
 const MemberSignIn = () => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
+  const [loading, setLoading] = useState(false);
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     const result = await signIn('credentials', {
       username: usernameInput,
       password: passwordInput,
-      redirect: true,
+      redirect: false,
       callbackUrl: router.query.callbackUrl ? (router.query.callbackUrl as string) : '/',
     });
+    console.log(result);
     if (result?.error === 'CredentialsSignin') {
-      setErrorMessage('Invalid email or password'); // Custom error message
-    } else if (result?.error) {
-      setErrorMessage(result.error);
+      setErrorMessage('Invalid email or password');
+      setLoading(false);
+    } else if (result?.status === 200) {
+      router.push(result?.url as string);
     }
   };
 
@@ -61,8 +66,12 @@ const MemberSignIn = () => {
               />
             </div>
             {errorMessage && <p className='text-xs text-red-600 mt-2'>{errorMessage}</p>}
-            <button className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md' onClick={(e) => onSubmit(e)}>
-              Login
+            <button
+              className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center'
+              onClick={(e) => onSubmit(e)}
+            >
+              {loading && <Loader />}
+              <div>Login</div>
             </button>
           </div>
           <div className='mt-4 flex divide-x place-content-center'>
@@ -91,7 +100,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: '/member/profile', // Redirect to the login page if not logged in
+        destination: '/member/profile',
         permanent: false,
       },
     };

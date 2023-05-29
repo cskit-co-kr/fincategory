@@ -2,7 +2,15 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { ArrowPathIcon, ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon, UserCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ListBulletIcon,
+  PhotoIcon,
+  Squares2X2Icon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
 import { BoardType, PostType } from '../../typings';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -158,8 +166,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                           <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
                         )}
                       </div>
-                      <div className='p-2 flex-grow'>
+                      <div className='p-2 flex-grow flex items-center gap-1'>
                         <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                        {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+                        {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
                       </div>
                       <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
                       <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
@@ -316,7 +326,15 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 ref={inputRef}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
-              <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'>{t['search']}</button>
+              <button
+                className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'
+                onClick={() => {
+                  setSearchTermPopup(false);
+                  setSearchDatePopup(false);
+                }}
+              >
+                {t['search']}
+              </button>
             </div>
           </div>
         </div>

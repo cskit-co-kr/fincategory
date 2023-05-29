@@ -6,6 +6,7 @@ export const enUS = {
     "english": "English",
     "sign-in": "Sign in",
     "sign-up": "Sign up",
+    "sign-out": "Sign Out",
     "home": "Home",
     "search": "Search",
     "board": "Board",

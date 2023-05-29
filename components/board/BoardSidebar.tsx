@@ -20,9 +20,11 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
             <>
               <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                 <UserCircleIcon className='h-6 text-black' />
-                <span className='font-semibold'>{session?.user.nickname}</span>
+                <span className='font-semibold'>
+                  <Link href='/member/profile'>{session?.user.nickname}</Link>
+                </span>
                 <button onClick={() => signOut()} className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'>
-                  Sign out
+                  {t['sign-out']}
                 </button>
               </div>
               <div className='text-xs gap-1.5 grid'>
