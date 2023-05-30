@@ -32,7 +32,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const post: PostType = props.post;
   const prevNext = props.prevNext;
-  console.log('prev: ', prevNext);
   
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
