@@ -1,7 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import * as cheerio from 'cheerio';
-import base64Img from 'base64-img';
-import axios from 'axios';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 let haveImage = 0;
 let haveImageUrl = '';
@@ -118,8 +116,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getComments() {
-    console.log('body: ', req.body);
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -174,7 +170,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   // GET LIST
   async function postReaction() {
     try {
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/reaction/${req.body.post}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -199,7 +194,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   // GET LIST
   async function commentReaction() {
     try {
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/reaction/${req.body.comment}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },

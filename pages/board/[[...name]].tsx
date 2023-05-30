@@ -13,12 +13,13 @@ import {
 } from '@heroicons/react/24/outline';
 import { BoardType, PostType } from '../../typings';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { signIn, signOut, useSession, getSession } from 'next-auth/react';
 import BoardSidebar from '../../components/board/BoardSidebar';
 import { Pagination, DateRangePicker } from 'rsuite';
 import Image from 'next/image';
+import { setCookie } from 'cookies-next';
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -56,11 +57,17 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermText, setSearchTermText] = useState(t['st-title']);
 
+  useEffect(() => {
+    setCookie('perPage', postsPerPage);
+    setCookie('page', activePage);
+  }, [])
+
   const setSearchDateHandler = (label: string, value: string) => {
     setSearchDate(value);
     setSearchDatePopup(false);
     setSearchDateText(label);
   };
+
   const setSearchTermHandler = (label: string, value: string) => {
     setSearchTerm(value);
     setSearchTermPopup(false);
@@ -86,6 +93,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   useEffect(() => {
     getPostsList();
     setPerpagePopup(false);
+    setCookie('perPage', postsPerPage);
+    setCookie('page', activePage);
   }, [postsPerPage, activePage, router.query.name]);
 
   return (
@@ -157,7 +166,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
                 <div className='text-xs'>
-                  {postsList?.posts?.map((post: PostType) => (
+                  {postsList?.posts?.map((post: PostType, idx: number) => (
                     <div className='border-b border-gray-200 flex' key={post.id}>
                       <div className='text-center p-2 min-w-[80px]'>
                         {router.query.name && router.query.name?.length > 0 ? (
@@ -338,7 +347,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };
