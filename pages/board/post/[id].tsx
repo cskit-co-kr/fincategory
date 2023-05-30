@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie } from 'cookies-next';
@@ -31,6 +31,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [postList, setPostList] = useState(props.postList);
 
   const post: PostType = props.post;
+  const prevNext = props.prevNext;
+  console.log('prev: ', prevNext);
+  
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
@@ -193,8 +196,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           <div className='flex items-center justify-between mb-4'>
             <div className='text-xl font-bold'>{post.board.title}</div>
             <div className='flex justify-end gap-[10px]'>
-              <ButtonLink url='dff' text='이전글' icon={<ChevronUpIcon className='h-3' />} />
-              <ButtonLink url='dff' text='다음글' icon={<ChevronDownIcon className='h-3' />} />
+              <ButtonLink url={prevNext.prev !== null ? `/board/post/${prevNext.prev}` : '#'} text='이전글' icon={<ChevronUpIcon className='h-3' />} />
+              <ButtonLink url={prevNext.next !== null ? `/board/post/${prevNext.next}` : '#'} text='다음글' icon={<ChevronDownIcon className='h-3' />} />
               <ButtonLink url={`/board/${post.board.name}`} text='목록' />
             </div>
           </div>
@@ -316,8 +319,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         <div className='text-center p-2 min-w-[80px]'>
                           <Link href={`/board/${postList.board.name}/${post.category.id}`}>{post.category.category}</Link>
                         </div>
-                        <div className='p-2 flex-grow'>
-                          {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title}</Link>}
+                        <div className='p-2 flex flex-1 items-center'>
+                          {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
+                          {post.extra_01 == '1' ? <PhotoIcon className='h-3 ml-1' /> : <></>}
                         </div>
                         <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
                         <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
@@ -351,7 +355,9 @@ export const getServerSideProps = async (context: any) => {
       id: context.query.id,
     }),
   });
-  const post = await resPost.json();
+  const data = await resPost.json();
+  const post = data.post;
+  const prevNext = data.prevNext[0];
 
   if (!post) {
     return {
@@ -423,7 +429,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, post, memberInfo, comments, postList, reactionTotal, page, perPage },
+    props: { allBoards, post, memberInfo, comments, postList, reactionTotal, page, perPage, prevNext },
   };
 };
 
