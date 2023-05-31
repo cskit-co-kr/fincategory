@@ -32,7 +32,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         query: null,
-        mode: 'full',
+        mode: null,
         paginate: {
           offset: 0,
           limit: 20,
@@ -54,24 +54,34 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   async function getPostList() {
     const limit = req.query.postsperpage ? req.query.postsperpage : 20;
     const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
+    const filter =
+      req.body.hasImage === 'grid'
+        ? {
+            field: 'extra_01',
+            value: '1',
+          }
+        : {
+            field: req.query.category === 'null' ? null : 'category_id',
+            value: req.query.category === 'null' ? null : req.query.category,
+          };
+    const data = {
+      board: req.query.board === 'null' ? null : req.query.board,
+      paginate: {
+        offset: offset,
+        limit: limit,
+      },
+      sort: {
+        field: 'created_at',
+        order: 'DESC',
+      },
+      filter: filter,
+      search: req.body.search,
+    };
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        board: req.query.board === 'null' ? null : req.query.board,
-        paginate: {
-          offset: offset,
-          limit: limit,
-        },
-        sort: {
-          field: 'created_at',
-          order: 'DESC',
-        },
-        filter: {
-          field: req.query.category === 'null' ? null : 'category_id',
-          value: req.query.category === 'null' ? null : req.query.category,
-        },
-      }),
+      body: JSON.stringify(data),
     });
 
     const result = await response.json();
@@ -99,7 +109,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         title: req.body.title,
         content: await processContent(req.body.content),
         board: req.body.board,
-        category: req.body.category,
+        category: req.body.category === 0 ? null : req.body.category,
         flag: req.body.flag === 'null' ? null : req.body.flag,
         status: req.body.status,
         user: req.body.user,
@@ -124,13 +134,13 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         query: req.body.query,
         paginate: {
           offset: req.body.paginate.offset,
-          limit: req.body.paginate.limit
+          limit: req.body.paginate.limit,
         },
         sort: {
           field: req.body.sort.field,
-          order: req.body.sort.value
-        }
-      })
+          order: req.body.sort.value,
+        },
+      }),
     });
 
     const result = await response.json();
@@ -151,18 +161,18 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
           parent: req.body.parent,
           user: req.body.user,
           post: req.body.post,
-          board: req.body.board
-        })
+          board: req.body.board,
+        }),
       });
 
       const data = await response.json();
 
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' })
+        res.status(500).json({ error: 'Unexpected error' });
       }
     }
   }
@@ -175,18 +185,18 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           user: req.body.user,
-          action: req.body.action
-        })
+          action: req.body.action,
+        }),
       });
 
       const data = await response.json();
 
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' })
+        res.status(500).json({ error: 'Unexpected error' });
       }
     }
   }
@@ -200,18 +210,18 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         body: JSON.stringify({
           user: req.body.user,
           action: req.body.action,
-          type: req.body.type
-        })
+          type: req.body.type,
+        }),
       });
 
       const data = await response.json();
 
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' })
+        res.status(500).json({ error: 'Unexpected error' });
       }
     }
   }
@@ -237,12 +247,11 @@ const processContent = async (htmlContent: string) => {
       const binaryData = base64ToBinary(base64Data);
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
-      $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" />`);
+      $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" class='post-image' />`);
     }
   }
   let modifiedHtml = $.html(); // Get the modified HTML content with the root tags
   modifiedHtml = modifiedHtml.replace(/<\/?(html|head|body)[^>]*>/gi, ''); // Remove opening and closing tags of <html>, <head>, and <body>
-  console.log(modifiedHtml);
   return modifiedHtml;
 };
 const base64ToBinary = (base64Data: any) => {

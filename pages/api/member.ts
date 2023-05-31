@@ -10,6 +10,12 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return checkEmail();
     case 'register':
       return registerMember();
+    case 'update':
+      return updateMember();
+    case 'updatepassword':
+      return updatePassword();
+    case 'resetpassword':
+      return resetPassword();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
@@ -80,6 +86,72 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     if (result) return res.status(200).json(result);
 
     return res.status(500);
+  }
+
+  async function updateMember() {
+    if (req.method !== 'POST') {
+      return false;
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/update/${req.body.userid}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        nickname: req.body.nickname,
+        email: req.body.email,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
+  async function updatePassword() {
+    if (req.method !== 'POST') {
+      return false;
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/changePassword/${req.body.userid}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        old: req.body.old,
+        password: req.body.password,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
+  async function resetPassword() {
+    if (req.method !== 'POST') {
+      return false;
+    }
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/checkEmail`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        email: req.body.email,
+      }),
+    });
+    const { total } = await resp.json();
+    if (total === 1) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/resetPassword`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: req.body.email,
+        }),
+      });
+      const result = await response.json();
+      return res.status(200).json(result);
+    }
+    return res.status(500).json({ code: 404, message: 'Email not found!' });
   }
 };
 

@@ -54,16 +54,43 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchEndDate, setSearchEndDate] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [inputRef, setInputFocus] = useFocus();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('title');
   const [searchTermText, setSearchTermText] = useState(t['st-title']);
 
   useEffect(() => {
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
-  }, [])
+  }, []);
 
   const setSearchDateHandler = (label: string, value: string) => {
-    setSearchDate(value);
+    switch (value) {
+      case 'all':
+        setSearchStartDate('');
+        setSearchEndDate('');
+        break;
+      case '1day':
+        setSearchStartDate(getDate('1day') as string);
+        setSearchEndDate(getToday());
+        break;
+      case '1week':
+        setSearchStartDate(getDate('1week') as string);
+        setSearchEndDate(getToday());
+        break;
+      case '1month':
+        setSearchStartDate(getDate('1month') as string);
+        setSearchEndDate(getToday());
+        break;
+      case '6months':
+        setSearchStartDate(getDate('6months') as string);
+        setSearchEndDate(getToday());
+        break;
+      case '1year':
+        setSearchStartDate(getDate('1year') as string);
+        setSearchEndDate(getToday());
+        break;
+      default:
+        null;
+    }
     setSearchDatePopup(false);
     setSearchDateText(label);
   };
@@ -84,6 +111,15 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          search: {
+            start: searchStartDate === '' ? null : searchStartDate,
+            end: searchEndDate === '' ? null : searchEndDate,
+            field: searchTerm,
+            value: searchInput === '' ? null : searchInput,
+          },
+          hasImage: viewPort,
+        }),
       }
     );
     const postList = await responsePost.json();
@@ -95,7 +131,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setPerpagePopup(false);
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
-  }, [postsPerPage, activePage, router.query.name]);
+  }, [postsPerPage, activePage, router.query.name, viewPort]);
 
   return (
     <>
@@ -170,7 +206,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     <div className='border-b border-gray-200 flex' key={post.id}>
                       <div className='text-center p-2 min-w-[80px]'>
                         {router.query.name && router.query.name?.length > 0 ? (
-                          <Link href={`/board/${postList.board.name}/${post.category.id}`}>{post.category.category}</Link>
+                          <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
                         ) : (
                           <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
                         )}
@@ -189,20 +225,18 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
             {viewPort === 'grid' && (
-              <div className='w-full text-sm mt-4 grid grid-cols-4'>
+              <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4'>
                 {postsList?.posts?.map(
                   (post: PostType) =>
                     post.extra_01 === '1' && (
                       <div className='' key={post.id}>
                         <div className=''>
-                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='contain w-full' />
+                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover w-full aspect-square' />
                         </div>
-                        <div className='font-semibold'>
+                        <div className='font-semibold line-clamp-2'>
                           <Link href={`/board/post/${post.id}`}>{post.title}</Link>
                         </div>
-                        <div className='mt-1'>
-                          <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
-                        </div>
+                        <div className='mt-1'>{post?.board?.title}</div>
                         <div className='text-xs text-gray-400'>
                           {formatDate(post.created_at)} <span className='dot'>조회 {post.views}</span>
                         </div>
@@ -269,19 +303,22 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       <input
                         type='text'
                         className='border border-gray-200 p-2 w-24'
-                        value={getToday()}
+                        placeholder={getToday()}
+                        value={searchStartDate}
                         onChange={(e) => setSearchStartDate(e.target.value)}
                       />
                       <input
                         type='text'
                         className='border border-gray-200 p-2 w-24'
-                        value={getToday()}
+                        placeholder={getToday()}
+                        value={searchEndDate}
                         onChange={(e) => setSearchEndDate(e.target.value)}
                       />
                       <button
                         className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline'
                         onClick={() => {
                           setSearchDate(searchStartDate + '&' + searchEndDate);
+                          setSearchDateText(searchStartDate + ' - ' + searchEndDate);
                           setSearchDatePopup(false);
                           setInputFocus();
                         }}
@@ -340,6 +377,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
+                  getPostsList();
                 }}
               >
                 {t['search']}
@@ -347,7 +385,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };
@@ -360,7 +398,7 @@ function formatDate(dateString: string) {
   const isWithin24Hours = timeDifference < oneDay;
   const formattedDateTime = isWithin24Hours
     ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-    : date.getFullYear() + '.' + date.getMonth() + '.' + date.getDate();
+    : dateString.substring(0, 10).replaceAll('-', '.');
   return formattedDateTime;
 }
 function getToday() {
@@ -370,6 +408,35 @@ function getToday() {
   const day = String(today.getDate()).padStart(2, '0');
   const formattedDate = year + '-' + month + '-' + day;
   return formattedDate;
+}
+function getDate(interval: any) {
+  const today = new Date();
+  let fromDate = new Date();
+
+  switch (interval) {
+    case '1day':
+      fromDate.setDate(today.getDate() - 1);
+      break;
+    case '1week':
+      fromDate.setDate(today.getDate() - 7);
+      break;
+    case '1month':
+      fromDate.setMonth(today.getMonth() - 1);
+      break;
+    case '6months':
+      fromDate.setMonth(today.getMonth() - 6);
+      break;
+    case '1year':
+      fromDate.setFullYear(today.getFullYear() - 1);
+      break;
+    default:
+      // Default case if interval is not recognized
+      return null;
+  }
+  const year = fromDate.getFullYear();
+  const month = String(fromDate.getMonth() + 1).padStart(2, '0');
+  const day = String(fromDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export const getServerSideProps = async (context: any) => {

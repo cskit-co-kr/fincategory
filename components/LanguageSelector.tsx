@@ -13,11 +13,12 @@ function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
 
   const browseRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
     function handleClick(event: any) {
-      if (browseRef.current && !browseRef.current.contains(event.target)) {
+      if (browseRef.current && !browseRef.current.contains(event.target) && !buttonRef.current?.contains(event.target)) {
         setIsOpen(false);
       }
     }
@@ -31,46 +32,34 @@ function LanguageSelector() {
   };
 
   return (
-    <div className='relative group'>
+    <div className='relative'>
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen((prev) => !prev)}
         className='flex gap-1 min-w-[66px] items-center text-[12px] font-bold'
       >
         {locale !== 'en' ? (
-          <>
+          <div className='flex gap-1'>
             <Image src='/south-korea.png' width={20} height={20} alt='' />
             {t['korean']}
-          </>
+          </div>
         ) : (
-          <>
+          <div className='flex gap-1'>
             <Image src='/united-states.png' width={20} height={20} alt='' />
             {t['english']}
-          </>
+          </div>
         )}
 
-        {!isOpen ? (
-          <ChevronDownIcon className='h-3 group-hover:animate-bounce' />
-        ) : (
-          <ChevronUpIcon className='h-3' />
-        )}
+        {!isOpen ? <ChevronDownIcon className='h-3' /> : <ChevronUpIcon className='h-3' />}
       </button>
 
       {isOpen && (
-        <div
-          className='absolute top-7 border shadow-md bg-white flex flex-col rounded-md w-[100px]'
-          ref={browseRef}
-        >
-          <button
-            className='flex gap-1 hover:bg-gray-50 py-1 pt-2 px-3 text-[12px] font-bold'
-            onClick={() => handleClick('ko')}
-          >
+        <div className='absolute top-7 border shadow-md bg-white flex flex-col rounded-md w-[100px]' ref={browseRef}>
+          <button className='flex gap-1 hover:bg-gray-50 py-1 pt-2 px-3 text-[12px] font-bold' onClick={() => handleClick('ko')}>
             <Image src='/south-korea.png' width={20} height={20} alt='' />
             {t['korean']}
           </button>
-          <button
-            className='flex gap-1 hover:bg-gray-50 py-1 pb-2 px-3 text-[12px] font-bold'
-            onClick={() => handleClick('en')}
-          >
+          <button className='flex gap-1 hover:bg-gray-50 py-1 pb-2 px-3 text-[12px] font-bold' onClick={() => handleClick('en')}>
             <Image src='/united-states.png' width={20} height={20} alt='' />
             {t['english']}
           </button>

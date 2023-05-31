@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useRouter } from 'next/router';
@@ -8,7 +8,8 @@ import LanguageSelector from './LanguageSelector';
 import { useData } from '../context/context';
 import { BoardType } from '../typings';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
+import { Nav } from 'rsuite';
 
 const Header = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const Header = () => {
   const [searchField, setSearchField] = useState<string | null>(null);
   const [allBoards, setAllBoards] = useState([]);
   const [boardsPopupMenuShow, setBoardsPopupMenuShow] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
 
   const handleSubmit = () => {
     console.log(searchField);
@@ -42,6 +44,20 @@ const Header = () => {
       e.target.blur();
     }
   };
+
+  const browseRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!userMenu) return;
+    function handleClick(event: any) {
+      if (browseRef.current && !browseRef.current.contains(event.target) && !buttonRef.current?.contains(event.target)) {
+        setUserMenu(false);
+      }
+    }
+    window.addEventListener('click', handleClick, true);
+    return () => window.removeEventListener('click', handleClick, true);
+  }, [userMenu]);
 
   useEffect(() => {
     const getBoards = async () => {
@@ -82,10 +98,29 @@ const Header = () => {
               </div>
               <div>
                 {session?.user ? (
-                  <Link href='/member/profile' className='flex gap-1 items-center text-xs border borde-gray-200 rounded-full px-2 py-1'>
-                    <UserCircleIcon className='h-4' />
-                    {session?.user.nickname}
-                  </Link>
+                  <div className='relative'>
+                    <button
+                      ref={buttonRef}
+                      onClick={() => setUserMenu((prev) => !prev)}
+                      className='flex gap-1 items-center text-xs border border-gray-200 rounded-full px-2 py-1'
+                    >
+                      <UserCircleIcon className='h-4' />
+                      {session?.user.nickname}
+                    </button>
+                    {userMenu && (
+                      <div
+                        className='absolute top-7 right-0 border shadow-md bg-white flex flex-col rounded-xl min-w-[100px] text-xs'
+                        ref={browseRef}
+                      >
+                        <Link href='/member/profile' onClick={() => setUserMenu(false)} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                          My Profile
+                        </Link>
+                        <Link href='' onClick={() => signOut()} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                          {t['sign-out']}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <Link
                     href='/member/signin'
@@ -121,17 +156,12 @@ const Header = () => {
                   {t['search']}
                 </button>
               </li>
-              {/* <li className='relative'>
+              <li className='relative'>
                 <button
-                  className={`group ${getPath === '/board' ? activePath : normalPath}`}
+                  className={`${getPath === '/board' ? activePath : normalPath}`}
                   onClick={() => setBoardsPopupMenuShow((prev) => !prev)}
                 >
-                  {t['board']}{' '}
-                  {boardsPopupMenuShow ? (
-                    <FaChevronUp size={12} className='group-hover:animate-bounce' />
-                  ) : (
-                    <FaChevronDown size={12} className='group-hover:animate-bounce' />
-                  )}
+                  {t['board']} {boardsPopupMenuShow ? <FaChevronUp size={12} className='' /> : <FaChevronDown size={12} className='' />}
                 </button>
                 {boardsPopupMenuShow && (
                   <div className='absolute left-4 top-11 min-w-[100px] z-20 bg-white border border-gray-200 rounded-lg shadow-md divide-y font-normal text-xs'>
@@ -149,7 +179,7 @@ const Header = () => {
                     ))}
                   </div>
                 )}
-              </li> */}
+              </li>
             </ul>
             <button
               className={getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}
