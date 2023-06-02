@@ -115,10 +115,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 
   async function getPost() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/get/${req.body.id}`);
-
     const result = await response.json();
-
-    if (result) return res.status(200).json(result.post);
+    if (result) return res.status(200).json(result);
 
     return res.status(500);
   }
