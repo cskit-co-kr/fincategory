@@ -7,7 +7,7 @@
 
 @layer base {
   body {
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 }
 
@@ -36,4 +36,20 @@
   .dot {
     @apply before:content-[''] before:inline-block before:w-[2px] before:h-[2px] before:mt-0 before:mr-[5px] before:mb-[4px] before:ml-[2px] before:border-2 before:bg-gray-600 before:text-gray-600;
   }
+}
+
+.ql-video {
+  @apply w-full md:w-3/5 h-fit aspect-video mx-auto;
+}
+.ql-editor img,
+.post-image {
+  @apply mx-auto;
+}
+.rs-nav-item {
+  @apply text-gray-600 hover:text-primary !important;
+}
+.rs-nav-item:hover,
+.rs-nav-item:focus,
+.rs-nav-item.rs-nav-item-focus {
+  @apply bg-transparent !important;
 }

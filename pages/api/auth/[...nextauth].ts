@@ -36,12 +36,22 @@ export const authOptions: NextAuthOptions = {
     signIn: '/member/signin',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === 'update') {
+        return { ...token, ...session.user };
+      }
       return { ...token, ...user };
     },
     async session({ session, token, user }) {
       session.user = token as any;
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 };
