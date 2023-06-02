@@ -32,7 +32,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const post: PostType = props.post;
   const prevNext = props.prevNext;
-  
+
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
   const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
@@ -318,9 +318,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         <div className='text-center p-2 min-w-[80px]'>
                           <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
                         </div>
-                        <div className='p-2 flex flex-1 items-center'>
+                        <div className='p-2 flex flex-1 items-center gap-1'>
                           {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
-                          {post.extra_01 == '1' ? <PhotoIcon className='h-3 ml-1' /> : <></>}
+                          {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+                          {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
                         </div>
                         <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
                         <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
