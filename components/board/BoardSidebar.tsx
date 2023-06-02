@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-const BoardSidebar = ({ allBoards, memberInfo }: any) => {
+const BoardSidebar = ({ allBoards, memberInfo, getPostsList, setSearchTerm, setSearchTermText, setSearchInput, searchTerm }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -26,6 +26,10 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
     };
     getGroups();
   }, []);
+
+  useEffect(() => {
+    getPostsList();
+  }, [searchTerm]);
 
   return (
     <div className='hidden lg:block lg:min-w-[310px]'>
@@ -47,10 +51,30 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
                   가입<div className='ml-auto'>{formatDate(memberInfo.member.created_at)}</div>
                 </div>
                 <div className='flex'>
-                  내가 쓴 글 보기<div className='ml-auto'>{memberInfo.post}</div>
+                  <button
+                    className='hover:underline'
+                    onClick={() => {
+                      setSearchTerm('author');
+                      setSearchTermText(t['st-author']);
+                      setSearchInput(session?.user.username);
+                    }}
+                  >
+                    내가 쓴 글 보기
+                  </button>
+                  <div className='ml-auto'>{memberInfo.post}</div>
                 </div>
                 <div className='flex'>
-                  내가 쓴 댓글 보기<div className='ml-auto'>{memberInfo.comment}</div>
+                  <button
+                    className='hover:underline'
+                    onClick={() => {
+                      setSearchTerm('commenter');
+                      setSearchTermText(t['st-commenter']);
+                      setSearchInput(session?.user.username);
+                    }}
+                  >
+                    내가 쓴 댓글 보기
+                  </button>
+                  <div className='ml-auto'>{memberInfo.comment}</div>
                 </div>
               </div>
               <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>

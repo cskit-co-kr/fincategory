@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { BoardType, PostType } from '../../typings';
 import Link from 'next/link';
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent, useCallback } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { signIn, signOut, useSession, getSession } from 'next-auth/react';
 import BoardSidebar from '../../components/board/BoardSidebar';
@@ -101,7 +101,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermText(label);
   };
 
-  async function getPostsList() {
+  const getPostsList = async () => {
     // Get Posts List
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
@@ -124,7 +124,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     );
     const postList = await responsePost.json();
     setPostsList(postList);
-  }
+  };
 
   useEffect(() => {
     getPostsList();
@@ -137,7 +137,15 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
+        <BoardSidebar
+          allBoards={allBoards}
+          memberInfo={memberInfo}
+          getPostsList={getPostsList}
+          setSearchTerm={setSearchTerm}
+          setSearchTermText={setSearchTermText}
+          setSearchInput={setSearchInput}
+          searchTerm={searchTerm}
+        />
         {/* Main */}
         <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
           <div className='text-xl font-bold'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
@@ -258,7 +266,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             <div className='border-t border-gray-300 p-5 flex justify-center gap-2 text-xs'>
               <div className='relative'>
                 <button
-                  className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-32 justify-between'
+                  className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-48 justify-between'
                   onClick={() => {
                     setSearchDatePopup((prev) => !prev);
                     setSearchTermPopup(false);
