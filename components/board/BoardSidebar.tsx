@@ -30,7 +30,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
   return (
     <div className='hidden lg:block lg:min-w-[310px]'>
       <div className='lg:sticky lg:top-4'>
-        <div className='flex flex-col gap-3 border border-gray-200 rounded-md p-[30px] bg-white'>
+        <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
           {session?.user ? (
             <>
               <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
@@ -68,7 +68,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
               </button>
             </>
           )}
-          <div className='border-t border-b border-gray-200 py-2.5 font-semibold'>
+          <div className='border-t border-gray-200 pt-2.5 font-semibold'>
             <Link href='/board'>{t['view-all-articles']}</Link>
           </div>
           {/* <div className='font-semibold'>{t['board-list']}</div>
@@ -84,7 +84,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
           <div className='flex flex-col gap-1 border-b border-gray-200 pb-2.5'>
             {groups?.map((group: GroupType, i: number) => (
               <>
-                <div key={i} className='font-semibold'>
+                <div key={i} className='font-semibold border-y border-gray-200 py-2'>
                   {group.name}
                 </div>
                 {group.boards.map((board: any, key: number) => (
