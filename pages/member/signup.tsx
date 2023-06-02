@@ -105,27 +105,27 @@ const MemberSignUp = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className='mt-4 gap-4 grid'>
             <div>
-              <label className='block pb-1'>Username</label>
+              <label className='block pb-1'>{t['username']}</label>
               <input type='text' className='input_field' {...register('userName')} />
               <p className='text-xs text-red-600'>{errors.userName?.message?.toString()}</p>
             </div>
             <div>
-              <label className='block pb-1'>Full Name</label>
+              <label className='block pb-1'>{t['nickname']}</label>
               <input type='text' className='input_field' {...register('fullName')} />
               <p className='text-xs text-red-600'>{errors.fullName?.message?.toString()}</p>
             </div>
             <div>
-              <label className='block pb-1'>E-mail</label>
+              <label className='block pb-1'>{t['email']}</label>
               <input type='text' className='input_field' {...register('email')} />
               <p className='text-xs text-red-600'>{errors.email?.message?.toString()}</p>
             </div>
             <div>
-              <label className='block pb-1'>Password</label>
+              <label className='block pb-1'>{t['password']}</label>
               <input type='password' className='input_field' {...register('password')} />
               <p className='text-xs text-red-600'>{errors.password?.message?.toString()}</p>
             </div>
             <div>
-              <label className='block pb-1'>Password Confirm</label>
+              <label className='block pb-1'>{t['password-confirm']}</label>
               <input type='password' className='input_field' {...register('confirmPassword')} />
               <p className='text-xs text-red-600'>{errors.confirmPassword?.message?.toString()}</p>
             </div>
@@ -136,14 +136,13 @@ const MemberSignUp = () => {
 
           <div className='mt-4 flex divide-x place-content-center'>
             <div className='px-4'>
-              Forgot your{' '}
               <Link href='/' className='underline'>
-                Password
+                {t['forgot-password']}
               </Link>
               ?
             </div>
             <div className='px-4'>
-              <Link href={`/member/signin?callbackUrl=${router.query.callbackUrl}`} className='underline'>
+              <Link href={`/member/signin`} className='underline'>
                 {t['sign-in']}
               </Link>
             </div>

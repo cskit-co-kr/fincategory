@@ -1,10 +1,11 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { ArrowPathIcon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { BoardType } from '../../typings';
+import { BoardType, GroupType } from '../../typings';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import { useEffect, useState } from 'react';
 
 const BoardSidebar = ({ allBoards, memberInfo }: any) => {
   const router = useRouter();
@@ -12,17 +13,33 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const { data: session } = useSession();
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      });
+      const result = await response.json();
+      setGroups(result.groups);
+    };
+    getGroups();
+  }, []);
+
   return (
     <div className='hidden lg:block lg:min-w-[310px]'>
       <div className='lg:sticky lg:top-4'>
-        <div className='flex flex-col gap-3 border border-gray-200 rounded-md p-[30px] bg-white'>
+        <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
           {session?.user ? (
             <>
               <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                 <UserCircleIcon className='h-6 text-black' />
-                <span className='font-semibold'>{session?.user.nickname}</span>
+                <span className='font-semibold'>
+                  <Link href='/member/profile'>{session?.user.nickname}</Link>
+                </span>
                 <button onClick={() => signOut()} className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'>
-                  Sign out
+                  {t['sign-out']}
                 </button>
               </div>
               <div className='text-xs gap-1.5 grid'>
@@ -51,10 +68,10 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
               </button>
             </>
           )}
-          <div className='border-t border-b border-gray-200 py-2.5 font-semibold'>
+          <div className='border-t border-gray-200 pt-2.5 font-semibold'>
             <Link href='/board'>{t['view-all-articles']}</Link>
           </div>
-          <div className='font-semibold'>{t['board-list']}</div>
+          {/* <div className='font-semibold'>{t['board-list']}</div>
           <div>
             {allBoards?.boards.map((board: BoardType) => (
               <div key={board.id}>
@@ -62,6 +79,20 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
                   {board.title}
                 </Link>
               </div>
+            ))}
+          </div> */}
+          <div className='flex flex-col gap-1 border-b border-gray-200 pb-2.5'>
+            {groups?.map((group: GroupType, i: number) => (
+              <>
+                <div key={i} className='font-semibold border-y border-gray-200 py-2'>
+                  {group.name}
+                </div>
+                {group.boards.map((board: any, key: number) => (
+                  <Link key={key} href={`/board/${board.name}`} className='ml-3'>
+                    {board.title}
+                  </Link>
+                ))}
+              </>
             ))}
           </div>
           <div className='flex justify-between'>
