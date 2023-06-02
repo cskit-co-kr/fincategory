@@ -5,9 +5,27 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { useCallback, useEffect, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 
-const BoardSidebar = ({ allBoards, memberInfo, getPostsList, setSearchTerm, setSearchTermText, setSearchInput, searchTerm }: any) => {
+type TTT = {
+  allBoards: any;
+  memberInfo: any;
+  getPostsList?: any;
+  setSearchTerm?: any;
+  setSearchTermText?: any;
+  setSearchInput?: any;
+  searchTerm?: any;
+};
+
+const BoardSidebar: FunctionComponent<TTT> = ({
+  allBoards,
+  memberInfo,
+  getPostsList,
+  setSearchTerm,
+  setSearchTermText,
+  setSearchInput,
+  searchTerm,
+}) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -28,7 +46,7 @@ const BoardSidebar = ({ allBoards, memberInfo, getPostsList, setSearchTerm, setS
   }, []);
 
   useEffect(() => {
-    getPostsList();
+    searchTerm && getPostsList();
   }, [searchTerm]);
 
   return (
@@ -54,9 +72,11 @@ const BoardSidebar = ({ allBoards, memberInfo, getPostsList, setSearchTerm, setS
                   <button
                     className='hover:underline'
                     onClick={() => {
-                      setSearchTerm('author');
-                      setSearchTermText(t['st-author']);
-                      setSearchInput(session?.user.username);
+                      if (searchTerm) {
+                        setSearchTerm('author');
+                        setSearchTermText(t['st-author']);
+                        setSearchInput(session?.user.username);
+                      }
                     }}
                   >
                     내가 쓴 글 보기
@@ -67,9 +87,11 @@ const BoardSidebar = ({ allBoards, memberInfo, getPostsList, setSearchTerm, setS
                   <button
                     className='hover:underline'
                     onClick={() => {
-                      setSearchTerm('commenter');
-                      setSearchTermText(t['st-commenter']);
-                      setSearchInput(session?.user.username);
+                      if (searchTerm) {
+                        setSearchTerm('commenter');
+                        setSearchTermText(t['st-commenter']);
+                        setSearchInput(session?.user.username);
+                      }
                     }}
                   >
                     내가 쓴 댓글 보기

@@ -473,15 +473,6 @@ export const getServerSideProps = async (context: any) => {
     {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        search: {
-          start: null,
-          end: null,
-          field: null,
-          value: null,
-        },
-        hasImage: 'list',
-      }),
     }
   );
   const postList = await responsePost.json();

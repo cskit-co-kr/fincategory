@@ -86,7 +86,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
             field: req.query.category === 'null' ? null : 'category_id',
             value: req.query.category === 'null' ? null : req.query.category,
           };
-    const data = {
+    let data: any = {
       board: req.query.board === 'null' ? null : req.query.board,
       paginate: {
         offset: offset,
@@ -97,9 +97,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         order: 'DESC',
       },
       filter: filter,
-      search: req.body.search,
     };
-
+    if (req.body.search) {
+      data['search'] = req.body.search;
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
