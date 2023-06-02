@@ -211,7 +211,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     </Avatar>
                   </div>
                   <div className='username flex flex-col'>
-                    <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>{post.user.nickname}</p>
+                    <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>{post.user.nickname} [{post.user.username}]</p>
                     <p className='m-0 pt-[5px] text-[12px] leading-[14px]'>{toDateTimeformat(post.created_at, '.')} 조회 {post.views}</p>
                   </div>
                   <div className='right ml-auto self-center flex items-center'>
