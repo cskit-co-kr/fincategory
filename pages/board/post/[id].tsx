@@ -316,7 +316,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     return (
                       <div className={`border-b border-gray-200 flex ${current ? 'font-bold text-[#0a5dc2]' : ''}`} key={post.id}>
                         <div className='text-center p-2 min-w-[80px]'>
-                          <Link href={`/board/${postList.board.name}/${post.category.id}`}>{post.category.category}</Link>
+                          <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
                         </div>
                         <div className='p-2 flex flex-1 items-center'>
                           {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
