@@ -6,7 +6,7 @@ import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
 import LanguageSelector from './LanguageSelector';
 import { useData } from '../context/context';
-import { BoardType } from '../typings';
+import { BoardType, GroupType } from '../typings';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Nav } from 'rsuite';
@@ -26,6 +26,7 @@ const Header = () => {
   const activePath = normalPath + ' text-primary';
 
   const [searchField, setSearchField] = useState<string | null>(null);
+  const [groups, setGroups] = useState([]);
   const [allBoards, setAllBoards] = useState([]);
   const [boardsPopupMenuShow, setBoardsPopupMenuShow] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
@@ -68,7 +69,15 @@ const Header = () => {
       const allBoards = await response.json();
       setAllBoards(allBoards.boards);
     };
-    getBoards();
+    const getGroups = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      });
+      const result = await response.json();
+      setGroups(result.groups);
+    };
+    getGroups();
   }, []);
 
   return (
@@ -136,7 +145,7 @@ const Header = () => {
               <Bars3Icon className='h-7' />
             </div>
           </div>
-          <nav className='flex text-sm font-bold'>
+          <nav className='flex text-sm font-bold items-center'>
             <ul className='flex'>
               <li className='hidden'>
                 <button className={getPath === '/' ? activePath : normalPath} onClick={() => router.push('/')}>
@@ -156,7 +165,7 @@ const Header = () => {
                   {t['search']}
                 </button>
               </li>
-              <li className='relative'>
+              {/* <li className='relative'>
                 <button
                   className={`${getPath === '/board' ? activePath : normalPath}`}
                   onClick={() => setBoardsPopupMenuShow((prev) => !prev)}
@@ -179,7 +188,18 @@ const Header = () => {
                     ))}
                   </div>
                 )}
-              </li>
+              </li> */}
+              <Nav className='mt-1 custom-nav-menu' appearance='subtle'>
+                {groups?.map((group: GroupType, i: number) => (
+                  <Nav.Menu key={i} title={group.name}>
+                    {group.boards.map((board: any, key: number) => (
+                      <Nav.Item key={key} as={Link} href={`/board/${board.name}`}>
+                        {board.title}
+                      </Nav.Item>
+                    ))}
+                  </Nav.Menu>
+                ))}
+              </Nav>
             </ul>
             <button
               className={getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}

@@ -6,6 +6,8 @@ let haveImageUrl = '';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.query.f) {
+    case 'getgroups':
+      return getGroups();
     case 'getallboardslist':
       return getBoardList();
     case 'getpostlist':
@@ -24,6 +26,26 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return commentReaction();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  async function getGroups() {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/group/read`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'full',
+        sort: {
+          field: null,
+          order: null,
+        },
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
   }
 
   async function getBoardList() {

@@ -45,3 +45,11 @@
 .post-image {
   @apply mx-auto;
 }
+.rs-nav-item {
+  @apply text-gray-600 hover:text-primary !important;
+}
+.rs-nav-item:hover,
+.rs-nav-item:focus,
+.rs-nav-item.rs-nav-item-focus {
+  @apply bg-transparent !important;
+}

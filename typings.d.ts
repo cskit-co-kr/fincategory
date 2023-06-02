@@ -59,6 +59,18 @@ export type MultiValueOptions = {
   label: any;
 };
 
+export type GroupType = {
+  id: number;
+  name: string;
+  boards: [
+    {
+      id: number;
+      name: string;
+      title: string;
+    }
+  ];
+};
+
 export type BoardType = {
   id: number;
   name: string;

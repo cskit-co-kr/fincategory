@@ -1,10 +1,11 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { ArrowPathIcon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { BoardType } from '../../typings';
+import { BoardType, GroupType } from '../../typings';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import { useEffect, useState } from 'react';
 
 const BoardSidebar = ({ allBoards, memberInfo }: any) => {
   const router = useRouter();
@@ -12,6 +13,20 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const { data: session } = useSession();
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      });
+      const result = await response.json();
+      setGroups(result.groups);
+    };
+    getGroups();
+  }, []);
+
   return (
     <div className='hidden lg:block lg:min-w-[310px]'>
       <div className='lg:sticky lg:top-4'>
@@ -56,7 +71,7 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
           <div className='border-t border-b border-gray-200 py-2.5 font-semibold'>
             <Link href='/board'>{t['view-all-articles']}</Link>
           </div>
-          <div className='font-semibold'>{t['board-list']}</div>
+          {/* <div className='font-semibold'>{t['board-list']}</div>
           <div>
             {allBoards?.boards.map((board: BoardType) => (
               <div key={board.id}>
@@ -64,6 +79,20 @@ const BoardSidebar = ({ allBoards, memberInfo }: any) => {
                   {board.title}
                 </Link>
               </div>
+            ))}
+          </div> */}
+          <div className='flex flex-col gap-1 border-b border-gray-200 pb-2.5'>
+            {groups?.map((group: GroupType, i: number) => (
+              <>
+                <div key={i} className='font-semibold'>
+                  {group.name}
+                </div>
+                {group.boards.map((board: any, key: number) => (
+                  <Link key={key} href={`/board/${board.name}`} className='ml-3'>
+                    {board.title}
+                  </Link>
+                ))}
+              </>
             ))}
           </div>
           <div className='flex justify-between'>
