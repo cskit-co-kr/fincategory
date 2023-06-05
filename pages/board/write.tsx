@@ -165,7 +165,7 @@ const WritePost = ({ allBoards, groupsList }: any) => {
                 </select>
 
                 <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
-                  <option value='0'>You can choose category or not</option>
+                  <option value='0'>말머리 선택</option>
                   {allBoards?.boards
                     .find((board: BoardType) => board.id === Number(selectedBoard))
                     ?.categories?.map((category: any) => (

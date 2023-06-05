@@ -4,8 +4,8 @@ import { getSession, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { Pagination } from 'rsuite';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Loader, Pagination } from 'rsuite';
 import BoardSidebar from '../../components/board/BoardSidebar';
 import ListPostRow from '../../components/board/ListPostRow';
 import { enUS } from '../../lang/en-US';
@@ -34,6 +34,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const { data: session } = useSession();
 
+  const [loading, setLoading] = useState(false);
   const [viewPort, setViewPort] = useState('list');
 
   const [perpagePopup, setPerpagePopup] = useState(false);
@@ -92,6 +93,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermText(label);
   };
 
+  const resetSearch = () => {
+    setSearchStartDate('');
+    setSearchEndDate('');
+    setSearchInput('');
+    setSearchTermHandler(t['st-title'], 'title');
+  };
+
   const getPostsList = async () => {
     // Get Posts List
     const boardQuery = router.query.name;
@@ -122,7 +130,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setPerpagePopup(false);
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
-  }, [postsPerPage, activePage, router.query.name, viewPort]);
+  }, [postsPerPage, activePage, viewPort]);
+
+  useEffect(() => {
+    resetSearch();
+    setLoading(true);
+    getPostsList();
+    setLoading(false);
+  }, [router.query.name]);
 
   useEffect(() => {
     if (session?.user && router.query.member === 'posts') {
@@ -205,6 +220,11 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
                 <div className='text-xs'>
+                  {loading && (
+                    <div className='text-center w-full p-4'>
+                      <Loader />
+                    </div>
+                  )}
                   {postsList?.posts?.map((post: PostType, idx: number) => (
                     <ListPostRow post={post} boardName={postsList?.board?.name} key={idx} />
                   ))}
