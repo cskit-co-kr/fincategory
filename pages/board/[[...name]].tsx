@@ -35,6 +35,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(false);
+  const [clickCheck, setClickCheck] = useState(false);
   const [viewPort, setViewPort] = useState('list');
 
   const [perpagePopup, setPerpagePopup] = useState(false);
@@ -126,30 +127,33 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   useEffect(() => {
-    getPostsList();
-    setPerpagePopup(false);
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
+    return () => {
+      getPostsList();
+      setPerpagePopup(false);
+      setCookie('perPage', postsPerPage);
+      setCookie('page', activePage);
+    };
   }, [postsPerPage, activePage, viewPort]);
 
   useEffect(() => {
-    resetSearch();
-    setLoading(true);
-    getPostsList();
-    setLoading(false);
-  }, [router.query.name]);
+    const currentUser = session?.user;
+    const currentMember = router.query.member;
+
+    if (currentUser && currentMember === 'posts') {
+      setSearchTermHandler(t['st-author'], 'author');
+      setSearchInput(currentUser.nickname);
+    } else if (currentUser && currentMember === 'comments') {
+      setSearchTermHandler(t['st-commenter'], 'commenter');
+      setSearchInput(currentUser.nickname);
+    } else if (router.query.search === undefined) {
+      resetSearch();
+    }
+    setClickCheck((prev) => !prev);
+  }, [router.query]);
 
   useEffect(() => {
-    if (session?.user && router.query.member === 'posts') {
-      setSearchTermHandler(t['st-author'], 'author');
-      setSearchInput(session?.user.nickname);
-      getPostsList();
-    } else if (session?.user && router.query.member === 'comments') {
-      setSearchTermHandler(t['st-commenter'], 'commenter');
-      setSearchInput(session?.user.nickname);
-      getPostsList();
-    }
-  }, [router.query.member, session]);
+    getPostsList();
+  }, [clickCheck]);
 
   return (
     <>
@@ -384,6 +388,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
+                  router.replace(`/board?search`);
                   getPostsList();
                 }}
               >
