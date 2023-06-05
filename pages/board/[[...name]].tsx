@@ -1,25 +1,16 @@
-import axios from 'axios';
+import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import { setCookie } from 'cookies-next';
+import { getSession, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Loader, Pagination } from 'rsuite';
+import BoardSidebar from '../../components/board/BoardSidebar';
+import ListPostRow from '../../components/board/ListPostRow';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import {
-  ArrowPathIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ListBulletIcon,
-  PhotoIcon,
-  Squares2X2Icon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import { BoardType, PostType } from '../../typings';
-import Link from 'next/link';
-import { useEffect, useRef, useState, MouseEvent, useCallback } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { signIn, signOut, useSession, getSession } from 'next-auth/react';
-import BoardSidebar from '../../components/board/BoardSidebar';
-import { Pagination, DateRangePicker } from 'rsuite';
-import Image from 'next/image';
-import { setCookie } from 'cookies-next';
+import { PostType } from '../../typings';
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -43,6 +34,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const { data: session } = useSession();
 
+  const [loading, setLoading] = useState(false);
   const [viewPort, setViewPort] = useState('list');
 
   const [perpagePopup, setPerpagePopup] = useState(false);
@@ -101,6 +93,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermText(label);
   };
 
+  const resetSearch = () => {
+    setSearchStartDate('');
+    setSearchEndDate('');
+    setSearchInput('');
+    setSearchTermHandler(t['st-title'], 'title');
+  };
+
   const getPostsList = async () => {
     // Get Posts List
     const boardQuery = router.query.name;
@@ -131,21 +130,32 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setPerpagePopup(false);
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
-  }, [postsPerPage, activePage, router.query.name, viewPort]);
+  }, [postsPerPage, activePage, viewPort]);
+
+  useEffect(() => {
+    resetSearch();
+    setLoading(true);
+    getPostsList();
+    setLoading(false);
+  }, [router.query.name]);
+
+  useEffect(() => {
+    if (session?.user && router.query.member === 'posts') {
+      setSearchTermHandler(t['st-author'], 'author');
+      setSearchInput(session?.user.nickname);
+      getPostsList();
+    } else if (session?.user && router.query.member === 'comments') {
+      setSearchTermHandler(t['st-commenter'], 'commenter');
+      setSearchInput(session?.user.nickname);
+      getPostsList();
+    }
+  }, [router.query.member, session]);
 
   return (
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar
-          allBoards={allBoards}
-          memberInfo={memberInfo}
-          getPostsList={getPostsList}
-          setSearchTerm={setSearchTerm}
-          setSearchTermText={setSearchTermText}
-          setSearchInput={setSearchInput}
-          searchTerm={searchTerm}
-        />
+        <BoardSidebar />
         {/* Main */}
         <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
           <div className='text-xl font-bold'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
@@ -210,24 +220,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
                 <div className='text-xs'>
-                  {postsList?.posts?.map((post: PostType, idx: number) => (
-                    <div className='border-b border-gray-200 flex' key={post.id}>
-                      <div className='text-center p-2 min-w-[80px]'>
-                        {router.query.name && router.query.name?.length > 0 ? (
-                          <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
-                        ) : (
-                          <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
-                        )}
-                      </div>
-                      <div className='p-2 flex-grow flex items-center gap-1'>
-                        <Link href={`/board/post/${post.id}`}>{post.title}</Link>
-                        {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
-                        {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
-                      </div>
-                      <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
-                      <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
-                      <div className='text-center p-2 min-w-[48px]'>{post.views}</div>
+                  {loading && (
+                    <div className='text-center w-full p-4'>
+                      <Loader />
                     </div>
+                  )}
+                  {postsList?.posts?.map((post: PostType, idx: number) => (
+                    <ListPostRow post={post} boardName={postsList?.board?.name} key={idx} />
                   ))}
                 </div>
               </div>

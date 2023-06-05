@@ -49,7 +49,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, memberInfo }: any) => {
+const WritePost = ({ allBoards, groupsList }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -126,7 +126,7 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
+        <BoardSidebar />
         {/* Main */}
         <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
@@ -153,15 +153,19 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
                   onChange={(e: any) => setSelectedBoard(e.target.value)}
                 >
                   <option value='0'>게시판을 선택해 주세요.</option>
-                  {allBoards?.boards.map((board: BoardType) => (
-                    <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
-                      {board.title}
-                    </option>
+                  {groupsList?.groups.map((group: any) => (
+                    <optgroup label={group.name}>
+                      {group.boards.map((board: any) => (
+                        <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
+                          {board.title}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
 
                 <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
-                  <option value='0'>You can choose category or not</option>
+                  <option value='0'>말머리 선택</option>
                   {allBoards?.boards
                     .find((board: BoardType) => board.id === Number(selectedBoard))
                     ?.categories?.map((category: any) => (
@@ -195,16 +199,8 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
 };
 
 export const getServerSideProps = async (context: any) => {
-  // Get Member Information
-  let memberInfo = '';
   const session = await getSession(context);
-  if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    memberInfo = await responseMember.json();
-  } else {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/member/signin', // Redirect to the login page if not logged in
@@ -212,6 +208,11 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
+  const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+  });
+  const groupsList = await responseGroup.json();
   // Get Boards List
   const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
     method: 'POST',
@@ -221,7 +222,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, memberInfo },
+    props: { allBoards, groupsList },
   };
 };
 
