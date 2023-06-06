@@ -154,7 +154,7 @@ const WritePost = ({ allBoards, groupsList }: any) => {
                 >
                   <option value='0'>게시판을 선택해 주세요.</option>
                   {groupsList?.groups.map((group: any) => (
-                    <optgroup label={group.name}>
+                    <optgroup label={group.name} key={group.id}>
                       {group.boards.map((board: any) => (
                         <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
                           {board.title}

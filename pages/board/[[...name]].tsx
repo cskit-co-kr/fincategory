@@ -155,6 +155,33 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     getPostsList();
   }, [clickCheck]);
 
+  // Checkbox functions
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
+  const handleCheckboxChange = (event: any) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setCheckedItems([...checkedItems, value]);
+    } else {
+      setCheckedItems(checkedItems.filter((item) => item !== value));
+    }
+  };
+  const deletePost = async () => {
+    if (checkedItems.length === 0) return alert('No items selected');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        post: checkedItems,
+      }),
+    });
+    const result = await response.json();
+    if (result.success === true) {
+      router.reload();
+    }
+  };
+
   return (
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
@@ -230,7 +257,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     </div>
                   )}
                   {postsList?.posts?.map((post: PostType, idx: number) => (
-                    <ListPostRow post={post} boardName={postsList?.board?.name} key={idx} />
+                    <ListPostRow
+                      post={post}
+                      boardName={postsList?.board?.name}
+                      key={idx}
+                      checkedItems={checkedItems}
+                      handleCheckboxChange={handleCheckboxChange}
+                    />
                   ))}
                 </div>
               </div>
@@ -257,10 +290,19 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
           </div>
-          <div className='flex justify-end mt-2'>
-            <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
-              {t['write']}
-            </Link>
+          <div className='flex items-center'>
+            {session?.user && (
+              <div>
+                <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
+                  Delete selected posts
+                </button>
+              </div>
+            )}
+            <div className='flex ml-auto mt-2'>
+              <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
+                {t['write']}
+              </Link>
+            </div>
           </div>
           <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
