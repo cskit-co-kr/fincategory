@@ -21,6 +21,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return deletePost();
     case 'savepost':
       return savePost();
+    case 'editpost':
+      return editPost();
     case 'getcomments':
       return getComments();
     case 'insertcomment':
@@ -177,6 +179,35 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500);
   }
 
+  async function editPost() {
+    const processedContent = await processContent(req.body.content);
+    let srcValue: string | undefined;
+    const $ = cheerio.load(processedContent);
+    const imgElement = $('img').first();
+
+    if (imgElement.length) {
+      srcValue = imgElement.attr('src');
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/update/${req.body.id}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        title: req.body.title,
+        content: processedContent,
+        board: req.body.board,
+        category: req.body.category === 0 ? null : req.body.category,
+        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : 0,
+        extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
   async function getComments() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`, {
       method: 'POST',
@@ -300,6 +331,8 @@ const processContent = async (htmlContent: string) => {
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
       $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" class='post-image' />`);
+    } else if (src && src.startsWith('https://fincategory.com')) {
+      $(element).replaceWith(`<img src="${src}" alt="Image" class='post-image' />`);
     }
   }
   let modifiedHtml = $.html(); // Get the modified HTML content with the root tags

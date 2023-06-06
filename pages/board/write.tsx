@@ -49,7 +49,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, groupsList }: any) => {
+const WritePost = ({ allBoards, groupsList, post }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -102,25 +102,54 @@ const WritePost = ({ allBoards, groupsList }: any) => {
   const savePost = async () => {
     if (selectedBoard === '0') return alert('Please select the board');
     setLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        board: Number(selectedBoard),
-        category: Number(selectedCategory),
-        flag: null,
-        status: 1,
-        user: Number(session?.user.id),
-      }),
-    });
-    const result = await response.json();
-    setLoading(false);
-    if (result.code === 201 && result.message === 'Inserted') {
-      router.push('/board');
+    if (router.query.mode === 'edit') {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          id: router.query.id,
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Updated') {
+        router.push('/board');
+      }
+    } else {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          flag: null,
+          status: 1,
+          user: Number(session?.user.id),
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Inserted') {
+        router.push('/board');
+      }
     }
   };
+
+  useEffect(() => {
+    if (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) {
+      setContent(post.content);
+      setSelectedBoard(post.board.id);
+      setTitle(post.title);
+    } else {
+      //router.push('/board');
+    }
+  }, [session?.user]);
 
   return (
     <>
@@ -151,6 +180,7 @@ const WritePost = ({ allBoards, groupsList }: any) => {
                   className='border border-gray-200 p-2 w-full md:w-2/3'
                   defaultValue={0}
                   onChange={(e: any) => setSelectedBoard(e.target.value)}
+                  value={selectedBoard}
                 >
                   <option value='0'>게시판을 선택해 주세요.</option>
                   {groupsList?.groups.map((group: any) => (
@@ -208,6 +238,28 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
+  // Get Post
+  let post = {};
+  if (context.query.id) {
+    const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        id: context.query.id,
+      }),
+    });
+    const data = await resPost.json();
+    post = data.post;
+    if (!post) {
+      return {
+        redirect: {
+          destination: '/board',
+          permanent: false,
+        },
+      };
+    }
+  }
+  // Get Group
   const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -222,7 +274,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, groupsList },
+    props: { allBoards, groupsList, post },
   };
 };
 
