@@ -122,7 +122,7 @@ const Profile = () => {
           email: data.email,
         },
       });
-      setUpdateText('Updated successfully!');
+      setUpdateText(t['updated-successfully']);
     }
   };
   const onChangePassword = async (data: any) => {

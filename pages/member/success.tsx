@@ -17,12 +17,11 @@ const MemberSuccess = () => {
       <div className='gap-4 pt-7 bg-gray-50'>
         <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
           <div className='text-center gap-1 grid'>
-            <div className='font-semibold'>Congratulations!</div>
-            <div className=''>Your account is successfully created!</div>
+            <div className='font-semibold'>{t['congratulations']}</div>
+            <div className=''>{t['account-created']}</div>
             <div>
-              Go to{' '}
               <Link href='/member/signin?callbackUrl=/board' className='underline'>
-                Login Page
+                {t['go-to-login-page']}
               </Link>
             </div>
           </div>

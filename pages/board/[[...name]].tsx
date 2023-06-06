@@ -298,7 +298,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
             <div className='flex ml-auto mt-2'>
-              <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
+              <Link
+                className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
+                href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+              >
                 {t['write']}
               </Link>
             </div>

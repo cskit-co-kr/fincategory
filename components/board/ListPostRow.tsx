@@ -26,7 +26,11 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
       )}
       <div className='text-center p-2 min-w-[80px]'>
         {router.query.name && router.query.name?.length > 0 ? (
-          <Link href={`/board/${boardName}/${post.category?.id}`}>{post.category?.category}</Link>
+          post.category ? (
+            <Link href={`/board/${boardName}/${post.category?.id}`}>{post.category?.category}</Link>
+          ) : (
+            post.id
+          )
         ) : (
           <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
         )}

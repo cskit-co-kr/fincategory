@@ -58,7 +58,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
 
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
-  const [selectedBoard, setSelectedBoard] = useState();
+  const [selectedBoard, setSelectedBoard] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState();
   const [content, setContent] = useState('');
   const handleContentChange = (newContent: any) => {
@@ -142,6 +142,16 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   useEffect(() => {
+    if (router.query.board) {
+      allBoards.boards.find((board: BoardType) => {
+        if (board.name === router.query.board) {
+          setSelectedBoard(board.id);
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (
       (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) ||
       (session?.user && router.query.mode === 'edit' && session?.user.type === 2)
@@ -181,7 +191,6 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
               <div className='flex gap-2'>
                 <select
                   className='border border-gray-200 p-2 w-full md:w-2/3'
-                  defaultValue={0}
                   onChange={(e: any) => setSelectedBoard(e.target.value)}
                   value={selectedBoard}
                 >
