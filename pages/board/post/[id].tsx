@@ -28,8 +28,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 ) => {
   const router = useRouter();
 
-  const allBoards: Array<BoardType> = props.allBoards;
-  const memberInfo = props.memberInfo;
   const [postList, setPostList] = useState(props.postList);
 
   const post: PostType = props.post;
@@ -241,6 +239,22 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         복사
                       </span>
                     </span>
+                    {session?.user && session?.user.id === post.user.id && (
+                      <Link
+                        className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline text-xs ml-2'
+                        href={`/board/write?mode=edit&id=${post.id}`}
+                      >
+                        Edit Post
+                      </Link>
+                    )}
+                    {session?.user && session?.user.type === 2 && (
+                      <Link
+                        className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline text-xs ml-2'
+                        href={`/board/write?mode=edit&id=${post.id}`}
+                      >
+                        Edit Post
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -470,30 +484,6 @@ export const getServerSideProps = async (context: any) => {
     reactionTotal = JSON.parse(post.reaction).length;
   }
 
-  // Get Member Information
-  let memberInfo = '';
-  const session = await getSession(context);
-  if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    memberInfo = await responseMember.json();
-  } else {
-    return {
-      redirect: {
-        destination: '/member/signin', // Redirect to the login page if not logged in
-        permanent: false,
-      },
-    };
-  }
-  // Get Boards List
-  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-  });
-  const allBoards = await response.json();
-
   // Get Comments
   const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
     method: 'POST',
@@ -527,7 +517,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, post, memberInfo, comments, postList, reactionTotal, page, perPage, prevNext },
+    props: { post, comments, postList, reactionTotal, page, perPage, prevNext },
   };
 };
 

@@ -260,7 +260,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       key={idx}
                       checkedItems={checkedItems}
                       handleCheckboxChange={handleCheckboxChange}
-                      userType={memberInfo.member.type}
+                      userType={memberInfo.member?.type}
                     />
                   ))}
                 </div>
