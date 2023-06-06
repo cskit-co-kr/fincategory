@@ -1,5 +1,8 @@
 import * as cheerio from 'cheerio';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './auth/[...nextauth]';
 
 let haveImage = 0;
 let haveImageUrl = '';
@@ -14,8 +17,12 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return getPostList();
     case 'getpost':
       return getPost();
+    case 'deletepost':
+      return deletePost();
     case 'savepost':
       return savePost();
+    case 'editpost':
+      return editPost();
     case 'getcomments':
       return getComments();
     case 'insertcomment':
@@ -86,7 +93,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
             field: req.query.category === 'null' ? null : 'category_id',
             value: req.query.category === 'null' ? null : req.query.category,
           };
-    const data = {
+    let data: any = {
       board: req.query.board === 'null' ? null : req.query.board,
       paginate: {
         offset: offset,
@@ -97,9 +104,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         order: 'DESC',
       },
       filter: filter,
-      search: req.body.search,
     };
-
+    if (req.body.search) {
+      data['search'] = req.body.search;
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -121,6 +129,32 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500);
   }
 
+  async function deletePost() {
+    try {
+      const session = await getServerSession(req, res, authOptions);
+      if (session?.user) {
+        await Promise.all(
+          req.body.post.map(async (id: string) => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/delete/${id}`, {
+              method: 'DELETE',
+              headers: { 'content-type': 'application/json' },
+            });
+            const result = await response.json();
+            if (!response.ok) {
+              throw new Error(result.message);
+            }
+            return result;
+          })
+        );
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    } catch (error) {
+      return res.status(500).json({ error: (error as Error).message });
+    }
+  }
+
   async function savePost() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/insert`, {
       method: 'POST',
@@ -135,6 +169,35 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         user: req.body.user,
         extra_01: haveImage === 1 ? 1 : 0,
         extra_02: haveImage === 1 ? 'https://fincategory.com' + haveImageUrl : '',
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
+  async function editPost() {
+    const processedContent = await processContent(req.body.content);
+    let srcValue: string | undefined;
+    const $ = cheerio.load(processedContent);
+    const imgElement = $('img').first();
+
+    if (imgElement.length) {
+      srcValue = imgElement.attr('src');
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/update/${req.body.id}`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        title: req.body.title,
+        content: processedContent,
+        board: req.body.board,
+        category: req.body.category === 0 ? null : req.body.category,
+        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : 0,
+        extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,
       }),
     });
 
@@ -268,6 +331,8 @@ const processContent = async (htmlContent: string) => {
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
       $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" class='post-image' />`);
+    } else if (src && src.startsWith('https://fincategory.com')) {
+      $(element).replaceWith(`<img src="${src}" alt="Image" class='post-image' />`);
     }
   }
   let modifiedHtml = $.html(); // Get the modified HTML content with the root tags

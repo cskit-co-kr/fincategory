@@ -168,3 +168,18 @@ export type CommentType = {
   };
   child?: Array<CommentChildType>;
 };
+
+export type MemberType = {
+  code: number;
+  member: {
+    id: number;
+    username: string;
+    nickname: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+  };
+  post: number;
+  comment: number;
+};

@@ -122,7 +122,7 @@ const Header = () => {
                         ref={browseRef}
                       >
                         <Link href='/member/profile' onClick={() => setUserMenu(false)} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
-                          My Profile
+                          내 정보
                         </Link>
                         <Link href='' onClick={() => signOut()} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
                           {t['sign-out']}

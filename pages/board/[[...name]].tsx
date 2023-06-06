@@ -1,25 +1,17 @@
-import axios from 'axios';
+import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import { setCookie } from 'cookies-next';
+import { getSession, useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Loader, Pagination } from 'rsuite';
+import BoardSidebar from '../../components/board/BoardSidebar';
+import ListPostRow from '../../components/board/ListPostRow';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import {
-  ArrowPathIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ListBulletIcon,
-  PhotoIcon,
-  Squares2X2Icon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import { BoardType, PostType } from '../../typings';
-import Link from 'next/link';
-import { useEffect, useRef, useState, MouseEvent } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { signIn, signOut, useSession, getSession } from 'next-auth/react';
-import BoardSidebar from '../../components/board/BoardSidebar';
-import { Pagination, DateRangePicker } from 'rsuite';
-import Image from 'next/image';
-import { setCookie } from 'cookies-next';
+import { PostType } from '../../typings';
+import { formatDate } from '../../lib/utils';
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -43,6 +35,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const { data: session } = useSession();
 
+  const [loading, setLoading] = useState(false);
+  const [clickCheck, setClickCheck] = useState(false);
   const [viewPort, setViewPort] = useState('list');
 
   const [perpagePopup, setPerpagePopup] = useState(false);
@@ -101,7 +95,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermText(label);
   };
 
-  async function getPostsList() {
+  const resetSearch = () => {
+    setSearchStartDate('');
+    setSearchEndDate('');
+    setSearchInput('');
+    setSearchTermHandler(t['st-title'], 'title');
+  };
+
+  const getPostsList = async () => {
     // Get Posts List
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
@@ -124,20 +125,66 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     );
     const postList = await responsePost.json();
     setPostsList(postList);
-  }
+  };
+
+  useEffect(() => {
+    return () => {
+      setClickCheck((prev) => !prev);
+      setPerpagePopup(false);
+      setCookie('perPage', postsPerPage);
+      setCookie('page', activePage);
+    };
+  }, [postsPerPage, activePage, viewPort]);
+
+  useEffect(() => {
+    if (router.query.member && router.query.show === 'posts') {
+      setSearchTermHandler(t['st-author'], 'author');
+      setSearchInput(router.query.member as string);
+    } else if (router.query.member && router.query.show === 'comments') {
+      setSearchTermHandler(t['st-commenter'], 'commenter');
+      setSearchInput(router.query.member as string);
+    } else if (router.query.search === undefined) {
+      resetSearch();
+    }
+    setClickCheck((prev) => !prev);
+  }, [router.query]);
 
   useEffect(() => {
     getPostsList();
-    setPerpagePopup(false);
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
-  }, [postsPerPage, activePage, router.query.name, viewPort]);
+  }, [clickCheck]);
+
+  // Checkbox functions
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
+  const handleCheckboxChange = (event: any) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setCheckedItems([...checkedItems, value]);
+    } else {
+      setCheckedItems(checkedItems.filter((item) => item !== value));
+    }
+  };
+  const deletePost = async () => {
+    if (checkedItems.length === 0) return alert('No items selected');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        post: checkedItems,
+      }),
+    });
+    const result = await response.json();
+    if (result.success === true) {
+      router.reload();
+    }
+  };
 
   return (
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
+        <BoardSidebar />
         {/* Main */}
         <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
           <div className='text-xl font-bold'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
@@ -202,24 +249,20 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
                 <div className='text-xs'>
-                  {postsList?.posts?.map((post: PostType, idx: number) => (
-                    <div className='border-b border-gray-200 flex' key={post.id}>
-                      <div className='text-center p-2 min-w-[80px]'>
-                        {router.query.name && router.query.name?.length > 0 ? (
-                          <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
-                        ) : (
-                          <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
-                        )}
-                      </div>
-                      <div className='p-2 flex-grow flex items-center gap-1'>
-                        <Link href={`/board/post/${post.id}`}>{post.title}</Link>
-                        {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
-                        {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
-                      </div>
-                      <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
-                      <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
-                      <div className='text-center p-2 min-w-[48px]'>{post.views}</div>
+                  {loading && (
+                    <div className='text-center w-full p-4'>
+                      <Loader />
                     </div>
+                  )}
+                  {postsList?.posts?.map((post: PostType, idx: number) => (
+                    <ListPostRow
+                      post={post}
+                      boardName={postsList?.board?.name}
+                      key={idx}
+                      checkedItems={checkedItems}
+                      handleCheckboxChange={handleCheckboxChange}
+                      userType={memberInfo.member?.type}
+                    />
                   ))}
                 </div>
               </div>
@@ -246,10 +289,19 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
           </div>
-          <div className='flex justify-end mt-2'>
-            <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
-              {t['write']}
-            </Link>
+          <div className='flex items-center'>
+            {session?.user && memberInfo.member.type === 2 && (
+              <div>
+                <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
+                  Delete selected posts
+                </button>
+              </div>
+            )}
+            <div className='flex ml-auto mt-2'>
+              <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
+                {t['write']}
+              </Link>
+            </div>
           </div>
           <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
@@ -258,7 +310,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             <div className='border-t border-gray-300 p-5 flex justify-center gap-2 text-xs'>
               <div className='relative'>
                 <button
-                  className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-32 justify-between'
+                  className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-48 justify-between'
                   onClick={() => {
                     setSearchDatePopup((prev) => !prev);
                     setSearchTermPopup(false);
@@ -377,6 +429,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
+                  router.replace(`/board?search`);
                   getPostsList();
                 }}
               >
@@ -390,17 +443,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   );
 };
 
-function formatDate(dateString: string) {
-  const date: any = new Date(dateString);
-  const currentDate: any = new Date();
-  const timeDifference: any = currentDate - date;
-  const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
-  const isWithin24Hours = timeDifference < oneDay;
-  const formattedDateTime = isWithin24Hours
-    ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-    : dateString.substring(0, 10).replaceAll('-', '.');
-  return formattedDateTime;
-}
 function getToday() {
   const today = new Date();
   const year = today.getFullYear();

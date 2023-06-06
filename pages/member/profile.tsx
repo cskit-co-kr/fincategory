@@ -39,6 +39,9 @@ const Profile = () => {
       .email('Invalid email address')
       .required("You can't leave this empty")
       .test('emailAvailable', 'Email is already registered', (value) => validateEmail(value)),
+  });
+  const schema2 = yup.object().shape({
+    oldPassword: yup.string().required("You can't leave this empty."),
     password: yup.string().min(6, 'no to min 6').max(20, 'no to max 20').required("You can't leave this empty."),
     confirmPassword: yup
       .string()
@@ -52,6 +55,13 @@ const Profile = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+  });
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    formState: { errors: errors2 },
+  } = useForm({
+    resolver: yupResolver(schema2),
   });
 
   const validateUsername = async (value: string) => {
@@ -168,34 +178,34 @@ const Profile = () => {
               className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
               type='submit'
             >
-              {loading && <Loader />}Save
+              {loading && <Loader />}등록
             </button>
           </form>
         </div>
         <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm mt-4'>
-          <div className='font-semibold'>Change Password</div>
+          <div className='font-semibold'>비밀번호 변경</div>
           {updatePasswordText !== '' && <div className='bg-gray-100 p-4 text-center rounded-lg mt-4'>{updatePasswordText}</div>}
-          <form onSubmit={handleSubmit(onChangePassword)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
+          <form onSubmit={handleSubmit2(onChangePassword)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
             <div>
-              <label className='block pb-1'>Old Password</label>
-              <input type='password' className='input_field' {...register('oldPassword')} />
-              <p className='text-xs text-red-600'>{errors.oldPassword?.message?.toString()}</p>
+              <label className='block pb-1'>현재 비밀번호</label>
+              <input type='password' className='input_field' {...register2('oldPassword')} />
+              <p className='text-xs text-red-600'>{errors2.oldPassword?.message?.toString()}</p>
             </div>
             <div>
-              <label className='block pb-1'>{t['password']}</label>
-              <input type='password' className='input_field' {...register('password')} />
-              <p className='text-xs text-red-600'>{errors.password?.message?.toString()}</p>
+              <label className='block pb-1'>신규 비밀번호</label>
+              <input type='password' className='input_field' {...register2('password')} />
+              <p className='text-xs text-red-600'>{errors2.password?.message?.toString()}</p>
             </div>
             <div>
               <label className='block pb-1'>{t['password-confirm']}</label>
-              <input type='password' className='input_field' {...register('confirmPassword')} />
-              <p className='text-xs text-red-600'>{errors.confirmPassword?.message?.toString()}</p>
+              <input type='password' className='input_field' {...register2('confirmPassword')} />
+              <p className='text-xs text-red-600'>{errors2.confirmPassword?.message?.toString()}</p>
             </div>
             <button
               className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
               type='submit'
             >
-              {loading2 && <Loader />}Change Password
+              {loading2 && <Loader />}등록
             </button>
           </form>
         </div>

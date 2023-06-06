@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import BoardSidebar from '../../components/board/BoardSidebar';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { BoardType } from '../../typings';
+import { BoardType, PostType } from '../../typings';
 import * as cheerio from 'cheerio';
 import { Loader } from 'rsuite';
 
@@ -49,7 +49,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, memberInfo }: any) => {
+const WritePost = ({ allBoards, groupsList, post }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -102,31 +102,63 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
   const savePost = async () => {
     if (selectedBoard === '0') return alert('Please select the board');
     setLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        board: Number(selectedBoard),
-        category: Number(selectedCategory),
-        flag: null,
-        status: 1,
-        user: Number(session?.user.id),
-      }),
-    });
-    const result = await response.json();
-    setLoading(false);
-    if (result.code === 201 && result.message === 'Inserted') {
-      router.push('/board');
+    if (router.query.mode === 'edit') {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          id: router.query.id,
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Updated') {
+        router.push('/board');
+      }
+    } else {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          flag: null,
+          status: 1,
+          user: Number(session?.user.id),
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Inserted') {
+        router.push('/board');
+      }
     }
   };
+
+  useEffect(() => {
+    if (
+      (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) ||
+      (session?.user && router.query.mode === 'edit' && session?.user.type === 2)
+    ) {
+      setContent(post.content);
+      setSelectedBoard(post.board.id);
+      setTitle(post.title);
+    } else {
+      //router.push('/board');
+    }
+  }, [session?.user]);
 
   return (
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar allBoards={allBoards} memberInfo={memberInfo} />
+        <BoardSidebar />
         {/* Main */}
         <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
@@ -151,17 +183,22 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
                   className='border border-gray-200 p-2 w-full md:w-2/3'
                   defaultValue={0}
                   onChange={(e: any) => setSelectedBoard(e.target.value)}
+                  value={selectedBoard}
                 >
                   <option value='0'>게시판을 선택해 주세요.</option>
-                  {allBoards?.boards.map((board: BoardType) => (
-                    <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
-                      {board.title}
-                    </option>
+                  {groupsList?.groups.map((group: any) => (
+                    <optgroup label={group.name} key={group.id}>
+                      {group.boards.map((board: any) => (
+                        <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
+                          {board.title}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
 
                 <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
-                  <option value='0'>You can choose category or not</option>
+                  <option value='0'>말머리 선택</option>
                   {allBoards?.boards
                     .find((board: BoardType) => board.id === Number(selectedBoard))
                     ?.categories?.map((category: any) => (
@@ -195,16 +232,8 @@ const WritePost = ({ allBoards, memberInfo }: any) => {
 };
 
 export const getServerSideProps = async (context: any) => {
-  // Get Member Information
-  let memberInfo = '';
   const session = await getSession(context);
-  if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    memberInfo = await responseMember.json();
-  } else {
+  if (!session?.user) {
     return {
       redirect: {
         destination: '/member/signin', // Redirect to the login page if not logged in
@@ -212,6 +241,43 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
+  // Get Post
+  let post = [];
+  if (session?.user && context.query.mode === 'edit' && context.query.id) {
+    const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        id: context.query.id,
+      }),
+    });
+    const data = await resPost.json();
+    post = data.post;
+    if (!post) {
+      return {
+        redirect: {
+          destination: '/board',
+          permanent: false,
+        },
+      };
+    }
+    if (session?.user.type === 2) {
+      console.log('ok');
+    } else if (session?.user.id !== post.user.id) {
+      return {
+        redirect: {
+          destination: '/board', // Redirect to the login page if not logged in
+          permanent: false,
+        },
+      };
+    }
+  }
+  // Get Group
+  const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+  });
+  const groupsList = await responseGroup.json();
   // Get Boards List
   const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
     method: 'POST',
@@ -221,7 +287,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, memberInfo },
+    props: { allBoards, groupsList, post },
   };
 };
 
