@@ -142,7 +142,10 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   useEffect(() => {
-    if (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) {
+    if (
+      (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) ||
+      (session?.user && router.query.mode === 'edit' && session?.user.type === 2)
+    ) {
       setContent(post.content);
       setSelectedBoard(post.board.id);
       setTitle(post.title);
@@ -239,7 +242,7 @@ export const getServerSideProps = async (context: any) => {
     };
   }
   // Get Post
-  let post: PostType | undefined;
+  let post = [];
   if (session?.user && context.query.mode === 'edit' && context.query.id) {
     const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
       method: 'POST',
@@ -258,7 +261,9 @@ export const getServerSideProps = async (context: any) => {
         },
       };
     }
-    if (session?.user.id !== post.user.id) {
+    if (session?.user.type === 2) {
+      console.log('ok');
+    } else if (session?.user.id !== post.user.id) {
       return {
         redirect: {
           destination: '/board', // Redirect to the login page if not logged in
