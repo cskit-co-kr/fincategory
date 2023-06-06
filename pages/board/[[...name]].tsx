@@ -128,7 +128,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   useEffect(() => {
     return () => {
-      getPostsList();
+      setClickCheck((prev) => !prev);
       setPerpagePopup(false);
       setCookie('perPage', postsPerPage);
       setCookie('page', activePage);
