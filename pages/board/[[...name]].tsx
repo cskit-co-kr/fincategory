@@ -11,6 +11,7 @@ import ListPostRow from '../../components/board/ListPostRow';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { PostType } from '../../typings';
+import { formatDate } from '../../lib/utils';
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -442,17 +443,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   );
 };
 
-function formatDate(dateString: string) {
-  const date: any = new Date(dateString);
-  const currentDate: any = new Date();
-  const timeDifference: any = currentDate - date;
-  const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
-  const isWithin24Hours = timeDifference < oneDay;
-  const formattedDateTime = isWithin24Hours
-    ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-    : dateString.substring(0, 10).replaceAll('-', '.');
-  return formattedDateTime;
-}
 function getToday() {
   const today = new Date();
   const year = today.getFullYear();

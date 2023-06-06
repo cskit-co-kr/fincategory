@@ -5,6 +5,7 @@ import { koKR } from '../../lang/ko-KR';
 import Link from 'next/link';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
+import { formatDate } from '../../lib/utils';
 
 const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, userType }: any) => {
   const router = useRouter();
@@ -41,17 +42,5 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
     </div>
   );
 };
-
-function formatDate(dateString: string) {
-  const date: any = new Date(dateString);
-  const currentDate: any = new Date();
-  const timeDifference: any = currentDate - date;
-  const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
-  const isWithin24Hours = timeDifference < oneDay;
-  const formattedDateTime = isWithin24Hours
-    ? date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-    : dateString.substring(0, 10).replaceAll('-', '.');
-  return formattedDateTime;
-}
 
 export default ListPostRow;

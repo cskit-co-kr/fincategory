@@ -269,7 +269,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 {post.user.nickname.slice(0, 1)}
               </Avatar>
               <Link href={`/board?member=${post.user.nickname}&show=posts`} className='flex text-black hover:text-black hover:no-underline'>
-                <span className='mr-[8px]'>{post.user.nickname} 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
+                <span className='mr-[8px]'>{post.user.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
               </Link>
             </div>
             <div className='comment' ref={commentListRef}>
