@@ -1,5 +1,8 @@
 import * as cheerio from 'cheerio';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './auth/[...nextauth]';
 
 let haveImage = 0;
 let haveImageUrl = '';
@@ -14,6 +17,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return getPostList();
     case 'getpost':
       return getPost();
+    case 'deletepost':
+      return deletePost();
     case 'savepost':
       return savePost();
     case 'getcomments':
@@ -120,6 +125,32 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     if (result) return res.status(200).json(result);
 
     return res.status(500);
+  }
+
+  async function deletePost() {
+    try {
+      const session = await getServerSession(req, res, authOptions);
+      if (session?.user) {
+        await Promise.all(
+          req.body.post.map(async (id: string) => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/delete/${id}`, {
+              method: 'DELETE',
+              headers: { 'content-type': 'application/json' },
+            });
+            const result = await response.json();
+            if (!response.ok) {
+              throw new Error(result.message);
+            }
+            return result;
+          })
+        );
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    } catch (error) {
+      return res.status(500).json({ error: (error as Error).message });
+    }
   }
 
   async function savePost() {

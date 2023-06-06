@@ -4,13 +4,25 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import Link from 'next/link';
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import { useSession } from 'next-auth/react';
 
-const ListPostRow = ({ post, boardName }: any) => {
+const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
+
+  const { data: session } = useSession();
+
   return (
     <div className='border-b border-gray-200 flex' key={post.id}>
+      {session?.user.id === post.user.id && (
+        <input
+          type='checkbox'
+          value={post.id.toString()}
+          checked={checkedItems.includes(post.id.toString())}
+          onChange={handleCheckboxChange}
+        />
+      )}
       <div className='text-center p-2 min-w-[80px]'>
         {router.query.name && router.query.name?.length > 0 ? (
           <Link href={`/board/${boardName}/${post.category?.id}`}>{post.category?.category}</Link>
