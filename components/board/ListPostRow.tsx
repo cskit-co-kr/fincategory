@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
 
-const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange }: any) => {
+const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, userType }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -15,7 +15,7 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange }: an
 
   return (
     <div className='border-b border-gray-200 flex' key={post.id}>
-      {session?.user.id === post.user.id && (
+      {session?.user && userType === 2 && (
         <input
           type='checkbox'
           value={post.id.toString()}

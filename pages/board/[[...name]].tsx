@@ -136,15 +136,12 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [postsPerPage, activePage, viewPort]);
 
   useEffect(() => {
-    const currentUser = session?.user;
-    const currentMember = router.query.member;
-
-    if (currentUser && currentMember === 'posts') {
+    if (router.query.member && router.query.show === 'posts') {
       setSearchTermHandler(t['st-author'], 'author');
-      setSearchInput(currentUser.nickname);
-    } else if (currentUser && currentMember === 'comments') {
+      setSearchInput(router.query.member as string);
+    } else if (router.query.member && router.query.show === 'comments') {
       setSearchTermHandler(t['st-commenter'], 'commenter');
-      setSearchInput(currentUser.nickname);
+      setSearchInput(router.query.member as string);
     } else if (router.query.search === undefined) {
       resetSearch();
     }
@@ -263,6 +260,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       key={idx}
                       checkedItems={checkedItems}
                       handleCheckboxChange={handleCheckboxChange}
+                      userType={memberInfo.member.type}
                     />
                   ))}
                 </div>
@@ -291,7 +289,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             )}
           </div>
           <div className='flex items-center'>
-            {session?.user && (
+            {session?.user && memberInfo.member.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
                   Delete selected posts

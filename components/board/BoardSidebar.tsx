@@ -64,11 +64,11 @@ const BoardSidebar = () => {
                   가입<div className='ml-auto'>{formatDate(memberInfo?.member.created_at as string)}</div>
                 </div>
                 <div className='flex'>
-                  <Link href='/board?member=posts'>내가 쓴 글 보기</Link>
+                  <Link href={`/board?member=${session?.user.nickname}&show=posts`}>내가 쓴 글 보기</Link>
                   <div className='ml-auto'>{memberInfo?.post}</div>
                 </div>
                 <div className='flex'>
-                  <Link href='/board?member=comments'>내가 쓴 댓글 보기</Link>
+                  <Link href={`/board?member=${session?.user.nickname}&show=comments`}>내가 쓴 댓글 보기</Link>
                   <div className='ml-auto'>{memberInfo?.comment}</div>
                 </div>
               </div>
