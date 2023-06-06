@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import BoardSidebar from '../../components/board/BoardSidebar';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { BoardType } from '../../typings';
+import { BoardType, PostType } from '../../typings';
 import * as cheerio from 'cheerio';
 import { Loader } from 'rsuite';
 
@@ -239,8 +239,8 @@ export const getServerSideProps = async (context: any) => {
     };
   }
   // Get Post
-  let post = {};
-  if (context.query.id) {
+  let post: PostType | undefined;
+  if (session?.user && context.query.mode === 'edit' && context.query.id) {
     const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -254,6 +254,14 @@ export const getServerSideProps = async (context: any) => {
       return {
         redirect: {
           destination: '/board',
+          permanent: false,
+        },
+      };
+    }
+    if (session?.user.id !== post.user.id) {
+      return {
+        redirect: {
+          destination: '/board', // Redirect to the login page if not logged in
           permanent: false,
         },
       };
