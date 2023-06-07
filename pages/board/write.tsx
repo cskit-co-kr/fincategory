@@ -50,7 +50,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
+const WritePost = ({ allBoards, groupsList, post }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -164,6 +164,17 @@ const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
     }
   };
 
+  // Get Draft Post
+  const [postDraft, setPostDraft] = useState<any>([]);
+  const getDraft = async () => {
+    const resPostDraft = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getdraftpostlist`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    const data = await resPostDraft.json();
+    setPostDraft(data);
+  };
+
   useEffect(() => {
     if (router.query.board) {
       allBoards.boards.find((board: BoardType) => {
@@ -172,6 +183,7 @@ const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
         }
       });
     }
+    getDraft();
   }, []);
 
   useEffect(() => {
@@ -203,17 +215,17 @@ const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
               >
                 임시등록
               </button>
-              {postDraft.posts.length > 0 && (
+              {postDraft?.posts?.length > 0 && (
                 <div className='relative'>
                   <button
                     className='border border-gray-200 p-2 flex items-center gap-2 hover:underline'
                     onClick={() => setDraftPopup((prev) => !prev)}
                   >
-                    {postDraft.total} {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                    {postDraft?.total} {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                   </button>
                   {draftPopup && (
                     <ul className='absolute top-[33px] right-0 border border-gray-200 bg-white'>
-                      {postDraft.posts.map((draft: PostType) => (
+                      {postDraft?.posts?.map((draft: PostType) => (
                         <li key={draft.id}>
                           <Link
                             href=''
@@ -329,16 +341,6 @@ export const getServerSideProps = async (context: any) => {
       };
     }
   }
-  // Get Draft Post
-  let postDraft = [];
-  if (session?.user) {
-    const resPostDraft = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getdraftpostlist`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    const data = await resPostDraft.json();
-    postDraft = data;
-  }
 
   // Get Group
   const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
@@ -355,7 +357,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, groupsList, post, postDraft },
+    props: { allBoards, groupsList, post },
   };
 };
 

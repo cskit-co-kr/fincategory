@@ -7,7 +7,7 @@ import { authOptions } from './auth/[...nextauth]';
 let haveImage = 0;
 let haveImageUrl = '';
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.query.f) {
     case 'getgroups':
       return getGroups();
@@ -124,41 +124,47 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getDraftPostList() {
-    const session = await getServerSession(req, res, authOptions);
-    const limit = req.query.postsperpage ? req.query.postsperpage : 20;
-    const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
-    let data: any = {
-      board: null,
-      paginate: {
-        offset: offset,
-        limit: limit,
-      },
-      sort: {
-        field: 'created_at',
-        order: 'DESC',
-      },
-      filter: {
-        field: 'status',
-        value: 0,
-      },
-      search: {
-        start: null,
-        end: null,
-        field: 'author',
-        value: session?.user.username,
-      },
-    };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    try {
+      const session = await getServerSession(req, res, authOptions);
+      if (session?.user) {
+        const limit = req.query.postsperpage ? req.query.postsperpage : 20;
+        const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
+        let data: any = {
+          board: null,
+          paginate: {
+            offset: offset,
+            limit: limit,
+          },
+          sort: {
+            field: 'created_at',
+            order: 'DESC',
+          },
+          filter: {
+            field: 'status',
+            value: 0,
+          },
+          search: {
+            start: null,
+            end: null,
+            field: 'author',
+            value: session?.user.username,
+          },
+        };
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (result) return res.status(200).json(result);
-
-    return res.status(500);
+        return res.status(200).json(result);
+      } else {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    } catch (error) {
+      return res.status(500).json({ error: (error as Error).message });
+    }
   }
 
   async function getPost() {
