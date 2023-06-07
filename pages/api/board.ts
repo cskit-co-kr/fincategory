@@ -15,6 +15,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return getBoardList();
     case 'getpostlist':
       return getPostList();
+    case 'getdraftpostlist':
+      return getDraftPostList();
     case 'getpost':
       return getPost();
     case 'deletepost':
@@ -121,6 +123,44 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500);
   }
 
+  async function getDraftPostList() {
+    const session = await getServerSession(req, res, authOptions);
+    const limit = req.query.postsperpage ? req.query.postsperpage : 20;
+    const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
+    let data: any = {
+      board: null,
+      paginate: {
+        offset: offset,
+        limit: limit,
+      },
+      sort: {
+        field: 'created_at',
+        order: 'DESC',
+      },
+      filter: {
+        field: 'status',
+        value: 0,
+      },
+      search: {
+        start: null,
+        end: null,
+        field: 'author',
+        value: session?.user.username,
+      },
+    };
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (result) return res.status(200).json(result);
+
+    return res.status(500);
+  }
+
   async function getPost() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/get/${req.body.id}`);
     const result = await response.json();
@@ -195,6 +235,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         title: req.body.title,
         content: processedContent,
         board: req.body.board,
+        status: req.body.status,
         category: req.body.category === 0 ? null : req.body.category,
         extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : 0,
         extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,

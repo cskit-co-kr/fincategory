@@ -50,7 +50,7 @@ const MemberSignIn = () => {
     const result = await response.json();
     setLoading(false);
     if (result.code === 200) {
-      setForgotResultText('Temporary password sent successfully!');
+      setForgotResultText(t['temp-password-sent']);
     } else if (result.code === 404) {
       setForgotResultText(result.message);
     }
@@ -130,7 +130,7 @@ const MemberSignIn = () => {
                   onClick={(e) => onForgotSubmit(e)}
                 >
                   {loading && <Loader />}
-                  <div>{t['send']}</div>
+                  <div>{t['find-password']}</div>
                 </button>
               </div>
               <div className='mt-4 flex divide-x place-content-center'>
