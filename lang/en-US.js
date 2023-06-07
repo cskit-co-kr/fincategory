@@ -134,5 +134,8 @@ export const enUS = {
     "st-comment":"Comment",
     "st-commenter":"Commenter",
     "enter-period":"Enter period",
-    "enter-search-term":"Please enter a search term"
+    "enter-search-term":"Please enter a search term",
+    "edit": "Edit",
+    "delete": "Delete",
+    "comment-saved": "Your comment has been successfully saved."
 }

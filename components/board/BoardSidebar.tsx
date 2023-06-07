@@ -102,15 +102,15 @@ const BoardSidebar = () => {
               </div>
             ))}
           </div>
-          <div className='flex justify-between'>
+          <div className='justify-between hidden'>
             <div className='font-semibold'>{t['connected-members']}</div>
             <div className='flex gap-1 text-black'>
               <ArrowPathIcon className='border border-gray-200 rounded-md h-4 p-0.5' />
               <ChevronDownIcon className='border border-gray-200 rounded-md h-4 p-0.5' />
             </div>
           </div>
-          <div className='bg-gray-100 p-4 text-xs'>{t['no-connected-members']}</div>
-          <div className='border border-gray-200 p-4 text-xs'>오늘 3 전체 549</div>
+          <div className='bg-gray-100 p-4 text-xs hidden'>{t['no-connected-members']}</div>
+          <div className='border border-gray-200 p-4 text-xs hidden'>오늘 3 전체 549</div>
         </div>
       </div>
     </div>

@@ -9,9 +9,10 @@ import { koKR } from '../../lang/ko-KR';
 import { BoardType, PostType } from '../../typings';
 import * as cheerio from 'cheerio';
 import { Loader } from 'rsuite';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 import 'react-quill/dist/quill.snow.css';
+import { formatDate } from '../../lib/utils';
 
 const Quill = dynamic(import('react-quill'), {
   ssr: false,
@@ -79,7 +80,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const saveDraft = async () => {
-    if (selectedBoard === '0') return alert('Please select the board');
+    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('Please fill');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
@@ -122,7 +123,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const savePost = async () => {
-    if (selectedBoard === '0') return alert('Please select the board');
+    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('Please fill');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
@@ -198,6 +199,21 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
     }
   }, [router]);
 
+  const deletePost = async (id: any) => {
+    if (!session?.user) return alert('error');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        post: [id],
+      }),
+    });
+    const result = await response.json();
+    if (result.success === true) {
+      getDraft();
+    }
+  };
+
   return (
     <>
       <div className='flex gap-4 pt-7 bg-gray-50'>
@@ -207,10 +223,10 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
         <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
             <div className='text-xl font-bold'>글쓰기</div>
-            <div className='ml-auto text-xs flex gap-2 items-center'>
+            <div className='ml-auto text-xs flex items-center'>
               {loading && <Loader />}
               <button
-                className='border border-primary text-primary py-2 px-5 text-center hover:text-primary hover:underline'
+                className='border border-gray-200 text-primary rounded-l-md py-2 px-5 text-center hover:text-primary hover:underline'
                 onClick={saveDraft}
               >
                 임시등록
@@ -218,30 +234,41 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
               {postDraft?.posts?.length > 0 && (
                 <div className='relative'>
                   <button
-                    className='border border-gray-200 p-2 flex items-center gap-2 hover:underline'
+                    className='border border-l-0 border-gray-200 rounded-r-md p-2 pl-3 font-semibold flex items-center gap-2 hover:underline'
                     onClick={() => setDraftPopup((prev) => !prev)}
                   >
                     {postDraft?.total} {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                   </button>
                   {draftPopup && (
-                    <ul className='absolute top-[33px] right-0 border border-gray-200 bg-white'>
-                      {postDraft?.posts?.map((draft: PostType) => (
-                        <li key={draft.id}>
-                          <Link
-                            href=''
-                            onClick={() => router.push(`/board/write?mode=edit&id=${draft.id}`).then(() => setDraftPopup(false))}
-                            className='perpage'
-                          >
-                            {draft.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className='absolute top-[33px] right-0 border border-gray-200 bg-white p-4 flex max-w-xs z-10 rounded-md'>
+                      <ul className='min-w-0'>
+                        {postDraft?.posts?.map((draft: PostType) => (
+                          <li key={draft.id} className='flex items-center gap-2 justify-between'>
+                            <Link
+                              href=''
+                              onClick={() => router.push(`/board/write?mode=edit&id=${draft.id}`).then(() => setDraftPopup(false))}
+                              className='p-2 truncate'
+                            >
+                              {draft.title}
+                            </Link>
+                            <div className='flex items-center gap-1'>
+                              {formatDate(draft.created_at)}
+                              <button onClick={() => deletePost(draft.id)}>
+                                <TrashIcon className='h-4' />
+                              </button>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               )}
-              <button className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline' onClick={savePost}>
-                글쓰기
+              <button
+                className='bg-primary text-white py-2 px-5 ml-2 rounded-md text-center hover:text-white hover:underline'
+                onClick={savePost}
+              >
+                등록
               </button>
             </div>
           </div>

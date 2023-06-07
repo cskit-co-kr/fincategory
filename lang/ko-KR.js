@@ -134,5 +134,8 @@ export const koKR = {
     "st-comment":"댓글내용",
     "st-commenter":"댓글작성자",
     "enter-period":"기간 입력",
-    "enter-search-term":"검색어를 입력해주세요"
+    "enter-search-term":"검색어를 입력해주세요",
+    "edit": "수정",
+    "delete": "삭제",
+    "comment-saved": "댓글 등록 되었습니다."
 }
