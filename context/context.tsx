@@ -14,7 +14,6 @@ export const useData = () => useContext(ActionContext);
 
 export const DataProvider = (props: any) => {
   const [sideBar, setSideBar] = useState(false);
-
   const toggleSideBar = (status: boolean) => {
     setSideBar(status);
   };
