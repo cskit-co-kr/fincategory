@@ -175,10 +175,7 @@ const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
   }, []);
 
   useEffect(() => {
-    if (
-      (session?.user && router.query.mode === 'edit' && session?.user.id === post?.user.id) ||
-      (session?.user && router.query.mode === 'edit' && session?.user.type === 2)
-    ) {
+    if (router.query.mode === 'edit') {
       setContent(post.content);
       setSelectedBoard(post.board.id);
       setTitle(post.title);
@@ -187,7 +184,7 @@ const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
       setSelectedBoard(0);
       setTitle('');
     }
-  }, [session?.user, router]);
+  }, [router]);
 
   return (
     <>
