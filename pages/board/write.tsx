@@ -9,6 +9,7 @@ import { koKR } from '../../lang/ko-KR';
 import { BoardType, PostType } from '../../typings';
 import * as cheerio from 'cheerio';
 import { Loader } from 'rsuite';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 import 'react-quill/dist/quill.snow.css';
 
@@ -49,7 +50,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, groupsList, post }: any) => {
+const WritePost = ({ allBoards, groupsList, post, postDraft }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -57,6 +58,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(false);
+  const [draftPopup, setDraftPopup] = useState(false);
   const [title, setTitle] = useState('');
   const [selectedBoard, setSelectedBoard] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState();
@@ -79,23 +81,43 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   const saveDraft = async () => {
     if (selectedBoard === '0') return alert('Please select the board');
     setLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        board: Number(selectedBoard),
-        category: Number(selectedCategory),
-        flag: null,
-        status: 0,
-        user: Number(session?.user.id),
-      }),
-    });
-    const result = await response.json();
-    setLoading(false);
-    if (result.code === 201 && result.message === 'Inserted') {
-      router.push('/board');
+    if (router.query.mode === 'edit') {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          status: 0,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          id: router.query.id,
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Updated') {
+        router.push('/board');
+      }
+    } else {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          board: Number(selectedBoard),
+          category: Number(selectedCategory),
+          flag: null,
+          status: 0,
+          user: Number(session?.user.id),
+        }),
+      });
+      const result = await response.json();
+      setLoading(false);
+      if (result.code === 201 && result.message === 'Inserted') {
+        router.push('/board');
+      }
     }
   };
 
@@ -109,6 +131,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
         body: JSON.stringify({
           title: title,
           content: content,
+          status: 1,
           board: Number(selectedBoard),
           category: Number(selectedCategory),
           id: router.query.id,
@@ -160,9 +183,11 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
       setSelectedBoard(post.board.id);
       setTitle(post.title);
     } else {
-      //router.push('/board');
+      setContent('');
+      setSelectedBoard(0);
+      setTitle('');
     }
-  }, [session?.user]);
+  }, [session?.user, router]);
 
   return (
     <>
@@ -181,6 +206,31 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
               >
                 임시등록
               </button>
+              {postDraft.posts.length > 0 && (
+                <div className='relative'>
+                  <button
+                    className='border border-gray-200 p-2 flex items-center gap-2 hover:underline'
+                    onClick={() => setDraftPopup((prev) => !prev)}
+                  >
+                    {postDraft.total} {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                  </button>
+                  {draftPopup && (
+                    <ul className='absolute top-[33px] right-0 border border-gray-200 bg-white'>
+                      {postDraft.posts.map((draft: PostType) => (
+                        <li key={draft.id}>
+                          <Link
+                            href=''
+                            onClick={() => router.push(`/board/write?mode=edit&id=${draft.id}`).then(() => setDraftPopup(false))}
+                            className='perpage'
+                          >
+                            {draft.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
               <button className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline' onClick={savePost}>
                 글쓰기
               </button>
@@ -273,14 +323,26 @@ export const getServerSideProps = async (context: any) => {
     if (session?.user.type === 2) {
       console.log('ok');
     } else if (session?.user.id !== post.user.id) {
+      console.log('oh no');
       return {
         redirect: {
-          destination: '/board', // Redirect to the login page if not logged in
+          destination: '/board',
           permanent: false,
         },
       };
     }
   }
+  // Get Draft Post
+  let postDraft = [];
+  if (session?.user) {
+    const resPostDraft = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getdraftpostlist`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    const data = await resPostDraft.json();
+    postDraft = data;
+  }
+
   // Get Group
   const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
     method: 'POST',
@@ -296,7 +358,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, groupsList, post },
+    props: { allBoards, groupsList, post, postDraft },
   };
 };
 
