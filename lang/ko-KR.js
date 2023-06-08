@@ -12,6 +12,12 @@ export const koKR = {
     "forgot-password": "비밀번호 찾기",
     "password-confirm": "비밀번호 확인",
     "nickname": "닉네임",
+    "congratulations": "축하드립니다 !",
+    "account-created": "계정이 성공적으로 생성되었습니다!",
+    "go-to-login-page": "로그인 페이지로 가기",
+    "temp-password-sent": "메일로 인증 정보를 담은 메일이 발송되었습니다. 메일이 보이지 않으면 스팸보관함을 열어보시길 바랍니다.",
+    "find-password": "비번 찾기",
+    "updated-successfully": "변경 등록 되었습니다.",
     "home": "홈",
     "search": "검색",
     "board": "게시판",
@@ -128,5 +134,8 @@ export const koKR = {
     "st-comment":"댓글내용",
     "st-commenter":"댓글작성자",
     "enter-period":"기간 입력",
-    "enter-search-term":"검색어를 입력해주세요"
+    "enter-search-term":"검색어를 입력해주세요",
+    "edit": "수정",
+    "delete": "삭제",
+    "comment-saved": "댓글 등록 되었습니다."
 }

@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PencilIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie } from 'cookies-next';
@@ -7,7 +7,7 @@ import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Message, Pagination, useToaster } from 'rsuite';
+import { Avatar, Button, Message, Pagination, useToaster, Modal } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
 
@@ -33,6 +33,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const post: PostType = props.post;
   const prevNext = props.prevNext;
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
   const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
@@ -149,7 +152,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
     if (response.status === 200) {
       if (result.code === 201 && result.message === 'Inserted') {
-        toastShow('info', 'Your comment has been successfully saved.');
+        toastShow('info', t['comment-saved']);
         setComment('');
         loadComments();
       }
@@ -188,8 +191,34 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     }
   };
 
+  const deletePost = async () => {
+    if (session?.user.id !== post.user.id) return alert('error');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        post: [post.id],
+      }),
+    });
+    const result = await response.json();
+    if (result.success === true) {
+      router.push('/board');
+    }
+  };
+
   return (
     <>
+      <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
+        <Modal.Body>Are you sure want to delete {post.title}?</Modal.Body>
+        <Modal.Footer className='flex place-content-end gap-2'>
+          <button onClick={deletePost} className='bg-primary px-4 py-2 rounded-md text-white hover:underline'>
+            Yes
+          </button>
+          <button onClick={handleClose} className='bg-gray-200 px-4 py-2 rounded-md hover:underline'>
+            No
+          </button>
+        </Modal.Footer>
+      </Modal>
       <div className='flex gap-[14px] pt-7 bg-gray-50'>
         {/* Sidebar */}
         <BoardSidebar />
@@ -238,21 +267,17 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         복사
                       </span>
                     </span>
-                    {session?.user && session?.user.id === post.user.id && (
-                      <Link
-                        className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline text-xs ml-2'
-                        href={`/board/write?mode=edit&id=${post.id}`}
-                      >
-                        Edit Post
-                      </Link>
-                    )}
-                    {session?.user && session?.user.type === 2 && (
-                      <Link
-                        className='bg-primary text-white py-2 px-5 text-center hover:text-white hover:underline text-xs ml-2'
-                        href={`/board/write?mode=edit&id=${post.id}`}
-                      >
-                        Edit Post
-                      </Link>
+                    {session?.user && (session?.user.id === post.user.id || session?.user.type === 2) && (
+                      <div className='flex gap-2 ml-2'>
+                        <ButtonLink url={`/board/write?mode=edit&id=${post.id}`} text={t['edit']} icon={<PencilIcon className='h-3' />} />
+                        <button
+                          className='flex gap-[10px] items-center h-[35px] px-5 bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] hover:text-primary'
+                          onClick={handleOpen}
+                        >
+                          <TrashIcon className='h-3' />
+                          {t['delete']}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -385,7 +410,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     disabled={comment.trim().length > 0 ? false : true}
                     onClick={saveComment}
                   >
-                    글쓰기
+                    등록
                   </Button>
                 </div>
               </div>

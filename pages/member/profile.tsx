@@ -122,7 +122,7 @@ const Profile = () => {
           email: data.email,
         },
       });
-      setUpdateText('Updated successfully!');
+      setUpdateText(t['updated-successfully']);
     }
   };
   const onChangePassword = async (data: any) => {
@@ -140,7 +140,7 @@ const Profile = () => {
     const result = await response.json();
     setLoading2(false);
     if (result.code === 200 && result.message === 'Password Changed') {
-      setUpdatePasswordText('Password changed successfully!');
+      setUpdatePasswordText(t['updated-successfully']);
     } else if (result.code === 201) {
       setUpdatePasswordText('Old Password Incorrect!');
     }
