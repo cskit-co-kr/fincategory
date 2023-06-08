@@ -209,7 +209,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   return (
     <>
       <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
-        <Modal.Body>Are you sure want to delete {post.title}?</Modal.Body>
+        <Modal.Body>게시글을 삭제하시겠습니까?</Modal.Body>
         <Modal.Footer className='flex place-content-end gap-2'>
           <button onClick={deletePost} className='bg-primary px-4 py-2 rounded-md text-white hover:underline'>
             Yes

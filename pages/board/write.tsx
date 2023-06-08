@@ -80,7 +80,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const saveDraft = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('Please fill');
+    if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {

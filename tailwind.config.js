@@ -1,15 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 module.exports = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    './app/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     container: {
-      center: true
+      center: true,
     },
     extend: {
       colors: {
@@ -17,8 +13,18 @@ module.exports = {
       },
     },
     fontFamily: {
-      'raleway': 'Raleway, sans-serif'
-    }
+      raleway: 'Raleway, sans-serif',
+    },
   },
-  plugins: [],
-}
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require('daisyui/src/theming/themes')['[data-theme=light]'],
+          primary: '#3886E2',
+        },
+      },
+    ],
+  },
+};

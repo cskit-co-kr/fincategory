@@ -22,9 +22,10 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
           value={post.id.toString()}
           checked={checkedItems.includes(post.id.toString())}
           onChange={handleCheckboxChange}
+          className='hidden md:block'
         />
       )}
-      <div className='text-center p-2 min-w-[80px]'>
+      <div className='hidden md:block text-center p-2 min-w-[80px]'>
         {router.query.name && router.query.name?.length > 0 ? (
           post.category ? (
             <Link href={`/board/${boardName}/${post.category?.id}`}>{post.category?.category}</Link>
@@ -35,14 +36,14 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
           <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
         )}
       </div>
-      <div className='p-2 flex-grow flex items-center gap-1'>
+      <div className='p-4 md:p-2 flex-grow flex items-center gap-1'>
         <Link href={`/board/post/${post.id}`}>{post.title}</Link>
         {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
-        {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
+        {post.extra_01 === '1' && <PhotoIcon className='h-4 md:h-3 text-gray-400' />}
       </div>
-      <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
-      <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
-      <div className='text-center p-2 min-w-[48px]'>{post.views}</div>
+      <div className='hidden md:block text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
+      <div className='hidden md:block text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
+      <div className='hidden md:block text-center p-2 min-w-[48px]'>{post.views}</div>
     </div>
   );
 };
