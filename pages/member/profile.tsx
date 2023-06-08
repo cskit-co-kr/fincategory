@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Loader } from 'rsuite';
+import BoardSidebar from '../../components/board/BoardSidebar';
 
 const Profile = () => {
   const router = useRouter();
@@ -148,66 +149,70 @@ const Profile = () => {
 
   return (
     <>
-      <div className='gap-4 pt-7 bg-gray-50'>
-        <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
-          <div className='flex gap-2'>
-            <UserCircleIcon className='h-14 text-gray-400' />
-            <div>
-              <div className='font-semibold text-lg'>{session?.user.nickname}</div>
-              <div className='text-gray-500'>{session?.user.email}</div>
+      <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
+        {/* Sidebar */}
+        <BoardSidebar />
+        <div className='mx-auto'>
+          <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
+            <div className='flex gap-2'>
+              <UserCircleIcon className='h-14 text-gray-400' />
+              <div>
+                <div className='font-semibold text-lg'>{session?.user.nickname}</div>
+                <div className='text-gray-500'>{session?.user.email}</div>
+              </div>
             </div>
+            {updateText !== '' && <div className='bg-gray-100 p-4 text-center rounded-lg mt-4'>{updateText}</div>}
+            <form onSubmit={handleSubmit(onSubmit)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
+              <div>
+                <label className='block pb-1'>{t['username']}</label>
+                <input type='text' className='input_field' defaultValue={session?.user.username} {...register('userName')} />
+                <p className='text-xs text-red-600'>{errors.userName?.message?.toString()}</p>
+              </div>
+              <div>
+                <label className='block pb-1'>{t['nickname']}</label>
+                <input type='text' className='input_field' defaultValue={session?.user.nickname} {...register('fullName')} />
+                <p className='text-xs text-red-600'>{errors.fullName?.message?.toString()}</p>
+              </div>
+              <div>
+                <label className='block pb-1'>{t['email']}</label>
+                <input type='text' className='input_field' defaultValue={session?.user.email} {...register('email')} />
+                <p className='text-xs text-red-600'>{errors.email?.message?.toString()}</p>
+              </div>
+              <button
+                className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
+                type='submit'
+              >
+                {loading && <Loader />}등록
+              </button>
+            </form>
           </div>
-          {updateText !== '' && <div className='bg-gray-100 p-4 text-center rounded-lg mt-4'>{updateText}</div>}
-          <form onSubmit={handleSubmit(onSubmit)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
-            <div>
-              <label className='block pb-1'>{t['username']}</label>
-              <input type='text' className='input_field' defaultValue={session?.user.username} {...register('userName')} />
-              <p className='text-xs text-red-600'>{errors.userName?.message?.toString()}</p>
-            </div>
-            <div>
-              <label className='block pb-1'>{t['nickname']}</label>
-              <input type='text' className='input_field' defaultValue={session?.user.nickname} {...register('fullName')} />
-              <p className='text-xs text-red-600'>{errors.fullName?.message?.toString()}</p>
-            </div>
-            <div>
-              <label className='block pb-1'>{t['email']}</label>
-              <input type='text' className='input_field' defaultValue={session?.user.email} {...register('email')} />
-              <p className='text-xs text-red-600'>{errors.email?.message?.toString()}</p>
-            </div>
-            <button
-              className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
-              type='submit'
-            >
-              {loading && <Loader />}등록
-            </button>
-          </form>
-        </div>
-        <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm mt-4'>
-          <div className='font-semibold'>비밀번호 변경</div>
-          {updatePasswordText !== '' && <div className='bg-gray-100 p-4 text-center rounded-lg mt-4'>{updatePasswordText}</div>}
-          <form onSubmit={handleSubmit2(onChangePassword)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
-            <div>
-              <label className='block pb-1'>현재 비밀번호</label>
-              <input type='password' className='input_field' {...register2('oldPassword')} />
-              <p className='text-xs text-red-600'>{errors2.oldPassword?.message?.toString()}</p>
-            </div>
-            <div>
-              <label className='block pb-1'>신규 비밀번호</label>
-              <input type='password' className='input_field' {...register2('password')} />
-              <p className='text-xs text-red-600'>{errors2.password?.message?.toString()}</p>
-            </div>
-            <div>
-              <label className='block pb-1'>{t['password-confirm']}</label>
-              <input type='password' className='input_field' {...register2('confirmPassword')} />
-              <p className='text-xs text-red-600'>{errors2.confirmPassword?.message?.toString()}</p>
-            </div>
-            <button
-              className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
-              type='submit'
-            >
-              {loading2 && <Loader />}등록
-            </button>
-          </form>
+          <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm mt-4'>
+            <div className='font-semibold'>비밀번호 변경</div>
+            {updatePasswordText !== '' && <div className='bg-gray-100 p-4 text-center rounded-lg mt-4'>{updatePasswordText}</div>}
+            <form onSubmit={handleSubmit2(onChangePassword)} className='mt-4 gap-4 grid border-t border-gray-200 pt-4'>
+              <div>
+                <label className='block pb-1'>현재 비밀번호</label>
+                <input type='password' className='input_field' {...register2('oldPassword')} />
+                <p className='text-xs text-red-600'>{errors2.oldPassword?.message?.toString()}</p>
+              </div>
+              <div>
+                <label className='block pb-1'>신규 비밀번호</label>
+                <input type='password' className='input_field' {...register2('password')} />
+                <p className='text-xs text-red-600'>{errors2.password?.message?.toString()}</p>
+              </div>
+              <div>
+                <label className='block pb-1'>{t['password-confirm']}</label>
+                <input type='password' className='input_field' {...register2('confirmPassword')} />
+                <p className='text-xs text-red-600'>{errors2.confirmPassword?.message?.toString()}</p>
+              </div>
+              <button
+                className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md items-center gap-2 flex justify-center'
+                type='submit'
+              >
+                {loading2 && <Loader />}등록
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </>

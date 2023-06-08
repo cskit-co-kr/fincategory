@@ -209,7 +209,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   return (
     <>
       <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
-        <Modal.Body>Are you sure want to delete {post.title}?</Modal.Body>
+        <Modal.Body>게시글을 삭제하시겠습니까?</Modal.Body>
         <Modal.Footer className='flex place-content-end gap-2'>
           <button onClick={deletePost} className='bg-primary px-4 py-2 rounded-md text-white hover:underline'>
             Yes
@@ -224,7 +224,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         <BoardSidebar />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
-          <div className='flex items-center justify-between mb-4'>
+          <div className='hidden md:flex items-center justify-between mb-4'>
             <div className='text-xl font-bold'>{post.board.title}</div>
             <div className='flex justify-end gap-[10px]'>
               <ButtonLink
@@ -240,7 +240,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               <ButtonLink url={`/board/${post.board.name}`} text='목록' />
             </div>
           </div>
-          <div className='border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
+          <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
             <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
               <div className='post-header flex flex-1 flex-col'>
                 <div className='title text-xl font-bold mb-[26px]'>{post.title}</div>
@@ -256,24 +256,26 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                       {toDateTimeformat(post.created_at, '.')} 조회 {post.views}
                     </p>
                   </div>
-                  <div className='right ml-auto self-center flex items-center'>
-                    <span className='mr-[7px]'>
-                      <ChatBubbleOvalLeftEllipsisIcon className='w-[18px]' />
-                    </span>
-                    <span className='text-[12px] pr-2 cursor-pointer hover:text-[#000]' onClick={handleGotoComment}>
-                      댓글 {commentTotal}
-                    </span>
-                    <span>
-                      URL{' '}
-                      <span className='cursor-pointer hover:text-[#000]' onClick={handleUrlToClipboard}>
-                        복사
+                  <div className='right ml-auto self-center md:flex items-center'>
+                    <div className='flex mb-2 md:mb-0'>
+                      <div className='flex gap-2 items-center'>
+                        <ChatBubbleOvalLeftEllipsisIcon className='h-5' />
+                        <span className='text-[12px] pr-2 cursor-pointer hover:text-[#000]' onClick={handleGotoComment}>
+                          댓글 {commentTotal}
+                        </span>
+                      </div>
+                      <span>
+                        URL{' '}
+                        <span className='cursor-pointer hover:text-[#000]' onClick={handleUrlToClipboard}>
+                          복사
+                        </span>
                       </span>
-                    </span>
+                    </div>
                     {session?.user && (session?.user.id === post.user.id || session?.user.type === 2) && (
-                      <div className='flex gap-2 ml-2'>
+                      <div className='md:flex gap-2 ml-2'>
                         <ButtonLink url={`/board/write?mode=edit&id=${post.id}`} text={t['edit']} icon={<PencilIcon className='h-3' />} />
                         <button
-                          className='flex gap-[10px] items-center h-[35px] px-5 bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] hover:text-primary'
+                          className='flex whitespace-nowrap gap-1 md:gap-[10px] items-center h-[35px] px-5 bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] hover:text-primary'
                           onClick={handleOpen}
                         >
                           <TrashIcon className='h-3' />
@@ -400,7 +402,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 ) : (
                   <></>
                 )}
-                <div className='comment-write text-center mt-[20px] mx-[140px]' ref={commentWriteRef}>
+                <div className='comment-write text-center md:mt-[20px] md:mx-[140px]' ref={commentWriteRef}>
                   <textarea
                     className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
                     onChange={(e) => setComment(e.currentTarget.value)}

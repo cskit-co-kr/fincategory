@@ -30,6 +30,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const [postsList, setPostsList] = useState(postList);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfList, setIsEndOfList] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(20);
 
@@ -150,7 +152,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [router.query]);
 
   useEffect(() => {
+    setIsLoading(true);
     getPostsList();
+    setIsLoading(false);
   }, [clickCheck]);
 
   // Checkbox functions
@@ -180,15 +184,33 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoading || isEndOfList) return;
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        if (postsPerPage < postsList.total) {
+          setPostsPerPage((prev) => prev + 20);
+        } else {
+          setIsEndOfList(true);
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [postsPerPage]);
+
   return (
     <>
-      <div className='flex gap-4 pt-7 bg-gray-50'>
+      <div className='flex gap-4 md:pt-7 md:bg-gray-50'>
         {/* Sidebar */}
         <BoardSidebar />
         {/* Main */}
-        <div className='w-full xl:w-[974px] border border-gray-200 bg-white rounded-md p-[30px]'>
-          <div className='text-xl font-bold'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
-          <div className='flex justify-between items-center text-xs mt-4 pb-2.5'>
+        <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
+          <div className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
+          <div className='hidden md:flex justify-between items-center text-xs mt-4 pb-2.5'>
             <div>{postsList.total} 개의 글</div>
             <div className='flex items-center gap-3 relative'>
               <button onClick={() => setViewPort('list')}>
@@ -241,14 +263,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
           <div className='border-t border-gray-400'>
             {viewPort === 'list' && (
               <div className='w-full'>
-                <div className='border-b border-gray-200 flex font-bold'>
+                <div className='border-b border-gray-200 hidden md:flex font-bold'>
                   <div className='text-center p-2 min-w-[80px]'>{postsList.board ? '말머리' : ''}</div>
                   <div className='text-center p-2 flex-grow'>제목</div>
                   <div className='text-left p-2 min-w-[128px]'>작성자</div>
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-xs'>
+                <div className='text-sm md:text-xs'>
                   {loading && (
                     <div className='text-center w-full p-4'>
                       <Loader />
@@ -288,8 +310,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 )}
               </div>
             )}
+            {isLoading && <Loader />}
           </div>
-          <div className='flex items-center'>
+          <div className='hidden md:flex items-center'>
             {session?.user && memberInfo.member.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
@@ -297,7 +320,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 </button>
               </div>
             )}
-            <div className='flex ml-auto mt-2'>
+            <div className='hidden md:flex ml-auto mt-2'>
               <Link
                 className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
                 href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
@@ -306,7 +329,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </Link>
             </div>
           </div>
-          <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
+          <div className='hidden md:block bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
               <Pagination total={postsList?.total} limit={postsPerPage} activePage={activePage} onChangePage={setActivePage} />
             </div>

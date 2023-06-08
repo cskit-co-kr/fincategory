@@ -85,7 +85,7 @@ const Header = () => {
       <header className='bg-white z-20'>
         <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
-            <div className='font-raleway text-lg'>
+            <div className='font-raleway text-lg pl-4 md:pl-0'>
               <a href='/' className='hover:no-underline hover:text-current'>
                 <span className='font-bold text-primary'>Fin</span>
                 Category
@@ -140,12 +140,8 @@ const Header = () => {
                 )}
               </div>
             </div>
-            {/* Mobile */}
-            <div className='md:hidden'>
-              <Bars3Icon className='h-7' />
-            </div>
           </div>
-          <nav className='flex text-sm font-bold items-center'>
+          <nav className='hidden md:flex text-sm font-bold items-center'>
             <ul className='flex'>
               <li className='hidden'>
                 <button className={getPath === '/' ? activePath : normalPath} onClick={() => router.push('/')}>
@@ -165,30 +161,6 @@ const Header = () => {
                   {t['search']}
                 </button>
               </li>
-              {/* <li className='relative'>
-                <button
-                  className={`${getPath === '/board' ? activePath : normalPath}`}
-                  onClick={() => setBoardsPopupMenuShow((prev) => !prev)}
-                >
-                  {t['board']} {boardsPopupMenuShow ? <FaChevronUp size={12} className='' /> : <FaChevronDown size={12} className='' />}
-                </button>
-                {boardsPopupMenuShow && (
-                  <div className='absolute left-4 top-11 min-w-[100px] z-20 bg-white border border-gray-200 rounded-lg shadow-md divide-y font-normal text-xs'>
-                    <div>
-                      <Link href='/board' className='block px-3 py-2' onClick={() => setBoardsPopupMenuShow(false)}>
-                        {t['view-all-articles']}
-                      </Link>
-                    </div>
-                    {allBoards.map((board: BoardType) => (
-                      <div key={board.id}>
-                        <Link href={`/board/${board.name}`} className='block px-3 py-2' onClick={() => setBoardsPopupMenuShow(false)}>
-                          {board.title}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </li> */}
               <Nav className='mt-1 custom-nav-menu' appearance='subtle'>
                 {groups?.map((group: GroupType, i: number) => (
                   <Nav.Menu key={i} title={group.name}>
