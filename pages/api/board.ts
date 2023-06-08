@@ -219,7 +219,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const result = await response.json();
-
+    haveImage = 0;
+    haveImageUrl = '';
     if (result) return res.status(200).json(result);
 
     return res.status(500);

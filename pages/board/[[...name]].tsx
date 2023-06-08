@@ -30,6 +30,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const [postsList, setPostsList] = useState(postList);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfList, setIsEndOfList] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(20);
 
@@ -150,7 +152,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [router.query]);
 
   useEffect(() => {
+    setIsLoading(true);
     getPostsList();
+    setIsLoading(false);
   }, [clickCheck]);
 
   // Checkbox functions
@@ -179,6 +183,24 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       router.reload();
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isLoading || isEndOfList) return;
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        if (postsPerPage < postsList.total) {
+          setPostsPerPage((prev) => prev + 20);
+        } else {
+          setIsEndOfList(true);
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [postsPerPage]);
 
   return (
     <>
@@ -288,6 +310,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 )}
               </div>
             )}
+            {isLoading && <Loader />}
           </div>
           <div className='hidden md:flex items-center'>
             {session?.user && memberInfo.member.type === 2 && (

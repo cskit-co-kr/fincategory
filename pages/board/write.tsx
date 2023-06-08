@@ -216,11 +216,11 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
 
   return (
     <>
-      <div className='flex gap-4 pt-7 bg-gray-50'>
+      <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
         <BoardSidebar />
         {/* Main */}
-        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm pb-20'>
+        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
             <div className='text-xl font-bold'>글쓰기</div>
             <div className='ml-auto text-xs flex items-center'>
