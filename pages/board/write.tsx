@@ -177,13 +177,6 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   useEffect(() => {
-    if (router.query.board) {
-      allBoards.boards.find((board: BoardType) => {
-        if (board.name === router.query.board) {
-          setSelectedBoard(board.id);
-        }
-      });
-    }
     getDraft();
   }, []);
 
@@ -196,6 +189,15 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
       setContent('');
       setSelectedBoard(0);
       setTitle('');
+    }
+    if (router.query.board) {
+      allBoards.boards.find((board: BoardType) => {
+        if (board.name === router.query.board) {
+          setSelectedBoard(board.id);
+          return true;
+        }
+        return false;
+      });
     }
   }, [router]);
 
