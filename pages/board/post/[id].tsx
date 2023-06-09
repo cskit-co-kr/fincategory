@@ -245,8 +245,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               <div className='post-header flex flex-1 flex-col'>
                 <div className='title text-xl font-bold mb-[26px]'>{post.title}</div>
                 <div className='flex'>
-                  <div className='avatar mr-[10px]'>
-                    <Avatar circle className='bg-[#E7EAED]'>
+                  <div className='avatar mr-2.5'>
+                    <Avatar circle className='bg-gray-300 pt-1.5 text-center'>
                       {post.user.nickname.slice(0, 1)}
                     </Avatar>
                   </div>

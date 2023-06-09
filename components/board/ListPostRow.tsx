@@ -40,7 +40,11 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
       <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1'>
         <Link href={`/board/post/${post.id}`}>{post.title}</Link>
         {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
-        {post.extra_01 === '1' && <PhotoIcon className='hidden md:block h-3 text-gray-400' />}
+        {post.extra_01 === '1' && (
+          <span>
+            <PhotoIcon className='hidden md:block h-[14px] text-gray-400' />
+          </span>
+        )}
         {post.extra_01 === '1' && (
           <Image
             src={post.extra_02}

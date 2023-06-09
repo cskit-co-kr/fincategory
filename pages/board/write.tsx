@@ -80,7 +80,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const saveDraft = async () => {
-    if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
+    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
@@ -123,7 +123,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const savePost = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('Please fill');
+    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
@@ -192,7 +192,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
     }
     if (router.query.board) {
       allBoards.boards.find((board: BoardType) => {
-        if (board.name === router.query.board) {
+        if (board.name === router.query.board && board.write_level !== 2) {
           setSelectedBoard(board.id);
           return true;
         }
@@ -222,7 +222,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
         {/* Sidebar */}
         <BoardSidebar />
         {/* Main */}
-        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm pb-20'>
+        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
             <div className='text-xl font-bold'>글쓰기</div>
             <div className='ml-auto text-xs flex items-center'>
@@ -285,11 +285,14 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
                   <option value='0'>게시판을 선택해 주세요.</option>
                   {groupsList?.groups.map((group: any) => (
                     <optgroup label={group.name} key={group.id}>
-                      {group.boards.map((board: any) => (
-                        <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
-                          {board.title}
-                        </option>
-                      ))}
+                      {group.boards.map(
+                        (board: any) =>
+                          board.write_level !== 2 && (
+                            <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
+                              {board.title}
+                            </option>
+                          )
+                      )}
                     </optgroup>
                   ))}
                 </select>
@@ -319,7 +322,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
             formats={formats}
             theme='snow'
             onChange={handleContentChange}
-            style={{ height: '490px' }}
+            style={{ height: '490px', marginBottom: '40px' }}
             value={content}
           />
         </div>
