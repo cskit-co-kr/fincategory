@@ -3,11 +3,11 @@ import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubb
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Message, Pagination, useToaster, Modal } from 'rsuite';
+import { Avatar, Button, Message, Modal, Pagination, useToaster } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
 
@@ -18,7 +18,7 @@ import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
 import { formatDate, toDateTimeformat } from '../../../lib/utils';
-import { BoardType, CommentType, PostType } from '../../../typings';
+import { CommentType, PostType } from '../../../typings';
 
 import 'react-quill/dist/quill.snow.css';
 import BoardComment from '../../../components/board/comment';
