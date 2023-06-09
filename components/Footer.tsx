@@ -9,7 +9,7 @@ function Footer() {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
   return (
-    <footer className='bg-white py-8 bottom-0 w-full mt-10'>
+    <footer className='bg-white py-8 bottom-0 w-full mt-10 hidden md:block'>
       <div className='container'>
         <div className='sm:grid sm:grid-cols-3 md:grid-cols-5 py-4 xl:p-0'>
           <div className='mb-4'>
