@@ -105,6 +105,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   const getPostsList = async () => {
+    setIsLoading(true);
     // Get Posts List
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
@@ -127,6 +128,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     );
     const postList = await responsePost.json();
     setPostsList(postList);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -152,9 +154,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [router.query]);
 
   useEffect(() => {
-    setIsLoading(true);
     getPostsList();
-    setIsLoading(false);
   }, [clickCheck]);
 
   // Checkbox functions
@@ -296,7 +296,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     post.extra_01 === '1' && (
                       <div className='' key={post.id}>
                         <div className=''>
-                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover w-full aspect-square' />
+                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
                         </div>
                         <div className='font-semibold line-clamp-2'>
                           <Link href={`/board/post/${post.id}`}>{post.title}</Link>
@@ -310,7 +310,11 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 )}
               </div>
             )}
-            {isLoading && <Loader />}
+            {isLoading && (
+              <div className='p-4 text-center'>
+                <Loader />
+              </div>
+            )}
           </div>
           <div className='hidden md:flex items-center'>
             {session?.user && memberInfo.member.type === 2 && (
