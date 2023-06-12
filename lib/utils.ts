@@ -7,7 +7,7 @@ function formatDate(dateString: string) {
   const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
   const isWithin24Hours = timeDifference < oneDay;
   const formattedDateTime = isWithin24Hours
-    ? (localDate.getHours() + 1).toString().padStart(2, '0') + ':' + localDate.getMinutes().toString().padStart(2, '0')
+    ? localDate.getHours().toString().padStart(2, '0') + ':' + localDate.getMinutes().toString().padStart(2, '0')
     : dateString.substring(0, 10).replaceAll('-', '.');
   return formattedDateTime;
 }

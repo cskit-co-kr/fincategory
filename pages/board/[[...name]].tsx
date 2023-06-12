@@ -104,9 +104,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermHandler(t['st-title'], 'title');
   };
 
+  // Get Posts List
   const getPostsList = async () => {
     setIsLoading(true);
-    // Get Posts List
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
     const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
@@ -286,6 +286,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       userType={memberInfo.member?.type}
                     />
                   ))}
+                  {isEndOfList && <div>- -</div>}
                 </div>
               </div>
             )}
@@ -335,7 +336,18 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
           </div>
           <div className='hidden md:block bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
-              <Pagination total={postsList?.total} limit={postsPerPage} activePage={activePage} onChangePage={setActivePage} />
+              <Pagination
+                total={postsList?.total}
+                limit={postsPerPage}
+                activePage={activePage}
+                onChangePage={setActivePage}
+                maxButtons={10}
+                prev
+                last
+                next
+                first
+                ellipsis
+              />
             </div>
             <div className='border-t border-gray-300 p-5 flex justify-center gap-2 text-xs'>
               <div className='relative'>
