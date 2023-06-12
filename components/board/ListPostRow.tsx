@@ -5,7 +5,7 @@ import { koKR } from '../../lang/ko-KR';
 import Link from 'next/link';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
-import { formatDate } from '../../lib/utils';
+import { formatDate, toDateTimeformat } from '../../lib/utils';
 import Image from 'next/image';
 
 const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, userType }: any) => {

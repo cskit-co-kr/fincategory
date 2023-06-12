@@ -93,7 +93,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   useEffect(() => {
     loadComments();
-  }, [commentPage]);
+  }, [commentPage, router]);
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
     toaster.push(message(type, txt), { placement, duration: 5000 });
@@ -482,7 +482,14 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                           )}
                         </div>
                         <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1'>
-                          {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
+                          {current ? (
+                            <>{post.title}</>
+                          ) : (
+                            <>
+                              <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                              {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+                            </>
+                          )}
                           {post.extra_01 === '1' && (
                             <span>
                               <PhotoIcon className='hidden md:block h-[14px] text-gray-400' />

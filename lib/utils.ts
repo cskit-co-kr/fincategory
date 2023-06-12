@@ -1,14 +1,23 @@
-function formatDate(dateString: string) {
-  const date: any = new Date(dateString);
-  const timezoneOffset = date.getTimezoneOffset();
-  const localDate: any = new Date(date.getTime() - timezoneOffset * 60 * 1000);
+function formatDate(date: string) {
+  let newDate = new Date(date);
+  const timezoneOffset = newDate.getTimezoneOffset();
+
+  const localDate: any = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+
+  let year = localDate.getFullYear();
+  let month = localDate.getMonth() + 1;
+  let day = localDate.getDate();
+  let hour = localDate.getHours();
+  let minute = localDate.getMinutes();
+
   const currentDate: any = new Date();
   const timeDifference: any = currentDate - localDate;
   const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
   const isWithin24Hours = timeDifference < oneDay;
+
   const formattedDateTime = isWithin24Hours
-    ? localDate.getHours().toString().padStart(2, '0') + ':' + localDate.getMinutes().toString().padStart(2, '0')
-    : dateString.substring(0, 10).replaceAll('-', '.');
+    ? hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0')
+    : `${year}.${`00${month}`.slice(-2)}.${`00${day}`.slice(-2)}`;
   return formattedDateTime;
 }
 

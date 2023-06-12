@@ -132,15 +132,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   useEffect(() => {
-    return () => {
-      setClickCheck((prev) => !prev);
-      setPerpagePopup(false);
-      setCookie('perPage', postsPerPage);
-      setCookie('page', activePage);
-    };
-  }, [postsPerPage, activePage, viewPort]);
-
-  useEffect(() => {
     if (router.query.member && router.query.show === 'posts') {
       setSearchTermHandler(t['st-author'], 'author');
       setSearchInput(router.query.member as string);
@@ -154,12 +145,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [router.query]);
 
   useEffect(() => {
-    getPostsList();
-  }, [clickCheck]);
+    setClickCheck((prev) => !prev);
+    setPerpagePopup(false);
+    setCookie('perPage', postsPerPage);
+    setCookie('page', activePage);
+  }, [postsPerPage, activePage, viewPort]);
 
   // Checkbox functions
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
-
   const handleCheckboxChange = (event: any) => {
     const value = event.target.value;
     const isChecked = event.target.checked;
@@ -169,6 +162,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       setCheckedItems(checkedItems.filter((item) => item !== value));
     }
   };
+
+  // Admin delete post
   const deletePost = async () => {
     if (checkedItems.length === 0) return alert('No items selected');
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
@@ -184,6 +179,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     }
   };
 
+  // Mobile scrolling
   useEffect(() => {
     const handleScroll = () => {
       if (isLoading || isEndOfList) return;
@@ -201,6 +197,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [postsPerPage]);
+
+  useEffect(() => {
+    getPostsList();
+  }, [clickCheck, session]);
 
   return (
     <>
