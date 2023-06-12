@@ -7,7 +7,7 @@ function formatDate(date: string) {
   let year = localDate.getFullYear();
   let month = localDate.getMonth() + 1;
   let day = localDate.getDate();
-  let hour = localDate.getHours();
+  let hour = localDate.getHours() + 1;
   let minute = localDate.getMinutes();
 
   const currentDate: any = new Date();
