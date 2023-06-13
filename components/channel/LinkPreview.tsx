@@ -44,7 +44,15 @@ function LinkPreview({ meta }: any) {
           <div className='font-semibold'>{meta.webpage.title}</div>
           <div className='text-ellipsis max-h-[34px] overflow-hidden'>{meta.webpage.description}</div>
           <div className='pb-[56.25%] relative'>
-            <iframe width='100%' height='100%' className='h-full absolute' src={meta.webpage.embed_url} allow='autoplay; encrypted-media' allowFullScreen title='video' />
+            <iframe
+              width='100%'
+              height='100%'
+              className='h-full absolute'
+              src={meta.webpage.embed_url}
+              allow='autoplay; encrypted-media'
+              allowFullScreen
+              title='video'
+            />
           </div>
         </div>
       )}

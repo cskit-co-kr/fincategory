@@ -18,11 +18,12 @@ import ButtonLink from '../../../components/board/buttonLink';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
-import { formatDate, toDateTimeformat } from '../../../lib/utils';
+import { formatDate, toDateTimeformat, getHrefValue } from '../../../lib/utils';
 import { BoardType, CommentType, PostType } from '../../../typings';
 
 import 'react-quill/dist/quill.snow.css';
 import BoardComment from '../../../components/board/comment';
+import LinkPreview from '../../../components/board/LinkPreview';
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -320,6 +321,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 __html: post.content as string,
               }}
             />
+            <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
               <Avatar circle className='bg-[#E7EAED] mr-[10px] leading-[0]'>
                 {post.user.nickname.slice(0, 1)}
