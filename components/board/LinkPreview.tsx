@@ -24,7 +24,7 @@ function LinkPreview(metaLink: any) {
   return (
     <div className='text-xs border-l-2 pl-2 m-3 mt-5 gap-2.5'>
       <div>
-        <div className='font-semibold text-primary'>
+        <div className='font-semibold text-primary break-words'>
           <a href={meta?.url} target='_blank'>
             {meta?.url}
           </a>
@@ -33,7 +33,7 @@ function LinkPreview(metaLink: any) {
         <div>{meta?.description}...</div>
       </div>
       <div className='w-full'>
-        <img src={imageUrl} alt={meta?.title} className='max-w-[500px] max-h-[360px] mx-auto' />
+        <img src={imageUrl} alt={meta?.title} className='max-w-[280px] md:max-w-[500px] max-h-[360px] mx-auto' />
       </div>
     </div>
   );
