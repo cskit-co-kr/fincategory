@@ -200,7 +200,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   useEffect(() => {
     getPostsList();
-  }, [clickCheck, session]);
+  }, [clickCheck]);
 
   return (
     <>
@@ -299,8 +299,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                         <div className=''>
                           <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
                         </div>
-                        <div className='font-semibold line-clamp-2'>
-                          <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                        <div className='font-semibold'>
+                          <Link href={`/board/post/${post.id}`} className='break-words line-clamp-2'>
+                            {post.title}
+                          </Link>
                         </div>
                         <div className='mt-1'>{post?.board?.title}</div>
                         <div className='text-xs text-gray-400'>

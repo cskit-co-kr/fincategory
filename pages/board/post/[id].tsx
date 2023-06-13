@@ -272,7 +272,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           <div className='md:border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
             <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
               <div className='post-header flex flex-1 flex-col'>
-                <div className='title text-xl font-bold mb-[26px]'>{post.title}</div>
+                <div className='title text-xl font-bold mb-[26px] break-all md:break-normal'>{post.title}</div>
                 <div className='flex'>
                   <div className='avatar mr-2.5'>
                     <Avatar circle className='bg-gray-300 pt-1.5 text-center'>
@@ -326,9 +326,16 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               <Avatar circle className='bg-[#E7EAED] mr-[10px] leading-[0]'>
                 {post.user.nickname.slice(0, 1)}
               </Avatar>
-              <Link href={`/board?member=${post.user.nickname}&show=posts`} className='flex text-black hover:text-black hover:no-underline'>
+              <button
+                onClick={() =>
+                  router
+                    .push(`/board?member=${post.user.nickname}&show=posts`)
+                    .then(() => router.push(`/board?member=${post.user.nickname}&show=posts`))
+                }
+                className='flex text-black hover:underline items-center'
+              >
                 <span className='mr-[8px]'>{post.user.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
-              </Link>
+              </button>
             </div>
             <div className='comment' ref={commentListRef}>
               <div className='flex border-b border-gray-200 pb-[14px]'>
@@ -483,12 +490,14 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                             post.id
                           )}
                         </div>
-                        <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1'>
+                        <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1 break-all'>
                           {current ? (
                             <>{post.title}</>
                           ) : (
                             <>
-                              <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                              <Link href={`/board/post/${post.id}`} className='break-all'>
+                                {post.title}
+                              </Link>
                               {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
                             </>
                           )}
