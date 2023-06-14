@@ -12,6 +12,7 @@ const BoardSidebar = () => {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
+  const name = router.query.name && router.query.name[0];
   const { data: session } = useSession();
   const [groups, setGroups] = useState([]);
   const [memberInfo, setMemberInfo] = useState<MemberType>();
@@ -204,7 +205,7 @@ const BoardSidebar = () => {
                 <div key={index} className='flex flex-col gap-1'>
                   <div className='font-semibold py-1'>{group.name}</div>
                   {group.boards.map((board: any, key) => (
-                    <Link key={key} href={`/board/${board.name}`} className='ml-3'>
+                    <Link key={key} href={`/board/${board.name}`} className={`ml-3 ${board.name === name ? 'text-primary' : ''}`}>
                       {board.title}
                     </Link>
                   ))}

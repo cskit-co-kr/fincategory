@@ -180,26 +180,27 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   // Mobile scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isLoading || isEndOfList) return;
-      const isMobile = window.innerWidth <= 768;
-      if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
-        if (postsPerPage < postsList.total) {
-          setPostsPerPage((prev) => prev + 20);
-        } else {
-          setIsEndOfList(true);
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [postsPerPage]);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (isLoading || isEndOfList) return;
+  //     const isMobile = window.innerWidth <= 768;
+  //     if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+  //       if (postsPerPage < postsList.total) {
+  //         setPostsPerPage((prev) => prev + 20);
+  //       } else {
+  //         setIsEndOfList(true);
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, [postsPerPage]);
 
   useEffect(() => {
     getPostsList();
+    window.scrollTo(0, 0);
   }, [clickCheck]);
 
   return (
@@ -336,14 +337,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </Link>
             </div>
           </div>
-          <div className='hidden md:block bg-[#F9F9F9] rounded-lg mt-2.5 '>
+          <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
               <Pagination
                 total={postsList?.total}
                 limit={postsPerPage}
                 activePage={activePage}
                 onChangePage={setActivePage}
-                maxButtons={10}
+                maxButtons={6}
                 prev
                 last
                 next
@@ -351,7 +352,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 ellipsis
               />
             </div>
-            <div className='border-t border-gray-300 p-5 flex justify-center gap-2 text-xs'>
+            <div className='border-t border-gray-300 p-5 hidden md:flex justify-center gap-2 text-xs'>
               <div className='relative'>
                 <button
                   className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-48 justify-between'

@@ -80,7 +80,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const saveDraft = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택하지 않고 등록 버튼 클릭 시 텍스트 수정.');
+    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
     if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
@@ -124,7 +124,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const savePost = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택하지 않고 등록 버튼 클릭 시 텍스트 수정.');
+    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
     if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
