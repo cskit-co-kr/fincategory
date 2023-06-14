@@ -97,7 +97,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   }, [commentPage, router]);
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
-    toaster.push(message(type, txt), { placement, duration: 5000 });
+    const options = { placement, duration: 5000 };
+    toaster.push(message(type, txt), options);
   };
 
   // Load Comments
