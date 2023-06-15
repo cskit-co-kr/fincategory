@@ -321,6 +321,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               dangerouslySetInnerHTML={{
                 __html: post.content as string,
               }}
+              className='break-all md:break-words'
             />
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
@@ -536,10 +537,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 next
                 prev
                 last
+                ellipsis
                 total={postList?.total}
                 limit={postPerPage}
                 activePage={postPage}
                 onChangePage={setPostPage}
+                maxButtons={6}
               />
             </div>
           </div>
