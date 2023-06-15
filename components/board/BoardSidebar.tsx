@@ -155,7 +155,7 @@ const BoardSidebar = () => {
         </div>
       </div>
 
-      <div className='hidden lg:block lg:min-w-[310px]'>
+      <div className='hidden lg:block lg:min-w-[310px] text-sm md:text-xs'>
         <div className='lg:sticky lg:top-4'>
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
             {session?.user ? (
@@ -169,7 +169,7 @@ const BoardSidebar = () => {
                     {t['sign-out']}
                   </button>
                 </div>
-                <div className='text-xs gap-1.5 grid'>
+                <div className='gap-1.5 grid'>
                   <div className='flex'>
                     가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
                   </div>
@@ -182,7 +182,7 @@ const BoardSidebar = () => {
                     <div className='ml-auto'>{memberInfo?.comment}</div>
                   </div>
                 </div>
-                <Link className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' href='/board/write'>
+                <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white' href='/board/write'>
                   글쓰기
                 </Link>
               </>
@@ -192,7 +192,7 @@ const BoardSidebar = () => {
                   <UserCircleIcon className='h-6 text-black' />
                   <span className='font-semibold'>ID {t['sign-in']}</span>
                 </div>
-                <button className='bg-primary font-semibold text-white py-2 px-5 text-sm' onClick={() => signIn()}>
+                <button className='bg-primary font-semibold text-white py-2 px-5' onClick={() => signIn()}>
                   {t['sign-in']}
                 </button>
               </>
@@ -203,9 +203,9 @@ const BoardSidebar = () => {
             <div className='flex flex-col gap-1 pb-2'>
               {groups?.map((group: GroupType, index) => (
                 <div key={index} className='flex flex-col gap-1'>
-                  <div className='font-semibold py-1'>{group.name}</div>
+                  <div className='font-semibold py-2'>{group.name}</div>
                   {group.boards.map((board: any, key) => (
-                    <Link key={key} href={`/board/${board.name}`} className={`ml-3 ${board.name === name ? 'text-primary' : ''}`}>
+                    <Link key={key} href={`/board/${board.name}`} className={`ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''}`}>
                       {board.title}
                     </Link>
                   ))}
