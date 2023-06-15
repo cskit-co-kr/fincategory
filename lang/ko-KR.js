@@ -22,7 +22,7 @@ export const koKR = {
     "search": "검색",
     "board": "게시판",
     "view-all-articles": "전체글보기",
-    "new-channel-registration": "신규채널등록+",
+    "new-channel-registration": "신규채널등록",
     "see-more": "더보기",
     "by-keyword": "키워드",
     "type-here": "여기에 입력...",
