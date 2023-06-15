@@ -12,6 +12,7 @@ import Slider from '@mui/material/Slider';
 import GetChannels from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
 import { useData } from '../context/context';
+import BoardSidebar from '../components/board/BoardSidebar';
 
 type Options = {
   options: Array<MultiValueOptions>;

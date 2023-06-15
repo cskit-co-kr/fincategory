@@ -298,7 +298,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     post.extra_01 === '1' && (
                       <div className='' key={post.id}>
                         <div className=''>
-                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
+                          <Link href={`/board/post/${post.id}`}>
+                            <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
+                          </Link>
                         </div>
                         <div className='font-semibold'>
                           <Link href={`/board/post/${post.id}`} className='break-words line-clamp-2'>

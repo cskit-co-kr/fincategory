@@ -53,3 +53,15 @@
 .rs-nav-item.rs-nav-item-focus {
   @apply bg-transparent !important;
 }
+
+.scrollable-container {
+  overflow-x: scroll; /* Enable vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Enable momentum scrolling on iOS */
+  scrollbar-width: none; /* Hide the scrollbar on Firefox */
+  -ms-overflow-style: none; /* Hide the scrollbar on Internet Explorer and Edge */
+}
+
+/* Hide the scrollbar on WebKit-based browsers (Chrome, Safari, etc.) */
+.scrollable-container::-webkit-scrollbar {
+  display: none;
+}
