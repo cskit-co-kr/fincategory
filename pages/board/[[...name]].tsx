@@ -198,6 +198,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   //   };
   // }, [postsPerPage]);
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      setClickCheck((prev) => !prev);
+      e.target.blur();
+    }
+  };
+
   useEffect(() => {
     getPostsList();
     window.scrollTo(0, 0);
@@ -271,7 +278,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-sm md:text-xs'>
+                <div className='text-base md:text-xs'>
                   {loading && (
                     <div className='text-center w-full p-4'>
                       <Loader />
@@ -470,6 +477,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 value={searchInput}
                 ref={inputRef}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
               <button
                 className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'

@@ -204,7 +204,7 @@ const Header = () => {
         <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
             <div className='font-raleway text-lg pl-4 md:pl-0'>
-              <a href='/' className='hover:no-underline hover:text-current'>
+              <a href='https://fincategory.com' className='hover:no-underline hover:text-current'>
                 <span className='font-bold text-primary'>Fin</span>
                 Category
               </a>

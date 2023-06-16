@@ -97,7 +97,11 @@ const BoardSidebar = () => {
                 <div key={index} className='flex flex-col gap-1'>
                   <div className='font-semibold py-2'>{group.name}</div>
                   {group.boards.map((board: any, key) => (
-                    <Link key={key} href={`/board/${board.name}`} className={`ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''}`}>
+                    <Link
+                      key={key}
+                      href={`/board/${board.name}`}
+                      className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''}`}
+                    >
                       {board.title}
                     </Link>
                   ))}

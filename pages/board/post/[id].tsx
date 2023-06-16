@@ -321,7 +321,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               dangerouslySetInnerHTML={{
                 __html: post.content as string,
               }}
-              className='break-all md:break-words'
+              className='break-all md:break-words text-base md:text-sm'
             />
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
@@ -471,7 +471,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </div>
           <div className='post-list-wrapper'>
             <p className='font-bold text-[17px] mb-[20px] ml-4 md:ml-0'>전체글</p>
-            <div className='post-list border-t border-gray-400'>
+            <div className='post-list border-t border-gray-400 text-base md:text-xs'>
               <div className='w-full'>
                 <div className='border-b border-gray-200 hidden md:flex font-bold'>
                   <div className='text-center p-2 min-w-[80px]'>{postList.board ? '말머리' : ''}</div>
@@ -480,7 +480,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-xs'>
+                <div className=''>
                   {postList?.posts?.map((post: PostType, idx: number) => {
                     const current = post.id === parseInt(router.query.id as string) ? true : false;
                     return (
