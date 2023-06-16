@@ -109,89 +109,91 @@ const Header = () => {
         <div className='drawer-side'>
           <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
           <div className='menu p-5 w-80 h-full bg-white'>
-            {session?.user ? (
-              <div className='flex flex-col gap-2 text-sm'>
-                <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-                  <UserCircleIcon className='h-6 text-black' />
-                  <span className='font-semibold text-base'>
-                    <Link href='/member/profile' className='flex gap-1' onClick={handleClick}>
-                      {session?.user.nickname}
-                      <Cog6ToothIcon className='h-4' />
-                    </Link>
-                  </span>
+            <div className='grid'>
+              {session?.user ? (
+                <div className='flex flex-col gap-2 text-sm'>
+                  <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
+                    <UserCircleIcon className='h-6 text-black' />
+                    <span className='font-semibold text-base'>
+                      <Link href='/member/profile' className='flex gap-1' onClick={handleClick}>
+                        {session?.user.nickname}
+                        <Cog6ToothIcon className='h-4' />
+                      </Link>
+                    </span>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        handleClick();
+                      }}
+                      className='bg-gray-100 rounded-full px-2 py-1 ml-auto'
+                    >
+                      {t['sign-out']}
+                    </button>
+                  </div>
+                  <div className='gap-1.5 grid'>
+                    <div className='flex'>
+                      가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
+                    </div>
+                    <div className='flex'>
+                      <Link href={`/board?member=${session?.user.nickname}&show=posts`} onClick={handleClick}>
+                        내가 쓴 글 보기
+                      </Link>
+                      <div className='ml-auto'>{memberInfo?.post}</div>
+                    </div>
+                    <div className='flex'>
+                      <Link href={`/board?member=${session?.user.nickname}&show=comments`} onClick={handleClick}>
+                        내가 쓴 댓글 보기
+                      </Link>
+                      <div className='ml-auto'>{memberInfo?.comment}</div>
+                    </div>
+                  </div>
+                  <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white' href='/board/write' onClick={handleClick}>
+                    글쓰기
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
+                    <UserCircleIcon className='h-6 text-black' />
+                    <span className='font-semibold'>ID {t['sign-in']}</span>
+                  </div>
                   <button
+                    className='bg-primary font-semibold text-white py-2 px-5 text-base'
                     onClick={() => {
-                      signOut();
+                      signIn();
                       handleClick();
                     }}
-                    className='bg-gray-100 rounded-full px-2 py-1 ml-auto'
                   >
-                    {t['sign-out']}
+                    {t['sign-in']}
                   </button>
+                </>
+              )}
+              <div className='text-base'>
+                <div className='flex flex-col'>
+                  <Link className='font-semibold pt-2' href='/search' onClick={handleClick}>
+                    {t['search']}
+                  </Link>
+                  <Link className='font-semibold py-2' href='/add' onClick={handleClick}>
+                    {t['new-channel-registration']}
+                  </Link>
                 </div>
-                <div className='gap-1.5 grid'>
-                  <div className='flex'>
-                    가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
-                  </div>
-                  <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=posts`} onClick={handleClick}>
-                      내가 쓴 글 보기
-                    </Link>
-                    <div className='ml-auto'>{memberInfo?.post}</div>
-                  </div>
-                  <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=comments`} onClick={handleClick}>
-                      내가 쓴 댓글 보기
-                    </Link>
-                    <div className='ml-auto'>{memberInfo?.comment}</div>
-                  </div>
+                <div className='border-y border-gray-200 py-2 font-semibold'>
+                  <Link href='/board' onClick={handleClick}>
+                    {t['view-all-articles']}
+                  </Link>
                 </div>
-                <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white' href='/board/write' onClick={handleClick}>
-                  글쓰기
-                </Link>
-              </div>
-            ) : (
-              <>
-                <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-                  <UserCircleIcon className='h-6 text-black' />
-                  <span className='font-semibold'>ID {t['sign-in']}</span>
+                <div className='flex flex-col gap-2 py-2'>
+                  {groups?.map((group: GroupType, index) => (
+                    <div key={index} className='flex flex-col gap-2'>
+                      <div className='font-semibold py-1'>{group.name}</div>
+                      {group.boards.map((board: any, key) => (
+                        <Link key={key} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
+                          {board.title}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-                <button
-                  className='bg-primary font-semibold text-white py-2 px-5 text-base'
-                  onClick={() => {
-                    signIn();
-                    handleClick();
-                  }}
-                >
-                  {t['sign-in']}
-                </button>
-              </>
-            )}
-            <div className='text-base'>
-              <div className='flex flex-col'>
-                <Link className='font-semibold pt-2' href='/search' onClick={handleClick}>
-                  {t['search']}
-                </Link>
-                <Link className='font-semibold py-2' href='/add' onClick={handleClick}>
-                  {t['new-channel-registration']}
-                </Link>
-              </div>
-              <div className='border-y border-gray-200 py-2 font-semibold'>
-                <Link href='/board' onClick={handleClick}>
-                  {t['view-all-articles']}
-                </Link>
-              </div>
-              <div className='flex flex-col gap-2 py-2'>
-                {groups?.map((group: GroupType, index) => (
-                  <div key={index} className='flex flex-col gap-2'>
-                    <div className='font-semibold py-1'>{group.name}</div>
-                    {group.boards.map((board: any, key) => (
-                      <Link key={key} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
-                        {board.title}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
               </div>
             </div>
           </div>

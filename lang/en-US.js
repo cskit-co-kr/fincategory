@@ -137,5 +137,6 @@ export const enUS = {
     "enter-search-term":"Please enter a search term",
     "edit": "Edit",
     "delete": "Delete",
-    "comment-saved": "Your comment has been successfully saved."
+    "comment-saved": "Your comment has been successfully saved.",
+    "post-url-copied": "Board Post URL copied to clipboard."
 }

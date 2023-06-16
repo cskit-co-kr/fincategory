@@ -135,7 +135,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     } else {
       document.execCommand('copy', true, window.location.toString());
     }
-    toastShow('info', 'Board Post URL copied to clipboard');
+    toastShow('info', t['post-url-copied']);
   };
 
   // Save Comment
