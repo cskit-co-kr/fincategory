@@ -1,24 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as cheerio from 'cheerio';
 
 interface meta {
-  title: string;
-  description: string;
-  images: string[];
-  url: string;
+  title: string | undefined;
+  description: string | undefined;
+  image: string | undefined;
+  url: string | undefined;
 }
 
 function LinkPreview(metaLink: any) {
-  const [imageUrl, setImageUrl] = useState('/image.jpg');
+  const [imageUrl, setImageUrl] = useState<string | undefined>('/image.jpg');
   const [meta, setMeta] = useState<meta>();
-  const [isVideo, setIsVideo] = useState();
   async function getMeta() {
     const response = await fetch(`https://jsonlink.io/api/extract?url=${metaLink.url}`);
     const result = await response.json();
     setMeta(result);
     setImageUrl(result.images);
   }
+  const fetchMeta = async () => {
+    const html: any = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/meta?url=${metaLink.url}`);
+    const $ = cheerio.load(await html.json());
+
+    const ogTitle = $('meta[property="og:title"]').attr('content');
+    const ogDesc = $('meta[property="og:description"]').attr('content');
+    const ogImage = $('meta[property="og:image"]').attr('content');
+    const ogUrl = $('meta[property="og:url"]').attr('content');
+    setMeta({ title: ogTitle, description: ogDesc, image: ogImage, url: ogUrl });
+    setImageUrl(ogImage);
+  };
   useEffect(() => {
     getMeta();
+    // fetchMeta();
   }, []);
 
   return meta?.title ? (

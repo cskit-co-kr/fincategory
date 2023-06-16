@@ -11,7 +11,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // );
 // const client = new TelegramClient(session, apiId, apiHash, {});
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // async function getHistory() {
   //   await client.connect();
 
@@ -32,5 +32,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   //   await client.disconnect();
   // }
   // getHistory();
+
   res.status(200).json('data');
 }

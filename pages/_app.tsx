@@ -160,7 +160,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         }}
       />
       <noscript>
-        <a href='/' target='_blank'>
+        <a href='/' target='_blank' className='hidden'>
           <img src='//sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
         </a>
       </noscript>
