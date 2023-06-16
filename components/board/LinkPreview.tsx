@@ -30,7 +30,7 @@ function LinkPreview(metaLink: any) {
   };
   useEffect(() => {
     getMeta();
-    // fetchMeta();
+    !meta?.title && fetchMeta();
   }, []);
 
   return meta?.title ? (
