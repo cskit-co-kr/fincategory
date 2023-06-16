@@ -98,7 +98,7 @@ const Header = () => {
   return (
     <>
       {/* Mobile */}
-      <div className='md:hidden drawer drawer-end absolute top-4 z-50'>
+      <div className='md:hidden drawer absolute top-4 z-50'>
         <input id='my-drawer-4' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content ml-auto pr-4'>
           {/* Page content here */}
@@ -108,7 +108,7 @@ const Header = () => {
         </div>
         <div className='drawer-side'>
           <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
-          <div className='menu p-5 w-80 h-full bg-white'>
+          <div className='menu p-5 w-80 bg-white'>
             <div className='grid'>
               {session?.user ? (
                 <div className='flex flex-col gap-2 text-sm'>
