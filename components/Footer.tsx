@@ -13,12 +13,12 @@ function Footer() {
       <div className='container'>
         <div className='sm:grid sm:grid-cols-3 md:grid-cols-5 py-4 xl:p-0'>
           <div className='mb-4'>
-            <div className='mb-8 font-raleway text-black text-lg'>
-              <Link href='/' className='hover:no-underline hover:text-current'>
+            <div className='font-raleway text-black text-2xl pl-4 md:pl-0 flex gap-3 items-end mb-8'>
+              <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
-                Ca
+                <span className=''>Ca</span>
               </Link>
-              <div className='text-[11px] text-gray-500 leading-none'>텔레그램 채널정보, 핀카</div>
+              <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
             </div>
             <h2 className='font-bold text-base'>{t['contact-us']}</h2>
             <ul className='list-none mt-3 leading-7'>
