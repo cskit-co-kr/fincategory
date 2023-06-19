@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as cheerio from 'cheerio';
+import Link from 'next/link';
 
 interface meta {
   title: string | undefined;
@@ -36,10 +37,10 @@ function LinkPreview(metaLink: any) {
   return meta?.title ? (
     <div className='text-xs border-l-2 pl-2 m-3 mt-5 gap-2.5'>
       <div>
-        <div className='font-semibold text-primary break-words'>
-          <a href={meta?.url} target='_blank'>
+        <div className='font-semibold text-primary break-all'>
+          <Link href={meta?.url as string} target='_blank'>
             {meta?.url}
-          </a>
+          </Link>
         </div>
         <div className='font-semibold'>{meta?.title}</div>
         <div>{meta?.description}...</div>

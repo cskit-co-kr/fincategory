@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useEffect, useState } from 'react';
+import { getCookie } from 'cookies-next';
 
 const BoardSidebar = () => {
   const router = useRouter();
@@ -13,6 +14,7 @@ const BoardSidebar = () => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const name = router.query.name && router.query.name[0];
+  const postBoardName = getCookie('postboardname');
   const { data: session } = useSession();
   const [groups, setGroups] = useState([]);
   const [memberInfo, setMemberInfo] = useState<MemberType>();
@@ -100,7 +102,9 @@ const BoardSidebar = () => {
                     <Link
                       key={key}
                       href={`/board/${board.name}`}
-                      className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''}`}
+                      className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''} ${
+                        router.query.id && postBoardName === board.name ? 'text-primary' : ''
+                      }`}
                     >
                       {board.title}
                     </Link>
