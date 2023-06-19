@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PencilIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -78,6 +78,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   };
 
   useEffect(() => {
+    setCookie('postboardname', post.board.name);
     if (post.reaction === null) {
       setReaction(false);
     } else {
@@ -353,7 +354,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               {commentTotal === 0 ? (
                 <></>
               ) : (
-                <div className='comment-list mt-[20px]'>
+                <div className='comment-list mt-[20px] text-base md:text-sm'>
                   <p className='font-bold text-[17px] mb-[20px]'>댓글</p>
                   <ul className='relative overflow-hidden'>
                     {commentList.map((comment: CommentType, idx: number) => (

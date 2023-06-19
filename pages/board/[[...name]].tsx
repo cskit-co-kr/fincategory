@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
-import { setCookie } from 'cookies-next';
+import { setCookie, getCookie, hasCookie } from 'cookies-next';
 import { getSession, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -54,6 +54,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchTermText, setSearchTermText] = useState(t['st-title']);
 
   useEffect(() => {
+    // if (hasCookie('page')) {
+    //   const page: any = getCookie('page');
+    //   setActivePage(parseInt(page));
+    // }
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
   }, []);

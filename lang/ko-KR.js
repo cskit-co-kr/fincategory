@@ -19,7 +19,7 @@ export const koKR = {
     "find-password": "비번 찾기",
     "updated-successfully": "변경 등록 되었습니다.",
     "home": "홈",
-    "search": "검색",
+    "search": "채널 검색",
     "board": "게시판",
     "view-all-articles": "전체글보기",
     "new-channel-registration": "신규채널등록",

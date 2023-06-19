@@ -143,7 +143,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           </Layout>
         </DataProvider>
       </SessionProvider>
-      <Script
+      {/* <Script
         id='hi-stat'
         dangerouslySetInnerHTML={{
           __html: `
@@ -163,7 +163,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <a href='/' target='_blank' className='hidden'>
           <img src='//sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
         </a>
-      </noscript>
+      </noscript> */}
     </>
   );
 }
