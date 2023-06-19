@@ -99,12 +99,12 @@ const Header = () => {
       <header className='bg-white z-20'>
         <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
-            <div className='font-raleway text-black text-lg pl-4 md:pl-0'>
+            <div className='font-raleway text-black text-2xl pl-4 md:pl-0 flex gap-3 items-end'>
               <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
                 <span className=''>Ca</span>
               </Link>
-              <div className='text-[11px] text-gray-500 leading-none'>텔레그램 채널정보, 핀카</div>
+              <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
             </div>
 
             {/* Mobile */}
@@ -209,12 +209,15 @@ const Header = () => {
                         ))}
                       </div>
                     </div>
-                    <div className='font-raleway text-black text-lg border-t border-gray-200 mt-2 pt-2'>
-                      <Link href='/search' className='hover:no-underline hover:text-current leading-none'>
+                    <div className='font-raleway text-black text-2xl flex gap-3 items-end border-t border-gray-200 mt-2 pt-2'>
+                      <Link
+                        href='/search'
+                        className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'
+                      >
                         <span className='font-bold text-primary'>Fin</span>
                         <span className=''>Ca</span>
                       </Link>
-                      <div className='text-[11px] text-gray-500 leading-none'>텔레그램 채널정보, 핀카</div>
+                      <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
                     </div>
                     <div className='flex flex-col gap-2 mt-4 text-base'>
                       <span className='font-bold'>{t['contact-us']}</span>
