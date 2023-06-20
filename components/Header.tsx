@@ -99,7 +99,7 @@ const Header = () => {
       <header className='bg-white z-20'>
         <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
-            <div className='font-raleway text-black text-2xl pl-4 md:pl-0 flex gap-3 items-end'>
+            <div className='font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end'>
               <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
                 <span className=''>Ca</span>
@@ -209,7 +209,7 @@ const Header = () => {
                         ))}
                       </div>
                     </div>
-                    <div className='font-raleway text-black text-2xl flex gap-3 items-end border-t border-gray-200 mt-2 pt-2'>
+                    <div className='font-raleway text-2xl flex gap-3 items-end border-t border-gray-200 mt-2 pt-2'>
                       <Link
                         href='/search'
                         className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'

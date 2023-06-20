@@ -11,6 +11,7 @@ type TBoardComment = {
   userID: number;
   postID: number;
   boardID: number;
+  postUserNickname: string;
   reply: boolean;
   fncToast?: (type: TypeAttributes.Status, txt: string) => void;
   fncLoadComment: () => void;
@@ -23,6 +24,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
   userID,
   postID,
   boardID,
+  postUserNickname,
   reply,
   fncToast = () => {},
   fncLoadComment = () => {},
@@ -124,13 +126,17 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
 
   return (
     <div className='single-comment flex'>
-      <Avatar circle className='bg-[#E7EAED] mr-[10px] leading-[0]'>
+      <Avatar circle className='bg-gray-200 mr-[10px] leading-none' size='sm'>
         {comment.user.nickname.slice(0, 1)}
       </Avatar>
       <div className='flex flex-1 flex-col'>
         <div className='comment-content'>
           <p className='p-0 m-0 mb-[5px]'>
-            {comment.user.nickname} | <span className='text-xs text-[#7A8486]'>{toDateTimeformat(comment.created_at, '.')}</span>
+            <b>{comment.user.nickname}</b>{' '}
+            {postUserNickname === comment.user.nickname && (
+              <span className='rounded-full bg-sky-200 px-1 py-[1px] text-[10px] text-sky-700'>작성자</span>
+            )}{' '}
+            | <span className='text-xs text-[#7A8486]'>{toDateTimeformat(comment.created_at, '.')}</span>
           </p>
           <p className='p-0 m-0 mb-[10px] font-medium'>{comment.comment}</p>
           <p className='flex p-0 m-0 text-xs text-[#7A8486]'>

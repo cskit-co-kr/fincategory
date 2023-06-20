@@ -161,7 +161,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         loadComments();
       }
     } else {
-      toastShow('error', 'An error occurred while trying to save your comment.');
+      toastShow('error', t['login-to-comment']);
     }
   };
 
@@ -277,7 +277,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 <div className='title text-xl font-bold mb-[26px] break-all md:break-normal'>{post.title}</div>
                 <div className='flex'>
                   <div className='avatar mr-2.5'>
-                    <Avatar circle className='bg-gray-300 pt-1.5 text-center'>
+                    <Avatar circle className='bg-gray-200 pt-1.5 text-center'>
                       {post.user.nickname.slice(0, 1)}
                     </Avatar>
                   </div>
@@ -326,7 +326,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             />
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
-              <Avatar circle className='bg-[#E7EAED] mr-[10px] leading-[0]'>
+              <Avatar circle className='bg-gray-200 mr-[10px] leading-none' size='sm'>
                 {post.user.nickname.slice(0, 1)}
               </Avatar>
               <button
@@ -365,6 +365,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                           userID={Number(session?.user.id)}
                           postID={post.id}
                           boardID={post.board.id}
+                          postUserNickname={post.user.nickname}
                           reply={true}
                           fncToast={toastShow}
                           fncLoadComment={loadComments}
@@ -382,6 +383,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                   userID={Number(session?.user.id)}
                                   postID={post.id}
                                   boardID={post.board.id}
+                                  postUserNickname={post.user.nickname}
                                   reply={true}
                                   fncToast={toastShow}
                                   fncLoadComment={loadComments}
@@ -399,6 +401,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                           userID={Number(session?.user.id)}
                                           postID={post.id}
                                           boardID={post.board.id}
+                                          postUserNickname={post.user.nickname}
                                           reply={false}
                                           fncToast={toastShow}
                                           fncLoadComment={loadComments}

@@ -98,7 +98,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
           { name: 'twitter:description', content: channel.description },
         ]}
       />
-      <div className='pt-7 bg-gray-50'>
+      <div className='md:pt-7 bg-gray-50'>
         <div className='md:flex mx-auto px-3 md:px-0'>
           <ChannelDetailLeftSidebar channel={channel} />
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
@@ -176,7 +176,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                   <div className='flex justify-center col-span-3'>
                     <button
                       onClick={() => handleLoadMore(searchEvent)}
-                      className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                      className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0'
                     >
                       {loadMoreText}
                     </button>
