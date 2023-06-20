@@ -101,7 +101,6 @@ const MemberSignIn = () => {
                   <button onClick={() => setPage('forgot')} className='underline'>
                     {t['forgot-password']}
                   </button>
-                  ?
                 </div>
                 <div className='px-4'>
                   <Link href={`/member/signup`} className='underline'>

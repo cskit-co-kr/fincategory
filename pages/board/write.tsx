@@ -289,7 +289,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
                     <optgroup label={group.name} key={group.id}>
                       {group.boards.map(
                         (board: any) =>
-                          board.write_level !== 2 && (
+                          (board.write_level !== 2 || session?.user.type === 2) && (
                             <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
                               {board.title}
                             </option>

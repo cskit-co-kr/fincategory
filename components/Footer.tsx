@@ -13,7 +13,7 @@ function Footer() {
       <div className='container'>
         <div className='sm:grid sm:grid-cols-3 md:grid-cols-5 py-4 xl:p-0'>
           <div className='mb-4'>
-            <div className='font-raleway text-black text-2xl pl-4 md:pl-0 flex gap-3 items-end mb-8'>
+            <div className='font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end mb-8'>
               <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
                 <span className=''>Ca</span>

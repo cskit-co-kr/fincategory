@@ -252,7 +252,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 htmlFor='my-drawer-2'
                 className='border border-gray-200 rounded-lg bg-white px-2 py-1 whitespace-nowrap lg:hidden flex items-center gap-1 z-0'
               >
-                Search Filter
+                {t['search-filter']}
                 <AdjustmentsHorizontalIcon className='h-4' />
               </label>
             </div>
@@ -639,6 +639,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                   >
                     <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
                     <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
+                    <option value='today_desc'>오늘 조회수 순 &darr;</option>
+                    <option value='today_asc'>오늘 조회수 순 &uarr;</option>
+                    <option value='total_desc'>누적 조회수 순 &darr;</option>
+                    <option value='total_asc'>누적 조회수 순 &uarr;</option>
                   </select>
                 </div>
               </div>

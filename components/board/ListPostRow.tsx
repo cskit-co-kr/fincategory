@@ -38,7 +38,7 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
         )}
       </div>
       <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1'>
-        <Link href={`/board/post/${post.id}`} className='break-all md:break-words'>
+        <Link href={`/board/post/${post.id}`} className='break-all md:break-words md:line-clamp-1'>
           {post.title}
         </Link>
         {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}

@@ -425,7 +425,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                         onChange={(e) => setSearchEndDate(e.target.value)}
                       />
                       <button
-                        className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline'
+                        className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline whitespace-nowrap'
                         onClick={() => {
                           setSearchDate(searchStartDate + '&' + searchEndDate);
                           setSearchDateText(searchStartDate + ' - ' + searchEndDate);
@@ -433,7 +433,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                           setInputFocus();
                         }}
                       >
-                        Ok
+                        설정
                       </button>
                     </li>
                   </ul>
@@ -492,7 +492,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   getPostsList();
                 }}
               >
-                {t['search']}
+                {t['search0']}
               </button>
             </div>
           </div>
