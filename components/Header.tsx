@@ -184,7 +184,7 @@ const Header = () => {
                       </div>
                     )}
                     <div className='text-sm'>
-                      <div className='flex flex-col gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
+                      <div className='flex justify-between gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
                         <Link className='font-semibold flex gap-2 items-center' href='/search' onClick={handleClick}>
                           <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['search']}

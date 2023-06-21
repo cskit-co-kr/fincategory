@@ -30,15 +30,15 @@ function LinkPreview(metaLink: any) {
     setImageUrl(ogImage);
   };
   useEffect(() => {
-    getMeta();
-    !meta?.title && fetchMeta();
+    metaLink.url !== undefined && getMeta();
+    metaLink.url !== undefined && !meta?.title && fetchMeta();
   }, []);
 
   return meta?.title ? (
     <div className='text-xs border-l-2 pl-2 m-3 mt-5 gap-2.5'>
       <div>
         <div className='font-semibold text-primary break-all'>
-          <Link href={meta?.url as string} target='_blank'>
+          <Link href={meta?.url !== undefined ? (meta?.url as string) : '#'} target='_blank'>
             {meta?.url}
           </Link>
         </div>
