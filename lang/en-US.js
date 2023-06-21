@@ -43,7 +43,7 @@ export const enUS = {
     "average-post-reach": "Average post reach",
     "average-post-reach-24hours": "Average post reach (24 hours)",
     "citation-index": "Citation index (CI)",
-    "empty-search-text": "Specify the necessary filters to search channels",
+    "empty-search-text": "",
     "no-search-results": "No search results.",
     "loading-text": "Loading...",
     "load-more": "Load More",

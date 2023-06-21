@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Bars3Icon, ChevronDownIcon, Cog6ToothIcon, MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import React, { useEffect, useState, useRef } from 'react';
+import { Bars3Icon, Cog6ToothIcon, ListBulletIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon } from '@heroicons/react/24/solid';
+import { FaTelegramPlane } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
@@ -118,10 +119,10 @@ const Header = () => {
               </div>
               <div className='drawer-side'>
                 <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
-                <div className='menu p-5 w-80 bg-white'>
+                <div className='menu p-2 w-80 bg-gray-100'>
                   <div className='grid'>
                     {session?.user ? (
-                      <div className='flex flex-col gap-2 text-sm'>
+                      <div className='flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4'>
                         <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                           <UserCircleIcon className='h-6 text-black' />
                           <span className='font-semibold text-base'>
@@ -135,7 +136,7 @@ const Header = () => {
                               signOut();
                               handleClick();
                             }}
-                            className='bg-gray-100 rounded-full px-2 py-1 ml-auto'
+                            className='bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs'
                           >
                             {t['sign-out']}
                           </button>
@@ -166,7 +167,7 @@ const Header = () => {
                         </Link>
                       </div>
                     ) : (
-                      <>
+                      <div className='flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4'>
                         <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                           <UserCircleIcon className='h-6 text-black' />
                           <span className='font-semibold'>ID {t['sign-in']}</span>
@@ -180,36 +181,49 @@ const Header = () => {
                         >
                           {t['sign-in']}
                         </button>
-                      </>
+                      </div>
                     )}
-                    <div className='text-base'>
-                      <div className='flex flex-col'>
-                        <Link className='font-semibold pt-2' href='/search' onClick={handleClick}>
+                    <div className='text-sm'>
+                      <div className='flex flex-col gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
+                        <Link className='font-semibold flex gap-2 items-center' href='/search' onClick={handleClick}>
+                          <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['search']}
                         </Link>
-                        <Link className='font-semibold py-2' href='/add' onClick={handleClick}>
+                        <Link className='font-semibold flex gap-2 items-center' href='/add' onClick={handleClick}>
+                          <PlusIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['new-channel-registration']}
                         </Link>
                       </div>
-                      <div className='border-y border-gray-200 py-2 font-semibold'>
-                        <Link href='/board' onClick={handleClick}>
-                          {t['view-all-articles']}
-                        </Link>
-                      </div>
-                      <div className='flex flex-col gap-2 py-2'>
-                        {groups?.map((group: GroupType, index) => (
-                          <div key={index} className='flex flex-col gap-2'>
-                            <div className='font-semibold py-1'>{group.name}</div>
-                            {group.boards.map((board: any, key) => (
-                              <Link key={key} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
-                                {board.title}
-                              </Link>
-                            ))}
-                          </div>
-                        ))}
+                      <div className='bg-white p-4 rounded-xl shadow-sm'>
+                        <div className='border-b border-gray-200 pb-2 font-semibold'>
+                          <Link href='/board' onClick={handleClick} className='flex gap-1 items-center'>
+                            <Bars3Icon className='border border-gray-200 h-4 rounded-md p-[1px]' />
+                            {t['view-all-articles']}
+                          </Link>
+                        </div>
+                        <div className='flex flex-col gap-2 py-2'>
+                          {groups?.map((group: GroupType, index) => (
+                            <div key={index} className='flex flex-col gap-2'>
+                              <div className='font-semibold py-1 flex gap-1 items-center'>
+                                <Bars3Icon className='border border-gray-200 h-4 rounded-md p-[1px]' />
+                                {group.name}
+                              </div>
+                              {group.boards.map((board: any, key) => (
+                                <Link key={key} href={`/board/${board.name}`} className='ml-5' onClick={handleClick}>
+                                  {board.title}
+                                </Link>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                    <div className='font-raleway text-2xl flex gap-3 items-end border-t border-gray-200 mt-2 pt-2'>
+                    <div className='bg-white p-2 rounded-xl shadow-sm mt-3 w-full'>
+                      <Link href='mailto:jopaint@naver.com' className='flex items-center gap-2'>
+                        <EnvelopeIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' /> jopaint@naver.com
+                      </Link>
+                    </div>
+                    <div className='font-raleway text-2xl flex gap-3 items-end mx-auto my-10'>
                       <Link
                         href='/search'
                         className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'
@@ -218,15 +232,6 @@ const Header = () => {
                         <span className=''>Ca</span>
                       </Link>
                       <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
-                    </div>
-                    <div className='flex flex-col gap-2 mt-4 text-base'>
-                      <span className='font-bold'>{t['contact-us']}</span>
-                      <Link href='/' className='ml-3'>
-                        {t['customer-support']}
-                      </Link>
-                      <Link href='mailto:jopaint@naver.com' className='ml-3'>
-                        {t['email']}: jopaint@naver.com
-                      </Link>
                     </div>
                   </div>
                 </div>

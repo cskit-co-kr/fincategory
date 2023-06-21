@@ -159,7 +159,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
-    setLoadMore(true);
+    // setLoadMore(true);
     goToTop();
     setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
@@ -191,7 +191,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const result = resultData.channel;
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-    result.length < 60 && setLoadMore(false);
+    result.length < 60 ? setLoadMore(false) : setLoadMore(true);
   };
 
   const handleLoadMore = async (data: any) => {
@@ -652,9 +652,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 return <GetChannels channels={channel} key={index} />;
               })
             ) : (
-              <div className='text-center p-10 border border-gray-200 md:rounded-md mt-2 md:mt-0 md:ml-4 bg-white col-span-12'>
-                {searchResultText}
-              </div>
+              <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
             )}
             {loadMore && (
               <div className='flex justify-center col-span-12'>

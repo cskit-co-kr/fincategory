@@ -43,7 +43,7 @@ export const koKR = {
     "average-post-reach": "포스트 평균 도달",
     "average-post-reach-24hours": "포스트 평균도달 (24 hours)",
     "citation-index": "인용 색인 (CI)",
-    "empty-search-text": "채널 검색에 필요한 필터 지정",
+    "empty-search-text": "",
     "no-search-results": "에 대한 검색결과가 없습니다.",
     "loading-text": "로드 중...",
     "load-more": "더보기",

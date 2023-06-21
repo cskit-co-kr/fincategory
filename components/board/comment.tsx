@@ -138,31 +138,31 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             )}{' '}
             | <span className='text-xs text-[#7A8486]'>{toDateTimeformat(comment.created_at, '.')}</span>
           </p>
-          <p className='p-0 m-0 mb-[10px] font-medium'>{comment.comment}</p>
+          <p className='p-0 m-0 mb-[10px]'>{comment.comment}</p>
           <p className='flex p-0 m-0 text-xs text-[#7A8486]'>
             <span
               className='mr-[7px] cursor-pointer hover:text-blue-700'
               onClick={() => handleCommentReaction(comment.id, checkCommentReaction('like') ? 'remove' : 'add', 'like')}
             >
-              <HandThumbUpIcon className={`w-[16px] ${checkCommentReaction('like') ? 'text-blue-600' : ''}`} />
+              <HandThumbUpIcon className={`w-4 ${checkCommentReaction('like') ? 'text-blue-600' : ''}`} />
             </span>
             <span className='mr-[12px]'>{countCommentReaction('like')}</span>
             <span
               className='mr-[7px] cursor-pointer hover:text-blue-700'
               onClick={() => handleCommentReaction(comment.id, checkCommentReaction('dislike') ? 'remove' : 'add', 'dislike')}
             >
-              <HandThumbDownIcon className={`w-[16px] ${checkCommentReaction('dislike') ? 'text-blue-600' : ''}`} />
+              <HandThumbDownIcon className={`w-4 ${checkCommentReaction('dislike') ? 'text-blue-600' : ''}`} />
             </span>
             <span>{countCommentReaction('dislike')}</span>
             {reply ? (
               <>
-                <span className='bg-[#e5e5ea] h-[16px] mx-[12px] w-[1px]' />
+                <span className='bg-[#e5e5ea] h-4 mx-3 w-[1px]' />
                 <span
                   onClick={() => {
                     setShowReply(true);
                     fncSelectComment(comment.id);
                   }}
-                  className='cursor-pointer hover:text-[#000]'
+                  className='cursor-pointer hover:text-black'
                 >
                   댓글
                 </span>
@@ -172,7 +172,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
                       setShowReply(false);
                       setContent('');
                     }}
-                    className='cursor-pointer hover:text-[#000] ml-[12px]'
+                    className='cursor-pointer hover:text-black ml-3'
                   >
                     취소
                   </span>
@@ -185,9 +185,9 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             )}
           </p>
         </div>
-        <div className={`comment-reply mt-[20px] ${showReply ? 'block' : 'hidden'}`}>
+        <div className={`comment-reply mt-5 ${showReply ? 'block' : 'hidden'}`}>
           <textarea
-            className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
+            className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-md focus:outline-none'
             onChange={(e) => setContent(e.currentTarget.value)}
             value={content}
           />
