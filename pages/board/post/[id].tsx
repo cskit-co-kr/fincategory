@@ -431,9 +431,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 {commentTopTotal > 0 ? (
                   <div className='paginate flex w-full border-b border-[#E4E4E4] justify-center pb-[20px]'>
                     <Pagination
-                      prev
                       last
-                      next
                       first
                       total={commentTopTotal}
                       limit={commentPerPage}
@@ -498,10 +496,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         </div>
                         <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1 break-all'>
                           {current ? (
-                            <>{post.title}</>
+                            <div className='md:line-clamp-1'>{post.title}</div>
                           ) : (
                             <>
-                              <Link href={`/board/post/${post.id}`} className='break-all'>
+                              <Link href={`/board/post/${post.id}`} className='break-all md:line-clamp-1'>
                                 {post.title}
                               </Link>
                               {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
@@ -538,8 +536,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             <div className='post-paginate flex justify-center p-5'>
               <Pagination
                 first
-                next
-                prev
                 last
                 ellipsis
                 total={postList?.total}

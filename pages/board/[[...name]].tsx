@@ -358,9 +358,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 activePage={activePage}
                 onChangePage={setActivePage}
                 maxButtons={6}
-                prev
                 last
-                next
                 first
                 ellipsis
               />
