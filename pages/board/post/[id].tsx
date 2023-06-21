@@ -374,7 +374,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         {comment.child?.length === 0 ? (
                           <></>
                         ) : (
-                          <ul className='ml-[50px]'>
+                          <ul className='ml-5'>
                             {comment.child?.map((child: CommentType, idxx: number) => (
                               <li key={idxx} className='mt-4'>
                                 <BoardComment
@@ -392,7 +392,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                 {child.child?.length === 0 ? (
                                   <></>
                                 ) : (
-                                  <ul className='ml-[50px]'>
+                                  <ul className='ml-5'>
                                     {child.child?.map((grandchild: CommentType, idxx: number) => (
                                       <li key={idxx} className='mt-4'>
                                         <BoardComment
