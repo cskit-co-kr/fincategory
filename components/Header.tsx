@@ -197,19 +197,15 @@ const Header = () => {
                       <div className='bg-white p-4 rounded-xl shadow-sm'>
                         <div className='border-b border-gray-200 pb-2 font-semibold'>
                           <Link href='/board' onClick={handleClick} className='flex gap-1 items-center'>
-                            <Bars3Icon className='border border-gray-200 h-4 rounded-md p-[1px]' />
                             {t['view-all-articles']}
                           </Link>
                         </div>
                         <div className='flex flex-col gap-2 py-2'>
                           {groups?.map((group: GroupType, index) => (
                             <div key={index} className='flex flex-col gap-2'>
-                              <div className='font-semibold py-1 flex gap-1 items-center'>
-                                <Bars3Icon className='border border-gray-200 h-4 rounded-md p-[1px]' />
-                                {group.name}
-                              </div>
+                              <div className='font-semibold py-1 flex gap-1 items-center'>{group.name}</div>
                               {group.boards.map((board: any, key) => (
-                                <Link key={key} href={`/board/${board.name}`} className='ml-5' onClick={handleClick}>
+                                <Link key={key} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
                                   {board.title}
                                 </Link>
                               ))}
