@@ -238,6 +238,7 @@ const Header = () => {
               <MagnifyingGlassIcon className='h-5 text-neutral-500 group-hover:bg-white group-hover:rounded-full group-hover:p-1 group-hover:text-black transition-all' />
               <input
                 type='text'
+                name='search'
                 value={searchField ?? ''}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}

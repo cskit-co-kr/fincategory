@@ -410,6 +410,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     <li className='flex gap-2 px-2 pb-2'>
                       <input
                         type='text'
+                        name='start-date'
                         className='border border-gray-200 p-2 w-24'
                         placeholder={getToday()}
                         value={searchStartDate}
@@ -417,6 +418,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       />
                       <input
                         type='text'
+                        name='end-date'
                         className='border border-gray-200 p-2 w-24'
                         placeholder={getToday()}
                         value={searchEndDate}
@@ -474,6 +476,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
               <input
                 type='text'
+                name='searchPost'
                 placeholder={t['enter-search-term']}
                 className='border border-gray-200 p-2'
                 value={searchInput}
