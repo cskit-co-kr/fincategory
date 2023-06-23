@@ -448,6 +448,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
                     onChange={(e) => setComment(e.currentTarget.value)}
                     value={comment}
+                    name='textarea'
                   />
                   <Button
                     appearance='primary'

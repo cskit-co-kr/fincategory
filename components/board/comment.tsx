@@ -190,6 +190,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-md focus:outline-none'
             onChange={(e) => setContent(e.currentTarget.value)}
             value={content}
+            name='textarea'
           />
           <Button
             appearance='primary'

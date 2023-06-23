@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import GetChannels from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
-import { useData } from '../context/context';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 
 type Options = {
@@ -37,7 +36,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
-  const { toggleSideBar, sideBar } = useData();
+
   const optionsChannelTypes = [
     {
       value: 'channel',
@@ -272,6 +271,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                           placeholder={t['type-here']}
                           type='text'
                           className='py-3 px-3 text-xs outline-none rounded-lg border border-gray-200'
+                          name='input'
                         />
                       </label>
                       <label className='text-sm flex gap-2 cursor-pointer'>
@@ -636,6 +636,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                     }}
                     value={selectedSorting}
                     className='border rounded-md pl-2 pr-4 py-1'
+                    name='select'
                   >
                     <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
                     <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>

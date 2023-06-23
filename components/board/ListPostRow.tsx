@@ -20,6 +20,7 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
       {session?.user && userType === 2 && (
         <input
           type='checkbox'
+          name='checkbox'
           value={post.id.toString()}
           checked={checkedItems.includes(post.id.toString())}
           onChange={handleCheckboxChange}
