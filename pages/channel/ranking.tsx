@@ -9,6 +9,8 @@ import { MultiValueOptions } from '../../typings';
 import { Row, Table } from 'rsuite';
 import { formatKoreanNumber } from '../../lib/utils';
 import { SortType } from 'rsuite/esm/Table';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -20,6 +22,8 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
+
+  const [error, setError] = useState<boolean>(false);
 
   const [data, setData] = useState([]);
 
@@ -131,6 +135,8 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       try {
         const data = await getSubsHistory(obj.channel_id);
         obj.increase24h = data.inc24h;
+        obj.increase7d = data.inc7d;
+        obj.increase30d = data.inc30d;
       } catch (error) {
         console.error(error);
       }
@@ -139,15 +145,22 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   const getSubsHistory = async (getId: any) => {
-    const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: getId });
+    // const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: getId });
+    const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs`, { username: getId });
     const sub = await responseSub.data;
-    const growthData = await sub.slice(1).map((val: any, idx: any) => ({
-      date: val.created_at.substring(0, 10),
-      count: val.count,
-      diff: val.count - sub[idx].count,
+    const growthData = sub.slice(1).map((val: any, idx: any) => ({
+      date: val.name.substring(0, 10),
+      count: val.sub,
+      diff: val.sub - sub[idx].sub,
     }));
-    const oneDay = await growthData.slice(growthData.length - 1);
-    return { inc24h: oneDay[0].diff };
+    const oneDay = growthData.slice(growthData.length - 1);
+    const sevenDay = growthData.slice(growthData.length - 7).reduce((a: any, b: any) => {
+      return a + b.diff;
+    }, 0);
+    const thirtyDay = growthData.slice(growthData.length - 30).reduce((a: any, b: any) => {
+      return a + b.diff;
+    }, 0);
+    return { inc24h: oneDay[0].diff, inc7d: sevenDay, inc30d: thirtyDay };
   };
 
   const getCategoryName = (catId: string): string => {
@@ -204,8 +217,9 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   return (
     <div className='md:pt-7 bg-gray-50'>
       <div className='border border-gray-200 bg-white rounded-md p-[30px]'>
-        <div className='flex gap-5'>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap'>
+        <div className='mb-7 font-semibold text-lg leading-none'>{t['telegram-channels-rating']}</div>
+        <div className='md:flex gap-5 z-10'>
+          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
             {t['channel-topic']}
             <Select
               instanceId='category'
@@ -219,7 +233,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               className='w-full'
             />
           </label>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap'>
+          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
             {t['channel-country']}
             <Select
               value={{ value: 113, label: 'Korea, Republic of' }}
@@ -234,7 +248,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               className='w-full'
             />
           </label>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap'>
+          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
             {t['channel-language']}
             <Select
               value={{ value: 'ko', label: 'Korean' }}
@@ -258,34 +272,57 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             sortType={sortType}
             onSortColumn={handleSortColumn}
             loading={loading}
-            rowHeight={66}
+            rowHeight={68}
             bordered
+            className='z-0'
+            renderEmpty={() => <div className='text-center py-10'>{t['loading-text']}</div>}
+            renderLoading={() => <div className='text-center py-10'>{t['loading-text']}</div>}
           >
             <Column width={70} align='center' sortable>
-              <HeaderCell>Rank</HeaderCell>
+              <HeaderCell>{t['rank']}</HeaderCell>
               <Cell dataKey='rank' />
             </Column>
 
-            <Column flexGrow={2} sortable>
-              <HeaderCell>Channel</HeaderCell>
+            <Column flexGrow={2}>
+              <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className='flex flex-col'>
-                    <span>{rowData.title}</span>
-                    <span className='text-xs text-gray-400'>@{rowData.username}</span>
+                  <div className='flex gap-4 items-center'>
+                    <div className='relative w-10 min-w-10 max-w-10'>
+                      <Image
+                        src={
+                          error
+                            ? '/telegram-icon-96.png'
+                            : `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`
+                        }
+                        alt={'avatar of ' + rowData.title}
+                        width={40}
+                        height={40}
+                        className='object-contain rounded-full z-0'
+                        onError={() => setError(true)}
+                      />
+                    </div>
+                    <div className='flex flex-col'>
+                      <span>{rowData.title}</span>
+                      <span className='text-xs text-gray-400'>
+                        <Link href={`https://t.me/${rowData.username}`} target='_blank'>
+                          @{rowData.username}
+                        </Link>
+                      </span>
+                    </div>
                   </div>
                 )}
               </Cell>
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>Subscribers</HeaderCell>
+              <HeaderCell>{t['subscribers']}</HeaderCell>
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>Increase (24h)</HeaderCell>
-              <Cell>
+              <HeaderCell>{t['increase-24h']}</HeaderCell>
+              <Cell dataKey='increase24h'>
                 {(rowData) =>
                   rowData.increase24h > 0 ? (
                     <span className='text-green-500'>+{rowData.increase24h}</span>
@@ -297,17 +334,33 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>Increase (7d)</HeaderCell>
-              <Cell dataKey='increase7d' />
+              <HeaderCell>{t['increase-7d']}</HeaderCell>
+              <Cell dataKey='increase7d'>
+                {(rowData) =>
+                  rowData.increase7d > 0 ? (
+                    <span className='text-green-500'>+{rowData.increase7d}</span>
+                  ) : (
+                    <span className='text-red-500'>{rowData.increase7d}</span>
+                  )
+                }
+              </Cell>
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>Increase (30d)</HeaderCell>
-              <Cell dataKey='increase30d' />
+              <HeaderCell>{t['increase-30d']}</HeaderCell>
+              <Cell dataKey='increase30d'>
+                {(rowData) =>
+                  rowData.increase30d > 0 ? (
+                    <span className='text-green-500'>+{rowData.increase30d}</span>
+                  ) : (
+                    <span className='text-red-500'>{rowData.increase30d}</span>
+                  )
+                }
+              </Cell>
             </Column>
 
-            <Column align='center' sortable>
-              <HeaderCell>Category</HeaderCell>
+            <Column align='center'>
+              <HeaderCell>{t['category']}</HeaderCell>
               <Cell dataKey='category' />
             </Column>
           </Table>

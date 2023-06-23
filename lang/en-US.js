@@ -141,5 +141,11 @@ export const enUS = {
     "comment-saved": "Your comment has been successfully saved.",
     "post-url-copied": "Board Post URL copied to clipboard.",
     "search-filter": "Search filter",
-    "login-to-comment": "You must be logged in to post a comment."
+    "login-to-comment": "You must be logged in to post a comment.",
+    /* rating */
+    "rank": "Rank",
+    "telegram-channels-rating": "Telegram channels rating",
+    "increase-24h": "Increase (24h)",
+    "increase-7d": "Increase (7d)",
+    "increase-30d": "Increase (30d)",
 }
