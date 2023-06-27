@@ -105,7 +105,7 @@ const Header = () => {
   useEffect(() => {
     const s = router.query.q === undefined ? null : (router.query.q as string);
     setSearchField(s);
-    const ss = router.asPath === '/board' ? 2 : 1;
+    const ss = router.asPath.includes('/board') ? 2 : 1;
     setSearchSection(ss);
   }, [router]);
 

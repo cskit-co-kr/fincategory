@@ -114,6 +114,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
     const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+    const q = router.query.member ? router.query.member : router.query.q ? router.query.q : null;
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postsPerPage}&offset=${activePage}`,
       {
@@ -124,7 +125,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             start: searchStartDate === '' ? null : searchStartDate,
             end: searchEndDate === '' ? null : searchEndDate,
             field: searchTerm,
-            value: router.query.q === undefined ? null : router.query.q,
+            value: q,
           },
           hasImage: viewPort,
         }),
@@ -148,17 +149,16 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   }, [postsPerPage, activePage, viewPort]);
 
   useEffect(() => {
-    if (router.query.member && router.query.show === 'posts') {
+    if (router.query.show === 'posts') {
       setSearchTermHandler(t['st-author'], 'author');
-      setSearchInput(router.query.member as string);
-    } else if (router.query.member && router.query.show === 'comments') {
+    } else if (router.query.show === 'comments') {
       setSearchTermHandler(t['st-commenter'], 'commenter');
-      setSearchInput(router.query.member as string);
-    } else if (router.query.search === undefined) {
-      resetSearch();
-    }
-    if (router.query.q) {
+    } else {
       setSearchTermHandler(t['st-title'], 'title');
+    }
+    if (router.query.member) {
+      setSearchInput(router.query.member as string);
+    } else {
       setSearchInput(router.query.q as string);
     }
     setClickCheck((prev) => !prev);
