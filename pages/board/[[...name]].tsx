@@ -53,14 +53,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchTerm, setSearchTerm] = useState('title');
   const [searchTermText, setSearchTermText] = useState(t['st-title']);
 
-  useEffect(() => {
-    // if (hasCookie('page')) {
-    //   const page: any = getCookie('page');
-    //   setActivePage(parseInt(page));
-    // }
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
-  }, []);
+  // useEffect(() => {
+  //   // if (hasCookie('page')) {
+  //   //   const page: any = getCookie('page');
+  //   //   setActivePage(parseInt(page));
+  //   // }
+  //   setCookie('perPage', postsPerPage);
+  //   setCookie('page', activePage);
+  // }, []);
 
   const setSearchDateHandler = (label: string, value: string) => {
     switch (value) {
@@ -124,7 +124,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             start: searchStartDate === '' ? null : searchStartDate,
             end: searchEndDate === '' ? null : searchEndDate,
             field: searchTerm,
-            value: searchInput === '' ? null : searchInput,
+            value: router.query.q === undefined ? null : router.query.q,
           },
           hasImage: viewPort,
         }),
@@ -134,6 +134,18 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setPostsList(postList);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    getPostsList();
+    window.scrollTo(0, 0);
+  }, [clickCheck]);
+
+  useEffect(() => {
+    setClickCheck((prev) => !prev);
+    setPerpagePopup(false);
+    setCookie('perPage', postsPerPage);
+    setCookie('page', activePage);
+  }, [postsPerPage, activePage, viewPort]);
 
   useEffect(() => {
     if (router.query.member && router.query.show === 'posts') {
@@ -146,18 +158,11 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       resetSearch();
     }
     if (router.query.q) {
+      setSearchTermHandler(t['st-title'], 'title');
       setSearchInput(router.query.q as string);
-      setClickCheck((prev) => !prev);
     }
     setClickCheck((prev) => !prev);
-  }, [router.query]);
-
-  useEffect(() => {
-    setClickCheck((prev) => !prev);
-    setPerpagePopup(false);
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
-  }, [postsPerPage, activePage, viewPort]);
+  }, [router]);
 
   // Checkbox functions
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -212,11 +217,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       e.target.blur();
     }
   };
-
-  useEffect(() => {
-    getPostsList();
-    window.scrollTo(0, 0);
-  }, [clickCheck]);
 
   return (
     <>
@@ -493,8 +493,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
-                  router.replace(`/board?q=${searchInput}`);
-                  getPostsList();
+                  router.push(`/board?q=${searchInput}`);
+                  //getPostsList();
                 }}
               >
                 {t['search0']}
@@ -562,6 +562,7 @@ export const getServerSideProps = async (context: any) => {
     headers: { 'content-type': 'application/json' },
   });
   const allBoards = await response.json();
+
   // Get Posts List
   const boardQuery = context.query.name;
   const board = boardQuery === undefined ? 'null' : boardQuery[0];
