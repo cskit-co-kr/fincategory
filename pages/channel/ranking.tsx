@@ -6,11 +6,12 @@ import { InferGetServerSidePropsType } from 'next';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import { MultiValueOptions } from '../../typings';
-import { Row, Table } from 'rsuite';
+import { Table } from 'rsuite';
 import { formatKoreanNumber } from '../../lib/utils';
 import { SortType } from 'rsuite/esm/Table';
 import Image from 'next/image';
 import Link from 'next/link';
+import { colorStyles } from '../../constants';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -66,41 +67,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     };
   });
 
-  const colorStyles = {
-    multiValue: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        backgroundColor: '#D6e8FC',
-        color: '#3886E2',
-        borderRadius: 5,
-        border: '1px solid #3886E2',
-      };
-    },
-    multiValueLabel: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-      };
-    },
-    multiValueRemove: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-        cursor: 'pointer',
-        ':hover': {
-          color: '#fff',
-          backgroundColor: '#3886E2',
-          borderRadius: 3,
-        },
-        borderRadius: 5,
-      };
-    },
-    placeholder: (base: any) => ({
-      ...base,
-      fontSize: '0.75rem',
-    }),
-  };
-
   // Data
   const doSearch = async () => {
     const sorting = {
@@ -145,7 +111,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   const getSubsHistory = async (getId: any) => {
-    // const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: getId });
     const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs`, { username: getId });
     const sub = await responseSub.data;
     const growthData = sub.slice(1).map((val: any, idx: any) => ({
@@ -283,7 +248,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='rank' />
             </Column>
 
-            <Column flexGrow={2}>
+            <Column flexGrow={2} minWidth={400}>
               <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
                 {(rowData) => (

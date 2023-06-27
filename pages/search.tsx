@@ -11,6 +11,7 @@ import Slider from '@mui/material/Slider';
 import GetChannels from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
+import { colorStyles } from '../constants';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -70,41 +71,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     };
   });
 
-  const colorStyles = {
-    multiValue: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        backgroundColor: '#D6e8FC',
-        color: '#3886E2',
-        borderRadius: 5,
-        border: '1px solid #3886E2',
-      };
-    },
-    multiValueLabel: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-      };
-    },
-    multiValueRemove: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-        cursor: 'pointer',
-        ':hover': {
-          color: '#fff',
-          backgroundColor: '#3886E2',
-          borderRadius: 3,
-        },
-        borderRadius: 5,
-      };
-    },
-    placeholder: (base: any) => ({
-      ...base,
-      fontSize: '0.75rem',
-    }),
-  };
-
   const [searchText, setSearchText] = useState<any>('');
   const [selectDesc, setSelectDesc] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
@@ -131,18 +97,20 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
-  useEffect(() => {
-    doSearch('');
-  }, []);
-  useEffect(() => {
-    doSearch('');
-  }, [sorting]);
+  // useEffect(() => {
+  //   doSearch('');
+  // }, []);
+  // useEffect(() => {
+  //   doSearch('');
+  // }, [sorting]);
 
   useEffect(() => {
     if (router.query.q !== undefined) {
       doSearch(router.query.q as string);
+    } else {
+      doSearch('');
     }
-  }, [router]);
+  }, [router, sorting]);
 
   useEffect(() => {
     setOptions(cats);
@@ -164,7 +132,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     const data = {
-      query: q.length > 0 ? q : searchText === '' ? null : searchText,
+      query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
       withDesc: selectDesc,
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
@@ -211,7 +179,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   };
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      doSearch('');
+      //doSearch('');
+      router.push(`/search?q=${searchText}`);
       e.target.blur();
     }
   };
@@ -401,7 +370,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       </label>
                       <button
                         onClick={() => {
-                          doSearch('');
+                          //doSearch('');
+                          router.push(`/search?q=${searchText}`);
                           handleClick();
                         }}
                         className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'

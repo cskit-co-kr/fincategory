@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Bars3Icon, Cog6ToothIcon, ListBulletIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState, useRef } from 'react';
+import { Bars3Icon, Cog6ToothIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { EnvelopeIcon } from '@heroicons/react/24/solid';
-import { FaTelegramPlane } from 'react-icons/fa';
+import { FaCaretDown, FaTelegramPlane } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
 import LanguageSelector from './LanguageSelector';
-import { useData } from '../context/context';
-import { BoardType, GroupType, MemberType } from '../typings';
+import { GroupType, MemberType } from '../typings';
 import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
@@ -20,19 +19,22 @@ const Header = () => {
 
   const { data: session } = useSession();
 
-  const { toggleSideBar, sideBar } = useData();
-
   const normalPath = 'px-5 py-3 font-bold text-[14px] hover:text-primary flex items-center gap-1';
   // const activePath = normalPath + ' border-b-2 border-primary';
   const activePath = normalPath + ' text-primary';
 
   const [searchField, setSearchField] = useState<string | null>(null);
   const [userMenu, setUserMenu] = useState(false);
+  const [searchSection, setSearchSection] = useState(1);
+  const [searchSectionMenu, setSearchSectionMenu] = useState(false);
 
   const handleSubmit = () => {
     if (searchField !== null) {
-      router.replace(`/search?q=${searchField}`);
-      //setSearchField(null)
+      if (searchSection === 1) {
+        router.push(`/search?q=${searchField}`);
+      } else if (searchSection === 2) {
+        router.push(`/board?q=${searchField}`);
+      }
     }
   };
 
@@ -45,6 +47,7 @@ const Header = () => {
 
   const browseRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!userMenu) return;
@@ -56,6 +59,17 @@ const Header = () => {
     window.addEventListener('click', handleClick, true);
     return () => window.removeEventListener('click', handleClick, true);
   }, [userMenu]);
+
+  useEffect(() => {
+    if (!searchSectionMenu) return;
+    function handleClick(event: any) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchSectionMenu(false);
+      }
+    }
+    window.addEventListener('click', handleClick, true);
+    return () => window.removeEventListener('click', handleClick, true);
+  }, [searchSectionMenu]);
 
   const [groups, setGroups] = useState([]);
   const [memberInfo, setMemberInfo] = useState<MemberType>();
@@ -234,16 +248,50 @@ const Header = () => {
               </div>
             </div>
 
-            <div className='relative bg-neutral-100 items-center py-2 px-3 rounded-full hidden md:inline-flex group'>
-              <MagnifyingGlassIcon className='h-5 text-neutral-500 group-hover:bg-white group-hover:rounded-full group-hover:p-1 group-hover:text-black transition-all' />
+            <div className='relative border border-primary items-center py-2 px-3 rounded-full hidden md:inline-flex hover:shadow-md'>
               <input
                 type='text'
                 name='search'
                 value={searchField ?? ''}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className='outline-none bg-neutral-100 pl-3 w-24 md:w-80 xl:w-96 text-sm'
+                className='outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm'
               />
+              <button
+                className='text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center'
+                onClick={() => setSearchSectionMenu((prev) => !prev)}
+              >
+                {searchSection === 1 ? t['channel'] : t['board']}
+                <FaCaretDown size={14} />
+              </button>
+              {searchSectionMenu && (
+                <div
+                  className='absolute top-9 right-10 border shadow-md bg-white flex flex-col rounded-xl min-w-[50px] text-xs'
+                  ref={searchRef}
+                >
+                  <button
+                    onClick={() => {
+                      setSearchSection(1);
+                      setSearchSectionMenu((prev) => !prev);
+                    }}
+                    className='px-3 py-2 hover:bg-gray-50 rounded-xl'
+                  >
+                    {t['channel']}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSearchSection(2);
+                      setSearchSectionMenu((prev) => !prev);
+                    }}
+                    className='px-3 py-2 hover:bg-gray-50 rounded-xl'
+                  >
+                    {t['board']}
+                  </button>
+                </div>
+              )}
+              <button onClick={handleSubmit}>
+                <MagnifyingGlassIcon className='h-5 text-primary mr-1' />
+              </button>
             </div>
             <div className='hidden md:flex gap-4 items-center'>
               <div>
@@ -294,14 +342,6 @@ const Header = () => {
               </li>
               <li className='hidden lg:block'>
                 <button className={getPath === '/search' ? activePath : normalPath} onClick={() => router.push('/search')}>
-                  {t['search']}
-                </button>
-              </li>
-              <li className='lg:hidden'>
-                <button
-                  className={getPath === '/search' ? activePath : normalPath}
-                  onClick={() => (getPath === '/add' ? router.push('/search') : toggleSideBar(true))}
-                >
                   {t['search']}
                 </button>
               </li>

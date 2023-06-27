@@ -145,6 +145,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     } else if (router.query.search === undefined) {
       resetSearch();
     }
+    if (router.query.q) {
+      setSearchInput(router.query.q as string);
+      setClickCheck((prev) => !prev);
+    }
     setClickCheck((prev) => !prev);
   }, [router.query]);
 
@@ -489,7 +493,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
-                  router.replace(`/board?search`);
+                  router.replace(`/board?q=${searchInput}`);
                   getPostsList();
                 }}
               >
