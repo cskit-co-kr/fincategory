@@ -102,6 +102,13 @@ const Header = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    const s = router.query.q === undefined ? null : (router.query.q as string);
+    setSearchField(s);
+    const ss = router.asPath === '/board' ? 2 : 1;
+    setSearchSection(ss);
+  }, [router]);
+
   function handleClick() {
     const element = document.getElementById('my-drawer-4');
     if (element) {

@@ -303,6 +303,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     />
                   ))}
                   {isEndOfList && <div>- -</div>}
+                  {postsList.posts.length === 0 && <div className='text-center my-2'>{postsList.total} 개의 글</div>}
                 </div>
               </div>
             )}
