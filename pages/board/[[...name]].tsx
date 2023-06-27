@@ -158,7 +158,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     }
     if (router.query.member) {
       setSearchInput(router.query.member as string);
-    } else {
+    } else if (router.query.q) {
       setSearchInput(router.query.q as string);
     }
     setClickCheck((prev) => !prev);

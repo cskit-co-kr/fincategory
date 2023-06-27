@@ -593,7 +593,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             {searchResult ? (
               <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 col-span-12 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
-                  {t['total-search-results1']}
+                  {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
                   <b>{totalChannels}</b>
                   {t['total-search-results2']}
                 </span>

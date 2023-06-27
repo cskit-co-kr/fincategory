@@ -23,13 +23,13 @@ const Header = () => {
   // const activePath = normalPath + ' border-b-2 border-primary';
   const activePath = normalPath + ' text-primary';
 
-  const [searchField, setSearchField] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState('');
   const [userMenu, setUserMenu] = useState(false);
   const [searchSection, setSearchSection] = useState(1);
   const [searchSectionMenu, setSearchSectionMenu] = useState(false);
 
   const handleSubmit = () => {
-    if (searchField !== null) {
+    if (searchField !== '') {
       if (searchSection === 1) {
         router.push(`/search?q=${searchField}`);
       } else if (searchSection === 2) {
@@ -103,7 +103,7 @@ const Header = () => {
   }, [session]);
 
   useEffect(() => {
-    const s = router.query.q === undefined ? null : (router.query.q as string);
+    const s = router.query.q === undefined ? '' : (router.query.q as string);
     setSearchField(s);
     const ss = router.asPath.includes('/board') ? 2 : 1;
     setSearchSection(ss);
@@ -259,7 +259,7 @@ const Header = () => {
               <input
                 type='text'
                 name='search'
-                value={searchField ?? ''}
+                value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className='outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm'
