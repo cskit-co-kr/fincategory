@@ -18,7 +18,7 @@ const RenderPost = ({ message, entities }: any) => {
         break;
 
       case 'messageEntityUrl':
-        const url2 = entity.url === undefined ? '#' : entity.url;
+        const url2 = styledMessage.slice(start, end); //entity.url === undefined ? '#' : entity.url;
         styledMessage =
           styledMessage.slice(0, start) +
           `<a href="${url2}" class="text-primary underline" target="_blank">${styledMessage.slice(start, end)}</a>` +
@@ -29,7 +29,10 @@ const RenderPost = ({ message, entities }: any) => {
       case 'messageEntityMention':
         styledMessage =
           styledMessage.slice(0, start) +
-          `<a href="/channel/${styledMessage.slice(start + 1, end)}" class="text-primary underline" target="_blank">${styledMessage.slice(start, end)}</a>` +
+          `<a href="/channel/${styledMessage.slice(start + 1, end)}" class="text-primary underline" target="_blank">${styledMessage.slice(
+            start,
+            end
+          )}</a>` +
           styledMessage.slice(end);
         addedPosition = addedPosition + 70 + styledMessage.slice(start, end).length;
         break;

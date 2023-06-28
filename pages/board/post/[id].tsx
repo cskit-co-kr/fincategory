@@ -252,7 +252,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       </Modal>
       <div className='flex gap-[14px] md:pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={props.memberInfo} />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
           <div className='hidden md:flex items-center justify-between mb-4'>
@@ -558,6 +558,17 @@ export const getServerSideProps = async (context: any) => {
   const page = getCookie('page', { req }) as string;
   const perPage = getCookie('perPage', { req }) as string;
 
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
   // Get Post
   const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
     method: 'POST',
@@ -617,7 +628,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { post, comments, postList, reactionTotal, page, perPage, prevNext },
+    props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
   };
 };
 

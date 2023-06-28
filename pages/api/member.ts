@@ -1,9 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './auth/[...nextauth]';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.query.f) {
     case 'getmember':
       return getMember();
+    case 'getuser':
+      return getUser();
     case 'checkusername':
       return checkUsername();
     case 'checkemail':
@@ -18,6 +22,24 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       return resetPassword();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  async function getUser() {
+    try {
+      const session = await getServerSession(req, res, authOptions);
+      if (session?.user) {
+        const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+        });
+        const result = await responseMember.json();
+        return res.status(200).json(result);
+      } else {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    } catch (error) {
+      return res.status(500).json({ error: (error as Error).message });
+    }
   }
 
   async function getMember() {

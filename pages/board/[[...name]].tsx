@@ -222,7 +222,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     <>
       <div className='flex gap-4 md:pt-7 md:bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
           <div className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>

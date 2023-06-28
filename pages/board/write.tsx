@@ -51,7 +51,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, groupsList, post }: any) => {
+const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -222,7 +222,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
@@ -343,6 +343,15 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
+  // Get Member Information
+  let memberInfo = '';
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
   // Get Post
   let post = [];
   if (session?.user && context.query.mode === 'edit' && context.query.id) {
@@ -391,7 +400,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, groupsList, post },
+    props: { allBoards, groupsList, post, memberInfo },
   };
 };
 

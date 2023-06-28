@@ -8,7 +8,7 @@ import { koKR } from '../../lang/ko-KR';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 
-const BoardSidebar = () => {
+const BoardSidebar = ({ memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -17,17 +17,17 @@ const BoardSidebar = () => {
   const postBoardName = getCookie('postboardname');
   const { data: session } = useSession();
   const [groups, setGroups] = useState([]);
-  const [memberInfo, setMemberInfo] = useState<MemberType>();
+  // const [memberInfo, setMemberInfo] = useState<MemberType>();
 
   // Get Member Information
-  const getMember = async () => {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    const memberInfo = await responseMember.json();
-    setMemberInfo(memberInfo);
-  };
+  // const getMember = async () => {
+  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   });
+  //   const memberInfo = await responseMember.json();
+  //   setMemberInfo(memberInfo);
+  // };
 
   useEffect(() => {
     const getGroups = async () => {
@@ -41,11 +41,11 @@ const BoardSidebar = () => {
     getGroups();
   }, []);
 
-  useEffect(() => {
-    if (session?.user) {
-      getMember();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     getMember();
+  //   }
+  // }, [session]);
 
   return (
     <>
