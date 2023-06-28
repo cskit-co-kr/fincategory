@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
 
-const Header = () => {
+const Header = ({ memberInfo }: any) => {
   const router = useRouter();
   const getPath = useRouter().pathname;
   const { locale } = router;
@@ -72,17 +72,17 @@ const Header = () => {
   }, [searchSectionMenu]);
 
   const [groups, setGroups] = useState([]);
-  const [memberInfo, setMemberInfo] = useState<MemberType>();
+  // const [memberInfo, setMemberInfo] = useState<MemberType>();
 
   // Get Member Information
-  const getMember = async () => {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    const memberInfo = await responseMember.json();
-    setMemberInfo(memberInfo);
-  };
+  // const getMember = async () => {
+  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   });
+  //   const memberInfo = await responseMember.json();
+  //   setMemberInfo(memberInfo);
+  // };
 
   useEffect(() => {
     const getGroups = async () => {
@@ -96,11 +96,11 @@ const Header = () => {
     getGroups();
   }, []);
 
-  useEffect(() => {
-    if (session?.user) {
-      getMember();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     getMember();
+  //   }
+  // }, [session]);
 
   useEffect(() => {
     const s = router.query.q === undefined ? '' : (router.query.q as string);
