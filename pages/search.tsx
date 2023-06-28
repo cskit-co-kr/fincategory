@@ -11,6 +11,7 @@ import Slider from '@mui/material/Slider';
 import GetChannels from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
+import { FaXmark } from 'react-icons/fa6';
 import { colorStyles } from '../constants';
 
 type Options = {
@@ -231,7 +232,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 <div className='flex flex-col md:min-w-[314px]'>
                   <div className='lg:sticky lg:top-4'>
                     <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
-                      <label className='flex flex-col gap-2'>
+                      <label className='flex flex-col gap-2 relative'>
                         {t['by-keyword']}
                         <input
                           value={searchText}
@@ -242,6 +243,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                           className='py-3 px-3 text-xs outline-none rounded-lg border border-gray-200'
                           name='input'
                         />
+                        {searchText !== '' && (
+                          <button
+                            className='absolute right-3 top-10 text-gray-300 hover:text-gray-400 transition-all duration-300'
+                            onClick={() => setSearchText('')}
+                          >
+                            <FaXmark size={16} />
+                          </button>
+                        )}
                       </label>
                       <label className='text-sm flex gap-2 cursor-pointer'>
                         <input name='description' checked={selectDesc} onChange={() => setSelectDesc(!selectDesc)} type='checkbox' />
