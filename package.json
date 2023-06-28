@@ -35,7 +35,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-i18next": "^12.1.4",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.10.1",
     "react-quill": "^2.0.0",
     "react-select": "^5.7.0",
     "recharts": "^2.5.0",
