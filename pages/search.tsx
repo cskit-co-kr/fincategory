@@ -58,7 +58,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const disable = item.nicename === 'Korea, Republic of' ? false : true;
     return {
       value: item.id,
-      label: item.nicename,
+      label: t[item.iso as keyof typeof t],
       isDisabled: disable,
     };
   });
@@ -67,7 +67,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const disable = item.value === 'Korean' ? false : true;
     return {
       value: item.id,
-      label: item.value,
+      label: t[item.value as keyof typeof t],
       isDisabled: disable,
     };
   });
@@ -272,7 +272,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       <label className='flex flex-col gap-2'>
                         {t['channel-country']}
                         <Select
-                          value={{ value: 113, label: 'Korea, Republic of' }}
+                          value={{ value: 113, label: t['KR'] }}
                           instanceId='country'
                           onChange={setSelectedCountry}
                           name='country'
@@ -286,7 +286,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       <label className='flex flex-col gap-2'>
                         {t['channel-language']}
                         <Select
-                          value={{ value: 'ko', label: 'Korean' }}
+                          value={{ value: 'ko', label: t['Korean'] }}
                           instanceId={'language'}
                           onChange={setSelectedLanguage}
                           name='language'
