@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
 
-const Header = ({ memberInfo }: any) => {
+const Header = () => {
   const router = useRouter();
   const getPath = useRouter().pathname;
   const { locale } = router;
@@ -72,17 +72,17 @@ const Header = ({ memberInfo }: any) => {
   }, [searchSectionMenu]);
 
   const [groups, setGroups] = useState([]);
-  // const [memberInfo, setMemberInfo] = useState<MemberType>();
+  const [memberInfo, setMemberInfo] = useState<MemberType>();
 
   // Get Member Information
-  // const getMember = async () => {
-  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
-  //     method: 'POST',
-  //     headers: { 'content-type': 'application/json' },
-  //   });
-  //   const memberInfo = await responseMember.json();
-  //   setMemberInfo(memberInfo);
-  // };
+  const getMember = async () => {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    const memberInfo = await responseMember.json();
+    setMemberInfo(memberInfo);
+  };
 
   useEffect(() => {
     const getGroups = async () => {
@@ -96,11 +96,11 @@ const Header = ({ memberInfo }: any) => {
     getGroups();
   }, []);
 
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     getMember();
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session?.user) {
+      getMember();
+    }
+  }, [session]);
 
   useEffect(() => {
     const s = router.query.q === undefined ? '' : (router.query.q as string);
@@ -222,11 +222,11 @@ const Header = ({ memberInfo }: any) => {
                           </Link>
                         </div>
                         <div className='flex flex-col gap-2 py-2'>
-                          {groups?.map((group: GroupType, index) => (
-                            <div key={index} className='flex flex-col gap-2'>
+                          {groups?.map((group: GroupType) => (
+                            <div key={group.id} className='flex flex-col gap-2'>
                               <div className='font-semibold py-1 flex gap-1 items-center'>{group.name}</div>
-                              {group.boards.map((board: any, key) => (
-                                <Link key={key} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
+                              {group.boards.map((board: any) => (
+                                <Link key={board.id} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
                                   {board.title}
                                 </Link>
                               ))}
@@ -353,10 +353,10 @@ const Header = ({ memberInfo }: any) => {
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-20' appearance='subtle'>
-                {groups?.map((group: GroupType, i: number) => (
-                  <Nav.Menu key={i} title={group.name}>
-                    {group.boards.map((board: any, key: number) => (
-                      <Nav.Item key={key} as={Link} href={`/board/${board.name}`}>
+                {groups?.map((group: GroupType) => (
+                  <Nav.Menu key={group.id} title={group.name}>
+                    {group.boards.map((board: any) => (
+                      <Nav.Item key={board.id} as={Link} href={`/board/${board.name}`}>
                         {board.title}
                       </Nav.Item>
                     ))}
