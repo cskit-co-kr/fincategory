@@ -38,21 +38,21 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <DefaultSeo
-        title='핀카테고리'
-        titleTemplate='%s | FinCategory'
-        description='가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.'
+        title='핀카'
+        titleTemplate='%s | FinCa'
+        description='가장 큰 한국 텔레그램 채널정보 핀카 | finca'
         additionalMetaTags={[
           {
             name: 'title',
-            content: '핀카테고리 | FinCategory',
+            content: 'FinCa |  텔레그램 채널정보, 핀카',
           },
           {
             name: 'description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
           },
           {
             name: 'author',
-            content: 'FinCategory',
+            content: 'FinCa',
           },
           {
             name: 'keywords',
@@ -73,15 +73,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             property: 'og:site_name',
-            content: 'FinCategory',
+            content: 'FinCa',
           },
           {
             property: 'og:title',
-            content: '핀카테고리 | Fincategory',
+            content: 'FinCa |  텔레그램 채널정보, 핀카',
           },
           {
             property: 'og:description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
           },
           {
             property: 'og:keywords',
@@ -106,15 +106,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             name: 'twitter:site',
-            content: 'Fincategory',
+            content: 'FinCa',
           },
           {
             name: 'twitter:title',
-            content: '핀카테고리 | Fincategory',
+            content: 'FinCa |  텔레그램 채널정보, 핀카',
           },
           {
             name: 'twitter:description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카테고리 | fincategory.',
+            content: '장 큰 한국 텔레그램 채널정보는 핀카 | finca',
           },
           {
             name: 'twitter:keywords',
@@ -127,7 +127,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             name: 'twitter:creator',
-            content: 'FinCategory',
+            content: 'FinCa',
           },
         ]}
         twitter={{
@@ -143,7 +143,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           </Layout>
         </DataProvider>
       </SessionProvider>
-      <Script
+      {/* <Script
         id='hi-stat'
         dangerouslySetInnerHTML={{
           __html: `
@@ -160,10 +160,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         }}
       />
       <noscript>
-        <a href='/' target='_blank'>
+        <a href='/' target='_blank' className='hidden'>
           <img src='//sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
         </a>
-      </noscript>
+      </noscript> */}
     </>
   );
 }

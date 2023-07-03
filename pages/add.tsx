@@ -5,8 +5,17 @@ import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
 import { useRouter } from 'next/router';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { Language } from '../typings';
 
-const add = ({ categories, countries, languages }: any) => {
+type Languages = Array<Language>;
+
+type AddComponentProps = {
+  categories: any;
+  countries: any;
+  languages: Languages;
+};
+
+const add = ({ categories, countries, languages }: AddComponentProps) => {
   const router = useRouter();
 
   const { locale }: any = router;
@@ -77,7 +86,7 @@ const add = ({ categories, countries, languages }: any) => {
   return (
     <div className='flex flex-col pt-7 bg-gray-50 min-h-screen'>
       <Head>
-        <title>FinCategory - Add channel</title>
+        <title>FinCa - {t['add-channel']}</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className='md:flex md:flex-col w-full xl:w-[1280px] mx-auto'>
@@ -107,7 +116,7 @@ const add = ({ categories, countries, languages }: any) => {
             {countries.map((country: any, index: number) => {
               return (
                 <option value={country.id} key={index}>
-                  {country.nicename}
+                  {t[country.iso as keyof typeof t]}
                 </option>
               );
             })}
@@ -121,10 +130,10 @@ const add = ({ categories, countries, languages }: any) => {
             name='language'
           >
             <option value=''>{t['choose-language']}</option>
-            {languages.map((language: any, index: number) => {
+            {languages.map((language: Language) => {
               return (
-                <option value={language.id} key={index}>
-                  {language.value}
+                <option value={language.id} key={language.id}>
+                  {t[language.value as keyof typeof t]}
                 </option>
               );
             })}
@@ -151,7 +160,7 @@ const add = ({ categories, countries, languages }: any) => {
             onClick={() => handleSubmit()}
             className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
           >
-            {t['send']}
+            {t['add-channel']}
           </button>
         </div>
       </div>

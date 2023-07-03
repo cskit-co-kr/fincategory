@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
-import { setCookie } from 'cookies-next';
+import { setCookie, getCookie, hasCookie } from 'cookies-next';
 import { getSession, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,10 +53,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchTerm, setSearchTerm] = useState('title');
   const [searchTermText, setSearchTermText] = useState(t['st-title']);
 
-  useEffect(() => {
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
-  }, []);
+  // useEffect(() => {
+  //   // if (hasCookie('page')) {
+  //   //   const page: any = getCookie('page');
+  //   //   setActivePage(parseInt(page));
+  //   // }
+  //   setCookie('perPage', postsPerPage);
+  //   setCookie('page', activePage);
+  // }, []);
 
   const setSearchDateHandler = (label: string, value: string) => {
     switch (value) {
@@ -104,12 +108,13 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setSearchTermHandler(t['st-title'], 'title');
   };
 
+  // Get Posts List
   const getPostsList = async () => {
     setIsLoading(true);
-    // Get Posts List
     const boardQuery = router.query.name;
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
     const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+    const q = router.query.member ? router.query.member : router.query.q ? router.query.q : null;
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postsPerPage}&offset=${activePage}`,
       {
@@ -120,7 +125,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             start: searchStartDate === '' ? null : searchStartDate,
             end: searchEndDate === '' ? null : searchEndDate,
             field: searchTerm,
-            value: searchInput === '' ? null : searchInput,
+            value: q,
           },
           hasImage: viewPort,
         }),
@@ -132,34 +137,35 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   useEffect(() => {
-    return () => {
-      setClickCheck((prev) => !prev);
-      setPerpagePopup(false);
-      setCookie('perPage', postsPerPage);
-      setCookie('page', activePage);
-    };
+    getPostsList();
+    window.scrollTo(0, 0);
+  }, [clickCheck]);
+
+  useEffect(() => {
+    setClickCheck((prev) => !prev);
+    setPerpagePopup(false);
+    setCookie('perPage', postsPerPage);
+    setCookie('page', activePage);
   }, [postsPerPage, activePage, viewPort]);
 
   useEffect(() => {
-    if (router.query.member && router.query.show === 'posts') {
+    if (router.query.show === 'posts') {
       setSearchTermHandler(t['st-author'], 'author');
-      setSearchInput(router.query.member as string);
-    } else if (router.query.member && router.query.show === 'comments') {
+    } else if (router.query.show === 'comments') {
       setSearchTermHandler(t['st-commenter'], 'commenter');
+    } else {
+      setSearchTermHandler(t['st-title'], 'title');
+    }
+    if (router.query.member) {
       setSearchInput(router.query.member as string);
-    } else if (router.query.search === undefined) {
-      resetSearch();
+    } else if (router.query.q) {
+      setSearchInput(router.query.q as string);
     }
     setClickCheck((prev) => !prev);
-  }, [router.query]);
-
-  useEffect(() => {
-    getPostsList();
-  }, [clickCheck]);
+  }, [router]);
 
   // Checkbox functions
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
-
   const handleCheckboxChange = (event: any) => {
     const value = event.target.value;
     const isChecked = event.target.checked;
@@ -169,6 +175,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       setCheckedItems(checkedItems.filter((item) => item !== value));
     }
   };
+
+  // Admin delete post
   const deletePost = async () => {
     if (checkedItems.length === 0) return alert('No items selected');
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
@@ -184,29 +192,37 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isLoading || isEndOfList) return;
-      const isMobile = window.innerWidth <= 768;
-      if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
-        if (postsPerPage < postsList.total) {
-          setPostsPerPage((prev) => prev + 20);
-        } else {
-          setIsEndOfList(true);
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [postsPerPage]);
+  // Mobile scrolling
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (isLoading || isEndOfList) return;
+  //     const isMobile = window.innerWidth <= 768;
+  //     if (isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+  //       if (postsPerPage < postsList.total) {
+  //         setPostsPerPage((prev) => prev + 20);
+  //       } else {
+  //         setIsEndOfList(true);
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, [postsPerPage]);
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      setClickCheck((prev) => !prev);
+      e.target.blur();
+    }
+  };
 
   return (
     <>
       <div className='flex gap-4 md:pt-7 md:bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
           <div className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
@@ -270,7 +286,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-sm md:text-xs'>
+                <div className='text-base md:text-xs'>
                   {loading && (
                     <div className='text-center w-full p-4'>
                       <Loader />
@@ -286,6 +302,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       userType={memberInfo.member?.type}
                     />
                   ))}
+                  {isEndOfList && <div>- -</div>}
+                  {postsList.posts.length === 0 && <div className='text-center my-2'>{postsList.total} 개의 글</div>}
                 </div>
               </div>
             )}
@@ -296,10 +314,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     post.extra_01 === '1' && (
                       <div className='' key={post.id}>
                         <div className=''>
-                          <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
+                          <Link href={`/board/post/${post.id}`}>
+                            <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
+                          </Link>
                         </div>
-                        <div className='font-semibold line-clamp-2'>
-                          <Link href={`/board/post/${post.id}`}>{post.title}</Link>
+                        <div className='font-semibold'>
+                          <Link href={`/board/post/${post.id}`} className='break-words line-clamp-2'>
+                            {post.title}
+                          </Link>
                         </div>
                         <div className='mt-1'>{post?.board?.title}</div>
                         <div className='text-xs text-gray-400'>
@@ -333,11 +355,20 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </Link>
             </div>
           </div>
-          <div className='hidden md:block bg-[#F9F9F9] rounded-lg mt-2.5 '>
+          <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
             <div className='p-5 flex justify-center'>
-              <Pagination total={postsList?.total} limit={postsPerPage} activePage={activePage} onChangePage={setActivePage} />
+              <Pagination
+                total={postsList?.total}
+                limit={postsPerPage}
+                activePage={activePage}
+                onChangePage={setActivePage}
+                maxButtons={6}
+                last
+                first
+                ellipsis
+              />
             </div>
-            <div className='border-t border-gray-300 p-5 flex justify-center gap-2 text-xs'>
+            <div className='border-t border-gray-300 p-5 hidden md:flex justify-center gap-2 text-xs'>
               <div className='relative'>
                 <button
                   className='border border-gray-200 p-2 flex items-center gap-2 hover:underline bg-white w-48 justify-between'
@@ -384,6 +415,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     <li className='flex gap-2 px-2 pb-2'>
                       <input
                         type='text'
+                        name='start-date'
                         className='border border-gray-200 p-2 w-24'
                         placeholder={getToday()}
                         value={searchStartDate}
@@ -391,13 +423,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       />
                       <input
                         type='text'
+                        name='end-date'
                         className='border border-gray-200 p-2 w-24'
                         placeholder={getToday()}
                         value={searchEndDate}
                         onChange={(e) => setSearchEndDate(e.target.value)}
                       />
                       <button
-                        className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline'
+                        className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline whitespace-nowrap'
                         onClick={() => {
                           setSearchDate(searchStartDate + '&' + searchEndDate);
                           setSearchDateText(searchStartDate + ' - ' + searchEndDate);
@@ -405,7 +438,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                           setInputFocus();
                         }}
                       >
-                        Ok
+                        설정
                       </button>
                     </li>
                   </ul>
@@ -448,22 +481,24 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
               <input
                 type='text'
+                name='searchPost'
                 placeholder={t['enter-search-term']}
                 className='border border-gray-200 p-2'
                 value={searchInput}
                 ref={inputRef}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
               <button
                 className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
-                  router.replace(`/board?search`);
-                  getPostsList();
+                  router.push(`/board?q=${searchInput}`);
+                  //getPostsList();
                 }}
               >
-                {t['search']}
+                {t['search0']}
               </button>
             </div>
           </div>
@@ -528,6 +563,7 @@ export const getServerSideProps = async (context: any) => {
     headers: { 'content-type': 'application/json' },
   });
   const allBoards = await response.json();
+
   // Get Posts List
   const boardQuery = context.query.name;
   const board = boardQuery === undefined ? 'null' : boardQuery[0];

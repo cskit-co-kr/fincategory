@@ -1,10 +1,11 @@
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PencilIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { Avatar, Button, Message, Modal, Pagination, useToaster } from 'rsuite';
@@ -17,11 +18,12 @@ import ButtonLink from '../../../components/board/buttonLink';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
-import { formatDate, toDateTimeformat } from '../../../lib/utils';
-import { CommentType, PostType } from '../../../typings';
+import { formatDate, toDateTimeformat, getHrefValue } from '../../../lib/utils';
+import { BoardType, CommentType, PostType } from '../../../typings';
 
 import 'react-quill/dist/quill.snow.css';
 import BoardComment from '../../../components/board/comment';
+import LinkPreview from '../../../components/board/LinkPreview';
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -76,6 +78,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   };
 
   useEffect(() => {
+    setCookie('postboardname', post.board.name);
     if (post.reaction === null) {
       setReaction(false);
     } else {
@@ -92,10 +95,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   useEffect(() => {
     loadComments();
-  }, [commentPage]);
+  }, [commentPage, router]);
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
-    toaster.push(message(type, txt), { placement, duration: 5000 });
+    const options = { placement, duration: 5000 };
+    toaster.push(message(type, txt), options);
   };
 
   // Load Comments
@@ -132,7 +136,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     } else {
       document.execCommand('copy', true, window.location.toString());
     }
-    toastShow('info', 'Board Post URL copied to clipboard');
+    toastShow('info', t['post-url-copied']);
   };
 
   // Save Comment
@@ -157,7 +161,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         loadComments();
       }
     } else {
-      toastShow('error', 'An error occurred while trying to save your comment.');
+      toastShow('error', t['login-to-comment']);
     }
   };
 
@@ -206,6 +210,33 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     }
   };
 
+  // Get Posts List
+  const [isLoading, setIsLoading] = useState(false);
+  const [clickCheck, setClickCheck] = useState(false);
+  const getPostsList = async () => {
+    setIsLoading(true);
+    const board = post.board.name;
+    const category = 'null';
+    const responsePost = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      }
+    );
+    const postList = await responsePost.json();
+    setPostList(postList);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setClickCheck((prev) => !prev);
+  }, [postPage]);
+
+  useEffect(() => {
+    getPostsList();
+  }, [clickCheck]);
+
   return (
     <>
       <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
@@ -219,9 +250,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </button>
         </Modal.Footer>
       </Modal>
-      <div className='flex gap-[14px] pt-7 bg-gray-50'>
+      <div className='flex gap-[14px] md:pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={props.memberInfo} />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
           <div className='hidden md:flex items-center justify-between mb-4'>
@@ -240,13 +271,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               <ButtonLink url={`/board/${post.board.name}`} text='목록' />
             </div>
           </div>
-          <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
+          <div className='md:border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
             <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
               <div className='post-header flex flex-1 flex-col'>
-                <div className='title text-xl font-bold mb-[26px]'>{post.title}</div>
+                <div className='title text-xl font-bold mb-[26px] break-all md:break-normal'>{post.title}</div>
                 <div className='flex'>
-                  <div className='avatar mr-[10px]'>
-                    <Avatar circle className='bg-[#E7EAED]'>
+                  <div className='avatar mr-2.5'>
+                    <Avatar circle className='bg-gray-200 pt-1.5 text-center'>
                       {post.user.nickname.slice(0, 1)}
                     </Avatar>
                   </div>
@@ -289,14 +320,23 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               dangerouslySetInnerHTML={{
                 __html: post.content as string,
               }}
+              className='break-all md:break-words text-base md:text-sm'
             />
+            <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
-              <Avatar circle className='bg-[#E7EAED] mr-[10px] leading-[0]'>
+              <Avatar circle className='bg-gray-200 mr-[10px] leading-none' size='sm'>
                 {post.user.nickname.slice(0, 1)}
               </Avatar>
-              <Link href={`/board?member=${post.user.nickname}&show=posts`} className='flex text-black hover:text-black hover:no-underline'>
+              <button
+                onClick={() =>
+                  router
+                    .push(`/board?member=${post.user.nickname}&show=posts`)
+                    .then(() => router.push(`/board?member=${post.user.nickname}&show=posts`))
+                }
+                className='flex text-black hover:underline items-center'
+              >
                 <span className='mr-[8px]'>{post.user.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
-              </Link>
+              </button>
             </div>
             <div className='comment' ref={commentListRef}>
               <div className='flex border-b border-gray-200 pb-[14px]'>
@@ -312,7 +352,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               {commentTotal === 0 ? (
                 <></>
               ) : (
-                <div className='comment-list mt-[20px]'>
+                <div className='comment-list mt-[20px] text-base md:text-sm'>
                   <p className='font-bold text-[17px] mb-[20px]'>댓글</p>
                   <ul className='relative overflow-hidden'>
                     {commentList.map((comment: CommentType, idx: number) => (
@@ -323,6 +363,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                           userID={Number(session?.user.id)}
                           postID={post.id}
                           boardID={post.board.id}
+                          postUserNickname={post.user.nickname}
                           reply={true}
                           fncToast={toastShow}
                           fncLoadComment={loadComments}
@@ -331,7 +372,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         {comment.child?.length === 0 ? (
                           <></>
                         ) : (
-                          <ul className='ml-[50px]'>
+                          <ul className='ml-5'>
                             {comment.child?.map((child: CommentType, idxx: number) => (
                               <li key={idxx} className='mt-4'>
                                 <BoardComment
@@ -340,6 +381,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                   userID={Number(session?.user.id)}
                                   postID={post.id}
                                   boardID={post.board.id}
+                                  postUserNickname={post.user.nickname}
                                   reply={true}
                                   fncToast={toastShow}
                                   fncLoadComment={loadComments}
@@ -348,7 +390,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                 {child.child?.length === 0 ? (
                                   <></>
                                 ) : (
-                                  <ul className='ml-[50px]'>
+                                  <ul className='ml-5'>
                                     {child.child?.map((grandchild: CommentType, idxx: number) => (
                                       <li key={idxx} className='mt-4'>
                                         <BoardComment
@@ -357,6 +399,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                           userID={Number(session?.user.id)}
                                           postID={post.id}
                                           boardID={post.board.id}
+                                          postUserNickname={post.user.nickname}
                                           reply={false}
                                           fncToast={toastShow}
                                           fncLoadComment={loadComments}
@@ -386,9 +429,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 {commentTopTotal > 0 ? (
                   <div className='paginate flex w-full border-b border-[#E4E4E4] justify-center pb-[20px]'>
                     <Pagination
-                      prev
                       last
-                      next
                       first
                       total={commentTopTotal}
                       limit={commentPerPage}
@@ -405,6 +446,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
                     onChange={(e) => setComment(e.currentTarget.value)}
                     value={comment}
+                    name='textarea'
                   />
                   <Button
                     appearance='primary'
@@ -418,7 +460,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               </div>
             </div>
           </div>
-          <div className='flex justify-end gap-[10px] mt-[16px]'>
+          <div className='flex justify-end gap-[10px] mt-[16px] mr-4 md:mr-0'>
             <ButtonLink url={`/board/${post.board.name}`} text='목록' />
             <span
               onClick={handleScrollTop}
@@ -429,32 +471,58 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             </span>
           </div>
           <div className='post-list-wrapper'>
-            <p className='font-bold text-[17px] mb-[20px]'>전체글</p>
-            <div className='post-list border-t border-gray-400'>
+            <p className='font-bold text-[17px] mb-[20px] ml-4 md:ml-0'>전체글</p>
+            <div className='post-list border-t border-gray-400 text-base md:text-xs'>
               <div className='w-full'>
-                <div className='border-b border-gray-200 flex font-bold'>
+                <div className='border-b border-gray-200 hidden md:flex font-bold'>
                   <div className='text-center p-2 min-w-[80px]'>{postList.board ? '말머리' : ''}</div>
                   <div className='text-center p-2 flex-grow'>제목</div>
                   <div className='text-left p-2 min-w-[128px]'>작성자</div>
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-xs'>
+                <div className=''>
                   {postList?.posts?.map((post: PostType, idx: number) => {
                     const current = post.id === parseInt(router.query.id as string) ? true : false;
                     return (
-                      <div className={`border-b border-gray-200 flex ${current ? 'font-bold text-[#0a5dc2]' : ''}`} key={post.id}>
-                        <div className='text-center p-2 min-w-[80px]'>
-                          <Link href={`/board/${postList.board.name}/${post.category?.id}`}>{post.category?.category}</Link>
+                      <div className={`border-b border-gray-200 md:flex ${current ? 'font-bold text-[#0a5dc2]' : ''}`} key={post.id}>
+                        <div className='hidden md:block text-center p-2 min-w-[80px]'>
+                          {post.category ? (
+                            <Link href={`/board/${postList?.board?.name}/${post.category?.id}`}>{post.category?.category}</Link>
+                          ) : (
+                            post.id
+                          )}
                         </div>
-                        <div className='p-2 flex flex-1 items-center gap-1'>
+                        <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1 break-all'>
+                          {current ? (
+                            <div className='md:line-clamp-1'>{post.title}</div>
+                          ) : (
+                            <>
+                              <Link href={`/board/post/${post.id}`} className='break-all md:line-clamp-1'>
+                                {post.title}
+                              </Link>
+                              {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+                            </>
+                          )}
+                          {post.extra_01 === '1' && (
+                            <span>
+                              <PhotoIcon className='hidden md:block h-[14px] text-gray-400' />
+                            </span>
+                          )}
+                          {post.extra_01 === '1' && (
+                            <Image
+                              src={post.extra_02}
+                              width='56'
+                              height='56'
+                              alt='Image'
+                              className='border border-gray-600 md:hidden aspect-square rounded-md ml-auto w-14'
+                            />
+                          )}
+                        </div>
+                        <div className='p-2 flex flex-1 items-center'>
                           {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
-                          {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
-                          {post.extra_01 === '1' && <PhotoIcon className='h-3 text-gray-400' />}
+                          {post.extra_01 == '1' ? <PhotoIcon className='h-3 ml-1' /> : <></>}
                         </div>
-                        <div className='text-left p-2 min-w-[128px]'>{post.user?.nickname}</div>
-                        <div className='text-center p-2 min-w-[96px]'>{formatDate(post.created_at)}</div>
-                        <div className='text-center p-2 min-w-[48px]'>{post.views}</div>
                       </div>
                     );
                   })}
@@ -464,13 +532,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             <div className='post-paginate flex justify-center p-5'>
               <Pagination
                 first
-                next
-                prev
                 last
+                ellipsis
                 total={postList?.total}
                 limit={postPerPage}
                 activePage={postPage}
                 onChangePage={setPostPage}
+                maxButtons={6}
               />
             </div>
           </div>
@@ -484,6 +552,17 @@ export const getServerSideProps = async (context: any) => {
   const req = context.req;
   const page = getCookie('page', { req }) as string;
   const perPage = getCookie('perPage', { req }) as string;
+
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
 
   // Get Post
   const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
@@ -544,7 +623,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { post, comments, postList, reactionTotal, page, perPage, prevNext },
+    props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
   };
 };
 

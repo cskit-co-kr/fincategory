@@ -51,7 +51,7 @@ const formats = [
   'background',
 ];
 
-const WritePost = ({ allBoards, groupsList, post }: any) => {
+const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -80,6 +80,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const saveDraft = async () => {
+    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
     if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
@@ -123,7 +124,8 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
   };
 
   const savePost = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0' || title === '' || content === '') return alert('Please fill');
+    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
+    if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
     setLoading(true);
     if (router.query.mode === 'edit') {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
@@ -192,7 +194,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
     }
     if (router.query.board) {
       allBoards.boards.find((board: BoardType) => {
-        if (board.name === router.query.board) {
+        if (board.name === router.query.board && board.write_level !== 2) {
           setSelectedBoard(board.id);
           return true;
         }
@@ -220,7 +222,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar />
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
@@ -285,11 +287,14 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
                   <option value='0'>게시판을 선택해 주세요.</option>
                   {groupsList?.groups.map((group: any) => (
                     <optgroup label={group.name} key={group.id}>
-                      {group.boards.map((board: any) => (
-                        <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
-                          {board.title}
-                        </option>
-                      ))}
+                      {group.boards.map(
+                        (board: any) =>
+                          (board.write_level !== 2 || session?.user.type === 2) && (
+                            <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
+                              {board.title}
+                            </option>
+                          )
+                      )}
                     </optgroup>
                   ))}
                 </select>
@@ -319,7 +324,7 @@ const WritePost = ({ allBoards, groupsList, post }: any) => {
             formats={formats}
             theme='snow'
             onChange={handleContentChange}
-            style={{ height: '490px' }}
+            style={{ height: '490px', marginBottom: '40px' }}
             value={content}
           />
         </div>
@@ -337,6 +342,15 @@ export const getServerSideProps = async (context: any) => {
         permanent: false,
       },
     };
+  }
+  // Get Member Information
+  let memberInfo = '';
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
   }
   // Get Post
   let post = [];
@@ -386,7 +400,7 @@ export const getServerSideProps = async (context: any) => {
 
   // Return
   return {
-    props: { allBoards, groupsList, post },
+    props: { allBoards, groupsList, post, memberInfo },
   };
 };
 

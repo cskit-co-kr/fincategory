@@ -13,11 +13,12 @@ function Footer() {
       <div className='container'>
         <div className='sm:grid sm:grid-cols-3 md:grid-cols-5 py-4 xl:p-0'>
           <div className='mb-4'>
-            <div className='mb-8 font-raleway text-lg'>
-              <a href='/' className='hover:no-underline hover:text-current'>
+            <div className='font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end mb-8'>
+              <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
-                Category
-              </a>
+                <span className=''>Ca</span>
+              </Link>
+              <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
             </div>
             <h2 className='font-bold text-base'>{t['contact-us']}</h2>
             <ul className='list-none mt-3 leading-7'>
@@ -43,16 +44,24 @@ function Footer() {
             <h2 className='font-bold text-base'>{t['our-bots']}</h2>
             <ul className='list-none mt-3 leading-7'>
               <li>
-                <Link href='/'>@HHGYSBot</Link>
+                <Link target='_blank' href='https://t.me/HHGYSBot'>
+                  @HHGYSBot
+                </Link>
               </li>
               <li>
-                <Link href='/'>@cskitjopaint_bot</Link>
+                <Link target='_blank' href='https://t.me/cskitjopaint_bot'>
+                  @cskitjopaint_bot
+                </Link>
               </li>
               <li>
-                <Link href='/'>@FinCategoryBot</Link>
+                <Link target='_blank' href='https://t.me/FinCategoryBot'>
+                  @FinCategoryBot
+                </Link>
               </li>
               <li>
-                <Link href='/'>@GGFTSSBot</Link>
+                <Link target='_blank' href='https://t.me/GGFTSSBot'>
+                  @GGFTSSBot
+                </Link>
               </li>
             </ul>
           </div>
@@ -60,7 +69,7 @@ function Footer() {
             <div id='histats_counter'></div>
           </div>
         </div>
-        <div className='mt-0 md:mt-10 text-sm'>© 2023 FinCategory. All Rights Reserved.</div>
+        <div className='mt-0 md:mt-10 text-sm'>© 2023 Finca. All Rights Reserved.</div>
       </div>
     </footer>
   );

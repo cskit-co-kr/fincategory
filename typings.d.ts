@@ -6,6 +6,12 @@ export type Category = {
   deleted_at: null;
 };
 
+export type Language = {
+  id: string;
+  value: string;
+  deleted_at: string | null;
+};
+
 export interface Channel {
   id: string;
   channel_id: string;

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Head from 'next/head';
 import { InferGetServerSidePropsType } from 'next';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
@@ -11,7 +10,9 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import GetChannels from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
-import { useData } from '../context/context';
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
+import { FaXmark } from 'react-icons/fa6';
+import { colorStyles } from '../constants';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -37,7 +38,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
-  const { toggleSideBar, sideBar } = useData();
+
   const optionsChannelTypes = [
     {
       value: 'channel',
@@ -57,7 +58,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const disable = item.nicename === 'Korea, Republic of' ? false : true;
     return {
       value: item.id,
-      label: item.nicename,
+      label: t[item.iso as keyof typeof t],
       isDisabled: disable,
     };
   });
@@ -66,45 +67,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const disable = item.value === 'Korean' ? false : true;
     return {
       value: item.id,
-      label: item.value,
+      label: t[item.value as keyof typeof t],
       isDisabled: disable,
     };
   });
-
-  const colorStyles = {
-    multiValue: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        backgroundColor: '#D6e8FC',
-        color: '#3886E2',
-        borderRadius: 5,
-        border: '1px solid #3886E2',
-      };
-    },
-    multiValueLabel: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-      };
-    },
-    multiValueRemove: (styles: any, { data }: any) => {
-      return {
-        ...styles,
-        color: '#3886E2',
-        cursor: 'pointer',
-        ':hover': {
-          color: '#fff',
-          backgroundColor: '#3886E2',
-          borderRadius: 3,
-        },
-        borderRadius: 5,
-      };
-    },
-    placeholder: (base: any) => ({
-      ...base,
-      fontSize: '0.75rem',
-    }),
-  };
 
   const [searchText, setSearchText] = useState<any>('');
   const [selectDesc, setSelectDesc] = useState(false);
@@ -132,18 +98,20 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
-  useEffect(() => {
-    doSearch('');
-  }, []);
-  useEffect(() => {
-    doSearch('');
-  }, [sorting]);
+  // useEffect(() => {
+  //   doSearch('');
+  // }, []);
+  // useEffect(() => {
+  //   doSearch('');
+  // }, [sorting]);
 
   useEffect(() => {
     if (router.query.q !== undefined) {
       doSearch(router.query.q as string);
+    } else {
+      doSearch('');
     }
-  }, [router]);
+  }, [router, sorting]);
 
   useEffect(() => {
     setOptions(cats);
@@ -158,14 +126,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   }, [locale, props]);
 
   const doSearch = async (q: string) => {
-    toggleSideBar(false);
-    setLoadMore(true);
+    q.length > 0 && setSearchText(q);
+    // setLoadMore(true);
     goToTop();
     setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     const data = {
-      query: q.length > 0 ? q : searchText === '' ? null : searchText,
+      query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
       withDesc: selectDesc,
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
@@ -191,7 +159,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     const result = resultData.channel;
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-    result.length < 60 && setLoadMore(false);
+    result.length < 60 ? setLoadMore(false) : setLoadMore(true);
   };
 
   const handleLoadMore = async (data: any) => {
@@ -212,7 +180,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   };
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      doSearch('');
+      //doSearch('');
+      router.push(`/search?q=${searchText}`);
       e.target.blur();
     }
   };
@@ -231,11 +200,200 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
         return 'foo';
     }
   };
+
+  function handleClick() {
+    const element = document.getElementById('my-drawer-2');
+    if (element) {
+      element.click();
+    }
+  }
+
   return (
     <>
-      <div className='flex flex-1 flex-col pt-7'>
-        <div className='flex '>
-          <div className='flex flex-col w-0 lg:min-w-[314px]'>
+      <div className='flex flex-1 flex-col md:pt-7'>
+        <div className='grid md:flex'>
+          {/* Sidebar */}
+          <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-10'>
+            <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
+            <div className='w-fit ml-auto mr-2'>
+              {/* Page content here */}
+              <label
+                htmlFor='my-drawer-2'
+                className='border border-gray-200 rounded-lg bg-white px-2 py-1 whitespace-nowrap lg:hidden flex items-center gap-1 z-0'
+              >
+                {t['search-filter']}
+                <AdjustmentsHorizontalIcon className='h-4' />
+              </label>
+            </div>
+            <div className='drawer-side'>
+              <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
+              <div className='menu p-4 md:p-0 w-80 md:min-w-[314px] bg-base-200 md:bg-inherit'>
+                {/* Sidebar content here */}
+                <div className='flex flex-col md:min-w-[314px]'>
+                  <div className='lg:sticky lg:top-4'>
+                    <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
+                      <label className='flex flex-col gap-2 relative'>
+                        {t['by-keyword']}
+                        <input
+                          value={searchText}
+                          onChange={(e: any) => setSearchText(e.target.value)}
+                          onKeyDown={handleKeyDown}
+                          placeholder={t['type-here']}
+                          type='text'
+                          className='py-3 px-3 text-xs outline-none rounded-lg border border-gray-200'
+                          name='input'
+                        />
+                        {searchText !== '' && (
+                          <button
+                            className='absolute right-3 top-10 text-gray-300 hover:text-gray-400 transition-all duration-300'
+                            onClick={() => setSearchText('')}
+                          >
+                            <FaXmark size={16} />
+                          </button>
+                        )}
+                      </label>
+                      <label className='text-sm flex gap-2 cursor-pointer'>
+                        <input name='description' checked={selectDesc} onChange={() => setSelectDesc(!selectDesc)} type='checkbox' />
+                        {t['search-also-in-description']}
+                      </label>
+                      <label className='flex flex-col gap-2'>
+                        {t['channel-topic']}
+                        <Select
+                          instanceId='category'
+                          onChange={setSelectedCategory}
+                          name='category'
+                          isLoading={isLoading}
+                          styles={colorStyles}
+                          options={options}
+                          placeholder={t['select-topic']}
+                          isMulti
+                        />
+                      </label>
+                      <label className='flex flex-col gap-2'>
+                        {t['channel-country']}
+                        <Select
+                          value={{ value: 113, label: t['KR'] }}
+                          instanceId='country'
+                          onChange={setSelectedCountry}
+                          name='country'
+                          isLoading={isLoadingCountries}
+                          styles={colorStyles}
+                          options={optionsCountries}
+                          placeholder={t['select-country']}
+                          isMulti
+                        />
+                      </label>
+                      <label className='flex flex-col gap-2'>
+                        {t['channel-language']}
+                        <Select
+                          value={{ value: 'ko', label: t['Korean'] }}
+                          instanceId={'language'}
+                          onChange={setSelectedLanguage}
+                          name='language'
+                          isLoading={isLoadingLanguages}
+                          styles={colorStyles}
+                          options={optionsLanguages}
+                          placeholder={t['select-language']}
+                          isMulti
+                        />
+                      </label>
+                      <label className='flex flex-col gap-2'>
+                        {t['channel-type']}
+                        <Select
+                          instanceId={'type'}
+                          defaultValue={channelType}
+                          onChange={setChannelType}
+                          name='type'
+                          styles={colorStyles}
+                          options={optionsChannelTypes}
+                          placeholder={t['select-type']}
+                          isMulti
+                        />
+                      </label>
+                    </div>
+                    <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
+                      <label className='flex flex-col gap-2'>
+                        {t['channels-age-from-months']}
+                        <Box className='pl-3 pr-6'>
+                          <Slider
+                            name='channelsAge'
+                            valueLabelDisplay='auto'
+                            size='small'
+                            defaultValue={channelsAge}
+                            onChange={(event: Event, newValue: number | number[]) => {
+                              setChannelsAge(newValue as number);
+                            }}
+                            min={0}
+                            max={36}
+                            marks={[
+                              { value: 0, label: 0 },
+                              { value: 36, label: '36+' },
+                            ]}
+                          />
+                        </Box>
+                      </label>
+                      <label className='flex flex-col gap-2'>
+                        {t['engagement-rate-erp']}
+                        <Box className='pl-3 pr-6'>
+                          <Slider
+                            name='ERP'
+                            valueLabelDisplay='auto'
+                            size='small'
+                            defaultValue={channelsERP}
+                            onChange={(event: Event, newValue: number | number[]) => {
+                              setChannelsERP(newValue as number);
+                            }}
+                            min={0}
+                            max={100}
+                            marks={[
+                              { value: 1, label: '0%' },
+                              { value: 100, label: '100%+' },
+                            ]}
+                          />
+                        </Box>
+                      </label>
+                    </div>
+                    <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
+                      <label className='flex flex-col gap-2'>
+                        {t['subscribers']}
+                        <div className='flex gap-2'>
+                          <input
+                            name='subscribersFrom'
+                            value={subscribersFrom}
+                            onChange={(e: any) => setSubscribersFrom(e.target.value)}
+                            placeholder='from'
+                            type='number'
+                            min={0}
+                            className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
+                          />
+                          <input
+                            name='subscribersTo'
+                            value={subscribersTo}
+                            onChange={(e: any) => setSubscribersTo(e.target.value)}
+                            placeholder='to'
+                            type='number'
+                            min={0}
+                            className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
+                          />
+                        </div>
+                      </label>
+                      <button
+                        onClick={() => {
+                          //doSearch('');
+                          router.push(`/search?q=${searchText}`);
+                          handleClick();
+                        }}
+                        className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
+                      >
+                        {t['search']}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <div className='flex flex-col w-0 lg:min-w-[314px]'>
             <div className='lg:sticky lg:top-4'>
               <div
                 className={`${
@@ -379,7 +537,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       />
                     </div>
                   </label>
-                  {/* 
+                  
             <label className='flex flex-col gap-2'>{t['average-post-reach']}
                 <div className='flex gap-2'>
                 <input 
@@ -428,7 +586,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 />
                 </div>
             </label>
-            */}
+            
                   <button
                     onClick={() => doSearch('')}
                     className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
@@ -438,28 +596,33 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className='grid grid-cols-12 gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+          <div className='grid grid-cols-12 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {searchResult ? (
-              <div className='sorting md:flex items-center w-full bg-white rounded-md px-4 py-3 col-span-12 border border-gray-200 mt-4 md:mt-0'>
+              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 col-span-12 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
-                  {t['total-search-results1']}
+                  {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
                   <b>{totalChannels}</b>
                   {t['total-search-results2']}
                 </span>
-                <div className='ml-auto'>
-                  <span className='mr-2'>{t['sort-by']}</span>
+                <div className='ml-auto flex items-center'>
+                  <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
                   <select
                     onChange={(e) => {
                       setSelectedSorting(e.target.value);
                       doFilter(e.target.value);
                     }}
                     value={selectedSorting}
-                    className='border rounded-md pl-2 pr-5 py-1 mt-4 md:mt-0'
+                    className='border rounded-md pl-2 pr-4 py-1'
+                    name='select'
                   >
                     <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
                     <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
+                    <option value='today_desc'>오늘 조회수 순 &darr;</option>
+                    <option value='today_asc'>오늘 조회수 순 &uarr;</option>
+                    <option value='total_desc'>누적 조회수 순 &darr;</option>
+                    <option value='total_asc'>누적 조회수 순 &uarr;</option>
                   </select>
                 </div>
               </div>
@@ -469,15 +632,13 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 return <GetChannels channels={channel} key={index} />;
               })
             ) : (
-              <div className='text-center p-10 border border-gray-200 rounded-md mt-4 md:mt-0 md:ml-4 bg-white col-span-12'>
-                {searchResultText}
-              </div>
+              <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
             )}
             {loadMore && (
               <div className='flex justify-center col-span-12'>
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
-                  className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                  className='bg-primary px-8 rounded-full text-sm py-2 my-4 md:my-0 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
                 >
                   {loadMoreText}
                 </button>

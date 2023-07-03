@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Dialog from "@mui/material/Dialog";
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Dialog from '@mui/material/Dialog';
 
-import Loader from "../../public/loader.svg";
+import { Loader } from 'rsuite';
 
 const Media = ({ channel, post }: any) => {
   const [images, setImages] = useState([]);
@@ -14,10 +14,10 @@ const Media = ({ channel, post }: any) => {
   useEffect(() => {
     async function fetchMedia() {
       try {
-        if (post.media.includes("photo") || post.media.includes("video")) {
+        if (post.media.includes('photo') || post.media.includes('video')) {
           await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/media`, {
-            method: "POST",
-            headers: { "content-type": "application/json" },
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify(getMediaData),
           })
             .then((response) => response.json())
@@ -42,38 +42,37 @@ const Media = ({ channel, post }: any) => {
     <>
       {images?.length !== 0 || videos?.length !== 0 ? (
         <Box>
-          <ImageList variant="masonry" cols={images?.length === 1 ? 1 : 2} gap={8} >
+          <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
             {images?.map((url: any, index: number) => (
               <ImageListItem key={index}>
                 <img
                   src={`${url}?w=248&fit=crop&auto=format`}
                   srcSet={`${url}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt=""
-                  loading="lazy"
-                  className="max-h-[360px] aspect-auto !object-contain cursor-pointer"
+                  alt=''
+                  loading='lazy'
+                  className='max-h-[360px] aspect-auto !object-contain cursor-pointer'
                   onClick={(event) => handleImageClick(event, url)}
                 />
               </ImageListItem>
             ))}
-            {videos?.length > 0 && videos?.map((url: any, index: number) => (
-              <ImageListItem key={index}>
-                <video src={url}></video>
-              </ImageListItem>
-            ))}
+            {videos?.length > 0 &&
+              videos?.map((url: any, index: number) => (
+                <ImageListItem key={index}>
+                  <video src={url}></video>
+                </ImageListItem>
+              ))}
           </ImageList>
           <Dialog open={selectedImage !== undefined} onClose={() => setSelectedImage(undefined)}>
-            <img src={selectedImage} alt="" />
+            <img src={selectedImage} alt='' />
           </Dialog>
         </Box>
       ) : (
-        <div className="w-full h-[300px] flex items-center justify-center bg-gray-100">
-          <div className="animate-spin w-[40px] h-[40px]">
-            <Loader />
-          </div>
+        <div className='w-full h-[300px] flex items-center justify-center bg-gray-100'>
+          <Loader size='sm' content='loading media...' />
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Media
+export default Media;
