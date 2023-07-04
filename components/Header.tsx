@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Bars3Icon, Cog6ToothIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { EnvelopeIcon } from '@heroicons/react/24/solid';
+import { ChartBarIcon, EnvelopeIcon } from '@heroicons/react/24/solid';
 import { FaCaretDown, FaTelegramPlane } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { enUS } from '../lang/en-US';
@@ -205,10 +205,14 @@ const Header = () => {
                       </div>
                     )}
                     <div className='text-sm'>
-                      <div className='flex justify-between gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
+                      <div className='grid gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
                         <Link className='font-semibold flex gap-2 items-center' href='/search' onClick={handleClick}>
                           <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['search']}
+                        </Link>
+                        <Link className='font-semibold flex gap-2 items-center' href='/channel/rankings' onClick={handleClick}>
+                          <ChartBarIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
+                          {t['channel-rankings']}
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/add' onClick={handleClick}>
                           <PlusIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
@@ -347,9 +351,17 @@ const Header = () => {
                   {t['home']}
                 </button>
               </li>
-              <li className='hidden lg:block'>
+              <li>
                 <button className={getPath === '/search' ? activePath : normalPath} onClick={() => router.push('/search')}>
                   {t['search']}
+                </button>
+              </li>
+              <li>
+                <button
+                  className={getPath === '/channel/ranking' ? activePath : normalPath}
+                  onClick={() => router.push('/channel/ranking')}
+                >
+                  {t['channel-rankings']}
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-20' appearance='subtle'>

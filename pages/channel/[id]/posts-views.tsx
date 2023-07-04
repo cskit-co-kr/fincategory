@@ -161,9 +161,9 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
       <div className='pt-7 bg-gray-50'>
         <div className='md:flex xl:w-[1280px] mx-auto text-black'>
           <ChannelDetailLeftSidebar channel={channel} />
-          <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='text-xl mx-auto font-semibold my-4'>{t['Average-post-reach']}</div>
               {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
@@ -236,16 +236,32 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                           <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type='monotone' dataKey='average' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                      <Area
+                        type='monotone'
+                        dataKey='average'
+                        stroke='#3886E2'
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill='url(#color)'
+                        baseValue='dataMin'
+                      />
                     </AreaChart>
                   </Brush>
-                  <Area type='monotone' dataKey='average' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                  <Area
+                    type='monotone'
+                    dataKey='average'
+                    stroke='#3886E2'
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill='url(#color)'
+                    baseValue='dataMin'
+                  />
                 </AreaChart>
               </ResponsiveContainer>
               <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['The-average-number']}</div>
             </div>
 
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='text-xl mx-auto font-semibold my-4'>{t['Views-of-the']}</div>
               <ResponsiveContainer width='100%' height={420}>
                 <AreaChart width={270} height={420} data={totalViews}>
@@ -284,16 +300,32 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                           <stop offset='95%' stopColor='#55A348' stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type='monotone' dataKey='total' stroke='#55A348' strokeWidth={1} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
+                      <Area
+                        type='monotone'
+                        dataKey='total'
+                        stroke='#55A348'
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill='url(#color2)'
+                        baseValue='dataMin'
+                      />
                     </AreaChart>
                   </Brush>
-                  <Area type='monotone' dataKey='total' stroke='#55A348' strokeWidth={2} fillOpacity={1} fill='url(#color2)' baseValue='dataMin' />
+                  <Area
+                    type='monotone'
+                    dataKey='total'
+                    stroke='#55A348'
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill='url(#color2)'
+                    baseValue='dataMin'
+                  />
                 </AreaChart>
               </ResponsiveContainer>
               <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Total-number-of']}</div>
             </div>
 
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='text-xl mx-auto font-semibold my-4'>{t['ERR-engagement-by-views']}</div>
               <ResponsiveContainer width='100%' height={420}>
                 <AreaChart width={270} height={420} data={errPercent}>
@@ -332,10 +364,26 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                           <stop offset='95%' stopColor='#CD5066' stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={1} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
+                      <Area
+                        type='monotone'
+                        dataKey='views'
+                        stroke='#CD5066'
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill='url(#color3)'
+                        baseValue='dataMin'
+                      />
                     </AreaChart>
                   </Brush>
-                  <Area type='monotone' dataKey='views' stroke='#CD5066' strokeWidth={2} fillOpacity={1} fill='url(#color3)' baseValue='dataMin' />
+                  <Area
+                    type='monotone'
+                    dataKey='views'
+                    stroke='#CD5066'
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill='url(#color3)'
+                    baseValue='dataMin'
+                  />
                 </AreaChart>
               </ResponsiveContainer>
               <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Percentage-of-subscribers']}</div>

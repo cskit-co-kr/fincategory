@@ -38,11 +38,13 @@ function TopPosts(props: InferGetServerSidePropsType<typeof getServerSideProps>)
         </Head>
         <div className='md:flex xl:w-[1280px] mx-auto text-black'>
           <ChannelDetailLeftSidebar channel={channel} />
-          <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-4 flex flex-col border border-gray-200 rounded-md p-4 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-4 flex flex-col border border-gray-200 rounded-md p-4 bg-white'>
               <div className='text-xl mx-auto font-semibold my-4'>{t['The-most-popular-posts']}</div>
-              <div className='p-4 bg-gray-50 border border-gray-200 rounded-md'>{t['top-posts-text-1'].replace('%{channel.title}', channel.title)}</div>
+              <div className='p-4 bg-gray-50 border border-gray-200 rounded-md'>
+                {t['top-posts-text-1'].replace('%{channel.title}', channel.title)}
+              </div>
               {lastMonthData.length !== 0 ? (
                 lastMonthData.map((post: any, index: number) => {
                   return <PostMini channel={channel} post={post} key={index} />;

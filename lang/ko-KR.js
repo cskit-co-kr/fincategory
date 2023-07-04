@@ -160,6 +160,7 @@ export const koKR = {
     "search-filter": "검색 필터",
     "login-to-comment": "로그인을 하셔야 댓글을 작성할 수 있습니다.",
     /* rating */
+    "channel-rankings": "채널 랭킹",
     "rank": "랭킹",
     "telegram-channels-rating": "텔레그램 채널 랭킹",
     "increase-24h": "상승(24h)",
