@@ -160,6 +160,7 @@ export const enUS = {
     "search-filter": "Search filter",
     "login-to-comment": "You must be logged in to post a comment.",
     /* rating */
+    "channel-rankings": "Channel Rankings",
     "rank": "Rank",
     "telegram-channels-rating": "Telegram channels rating",
     "increase-24h": "Increase (24h)",

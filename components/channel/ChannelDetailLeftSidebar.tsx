@@ -1,7 +1,7 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 
@@ -9,12 +9,12 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
-  const menuPath = locale === 'ko' ? '/' : '/en/';
+
   const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
   const [error, setError] = useState<boolean>(false);
 
   return (
-    <div className='flex flex-col md:w-[250px] md:min-w-[250px] lg:w-[310px] mt-4 md:mt-0 md:mr-4'>
+    <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4'>
       <div className='sticky inset-y-4'>
         <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
           <Image
