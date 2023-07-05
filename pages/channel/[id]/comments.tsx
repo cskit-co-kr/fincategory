@@ -87,7 +87,6 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     });
 
     const result = response.data;
-    console.log('total: ', result.total);
     
     result.total === 0 ? null : setComments(result.comments);
     result.total <= 10 && setLoadMore(false);
