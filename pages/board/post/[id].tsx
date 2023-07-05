@@ -3,12 +3,12 @@ import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubb
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie, setCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Message, Pagination, useToaster, Modal } from 'rsuite';
+import { Avatar, Button, Message, Modal, Pagination, useToaster } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
 
@@ -282,10 +282,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     </Avatar>
                   </div>
                   <div className='username flex flex-col'>
-                    <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>{post.user.nickname}</p>
-                    <p className='m-0 pt-[5px] text-[12px] leading-[14px]'>
-                      {toDateTimeformat(post.created_at, '.')} 조회 {post.views}
-                    </p>
+                    <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>{post.user.nickname} [{post.user.username}]</p>
+                    <p className='m-0 pt-[5px] text-[12px] leading-[14px]'>{toDateTimeformat(post.created_at, '.')} 조회 {post.views}</p>
                   </div>
                   <div className='right ml-auto self-center md:flex items-center'>
                     <div className='flex mb-2 md:mb-0'>
@@ -521,12 +519,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                             />
                           )}
                         </div>
-                        <div className='flex gap-3 md:gap-0 px-4 pb-4 pt-1.5 md:p-0 text-gray-400 md:text-gray-600 text-xs'>
-                          <div className='md:block text-left md:p-2 md:min-w-[128px]'>{post.user?.nickname}</div>
-                          <div className='md:block md:text-center md:p-2 md:min-w-[96px]'>{formatDate(post.created_at)}</div>
-                          <div className='md:block md:text-center md:p-2 md:min-w-[48px]'>
-                            <span className='md:hidden'>조회</span> {post.views}
-                          </div>
+                        <div className='p-2 flex flex-1 items-center'>
+                          {current ? <>{post.title}</> : <Link href={`/board/post/${post.id}`}>{post.title} </Link>}
+                          {post.extra_01 == '1' ? <PhotoIcon className='h-3 ml-1' /> : <></>}
                         </div>
                       </div>
                     );
