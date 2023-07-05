@@ -123,6 +123,7 @@ export type PostType = {
   user: {
     id: number;
     nickname: string;
+    username: string;
   };
   board: {
     id: number;
