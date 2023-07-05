@@ -24,6 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       paginate: req.body.paginate,
       sort: req.body.sort,
     });
+    console.log("status: ", resp.status, await resp.data[0]);
     const data = await resp.data;
     if (resp.status === 200) {
       res.status(200).json(data);

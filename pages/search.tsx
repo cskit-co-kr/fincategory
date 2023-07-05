@@ -13,6 +13,7 @@ import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { FaXmark } from 'react-icons/fa6';
 import { colorStyles } from '../constants';
+import { useData } from '../context/context';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -38,6 +39,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
+
+  const {savePosts, posts} = useData()
 
   const optionsChannelTypes = [
     {
@@ -113,6 +116,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   }, [router, sorting]);
 
+
   useEffect(() => {
     setOptions(cats);
     setOptionsCountries(countries);
@@ -124,6 +128,34 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setLoadMoreText(t['load-more']);
     setSearchResultText(t['empty-search-text']);
   }, [locale, props]);
+
+
+  useEffect(() => {
+    if(searchResult && posts.length === 0){
+      const socket = new WebSocket(`ws://localhost:8081`);
+      
+      const data: any[] = []  
+      searchResult.slice(0, 10).map((res: any) => {
+        const channel = {
+          username: res.username,
+          // access_hash: res.access_hash,
+          // channel_id: res.channel_id,
+        }
+        data.push(channel)
+      })
+      socket.addEventListener("open", (event) => {
+        socket.send(JSON.stringify(data)); 
+      });
+
+      socket.addEventListener("message", (event) => {
+        console.log(event.data);
+        // console.log("Message from server ", event.data);
+        // savePosts(JSON.parse(event.data));
+      });
+    }
+    
+  }, [searchResult])
+
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
@@ -152,11 +184,12 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(data),
-    });
+    })
     // const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
     // const result = await response.data.channel
     const resultData = await response.json();
     const result = resultData.channel;
+
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
     result.length < 60 ? setLoadMore(false) : setLoadMore(true);
@@ -652,18 +685,20 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 };
 
 export const getServerSideProps = async () => {
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-  const categories = await result.data;
+    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+    const categories = await result.data;
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-  const countries = await resCountry.data;
+    const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+    const countries = await resCountry.data;
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-  const languages = await resLanguage.data;
+    const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+    const languages = await resLanguage.data;
 
-  return {
-    props: { categories, countries, languages },
-  };
+    return {
+      props: { categories, countries, languages },
+    };
+  
+
 };
 
 export default Search;
