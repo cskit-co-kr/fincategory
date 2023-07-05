@@ -44,7 +44,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         additionalMetaTags={[
           {
             name: 'title',
-            content: 'FinCa |  텔레그램 채널정보, 핀카',
+            content: 'FinCa | 텔레그램 채널정보, 핀카',
           },
           {
             name: 'description',
@@ -77,7 +77,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             property: 'og:title',
-            content: 'FinCa |  텔레그램 채널정보, 핀카',
+            content: 'FinCa | 텔레그램 채널정보, 핀카',
           },
           {
             property: 'og:description',
@@ -110,11 +110,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             name: 'twitter:title',
-            content: 'FinCa |  텔레그램 채널정보, 핀카',
+            content: 'FinCa | 텔레그램 채널정보, 핀카',
           },
           {
             name: 'twitter:description',
-            content: '장 큰 한국 텔레그램 채널정보는 핀카 | finca',
+            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
           },
           {
             name: 'twitter:keywords',
