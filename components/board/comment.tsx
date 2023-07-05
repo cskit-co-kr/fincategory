@@ -66,7 +66,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
         comment: commentID,
         action: action,
         type: type,
-      }),
+      })
     });
 
     const result = await response.json();

@@ -3,6 +3,7 @@ import {
   HandThumbUpIcon,
   RectangleGroupIcon,
   UsersIcon,
+  ChatBubbleLeftRightIcon 
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { enUS } from "../../lang/en-US";
@@ -75,6 +76,19 @@ const ChannelDetailNav = ({ channel }: any) => {
           >
             <HandThumbUpIcon className="h-3 hidden md:inline" />
             {t["Top-posts"]}
+          </a>
+        </li>
+        <li
+          className={`rounded-lg ${
+            router.pathname == "/channel/[id]/comments" ? liSelected : liNormal
+          }`}
+        >
+          <a
+            href={`${menuPath}channel/${channel.username}/comments`}
+            className={aNormal}
+          >
+            <ChatBubbleLeftRightIcon className="h-3 hidden md:inline" />
+            {t["Comments"]}
           </a>
         </li>
       </ul>
