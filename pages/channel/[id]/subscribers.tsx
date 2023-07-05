@@ -187,9 +187,9 @@ const subscribers = ({ channel, sub }: any) => {
       <div className='pt-7 bg-gray-50'>
         <div className='md:flex xl:w-[1280px] mx-auto text-black'>
           <ChannelDetailLeftSidebar channel={channel} />
-          <div className='w-full xl:w-[974px] flex flex-col gap-4 justify-items-stretch content-start'>
+          <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='ml-5 gap-4 items-center'>
                 <div className='pb-2 text-lg font-semibold text-center'>{t['Subscribers-count']}</div>
                 <div className='flex gap-0.5 text-xs my-4 h-fit'>
@@ -265,10 +265,26 @@ const subscribers = ({ channel, sub }: any) => {
                           <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                      <Area
+                        type='monotone'
+                        dataKey='sub'
+                        stroke='#3886E2'
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill='url(#color)'
+                        baseValue='dataMin'
+                      />
                     </AreaChart>
                   </Brush>
-                  <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                  <Area
+                    type='monotone'
+                    dataKey='sub'
+                    stroke='#3886E2'
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill='url(#color)'
+                    baseValue='dataMin'
+                  />
                 </AreaChart>
               </ResponsiveContainer>
               <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>
@@ -276,7 +292,7 @@ const subscribers = ({ channel, sub }: any) => {
               </div>
             </div>
 
-            <div className='w-full xl:w-[974px] mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
+            <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='text-xl mx-auto font-semibold'>
                 {t['Subscribers']} {t['gain']}
               </div>
@@ -345,7 +361,15 @@ const subscribers = ({ channel, sub }: any) => {
                           <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={1} fillOpacity={1} fill='url(#color)' baseValue='dataMin' />
+                      <Area
+                        type='monotone'
+                        dataKey='sub'
+                        stroke='#3886E2'
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill='url(#color)'
+                        baseValue='dataMin'
+                      />
                     </AreaChart>
                   </Brush>
                   <defs>
@@ -377,7 +401,12 @@ const subscribers = ({ channel, sub }: any) => {
                   </div>
                 ))}
                 <div className='mt-2.5 bg-gray-100 p-2 rounded-md'>
-                  <Pagination total={growthData2.length} limit={ITEMS_PER_PAGE} activePage={currentPage} onChangePage={(page) => setCurrentPage(page)} />
+                  <Pagination
+                    total={growthData2.length}
+                    limit={ITEMS_PER_PAGE}
+                    activePage={currentPage}
+                    onChangePage={(page) => setCurrentPage(page)}
+                  />
                 </div>
               </div>
             </div>

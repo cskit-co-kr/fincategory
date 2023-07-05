@@ -53,7 +53,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     const disable = item.nicename === 'Korea, Republic of' ? false : true;
     return {
       value: item.id,
-      label: item.nicename,
+      label: t[item.iso as keyof typeof t],
       isDisabled: disable,
     };
   });
@@ -62,7 +62,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     const disable = item.value === 'Korean' ? false : true;
     return {
       value: item.id,
-      label: item.value,
+      label: t[item.value as keyof typeof t],
       isDisabled: disable,
     };
   });
@@ -84,7 +84,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       erp: 0,
       subscribers_from: null,
       subscribers_to: null,
-      paginate: { limit: 10, offset: 0 },
+      paginate: { limit: 100, offset: 0 },
       sort: sorting,
     };
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
@@ -98,35 +98,39 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       const obj = result[i];
       obj.rank = i + 1;
       obj.category = getCategoryName(obj.category_id);
-      try {
-        const data = await getSubsHistory(obj.channel_id);
-        obj.increase24h = data.inc24h;
-        obj.increase7d = data.inc7d;
-        obj.increase30d = data.inc30d;
-      } catch (error) {
-        console.error(error);
-      }
+      const splitExtra = obj.extra_01 === null ? [0, 0, 0] : obj.extra_01.split(':');
+      obj.increase24h = splitExtra[0];
+      obj.increase7d = splitExtra[1];
+      obj.increase30d = splitExtra[2];
+      // try {
+      //   const data = await getSubsHistory(obj.channel_id);
+      //   obj.increase24h = data.inc24h;
+      //   obj.increase7d = data.inc7d;
+      //   obj.increase30d = data.inc30d;
+      // } catch (error) {
+      //   console.error(error);
+      // }
     }
     setData(result);
   };
 
-  const getSubsHistory = async (getId: any) => {
-    const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs`, { username: getId });
-    const sub = await responseSub.data;
-    const growthData = sub.slice(1).map((val: any, idx: any) => ({
-      date: val.name.substring(0, 10),
-      count: val.sub,
-      diff: val.sub - sub[idx].sub,
-    }));
-    const oneDay = growthData.slice(growthData.length - 1);
-    const sevenDay = growthData.slice(growthData.length - 7).reduce((a: any, b: any) => {
-      return a + b.diff;
-    }, 0);
-    const thirtyDay = growthData.slice(growthData.length - 30).reduce((a: any, b: any) => {
-      return a + b.diff;
-    }, 0);
-    return { inc24h: oneDay[0].diff, inc7d: sevenDay, inc30d: thirtyDay };
-  };
+  // const getSubsHistory = async (getId: any) => {
+  //   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs30`, { username: getId });
+  //   const sub = await responseSub.data;
+  //   const growthData = sub.slice(1).map((val: any, idx: any) => ({
+  //     date: val.name.substring(0, 10),
+  //     count: val.sub,
+  //     diff: val.sub - sub[idx].sub,
+  //   }));
+  //   const oneDay = growthData.slice(growthData.length - 1);
+  //   const sevenDay = growthData.slice(growthData.length - 7).reduce((a: any, b: any) => {
+  //     return a + b.diff;
+  //   }, 0);
+  //   const thirtyDay = growthData.slice(growthData.length - 30).reduce((a: any, b: any) => {
+  //     return a + b.diff;
+  //   }, 0);
+  //   return { inc24h: oneDay[0].diff, inc7d: sevenDay, inc30d: thirtyDay };
+  // };
 
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
@@ -134,8 +138,8 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   // Table
-  const [sortColumn, setSortColumn] = useState('rank');
-  const [sortType, setSortType] = useState<SortType>('asc');
+  const [sortColumn, setSortColumn] = useState('subscription');
+  const [sortType, setSortType] = useState<SortType>('desc');
   const [loading, setLoading] = useState(false);
 
   const getData = () => {
@@ -143,12 +147,12 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       return data.sort((a: any, b: any) => {
         let x = a[sortColumn];
         let y = b[sortColumn];
-        if (typeof x === 'string') {
-          x = x.charCodeAt(0);
-        }
-        if (typeof y === 'string') {
-          y = y.charCodeAt(0);
-        }
+        // if (typeof x === 'string') {
+        //   x = x.charCodeAt(0);
+        // }
+        // if (typeof y === 'string') {
+        //   y = y.charCodeAt(0);
+        // }
         if (sortType === 'asc') {
           return x - y;
         } else {
@@ -201,7 +205,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
           <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
             {t['channel-country']}
             <Select
-              value={{ value: 113, label: 'Korea, Republic of' }}
+              value={{ value: 113, label: t['KR'] }}
               instanceId='country'
               onChange={setSelectedCountry}
               name='country'
@@ -216,7 +220,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
           <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
             {t['channel-language']}
             <Select
-              value={{ value: 'ko', label: 'Korean' }}
+              value={{ value: 'ko', label: t['Korean'] }}
               instanceId={'language'}
               onChange={setSelectedLanguage}
               name='language'
@@ -270,7 +274,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                     <div className='flex flex-col'>
                       <span>{rowData.title}</span>
                       <span className='text-xs text-gray-400'>
-                        <Link href={`https://t.me/${rowData.username}`} target='_blank'>
+                        <Link href={`/channel/${rowData.username}`} target='_blank'>
                           @{rowData.username}
                         </Link>
                       </span>
@@ -281,12 +285,12 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['subscribers']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'subscription' ? 'font-bold text-primary' : ''}>{t['subscribers']}</HeaderCell>
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-24h']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase24h' ? 'font-bold text-primary' : ''}>{t['increase-24h']}</HeaderCell>
               <Cell dataKey='increase24h'>
                 {(rowData) =>
                   rowData.increase24h > 0 ? (
@@ -299,7 +303,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-7d']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase7d' ? 'font-bold text-primary' : ''}>{t['increase-7d']}</HeaderCell>
               <Cell dataKey='increase7d'>
                 {(rowData) =>
                   rowData.increase7d > 0 ? (
@@ -312,7 +316,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-30d']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase30d' ? 'font-bold text-primary' : ''}>{t['increase-30d']}</HeaderCell>
               <Cell dataKey='increase30d'>
                 {(rowData) =>
                   rowData.increase30d > 0 ? (
