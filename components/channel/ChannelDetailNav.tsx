@@ -1,7 +1,13 @@
-import { EyeIcon, HandThumbUpIcon, RectangleGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/router';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
+import {
+  EyeIcon,
+  HandThumbUpIcon,
+  RectangleGroupIcon,
+  UsersIcon,
+  ChatBubbleLeftRightIcon 
+} from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
 
 const ChannelDetailNav = ({ channel }: any) => {
   const router = useRouter();
@@ -36,6 +42,19 @@ const ChannelDetailNav = ({ channel }: any) => {
           <a href={`${menuPath}channel/${channel.username}/top-posts`} className={aNormal}>
             <HandThumbUpIcon className='h-3 hidden md:inline' />
             {t['Top-posts']}
+          </a>
+        </li>
+        <li
+          className={`rounded-lg ${
+            router.pathname == "/channel/[id]/comments" ? liSelected : liNormal
+          }`}
+        >
+          <a
+            href={`${menuPath}channel/${channel.username}/comments`}
+            className={aNormal}
+          >
+            <ChatBubbleLeftRightIcon className="h-3 hidden md:inline" />
+            {t["Comments"]}
           </a>
         </li>
       </ul>
