@@ -138,8 +138,8 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   // Table
-  const [sortColumn, setSortColumn] = useState('rank');
-  const [sortType, setSortType] = useState<SortType>('asc');
+  const [sortColumn, setSortColumn] = useState('subscription');
+  const [sortType, setSortType] = useState<SortType>('desc');
   const [loading, setLoading] = useState(false);
 
   const getData = () => {
@@ -147,12 +147,12 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       return data.sort((a: any, b: any) => {
         let x = a[sortColumn];
         let y = b[sortColumn];
-        if (typeof x === 'string') {
-          x = x.charCodeAt(0);
-        }
-        if (typeof y === 'string') {
-          y = y.charCodeAt(0);
-        }
+        // if (typeof x === 'string') {
+        //   x = x.charCodeAt(0);
+        // }
+        // if (typeof y === 'string') {
+        //   y = y.charCodeAt(0);
+        // }
         if (sortType === 'asc') {
           return x - y;
         } else {
@@ -285,12 +285,12 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['subscribers']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'subscription' ? 'font-bold text-primary' : ''}>{t['subscribers']}</HeaderCell>
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-24h']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase24h' ? 'font-bold text-primary' : ''}>{t['increase-24h']}</HeaderCell>
               <Cell dataKey='increase24h'>
                 {(rowData) =>
                   rowData.increase24h > 0 ? (
@@ -303,7 +303,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-7d']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase7d' ? 'font-bold text-primary' : ''}>{t['increase-7d']}</HeaderCell>
               <Cell dataKey='increase7d'>
                 {(rowData) =>
                   rowData.increase7d > 0 ? (
@@ -316,7 +316,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             </Column>
 
             <Column width={120} align='center' sortable>
-              <HeaderCell>{t['increase-30d']}</HeaderCell>
+              <HeaderCell className={sortColumn === 'increase30d' ? 'font-bold text-primary' : ''}>{t['increase-30d']}</HeaderCell>
               <Cell dataKey='increase30d'>
                 {(rowData) =>
                   rowData.increase30d > 0 ? (
