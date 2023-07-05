@@ -73,7 +73,6 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   const getComments = async () => {
     const getCommentData = { username: channel.channel_id, limit: 10, offset: 0 };
     setSearchEvent(getCommentData);
-    setLoadMore(true);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/comment/list`, {
       channel: channel.channel_id,
       paginate: {
@@ -89,7 +88,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     const result = response.data;
     
     result.total === 0 ? null : setComments(result.comments);
-    result.total <= 10 && setLoadMore(false);
+    result.total > 10 && setLoadMore(true);
   }
 
   const handleLoadMore = async (getCommentData: any) => {
@@ -264,7 +263,6 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                     </button>
                   </div>
                 )}
-
               </div>
             </div>
           </div>
