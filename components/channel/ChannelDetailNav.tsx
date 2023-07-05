@@ -54,7 +54,7 @@ const ChannelDetailNav = ({ channel }: any) => {
             className={aNormal}
           >
             <ChatBubbleLeftRightIcon className="h-3 hidden md:inline" />
-            {t["Comments"]}
+            {t["Comments"]} ({channel.comment})
           </a>
         </li>
       </ul>
