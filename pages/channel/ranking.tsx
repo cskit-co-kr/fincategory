@@ -247,7 +247,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             renderEmpty={() => <div className='text-center py-10'>{t['loading-text']}</div>}
             renderLoading={() => <div className='text-center py-10'>{t['loading-text']}</div>}
           >
-            <Column width={70} align='center' sortable>
+            <Column width={70} align='center'>
               <HeaderCell>{t['rank']}</HeaderCell>
               <Cell dataKey='rank' />
             </Column>
