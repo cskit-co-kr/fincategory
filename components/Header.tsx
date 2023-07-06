@@ -334,12 +334,12 @@ const Header = () => {
                     )}
                   </div>
                 ) : (
-                  <Link
-                    href={`/member/signin${router.query.callbackUrl ? '' : '?callbackUrl=' + router.asPath}`}
+                  <button
+                    onClick={() => signIn()}
                     className='bg-primary font-semibold text-white rounded-full py-1 px-5 text-sm hover:text-white'
                   >
                     {t['sign-in']}
-                  </Link>
+                  </button>
                 )}
               </div>
             </div>

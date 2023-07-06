@@ -180,7 +180,7 @@ const subscribers = ({ channel, sub }: any) => {
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa `},
+          { name: 'title', content: `${channel.title} | FinCa ` },
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
@@ -403,12 +403,16 @@ const subscribers = ({ channel, sub }: any) => {
                     <div className={`basis-1/3 text-right pr-2 ${item.diff < 0 ? 'text-red-400' : 'text-green-500'}`}>{item.diff}</div>
                   </div>
                 ))}
-                <div className='mt-2.5 bg-gray-100 p-2 rounded-md'>
+                <div className='mt-2.5 bg-gray-100 p-5 rounded-md flex justify-center'>
                   <Pagination
                     total={growthData2.length}
                     limit={ITEMS_PER_PAGE}
                     activePage={currentPage}
                     onChangePage={(page) => setCurrentPage(page)}
+                    maxButtons={6}
+                    last
+                    first
+                    ellipsis
                   />
                 </div>
               </div>
