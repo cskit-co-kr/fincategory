@@ -250,7 +250,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                         <Button
                           appearance='primary'
                           className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                          onClick={() => router.push('/member/signin')}
+                          onClick={() => router.push(`/member/signin?callbackUrl=/channel/${channel.username}/comments`)}
                         >
                           {t['sign-in']}
                         </Button>
