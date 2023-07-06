@@ -3,15 +3,14 @@ import '../styles/globals.css';
 
 import axios from 'axios';
 import { hasCookie, setCookie } from 'cookies-next';
+import { SessionProvider } from 'next-auth/react';
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import Script from 'next/script';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
 import { useEffect } from 'react';
 import Layout from '../components/layout';
 import { DataProvider } from '../context/context';
-import { SessionProvider } from 'next-auth/react';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const env = process.env.NODE_ENV;
@@ -40,16 +39,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <DefaultSeo
         title='핀카'
         titleTemplate='%s | FinCa'
-        description='가장 큰 한국 텔레그램 채널정보 핀카 | finca'
+        description='가장 큰 한국 텔레그램 채널정보는 핀카 | finca'
         additionalMetaTags={[
-          {
-            name: 'title',
-            content: 'FinCa | 텔레그램 채널정보, 핀카',
-          },
-          {
-            name: 'description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
-          },
           {
             name: 'author',
             content: 'FinCa',
@@ -57,7 +48,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           {
             name: 'keywords',
             content:
-              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더',
+              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움, 테더',
           },
           {
             property: 'og:locale',
