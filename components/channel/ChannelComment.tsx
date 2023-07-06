@@ -1,5 +1,5 @@
 import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/outline';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Avatar } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 
@@ -14,7 +14,12 @@ type TBoardComment = {
 };
 
 const ChannelComment: FunctionComponent<TBoardComment> = ({ comment, userID, fncToast = () => { } }) => {
-  const [reaction, setReaction] = useState<string | null>(comment.reaction);
+  const [reaction, setReaction] = useState<string | null>(null);
+  useEffect(() => {
+    if(comment.reaction !== null) {
+      setReaction(comment.reaction);
+    }
+  }, []);
 
   // Count Comment Reaction
   const countCommentReaction = (mode: string) => {
