@@ -86,6 +86,7 @@ export const koKR = {
     "channel-category": "채널 카테고리",
     "choose-category": "카테고리를 선택하세요...",
     "send": "보내다",
+    "register": "등록",
     "please-username": "* 사용자 이름을 입력하세요",
     "please-country": "* 국가를 선택하세요.",
     "please-language": "* 언어를 선택하세요",

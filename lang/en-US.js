@@ -86,6 +86,7 @@ export const enUS = {
     "channel-category": "Channel's category",
     "choose-category": "Choose a category...",
     "send": "Send",
+    "register": "Post",
     "please-username": "* Please input username",
     "please-country": "* Please select a country",
     "please-language": "* Please select a language",
