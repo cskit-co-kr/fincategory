@@ -1,16 +1,14 @@
-import { EyeIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
+import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
 import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
 import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 import PostMini from '../../../components/channel/PostMini';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 import { Channel } from '../../../typings';
-import { NextSeo } from 'next-seo';
 
 function TopPosts(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const channel: Channel = props.channel;
@@ -22,9 +20,12 @@ function TopPosts(props: InferGetServerSidePropsType<typeof getServerSideProps>)
   return (
     <>
       <NextSeo
+        noindex={true}
+        nofollow={true}
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
+          { name: 'title', content: `${channel.title} | FinCa `},
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
