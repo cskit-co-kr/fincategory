@@ -256,30 +256,28 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className='flex gap-4 items-center'>
-                    <div className='relative w-10 min-w-10 max-w-10'>
-                      <Image
-                        src={
-                          error
-                            ? '/telegram-icon-96.png'
-                            : `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`
-                        }
-                        alt={'avatar of ' + rowData.title}
-                        width={40}
-                        height={40}
-                        className='object-contain rounded-full z-0'
-                        onError={() => setError(true)}
-                      />
+                  <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
+                    <div className='flex gap-4 items-center'>
+                      <div className='relative w-10 min-w-10 max-w-10'>
+                        <Image
+                          src={
+                            error
+                              ? '/telegram-icon-96.png'
+                              : `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`
+                          }
+                          alt={'avatar of ' + rowData.title}
+                          width={40}
+                          height={40}
+                          className='object-contain rounded-full z-0'
+                          onError={() => setError(true)}
+                        />
+                      </div>
+                      <div className='flex flex-col'>
+                        <span>{rowData.title}</span>
+                        <span className='text-xs text-gray-400'>@{rowData.username}</span>
+                      </div>
                     </div>
-                    <div className='flex flex-col'>
-                      <span>{rowData.title}</span>
-                      <span className='text-xs text-gray-400'>
-                        <Link href={`/channel/${rowData.username}`} target='_blank'>
-                          @{rowData.username}
-                        </Link>
-                      </span>
-                    </div>
-                  </div>
+                  </Link>
                 )}
               </Cell>
             </Column>
