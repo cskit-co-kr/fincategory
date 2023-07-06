@@ -29,10 +29,6 @@ type TComment = {
   }
 }
 
-const Post = dynamic(() => import('../../../components/channel/Post'), {
-  ssr: false,
-});
-
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
@@ -51,7 +47,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   const t = locale === 'ko' ? koKR : enUS;
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
   const [comments, setComments] = useState<Array<TComment>>([]);
-  const [comment, setComment] = useState<string>('');
+  const [review, setReview] = useState<string>('');
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
   const [placement, setPlacement] = useState<PlacementType>('topEnd');
@@ -71,6 +67,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   }, []);
 
   const getComments = async () => {
+    // setComments([]);
     const getCommentData = { username: channel.channel_id, limit: 10, offset: 0 };
     setSearchEvent(getCommentData);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/comment/list`, {
@@ -87,7 +84,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
 
     const result = response.data;
 
-    result.total === 0 ? null : setComments(result.comments);
+    result.total === 0 ? setComments([]) : setComments(result.comments);
     result.total > 10 && setLoadMore(true);
   }
 
@@ -125,9 +122,9 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   });
 
   // Save Comment
-  const saveComment = async () => {
+  const saveReview = async () => {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/comment/insert`, {
-      comment: comment,
+      comment: review,
       user: Number(session?.user.id),
       channel: channel.channel_id
     });
@@ -137,18 +134,18 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     if (response.status === 200) {
       if (result.code === 201 && result.message === 'Inserted') {
         toastShow('info', t['comment-saved']);
-        setComment('');
+        setReview('');
+        getComments();
       }
     } else {
       toastShow('error', t['login-to-comment']);
     }
-    getComments();
   }
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
     const options = { placement, duration: 5000 };
     toaster.push(message(type, txt), options);
-  };
+  }
 
   return (
     <>
@@ -230,18 +227,18 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
 
               <div className='gap-4 flex flex-col w-full'>
                 <div className='bg-[#f2f2f2]'>
-                  <div className='comment-write text-center md:mt-[20px] md:mb-[20px] md:mx-[140px]'>
+                  <div className='review-write text-center md:mt-[20px] md:mb-[20px] md:mx-[140px]'>
                     {session?.user ? <><textarea
                       className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
-                      onChange={(e) => setComment(e.currentTarget.value)}
-                      value={comment}
+                      onChange={(e) => setReview(e.currentTarget.value)}
+                      value={review}
                       name='textarea'
                     />
                       <Button
                         appearance='primary'
                         className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                        disabled={comment.trim().length > 0 ? false : true}
-                        onClick={saveComment}
+                        disabled={review.trim().length > 0 ? false : true}
+                        onClick={saveReview}
                       >
                         {t['register']}
                       </Button>
@@ -263,7 +260,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                 {comments.length !== 0 ? (
                   <div className='p-4 border border-gray-200 rounded-md bg-white'>
                     {comments.map((comment: any, index: number) => {
-                      return <ChannelComment comment={comment} userID={Number(session?.user.id)} fncToast={toastShow} key={index} />;
+                      return <ChannelComment comment={comment} userID={Number(session?.user.id)} fncToast={toastShow} key={comment.id} />;
                     })}
                   </div>
                 ) : (

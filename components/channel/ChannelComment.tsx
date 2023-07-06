@@ -1,28 +1,24 @@
 import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/outline';
-import { FunctionComponent, useEffect, useState } from 'react';
+import axios from 'axios';
+import { FunctionComponent, useState } from 'react';
 import { Avatar } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 
 import { toDateTimeformat } from '../../lib/utils';
 import { CommentType } from '../../typings';
-import axios from 'axios';
 
 type TBoardComment = {
   comment: CommentType
   userID: number
   fncToast?: (type: TypeAttributes.Status, txt: string) => void
-};
+}
 
 const ChannelComment: FunctionComponent<TBoardComment> = ({ comment, userID, fncToast = () => { } }) => {
-  const [reaction, setReaction] = useState<string | null>(null);
-  useEffect(() => {
-    if(comment.reaction !== null) {
-      setReaction(comment.reaction);
-    }
-  }, []);
+  const [reaction, setReaction] = useState<string | null>(comment.reaction);
 
   // Count Comment Reaction
   const countCommentReaction = (mode: string) => {
+    console.log('reaction: ', comment.comment + ' : ' + comment.reaction);
     if (reaction === null) {
       return 0;
     } else {
