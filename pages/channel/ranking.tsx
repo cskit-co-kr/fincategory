@@ -259,7 +259,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
                     <div className='flex gap-4 items-center'>
                       <div className='relative w-10 min-w-10 max-w-10'>
-                        <Image
+                        {/* <Image
                           src={
                             error
                               ? '/telegram-icon-96.png'
@@ -270,6 +270,13 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                           height={40}
                           className='object-contain rounded-full z-0'
                           onError={() => setError(true)}
+                        /> */}
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`}
+                          alt={rowData.title}
+                          width={40}
+                          height={40}
+                          className='object-contain rounded-full z-0'
                         />
                       </div>
                       <div className='flex flex-col'>
