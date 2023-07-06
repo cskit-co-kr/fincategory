@@ -1,21 +1,20 @@
 import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIcon, UsersIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import { NextSeo } from 'next-seo';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Button, Loader, Message, useToaster } from 'rsuite';
-import { useSession } from 'next-auth/react';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
 
 import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
 import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 
+import ChannelComment from '../../../components/channel/ChannelComment';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
-import ChannelComment from '../../../components/channel/ChannelComment';
 
 type TComment = {
   id: number
@@ -150,9 +149,12 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   return (
     <>
       <NextSeo
+        noindex={true}
+        nofollow={true}
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
+          { name: 'title', content: `${channel.title} | FinCa `},
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
@@ -184,7 +186,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                       </AreaChart>
                     </ResponsiveContainer>
                     <a
-                      href={`${router.asPath}/subscribers`}
+                      href={`/channel/${channel.username}/subscribers`}
                       className='flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5'
                     >
                       <ChartBarSquareIcon className='h-5' />

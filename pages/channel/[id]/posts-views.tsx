@@ -149,9 +149,12 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   return (
     <>
       <NextSeo
+        noindex={true}
+        nofollow={true}
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
+          { name: 'title', content: `${channel.title} | FinCa `},
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
