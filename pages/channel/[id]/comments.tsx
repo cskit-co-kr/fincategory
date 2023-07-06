@@ -86,7 +86,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     });
 
     const result = response.data;
-    
+
     result.total === 0 ? null : setComments(result.comments);
     result.total > 10 && setLoadMore(true);
   }
@@ -231,20 +231,33 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
               <div className='gap-4 flex flex-col w-full'>
                 <div className='bg-[#f2f2f2]'>
                   <div className='comment-write text-center md:mt-[20px] md:mb-[20px] md:mx-[140px]'>
-                    <textarea
+                    {session?.user ? <><textarea
                       className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
                       onChange={(e) => setComment(e.currentTarget.value)}
                       value={comment}
                       name='textarea'
                     />
-                    <Button
-                      appearance='primary'
-                      className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                      disabled={comment.trim().length > 0 ? false : true}
-                      onClick={saveComment}
-                    >
-                      등록
-                    </Button>
+                      <Button
+                        appearance='primary'
+                        className='bg-primary text-white py-2 px-5 text-center hover:text-white'
+                        disabled={comment.trim().length > 0 ? false : true}
+                        onClick={saveComment}
+                      >
+                        {t['register']}
+                      </Button>
+                    </> : (
+                      <div className='p-10'>
+                        <div className='text-center pb-5'>{t['login-to-comment']}</div>
+                        <Button
+                          appearance='primary'
+                          className='bg-primary text-white py-2 px-5 text-center hover:text-white'
+                          onClick={() => router.push('/member/signin')}
+                        >
+                          {t['sign-in']}
+                        </Button>
+                      </div>
+                    )
+                    }
                   </div>
                 </div>
                 {comments.length !== 0 ? (
