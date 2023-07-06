@@ -210,7 +210,7 @@ const Header = () => {
                           <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['search']}
                         </Link>
-                        <Link className='font-semibold flex gap-2 items-center' href='/channel/rankings' onClick={handleClick}>
+                        <Link className='font-semibold flex gap-2 items-center' href='/channel/ranking' onClick={handleClick}>
                           <ChartBarIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['channel-rankings']}
                         </Link>
@@ -327,7 +327,7 @@ const Header = () => {
                         <Link href='/member/profile' onClick={() => setUserMenu(false)} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
                           내 정보
                         </Link>
-                        <Link href='' onClick={() => signOut()} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                        <Link href='#' onClick={() => signOut()} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
                           {t['sign-out']}
                         </Link>
                       </div>

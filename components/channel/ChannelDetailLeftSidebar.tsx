@@ -43,7 +43,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           <div className='flex flex-col justify-between w-full'>
             <span className='text-gray-400'>{t['channel-region-and-language']}</span>
             <span>
-              {channel.country.nicename}, {channel.language && channel.language.value}
+              {t[channel.country.iso as keyof typeof t]}, {channel.language && t[channel.language.value as keyof typeof t]}
             </span>
           </div>
         </div>
