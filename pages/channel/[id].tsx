@@ -40,35 +40,37 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
   useEffect(() => {
-    // setPosts(getPosts(channel.username));
     getPosts();
   }, []);
 
-  const getPosts = async () => {
-    const response = await axios.post(`http://localhost:8080/v1/channel/posts_`, {
-      username: channel.username
-    });
-    const result = await response?.data;
-    result.length === 0 ? null : setPosts(result.messages);
-    result.length < 10 && setLoadMore(false);
-  }
+  // const getPosts = async () => {
+  //   const response = await axios.post(`http://localhost:8080/v1/channel/posts_`, {
+  //     username: channel.username
+  //   });
+  //   const result = await response?.data;
+  //   const posts = result.posts.messages.filter((msg: any) => msg["_"] === "message")
+  //   console.log("posts: ", posts);
+  //   result.length === 0 ? null : setPosts(posts);
+  //   result.length < 10 && setLoadMore(false);
+  // }
   // console.log("channel: ", getPosts(channel.username));
 
-  // const getPosts = async () => {
-  //   const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
-  //   setSearchEvent(getPostData);
-  //   setLoadMore(true);
-  //   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-  //     paginate: {
-  //       limit: getPostData.limit,
-  //       offset: getPostData.offset,
-  //     },
-  //   });
+  const getPosts = async () => {
+    const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
+    setSearchEvent(getPostData);
+    setLoadMore(true);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+      paginate: {
+        limit: getPostData.limit,
+        offset: getPostData.offset,
+      },
+    });
 
-  //   const result = await response?.data;
-  //   result.length === 0 ? null : setPosts(result);
-  //   result.length < 10 && setLoadMore(false);
-  // };
+    const result = await response?.data;
+    console.log("res: ", result);
+    result.length === 0 ? null : setPosts(result);
+    result.length < 10 && setLoadMore(false);
+  };
 
   const handleLoadMore = async (getPostData: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);

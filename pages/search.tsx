@@ -130,31 +130,31 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   }, [locale, props]);
 
 
-  useEffect(() => {
-    if(searchResult && posts.length === 0){
-      const socket = new WebSocket(`ws://localhost:8081`);
+  // useEffect(() => {
+  //   if(searchResult && posts.length === 0){
+  //     const socket = new WebSocket(`ws://localhost:8081`);
       
-      const data: any[] = []  
-      searchResult.slice(0, 10).map((res: any) => {
-        const channel = {
-          username: res.username,
-          // access_hash: res.access_hash,
-          // channel_id: res.channel_id,
-        }
-        data.push(channel)
-      })
-      socket.addEventListener("open", (event) => {
-        socket.send(JSON.stringify(data)); 
-      });
+  //     const data: any[] = []  
+  //     searchResult.slice(0, 10).map((res: any) => {
+  //       const channel = {
+  //         username: res.username,
+  //         // access_hash: res.access_hash,
+  //         // channel_id: res.channel_id,
+  //       }
+  //       data.push(channel)
+  //     })
+  //     socket.addEventListener("open", (event) => {
+  //       socket.send(JSON.stringify(data)); 
+  //     });
 
-      socket.addEventListener("message", (event) => {
-        console.log(event.data);
-        // console.log("Message from server ", event.data);
-        // savePosts(JSON.parse(event.data));
-      });
-    }
+  //     socket.addEventListener("message", (event) => {
+  //       console.log(event.data);
+  //       // console.log("Message from server ", event.data);
+  //       // savePosts(JSON.parse(event.data));
+  //     });
+  //   }
     
-  }, [searchResult])
+  // }, [searchResult])
 
 
   const doSearch = async (q: string) => {
