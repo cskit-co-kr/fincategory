@@ -17,16 +17,16 @@ import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
 type TComment = {
-  id: number
-  comment: string
-  reaction: string
-  created_at: Date
-  updated_at: Date
+  id: number;
+  comment: string;
+  reaction: string;
+  created_at: Date;
+  updated_at: Date;
   user: {
-    id: number
-    nickname: string
-  }
-}
+    id: number;
+    nickname: string;
+  };
+};
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
-}
+};
 
 const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any) => {
   const router = useRouter();
@@ -77,15 +77,15 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
       },
       sort: {
         field: 'created_at',
-        order: 'DESC'
-      }
+        order: 'DESC',
+      },
     });
 
     const result = response.data;
 
     result.total === 0 ? setComments([]) : setComments(result.comments);
     result.total > 10 && setLoadMore(true);
-  }
+  };
 
   const handleLoadMore = async (getCommentData: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);
@@ -99,15 +99,15 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
       },
       sort: {
         field: 'created_at',
-        order: 'DESC'
-      }
+        order: 'DESC',
+      },
     });
     const result = response.data;
     result.comments.length < 10 && setLoadMore(false);
 
     setComments(comments.concat(result.comments));
     setLoadMoreText(t['load-more']);
-  }
+  };
 
   const data = sub?.map((item: any) => {
     const date = new Date(item.created_at);
@@ -125,7 +125,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/comment/insert`, {
       comment: review,
       user: Number(session?.user.id),
-      channel: channel.channel_id
+      channel: channel.channel_id,
     });
 
     const result = response.data;
@@ -139,12 +139,12 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     } else {
       toastShow('error', t['login-to-comment']);
     }
-  }
+  };
 
   const toastShow = (type: TypeAttributes.Status, txt: string) => {
     const options = { placement, duration: 5000 };
     toaster.push(message(type, txt), options);
-  }
+  };
 
   return (
     <>
@@ -154,7 +154,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa `},
+          { name: 'title', content: `${channel.title} | FinCa ` },
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
@@ -229,22 +229,25 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
 
               <div className='gap-4 flex flex-col w-full'>
                 <div className='bg-[#f2f2f2]'>
-                  <div className='review-write text-center md:mt-[20px] md:mb-[20px] md:mx-[140px]'>
-                    {session?.user ? <><textarea
-                      className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
-                      onChange={(e) => setReview(e.currentTarget.value)}
-                      value={review}
-                      name='textarea'
-                    />
-                      <Button
-                        appearance='primary'
-                        className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                        disabled={review.trim().length > 0 ? false : true}
-                        onClick={saveReview}
-                      >
-                        {t['register']}
-                      </Button>
-                    </> : (
+                  <div className='review-write text-center p-5'>
+                    {session?.user ? (
+                      <>
+                        <textarea
+                          className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
+                          onChange={(e) => setReview(e.currentTarget.value)}
+                          value={review}
+                          name='textarea'
+                        />
+                        <Button
+                          appearance='primary'
+                          className='bg-primary text-white py-2 px-5 text-center hover:text-white'
+                          disabled={review.trim().length > 0 ? false : true}
+                          onClick={saveReview}
+                        >
+                          {t['register']}
+                        </Button>
+                      </>
+                    ) : (
                       <div className='p-10'>
                         <div className='text-center pb-5'>{t['login-to-comment']}</div>
                         <Button
@@ -255,8 +258,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                           {t['sign-in']}
                         </Button>
                       </div>
-                    )
-                    }
+                    )}
                   </div>
                 </div>
                 {comments.length !== 0 ? (
@@ -270,7 +272,10 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                 )}
                 {loadMore && (
                   <div className='flex justify-center col-span-3'>
-                    <button onClick={() => handleLoadMore(searchEvent)} className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0'>
+                    <button
+                      onClick={() => handleLoadMore(searchEvent)}
+                      className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0'
+                    >
                       {loadMoreText}
                     </button>
                   </div>
@@ -321,18 +326,19 @@ export const getServerSideProps = async (context: any) => {
       views: Math.round((item.average * 100) / channel.subscription),
     }));
 
-    averageErr = errPercent.reduce((a: any, b: any) => {
-      return a + b.views;
-    }, 0) / errPercent.length;
+    averageErr =
+      errPercent.reduce((a: any, b: any) => {
+        return a + b.views;
+      }, 0) / errPercent.length;
   }
 
   if (channel !== '') {
     return {
-      props: { channel, sub, averageViews, averagePosts, averageErr }
-    }
+      props: { channel, sub, averageViews, averagePosts, averageErr },
+    };
   } else {
-    return { notFound: true }
+    return { notFound: true };
   }
-}
+};
 
 export default Comments;

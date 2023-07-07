@@ -445,7 +445,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 ) : (
                   <></>
                 )}
-                <div className='comment-write text-center md:mt-[20px] md:mx-[140px]' ref={commentWriteRef}>
+                <div className='comment-write text-center' ref={commentWriteRef}>
                   <textarea
                     className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
                     onChange={(e) => setComment(e.currentTarget.value)}
