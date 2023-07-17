@@ -7,6 +7,7 @@ import { koKR } from '../../lang/ko-KR';
 import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
+import { toDateTimeformat } from '../../lib/utils';
 const Media = dynamic(() => import('./ChannelMedia'), { ssr: false });
 
 const Post = ({ channel, post }: any) => {
@@ -32,7 +33,12 @@ const Post = ({ channel, post }: any) => {
         <div className='flex flex-col gap-0.5'>
           <div className='text-sm font-bold'>{channel.title}</div>
           <div className='text-xs text-gray-500'>
-            {new Date(post.date).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+            {/* {new Date(post.date).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })} */}
+            {new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
@@ -52,7 +58,7 @@ const Post = ({ channel, post }: any) => {
         <div className='flex flex-wrap gap-2 text-xs'>
           {JSON.parse(post.reactions)?.results.map((reaction: any, index: number) => (
             <div key={index} className='rounded-full bg-gray-100 pl-2 pr-3 py-1 flex gap-1'>
-              <span>{reaction.reaction}</span>
+              <span>{reaction.reaction._ ? reaction.reaction.emoticon : reaction.reaction}</span>
               <span>{reaction.count}</span>
             </div>
           ))}
