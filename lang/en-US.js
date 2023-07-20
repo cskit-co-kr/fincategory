@@ -76,6 +76,7 @@ export const enUS = {
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
+    "tags": "Hashtags",
     /* add a channel */
     "add-channel": "Add a channel",
     "link-to": "Link to the channel or @username",

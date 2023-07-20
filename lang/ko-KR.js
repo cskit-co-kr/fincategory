@@ -76,6 +76,7 @@ export const koKR = {
     "sort-by": "정렬 기준",
     "subscribers-desc": "구독자순 ",
     "subscribers-asc": "구독자순 ",
+    "tags": "해시태그",
     /* add a channel */
     "add-channel": "채널 추가",
     "link-to": "채널 또는 @username에 대한 링크",
