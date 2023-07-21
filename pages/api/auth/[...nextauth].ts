@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import KakaoProvider from 'next-auth/providers/kakao';
 import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
@@ -30,6 +31,10 @@ export const authOptions: NextAuthOptions = {
           return decodedToken;
         } else return null;
       },
+    }),
+    KakaoProvider({
+      clientId: process.env.KAKAO_CLIENT_ID as string,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET as string,
     }),
   ],
   pages: {

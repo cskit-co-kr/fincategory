@@ -153,8 +153,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(data),
     });
-    // const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
-    // const result = await response.data.channel
+    // const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
+    // const resultData = await response.data;
     const resultData = await response.json();
     const result = resultData.channel;
     setTotalChannels(resultData.total);
@@ -165,8 +165,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const handleLoadMore = async (data: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);
     data['paginate'].limit = data['paginate'].limit + 60;
-    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/searchChannel`, data)
-    //const result = await response.data.channel
+    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
+    //const resultData = await response.data;
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
