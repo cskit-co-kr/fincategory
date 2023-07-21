@@ -160,6 +160,7 @@ export const koKR = {
     "edit": "수정",
     "delete": "삭제",
     "comment-saved": "댓글 등록 되었습니다.",
+    "tag-saved": "해시태그 등록 되었습니다.",
     "post-url-copied": "URL이 복사되었습니다. 원하는 곳에 붙여 넣으세요.",
     "search-filter": "검색 필터",
     "login-to-comment": "로그인을 하셔야 댓글을 작성할 수 있습니다.",
