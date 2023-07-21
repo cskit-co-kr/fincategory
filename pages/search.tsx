@@ -40,7 +40,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
 
-  const {savePosts, posts} = useData()
+  const { savePosts, posts } = useData()
 
   const optionsChannelTypes = [
     {
@@ -133,7 +133,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   // useEffect(() => {
   //   if(searchResult && posts.length === 0){
   //     const socket = new WebSocket(`ws://localhost:8081`);
-      
+
   //     const data: any[] = []  
   //     searchResult.slice(0, 10).map((res: any) => {
   //       const channel = {
@@ -153,7 +153,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   //       // savePosts(JSON.parse(event.data));
   //     });
   //   }
-    
+
   // }, [searchResult])
 
 
@@ -660,13 +660,13 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </div>
               </div>
             ) : null}
-            {searchResult ? (
-              searchResult.map((channel: any, index: number) => {
-                return <GetChannels channels={channel} key={index} />;
-              })
-            ) : (
-              <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
-            )}
+              {searchResult ? (
+                searchResult.map((channel: any, index: number) => {
+                  return <GetChannels channels={channel} key={index} />;
+                })
+              ) : (
+                <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
+              )}
             {loadMore && (
               <div className='flex justify-center col-span-12'>
                 <button
@@ -685,19 +685,19 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 };
 
 export const getServerSideProps = async () => {
-    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-    const categories = await result.data;
+  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+  const categories = await result.data;
 
-    const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-    const countries = await resCountry.data;
+  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+  const countries = await resCountry.data;
 
-    const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-    const languages = await resLanguage.data;
+  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+  const languages = await resLanguage.data;
 
-    return {
-      props: { categories, countries, languages },
-    };
-  
+  return {
+    props: { categories, countries, languages },
+  };
+
 
 };
 
