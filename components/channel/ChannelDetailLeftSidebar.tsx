@@ -9,7 +9,7 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 
 import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
-import { AutoComplete, Button, Input, PickerHandle, Tag, Tooltip } from 'rsuite';
+import { AutoComplete, Button, Input, PickerHandle, Tag, Tooltip, Whisper } from 'rsuite';
 
 interface DataTags {
   tag: string
@@ -72,7 +72,9 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   }
 
   const handleEditInputChange = (value: string, e: ChangeEvent<HTMLInputElement>) => {
-    setEditInputValue(value);
+    const val = value.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
+
+    setEditInputValue(val);
   }
 
   const handleEditInputConfirm = () => {
@@ -93,9 +95,6 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   }
 
   const handleSearch = async (newValue: string) => {
-    // console.log('newValue: ', newValue);
-    // console.log('tagList: ', tagsList);
-
     const val = newValue.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
 
     if (val && val.length > 0) {
@@ -125,7 +124,15 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   const tagInputStyle: React.CSSProperties = {
     width: 160,
-    verticalAlign: 'top'
+    verticalAlign: 'top',
+    marginBottom: 10
+  }
+
+  const saveTag = async () => {
+    const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`, {
+      tags: tags,
+      channel: channel.channel_id
+    });
   }
 
   return (
@@ -166,40 +173,42 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             <span className='text-gray-400'>{t['tags']}</span>
             {session?.user.type === undefined ?
               <div className='admin-mode mt-1'>
-                <div className='mb-1'>
+                <div className='mb-1 '>
                   {tags.map((tag, index: number) => {
                     if (editInputIndex === index) {
                       return (
                         <Input
                           ref={editInputRef}
                           key={tag}
-                          size="sm"
+                          size="xs"
                           style={tagInputStyle}
                           value={editInputValue}
                           onChange={handleEditInputChange}
                           onBlur={handleEditInputConfirm}
                           onPressEnter={handleEditInputConfirm}
+                          className='focus-within:outline-none'
                         />
                       );
                     }
                     const isLongTag = tag.length > 20;
                     const tagElem = (
-                      <Tag
-                        key={tag}
-                        closable={true}
-                        style={{ userSelect: 'none', marginBottom: 8 }}
-                        onClose={() => handleClose(tag)}
-                      >
-                        <span
-                          onDoubleClick={(e) => {
+                      <Whisper trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
+                        <Tag
+                          key={tag}
+                          closable={true}
+                          style={{ userSelect: 'none', marginBottom: 4 }}
+                          onClose={() => handleClose(tag)}
+                        >
+                          <span onDoubleClick={(e) => {
                             setEditInputIndex(index);
                             setEditInputValue(tag);
                             e.preventDefault();
                           }}
-                        >
-                          {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                        </span>
-                      </Tag>
+                          >
+                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                          </span>
+                        </Tag>
+                      </Whisper>
                     );
                     return isLongTag ? (
                       <Tooltip title={tag} key={tag}>
@@ -211,7 +220,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                   })}
                 </div>
                 {inputVisible ? (
-                  <>
+                  <div className='border-t-[1px] pt-2 flex items-center'>
                     <AutoComplete
                       ref={inputRef}
                       onChange={handleSearch}
@@ -220,15 +229,17 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                       onKeyUp={handleKeyDown}
                       data={data}
                       size='xs'
-                      className='outline-none focus:outline-none  focus-within:outline-none'
+                      className='w-[160px] focus-within:outline-none'
                     />
-                  </>
+                  </div>
                 ) : (
-                  <span className='flex items-center bg-[#1677ff] text-white border border-dashed text-[12px]' style={{ display: 'flex' }} onClick={showInput}>
-                    <PlusSmallIcon className='h-6 w-6 text-white' /> New Tag
-                  </span>
+                  <div className='border-t-[1px] pt-2 flex items-center'>
+                    <span className='flex items-center bg-[#3498ff] text-white border border-dashed text-[12px] rounded-md pr-2 mr-2' onClick={showInput}>
+                      <PlusSmallIcon className='h-6 w-6 text-white' /> New Tag
+                    </span>
+                    <Button appearance='primary' size='xs' className='bg-[#3498ff] border border-dashed' onClick={saveTag}>Save</Button>
+                  </div>
                 )}
-                <Button>Save</Button>
               </div>
               :
               <div className='hashtags flex gap-1'>
