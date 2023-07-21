@@ -57,7 +57,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
     setTags(tags);
 
-    if (session?.user.type === undefined) {
+    if (session?.user.type === 2) {
       loadTags();
     }
   }, [])
@@ -171,7 +171,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           </div>
           <div className='flex flex-col justify-between w-full'>
             <span className='text-gray-400'>{t['tags']}</span>
-            {session?.user.type === undefined ?
+            {session?.user.type === 2 ?
               <div className='admin-mode mt-1'>
                 <div className='mb-1 '>
                   {tags.map((tag, index: number) => {
