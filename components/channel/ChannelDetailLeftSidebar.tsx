@@ -9,7 +9,8 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 
 import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
-import { AutoComplete, Button, Input, PickerHandle, Tag, Tooltip, Whisper } from 'rsuite';
+import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from 'rsuite';
+import { TypeAttributes } from 'rsuite/esm/@types/common';
 
 interface DataTags {
   tag: string
@@ -37,6 +38,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
+
+  const message = (type: TypeAttributes.Status, message: string) => (
+    <Message showIcon type={type} closable>
+      {message}
+    </Message>
+  );
+
 
   const loadTags = async () => {
     const tags: any = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
@@ -133,6 +141,20 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       tags: tags,
       channel: channel.channel_id
     });
+
+    const data = res.data;
+
+    if (res.status === 200 && data.code === 200) {
+      toaster.push(message('info', t['tag-saved']), {
+        placement: 'topEnd',
+        duration: 5000
+      });
+    } else {
+      toaster.push(message('error', 'UnSuccessfull'), {
+        placement: 'topEnd',
+        duration: 5000
+      });
+    }
   }
 
   return (
