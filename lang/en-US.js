@@ -76,6 +76,7 @@ export const enUS = {
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
+    "tags": "Hashtags",
     /* add a channel */
     "add-channel": "Add a channel",
     "link-to": "Link to the channel or @username",
@@ -159,6 +160,7 @@ export const enUS = {
     "edit": "Edit",
     "delete": "Delete",
     "comment-saved": "Your comment has been successfully saved.",
+    "tag-saved": "The tag has been successfully saved.",
     "post-url-copied": "Board Post URL copied to clipboard.",
     "search-filter": "Search filter",
     "login-to-comment": "You must be logged in to post a comment.",

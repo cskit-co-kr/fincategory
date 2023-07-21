@@ -12,7 +12,6 @@ import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import { useData } from '../../context/context';
 
 const Post = dynamic(() => import('../../components/channel/Post'), {
   ssr: false,
@@ -67,7 +66,6 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     });
 
     const result = await response?.data;
-    console.log("res: ", result);
     result.length === 0 ? null : setPosts(result);
     result.length < 10 && setLoadMore(false);
   };
@@ -108,7 +106,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa `},
+          { name: 'title', content: `${channel.title} | FinCa ` },
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
@@ -210,6 +208,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
 
 export const getServerSideProps = async (context: any) => {
   const getId = context.query['id'];
+
   let averageViews = 0;
   let averagePosts = 0;
   let averageErr = 0;

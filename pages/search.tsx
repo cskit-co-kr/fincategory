@@ -154,6 +154,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   // }, [searchResult])
 
+  // }, [searchResult])
+
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
     // setLoadMore(true);
