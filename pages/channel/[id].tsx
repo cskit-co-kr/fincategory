@@ -12,6 +12,7 @@ import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import { useData } from '../../context/context';
 
 const Post = dynamic(() => import('../../components/channel/Post'), {
   ssr: false,
@@ -34,13 +35,25 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
-  const [posts, setPosts] = useState<any | null>(null);
+  const [posts, setPosts] = useState<any[]>([]);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
   useEffect(() => {
     getPosts();
   }, []);
+
+  // const getPosts = async () => {
+  //   const response = await axios.post(`http://localhost:8080/v1/channel/posts_`, {
+  //     username: channel.username
+  //   });
+  //   const result = await response?.data;
+  //   const posts = result.posts.messages.filter((msg: any) => msg["_"] === "message")
+  //   console.log("posts: ", posts);
+  //   result.length === 0 ? null : setPosts(posts);
+  //   result.length < 10 && setLoadMore(false);
+  // }
+  // console.log("channel: ", getPosts(channel.username));
 
   const getPosts = async () => {
     const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
@@ -54,6 +67,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     });
 
     const result = await response?.data;
+    console.log("res: ", result);
     result.length === 0 ? null : setPosts(result);
     result.length < 10 && setLoadMore(false);
   };

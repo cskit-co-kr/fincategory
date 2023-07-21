@@ -13,6 +13,7 @@ import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { FaXmark } from 'react-icons/fa6';
 import { colorStyles } from '../constants';
+import { useData } from '../context/context';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -38,6 +39,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
+
+  const { savePosts, posts } = useData();
 
   const optionsChannelTypes = [
     {
@@ -125,6 +128,32 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setSearchResultText(t['empty-search-text']);
   }, [locale, props]);
 
+  // useEffect(() => {
+  //   if(searchResult && posts.length === 0){
+  //     const socket = new WebSocket(`ws://localhost:8081`);
+
+  //     const data: any[] = []
+  //     searchResult.slice(0, 10).map((res: any) => {
+  //       const channel = {
+  //         username: res.username,
+  //         // access_hash: res.access_hash,
+  //         // channel_id: res.channel_id,
+  //       }
+  //       data.push(channel)
+  //     })
+  //     socket.addEventListener("open", (event) => {
+  //       socket.send(JSON.stringify(data));
+  //     });
+
+  //     socket.addEventListener("message", (event) => {
+  //       console.log(event.data);
+  //       // console.log("Message from server ", event.data);
+  //       // savePosts(JSON.parse(event.data));
+  //     });
+  //   }
+
+  // }, [searchResult])
+
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
     // setLoadMore(true);
@@ -157,6 +186,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     // const resultData = await response.data;
     const resultData = await response.json();
     const result = resultData.channel;
+
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
     result.length < 60 ? setLoadMore(false) : setLoadMore(true);
