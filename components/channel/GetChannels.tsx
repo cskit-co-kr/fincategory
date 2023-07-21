@@ -5,6 +5,7 @@ import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Tag } from 'rsuite';
 
 type Props = {
   channels: Channel;
@@ -20,10 +21,10 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
   return (
     <Link
       href={{ pathname: '/channel/' + channels.username }}
-      className='hover:no-underline group col-span-12 sm:col-span-6 lg:col-span-6 xl:col-span-4'
+      className='hover:no-underline block group col-span-12 sm:col-span-6 lg:col-span-6 xl:col-span-4'
       target={'_blank'}
     >
-      <div className='flex items-start border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black max-h-[140px] overflow-hidden transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
+      <div className='flex h-full border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black overflow-hidden transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
         <div className='relative w-[50px] min-w-[50px] max-w-[50px]'>
           <Image
             src={error ? '/telegram-icon-96.png' : avatar}
@@ -44,6 +45,13 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
             <p className='text-[12px] m-0 text-gray-500'>
               오늘{channels.counter.today}/누적{channels.counter.total}
             </p>
+          </div>
+          <div className='tags flex flex-wrap'>
+            {channels.tags && channels.tags.map((tag: { id: number, channel_id: number, tag: string }) => {
+              return (
+                <Link href={`/search?q=#${tag.tag}`} className='text-primary mr-1' key={tag.id}>#{tag.tag}</Link>
+              )
+            })}
           </div>
         </div>
       </div>
