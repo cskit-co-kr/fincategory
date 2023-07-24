@@ -10,6 +10,7 @@ import { GroupType, MemberType } from '../typings';
 import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
+import { Sankey } from 'recharts';
 
 const Header = () => {
   const router = useRouter();
@@ -31,7 +32,10 @@ const Header = () => {
   const handleSubmit = () => {
     if (searchField !== '') {
       if (searchSection === 1) {
-        router.push(`/search?q=${searchField}`);
+        router.push({
+          pathname: 'search',
+          query: { q: searchField }
+        });
       } else if (searchSection === 2) {
         router.push(`/board?q=${searchField}`);
       }

@@ -679,7 +679,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       </div>
     </>
   );
-};
+}
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
@@ -694,6 +694,8 @@ export const getServerSideProps = async () => {
   return {
     props: { categories, countries, languages },
   };
+
+
 };
 
 export default Search;
