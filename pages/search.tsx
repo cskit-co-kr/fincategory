@@ -410,7 +410,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       <button
                         onClick={() => {
                           //doSearch('');
-                          router.push(`/search?q=${searchText}`);
+                          router.push({
+                            pathname: 'search',
+                            query: searchText != '' ? { q: searchText } : undefined,
+                          });
                           handleClick();
                         }}
                         className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
@@ -679,7 +682,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       </div>
     </>
   );
-}
+};
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
@@ -694,8 +697,6 @@ export const getServerSideProps = async () => {
   return {
     props: { categories, countries, languages },
   };
-
-
 };
 
 export default Search;
