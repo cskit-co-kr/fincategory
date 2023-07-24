@@ -660,13 +660,13 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </div>
               </div>
             ) : null}
-              {searchResult ? (
-                searchResult.map((channel: any, index: number) => {
-                  return <GetChannels channels={channel} key={index} />;
-                })
-              ) : (
-                <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
-              )}
+            {searchResult ? (
+              searchResult.map((channel: any, index: number) => {
+                return <GetChannels channels={channel} key={index} />;
+              })
+            ) : (
+              <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
+            )}
             {loadMore && (
               <div className='flex justify-center col-span-12'>
                 <button
@@ -682,7 +682,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       </div>
     </>
   );
-};
+}
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
@@ -695,10 +695,8 @@ export const getServerSideProps = async () => {
   const languages = await resLanguage.data;
 
   return {
-    props: { categories, countries, languages },
-  };
-
-
-};
+    props: { categories, countries, languages }
+  }
+}
 
 export default Search;

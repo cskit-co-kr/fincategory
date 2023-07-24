@@ -49,7 +49,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
           <div className='tags flex flex-wrap'>
             {channels.tags && channels.tags.map((tag: { id: number, channel_id: number, tag: string }) => {
               return (
-                <Link href={`/search?q=#${tag.tag}`} className='text-primary mr-1' key={tag.id}>#{tag.tag}</Link>
+                <Link href={`/search?q=#${tag.tag}`} className='text-primary mr-1 text-[12px]' key={tag.id}>#{tag.tag}</Link>
               )
             })}
           </div>
