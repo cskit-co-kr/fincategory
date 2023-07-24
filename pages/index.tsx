@@ -9,11 +9,18 @@ import { Category, PostType } from '../typings';
 import GetChannels from '../components/channel/GetChannels';
 import HashtagBox from '../components/HashtagBox';
 import HomeBoardPostList from '../components/HomeBoardPostList';
+import { useEffect, useState } from 'react';
 
-const Home: NextPage = ({ channels, categories, postList }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
+
+  const [selectedTags, setSelectedTags] = useState([tags[0].tag]);
+
+  useEffect(() => {
+    //searchs
+  }, [selectedTags]);
 
   // const cats = categories?.map((item: any) => {
   //   const obj = JSON.parse(item.name);
@@ -163,9 +170,26 @@ const Home: NextPage = ({ channels, categories, postList }: InferGetServerSidePr
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
-        <div className='flex gap-2'>
-          <button className='bg-primary px-5 py-2 rounded-full text-white'>생활</button>
-          <button className='border border-primary px-5 py-2 rounded-full text-primary'>생활</button>
+        <div className='flex gap-2 flex-wrap'>
+          {tags?.map((tag: any) => (
+            <button
+              className={`px-5 py-2 whitespace-nowrap border border-primary ${
+                selectedTags.find((e) => e === tag.tag) ? 'bg-primary rounded-full text-white' : 'rounded-full text-primary'
+              }`}
+              key={tag.tag}
+              onClick={() => {
+                selectedTags.find((e) => e === tag.tag)
+                  ? setSelectedTags((current) =>
+                      current.filter((element) => {
+                        return element !== tag.tag;
+                      })
+                    )
+                  : setSelectedTags([...selectedTags, tag.tag]);
+              }}
+            >
+              {tag.tag}
+            </button>
+          ))}
         </div>
         <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
           {channels.map((channel: any, index: number) => {
@@ -227,8 +251,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   );
   const postList = await responsePost.json();
 
+  // Get Tag List
+  const resultTag = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
+  const tags = await resultTag.data;
+
   return {
-    props: { channels, categories, postList },
+    props: { channels, categories, postList, tags },
   };
 };
 
