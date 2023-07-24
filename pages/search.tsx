@@ -628,9 +628,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             </div>
           </div> */}
 
-          <div className='grid grid-cols-12 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+          <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 col-span-12 border border-gray-200 mt-2 md:mt-0'>
+              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
                   {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
                   <b>{totalChannels}</b>
@@ -662,10 +662,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 return <GetChannels channels={channel} key={index} />;
               })
             ) : (
-              <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
+              <div className='text-center mt-2 md:mt-0 md:col-span-3'>{searchResultText}</div>
             )}
             {loadMore && (
-              <div className='flex justify-center col-span-12'>
+              <div className='flex justify-center md:col-span-3'>
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
                   className='bg-primary px-8 rounded-full text-sm py-2 my-4 md:my-0 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
