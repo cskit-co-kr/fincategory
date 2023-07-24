@@ -40,7 +40,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
 
-  const { savePosts, posts } = useData()
+  const { savePosts, posts } = useData();
 
   const optionsChannelTypes = [
     {
@@ -116,7 +116,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   }, [router, sorting]);
 
-
   useEffect(() => {
     setOptions(cats);
     setOptionsCountries(countries);
@@ -129,12 +128,11 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setSearchResultText(t['empty-search-text']);
   }, [locale, props]);
 
-
   // useEffect(() => {
   //   if(searchResult && posts.length === 0){
   //     const socket = new WebSocket(`ws://localhost:8081`);
 
-  //     const data: any[] = []  
+  //     const data: any[] = []
   //     searchResult.slice(0, 10).map((res: any) => {
   //       const channel = {
   //         username: res.username,
@@ -144,7 +142,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   //       data.push(channel)
   //     })
   //     socket.addEventListener("open", (event) => {
-  //       socket.send(JSON.stringify(data)); 
+  //       socket.send(JSON.stringify(data));
   //     });
 
   //     socket.addEventListener("message", (event) => {
@@ -155,7 +153,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   //   }
 
   // }, [searchResult])
-
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
@@ -184,9 +181,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(data),
-    })
-    // const response = await axios.post(`https://api.fincategory.com/client/telegram/searchChannel`, data)
-    // const result = await response.data.channel
+    });
+    // const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
+    // const resultData = await response.data;
     const resultData = await response.json();
     const result = resultData.channel;
 
@@ -198,8 +195,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const handleLoadMore = async (data: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);
     data['paginate'].limit = data['paginate'].limit + 60;
-    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/client/telegram/searchChannel`, data)
-    //const result = await response.data.channel
+    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
+    //const resultData = await response.data;
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -631,9 +628,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             </div>
           </div> */}
 
-          <div className='grid grid-cols-12 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+          <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 col-span-12 border border-gray-200 mt-2 md:mt-0'>
+              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
                   {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
                   <b>{totalChannels}</b>
@@ -660,15 +657,15 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </div>
               </div>
             ) : null}
-              {searchResult ? (
-                searchResult.map((channel: any, index: number) => {
-                  return <GetChannels channels={channel} key={index} />;
-                })
-              ) : (
-                <div className='text-center mt-2 md:mt-0 col-span-12'>{searchResultText}</div>
-              )}
+            {searchResult ? (
+              searchResult.map((channel: any, index: number) => {
+                return <GetChannels channels={channel} key={index} />;
+              })
+            ) : (
+              <div className='text-center mt-2 md:mt-0 md:col-span-3'>{searchResultText}</div>
+            )}
             {loadMore && (
-              <div className='flex justify-center col-span-12'>
+              <div className='flex justify-center md:col-span-3'>
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
                   className='bg-primary px-8 rounded-full text-sm py-2 my-4 md:my-0 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
@@ -697,8 +694,6 @@ export const getServerSideProps = async () => {
   return {
     props: { categories, countries, languages },
   };
-
-
 };
 
 export default Search;

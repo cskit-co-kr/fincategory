@@ -1,11 +1,10 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Channel } from '../../typings';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Tag } from 'rsuite';
+import ChannelAvatar from './ChannelAvatar';
 
 type Props = {
   channels: Channel;
@@ -15,43 +14,31 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
-  const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channels.channel_id}/avatar.jfif`;
-  const [error, setError] = useState<boolean>(false);
 
   return (
-    <Link
-      href={{ pathname: '/channel/' + channels.username }}
-      className='hover:no-underline block group col-span-12 sm:col-span-6 lg:col-span-6 xl:col-span-4'
-      target={'_blank'}
-    >
+    <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black group' target='_blank'>
       <div className='flex h-full border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black overflow-hidden transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
-        <div className='relative w-[50px] min-w-[50px] max-w-[50px]'>
-          <Image
-            src={error ? '/telegram-icon-96.png' : avatar}
-            alt={'avatar of ' + channels.title}
-            width={50}
-            height={50}
-            className='object-contain rounded-full z-0'
-            onError={() => setError(true)}
-          />
-        </div>
-        <div className='flex flex-1 flex-col gap-2 overflow-hidden'>
-          <h2 className='font-semibold text-sm truncate w-full'>{channels.title}</h2>
-          <p className='text-[12px] h-9 w-full overflow-hidden'>{channels.description}</p>
-          <div className='flex justify-between'>
-            <p className='text-[12px] m-0 text-gray-500'>
+        <ChannelAvatar id={channels.channel_id} title={channels.title} size='50' shape='rounded-full' />
+        <div className='space-y-2 overflow-hidden w-full'>
+          <h2 className='font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
+          <p className='text-[12px] h-9 overflow-hidden'>{channels.description}</p>
+          <div className='flex justify-between text-[12px] text-gray-500'>
+            <span>
               {t['subscribers']} <b>{channels.subscription?.toLocaleString()}</b>
-            </p>
-            <p className='text-[12px] m-0 text-gray-500'>
+            </span>
+            <span>
               오늘{channels.counter.today}/누적{channels.counter.total}
-            </p>
+            </span>
           </div>
           <div className='tags flex flex-wrap'>
-            {channels.tags && channels.tags.map((tag: { id: number, channel_id: number, tag: string }) => {
-              return (
-                <Link href={`/search?q=#${tag.tag}`} className='text-primary mr-1' key={tag.id}>#{tag.tag}</Link>
-              )
-            })}
+            {channels.tags &&
+              channels.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
+                return (
+                  <Link href={`/search?q=#${tag.tag}`} className='text-primary mr-1' key={tag.id}>
+                    #{tag.tag}
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </div>

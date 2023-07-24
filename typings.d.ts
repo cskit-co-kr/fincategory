@@ -59,10 +59,10 @@ export interface Channel {
     deleted_at: any;
   };
   tags: Array<{
-    id: number
-    channel_id: number
-    tag: string
-  }>
+    id: number;
+    channel_id: number;
+    tag: string;
+  }>;
 }
 
 export type MultiValueOptions = {
