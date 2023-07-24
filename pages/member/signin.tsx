@@ -96,6 +96,9 @@ const MemberSignIn = () => {
                   <div>{t['sign-in']}</div>
                 </button>
               </div>
+              {/* <div>
+                <button onClick={() => signIn('kakao', { callbackUrl: '/member/kakaoLogin' })}>Sign in with Kakao</button>
+              </div> */}
               <div className='mt-4 flex divide-x place-content-center'>
                 <div className='px-4'>
                   <button onClick={() => setPage('forgot')} className='underline'>
