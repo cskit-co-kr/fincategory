@@ -53,8 +53,6 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       return acc;
     }, []);
 
-    console.log('taglist: ', tagsList);
-
     setTagsList(tagsList);
   }
 
@@ -269,7 +267,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               <div className='hashtags flex gap-1'>
                 {channel.tags.map((tag: { id: number, channel_id: number, tag: string }) => {
                   return (
-                    <Link href={`/search?q=#${tag.tag}`} className='text-primary' key={tag.id}>#{tag.tag}</Link>
+                    <Link href={`/search?q=#${tag.tag}`} className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700' key={tag.id}>#{tag.tag}</Link>
                   )
                 })}
               </div>
