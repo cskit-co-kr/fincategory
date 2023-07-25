@@ -45,7 +45,6 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     </Message>
   );
 
-
   const loadTags = async () => {
     const tags: any = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
 
@@ -53,6 +52,8 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       acc.push(e.tag);
       return acc;
     }, []);
+
+    console.log('taglist: ', tagsList);
 
     setTagsList(tagsList);
   }
@@ -68,7 +69,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     if (session?.user.type === 2) {
       loadTags();
     }
-  }, [])
+  }, []);
 
   const showInput = () => {
     setInputVisible(true);
@@ -155,6 +156,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
         duration: 5000
       });
     }
+    loadTags();
   }
 
   return (
@@ -214,7 +216,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                     }
                     const isLongTag = tag.length > 20;
                     const tagElem = (
-                      <Whisper trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
+                      <Whisper key={tag} trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
                         <Tag
                           key={tag}
                           closable={true}
