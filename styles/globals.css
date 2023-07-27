@@ -65,3 +65,17 @@
 .scrollable-container::-webkit-scrollbar {
   display: none;
 }
+
+.tgme_widget_message_user,
+.tgme_widget_message_bubble_tail,
+.tgme_widget_message_bubble_logo,
+.tgme_widget_message_author,
+.tgme_widget_message_link {
+  display: none !important;
+}
+.tgme_widget_message_bubble {
+  border-radius: 10px !important;
+}
+.tgme_widget_message_bubble {
+  margin-left: 0 !important;
+}

@@ -39,10 +39,12 @@
     "react-icons": "^4.10.1",
     "react-quill": "^2.0.0",
     "react-select": "^5.7.0",
+    "react-slick": "^0.29.0",
     "recharts": "^2.5.0",
     "recoil": "^0.7.6",
     "rsuite": "^5.25.0",
     "sharp": "^0.32.0",
+    "slick-carousel": "^1.8.1",
     "ws": "^8.13.0",
     "yup": "^1.1.1"
   },
