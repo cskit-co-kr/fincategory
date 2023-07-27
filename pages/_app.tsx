@@ -1,4 +1,6 @@
 import 'rsuite/dist/rsuite.min.css';
+import '../styles/widget-frame.css';
+import '../styles/telegram-web.css';
 import '../styles/globals.css';
 
 import axios from 'axios';

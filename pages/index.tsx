@@ -3,15 +3,24 @@ import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from '
 import { useRouter } from 'next/router';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { GetChannelsByCategory } from '../components/channel/GetChannelsByCategory';
 import { Category, PostType } from '../typings';
 import GetChannels from '../components/channel/GetChannels';
 import HashtagBox from '../components/HashtagBox';
 import HomeBoardPostList from '../components/HomeBoardPostList';
 import { useEffect, useState } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = ({
+  channels,
+  channelsToday,
+  categories,
+  postList,
+  tags,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -19,8 +28,61 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
   const [selectedTags, setSelectedTags] = useState([tags[0].tag]);
 
   useEffect(() => {
-    //searchs
+    // TODO
   }, [selectedTags]);
+
+  function PrevArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div style={{ ...style, display: 'block' }} onClick={onClick}>
+        <ChevronLeftIcon className='text-gray-400 h-6 absolute top-2 -left-5 lg:-left-7 cursor-pointer hover:text-black' />
+      </div>
+    );
+  }
+  function NextArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div style={{ ...style, display: 'block' }} onClick={onClick}>
+        <ChevronRightIcon className='text-gray-400 h-6 absolute top-2 -right-5 lg:-right-7 cursor-pointer hover:text-black' />
+      </div>
+    );
+  }
+
+  const settings = {
+    className: 'slider variable-width',
+    variableWidth: true,
+    dots: false,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 1,
+    slidesToScroll: 8,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1340,
+        settings: {
+          slidesToShow: 8,
+          slidesToScroll: 5,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+    ],
+  };
 
   // const cats = categories?.map((item: any) => {
   //   const obj = JSON.parse(item.name);
@@ -40,13 +102,13 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
       <div className='space-y-4'>
         <span className='font-bold text-base'>오늘 가장 많이 본 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
-          {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} key={index} />;
+          {channelsToday.map((channel: any, index: number) => {
+            return <GetChannels channels={channel} desc={true} key={index} />;
           })}
         </div>
       </div>
 
-      <div className='mt-7 grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <div className='mt-7 grid md:grid-cols-2 gap-4'>
         <div className='space-y-4'>
           <div className='flex items-center'>
             <span className='font-bold'>일간베스트</span>
@@ -62,18 +124,6 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
         <div className='space-y-4'>
           <div className='flex items-center'>
             <span className='font-bold'>짤방</span>
-            <a href='' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-              {t['see-more']}
-              <ChevronRightIcon className='h-3' />
-            </a>
-          </div>
-          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
-            <HomeBoardPostList postList={postList} />
-          </div>
-        </div>
-        <div className='space-y-4'>
-          <div className='flex items-center'>
-            <span className='font-bold'>핫딜</span>
             <a href='' className='ml-auto flex gap-1 items-center text-xs text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
@@ -145,13 +195,13 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
         <span className='font-bold text-base'>최근 추가된 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} key={index} />;
+            return <GetChannels channels={channel} desc={false} key={index} />;
           })}
         </div>
       </div>
 
       <div className='space-y-4 mt-7'>
-        <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
+        <div className='grid md:grid-cols-4 gap-0 md:gap-4 space-y-4 md:space-y-0'>
           <HashtagBox channels={channels} />
           <HashtagBox channels={channels} />
           <HashtagBox channels={channels} />
@@ -163,37 +213,41 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
         <span className='font-bold text-base'>대부분의 구독자는 24시간 내에 채널을 늘렸습니다</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} key={index} />;
+            return <GetChannels channels={channel} desc={true} key={index} />;
           })}
         </div>
       </div>
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
-        <div className='flex gap-2 flex-wrap'>
-          {tags?.map((tag: any) => (
-            <button
-              className={`px-5 py-2 whitespace-nowrap border border-primary ${
-                selectedTags.find((e) => e === tag.tag) ? 'bg-primary rounded-full text-white' : 'rounded-full text-primary'
-              }`}
-              key={tag.tag}
-              onClick={() => {
-                selectedTags.find((e) => e === tag.tag)
-                  ? setSelectedTags((current) =>
-                      current.filter((element) => {
-                        return element !== tag.tag;
-                      })
-                    )
-                  : setSelectedTags([...selectedTags, tag.tag]);
-              }}
-            >
-              {tag.tag}
-            </button>
-          ))}
+        <div className='relative block space-x-2'>
+          <Slider {...settings}>
+            {tags?.map((tag: any) => (
+              <div key={tag.tag} className='mr-1'>
+                <button
+                  className={`px-5 py-2 whitespace-nowrap border border-primary rounded-xl ${
+                    selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white' : 'text-primary'
+                  }`}
+                  key={tag.tag}
+                  onClick={() => {
+                    selectedTags.find((e) => e === tag.tag)
+                      ? setSelectedTags((current) =>
+                          current.filter((element) => {
+                            return element !== tag.tag;
+                          })
+                        )
+                      : setSelectedTags([...selectedTags, tag.tag]);
+                  }}
+                >
+                  {tag.tag}
+                </button>
+              </div>
+            ))}
+          </Slider>
         </div>
         <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
           {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} key={index} />;
+            return <GetChannels channels={channel} desc={true} key={index} />;
           })}
         </div>
       </div>
@@ -220,7 +274,7 @@ const Home: NextPage = ({ channels, categories, postList, tags }: InferGetServer
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const data = {
+  let data: any = {
     query: null,
     withDesc: false,
     category: [],
@@ -237,6 +291,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
   const channels = await response.data.channel;
+
+  data['sort'] = { field: 'today', order: 'desc' };
+  const responseToday = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
+  const channelsToday = await responseToday.data.channel;
 
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
   const categories = await result.data;
@@ -256,7 +314,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const tags = await resultTag.data;
 
   return {
-    props: { channels, categories, postList, tags },
+    props: { channels, channelsToday, categories, postList, tags },
   };
 };
 
