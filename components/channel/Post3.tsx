@@ -41,13 +41,13 @@ const Post3 = ({ channel, post }: any) => {
           </div>
         </div>
       </div>
-      <div className='post'>
+      <div className='content'>
         {post.forwarded_from === null ? '' : <div className='forwarded-from' dangerouslySetInnerHTML={{ __html: post.forwarded_from }} />}
         {post.post_media === null ? '' : <div className='media py-2'><Media medias={post.post_media} /></div>}
+        <div className='post' dangerouslySetInnerHTML={{
+          __html: post.post,
+        }} />
       </div>
-      <div className='post widget_frame_base' dangerouslySetInnerHTML={{
-        __html: post.post,
-      }} />
       <div className='footer flex flex-row-reverse gap-3 border-t border-gray-200 pt-3'>
         <div className='flex gap-1 text-xs py-1'>
           <EyeIcon className='h-4' />
