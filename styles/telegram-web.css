@@ -44,7 +44,6 @@ html body {
   width: 100%;
   padding-right: 6px;
   box-sizing: border-box;
-  color: var(--text-color);
 }
 
 .tgme_widget_message_bubble {

@@ -4,7 +4,6 @@
 body {
   --text-color: #212121;
   --second-color: #738ca7;
-  --accent-color: #2481cc;
   --accent-line-color: #4ca3e2;
   --accent-btn-color: #2481cc;
   --accent-btn-bghover: #e6f1f7;
@@ -566,7 +565,6 @@ a.tgme_widget_message_action_btn.accent_color {
   font-size: 16px;
   line-height: 23px;
   margin: -2px 0;
-  color: var(--accent-color);
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;

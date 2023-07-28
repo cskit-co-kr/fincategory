@@ -13,6 +13,7 @@ import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import Post2 from '../../components/channel/Post2';
+import Post3 from '../../components/channel/Post3';
 
 const Post = dynamic(() => import('../../components/channel/Post'), {
   ssr: false,
@@ -48,7 +49,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     setLoadMore(true);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
       channel: channel.username,
-      last_id: null,
+      last_id: null
     });
     const result = await response.data;
     setPostsLastId(result.last_id);
@@ -65,7 +66,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
       last_id: postsLastId,
     });
     const result = await response.data;
-    result.posts.length < 12 && setLoadMore(false);
+    result.last_id === null ? setLoadMore(false) : setLoadMore(true);
 
     setPostsLastId(result.last_id);
     setPosts(posts.concat(result.posts));
@@ -200,7 +201,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
               <div className='gap-4 flex flex-col w-full'>
                 {posts !== null ? (
                   posts.map((post: any) => {
-                    return <Post2 post={post} key={post.id} />;
+                    return post.post !== null ? <Post3 channel={channel} post={post} key={post.id} /> : <></>;
                   })
                 ) : (
                   <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>

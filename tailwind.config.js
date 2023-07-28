@@ -11,6 +11,9 @@ module.exports = {
       colors: {
         gray: colors.neutral,
       },
+      aspectRatio: {
+        '4/3': '4 / 3',
+      },
     },
     fontFamily: {
       raleway: 'Raleway, sans-serif',
