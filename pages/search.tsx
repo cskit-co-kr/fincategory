@@ -662,7 +662,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             ) : null}
             {searchResult ? (
               searchResult.map((channel: any, index: number) => {
-                return <GetChannels channels={channel} key={index} />;
+                return <GetChannels channels={channel} desc={true} key={index} />;
               })
             ) : (
               <div className='text-center mt-2 md:mt-0 md:col-span-3'>{searchResultText}</div>
