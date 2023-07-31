@@ -34,7 +34,7 @@ const Header = () => {
       if (searchSection === 1) {
         router.push({
           pathname: 'search',
-          query: { q: searchField }
+          query: { q: searchField },
         });
       } else if (searchSection === 2) {
         router.push(`/board?q=${searchField}`);
@@ -126,7 +126,7 @@ const Header = () => {
         <div className='container'>
           <div className='flex pt-4 justify-between items-center border-b pb-4'>
             <div className='font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end'>
-              <Link href='/search' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
+              <Link href='/' className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'>
                 <span className='font-bold text-primary'>Fin</span>
                 <span className=''>Ca</span>
               </Link>

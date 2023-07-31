@@ -20,6 +20,7 @@ import Link from 'next/link';
 const Home: NextPage = ({
   channels,
   channelsToday,
+  channels24h,
   categories,
   postList,
   gridPostList,
@@ -127,40 +128,6 @@ const Home: NextPage = ({
         </div>
       </div>
 
-      <div className='mt-7 grid md:grid-cols-2 gap-4'>
-        <div className='space-y-4'>
-          <div className='flex items-center'>
-            <span className='font-bold text-base'>주식</span>
-            <Link href='/board/stock' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-              {t['see-more']}
-              <ChevronRightIcon className='h-3' />
-            </Link>
-          </div>
-          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
-            <HomeBoardPostList postList={postList} />
-          </div>
-        </div>
-        <div className='space-y-4'>
-          <div className='flex items-center'>
-            <span className='font-bold text-base'>공지사항</span>
-            <Link href='/board/announcement' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-              {t['see-more']}
-              <ChevronRightIcon className='h-3' />
-            </Link>
-          </div>
-          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
-            <HomeBoardPostList postList={postList} />
-          </div>
-        </div>
-      </div>
-
-      <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>코인공지</span>
-        <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4 border border-gray-200 bg-white rounded-md p-5'>
-          {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
-        </div>
-      </div>
-
       {/* <div className='flex border border-gray-200 rounded-md bg-white p-4 mt-4'>
         <ul className='grid md:grid-cols-4 gap-4'>
           <li className='flex md:flex-col gap-4 md:gap-0'>
@@ -239,9 +206,43 @@ const Home: NextPage = ({
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>대부분의 구독자는 24시간 내에 채널을 늘렸습니다</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
-          {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} desc={true} key={index} />;
+          {channels24h.map((channel: any) => {
+            return <GetChannels channels={channel} desc={true} key={channel.id} />;
           })}
+        </div>
+      </div>
+
+      <div className='mt-7 grid md:grid-cols-2 gap-4'>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <span className='font-bold text-base'>주식</span>
+            <Link href='/board/stock' className='ml-auto flex gap-1 items-center text-xs text-primary'>
+              {t['see-more']}
+              <ChevronRightIcon className='h-3' />
+            </Link>
+          </div>
+          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
+            <HomeBoardPostList postList={postList} />
+          </div>
+        </div>
+        <div className='space-y-4'>
+          <div className='flex items-center'>
+            <span className='font-bold text-base'>공지사항</span>
+            <Link href='/board/announcement' className='ml-auto flex gap-1 items-center text-xs text-primary'>
+              {t['see-more']}
+              <ChevronRightIcon className='h-3' />
+            </Link>
+          </div>
+          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
+            <HomeBoardPostList postList={postList} />
+          </div>
+        </div>
+      </div>
+
+      <div className='space-y-4 mt-7'>
+        <span className='font-bold text-base'>코인공지</span>
+        <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4 border border-gray-200 bg-white rounded-md p-5'>
+          {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
         </div>
       </div>
 
@@ -318,7 +319,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     withDesc: false,
     category: [],
     country: [],
-    language: [],
+    language: [{ value: 'ko', label: 'Korean' }],
     channel_type: null,
     channel_age: 0,
     erp: 0,
@@ -334,6 +335,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   data['sort'] = { field: 'today', order: 'desc' };
   const responseToday = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
   const channelsToday = await responseToday.data.channel;
+
+  data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+  const response24h = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
+  const channels24h = await response24h.data.channel;
 
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
   const categories = await result.data;
@@ -378,7 +383,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const tags = await resultTag.data;
 
   return {
-    props: { channels, channelsToday, categories, postList, gridPostList, tags },
+    props: { channels, channelsToday, channels24h, categories, postList, gridPostList, tags },
   };
 };
 
