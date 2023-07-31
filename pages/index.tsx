@@ -13,23 +13,42 @@ import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Pagination } from 'rsuite';
+import GridPostRow from '../components/board/GridPostRow';
+import Link from 'next/link';
 
 const Home: NextPage = ({
   channels,
   channelsToday,
   categories,
   postList,
+  gridPostList,
   tags,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const [selectedTags, setSelectedTags] = useState([tags[0].tag]);
+  const [selectedTags, setSelectedTags] = useState([tags[6].tag]);
+  const [taggedChannels, setTaggedChannels] = useState<any>([]);
+
+  const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
-    // TODO
+    setActivePage(1);
   }, [selectedTags]);
+
+  useEffect(() => {
+    async function getChannels() {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/tag`, {
+        query: selectedTags,
+        offset: (activePage - 1) * 15,
+      });
+      const result = await response.data;
+      setTaggedChannels(result);
+    }
+    getChannels();
+  }, [selectedTags, activePage]);
 
   function PrevArrow(props: any) {
     const { className, style, onClick } = props;
@@ -111,11 +130,11 @@ const Home: NextPage = ({
       <div className='mt-7 grid md:grid-cols-2 gap-4'>
         <div className='space-y-4'>
           <div className='flex items-center'>
-            <span className='font-bold'>일간베스트</span>
-            <a href='' className='ml-auto flex gap-1 items-center text-xs text-primary'>
+            <span className='font-bold text-base'>주식</span>
+            <Link href='/board/stock' className='ml-auto flex gap-1 items-center text-xs text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
-            </a>
+            </Link>
           </div>
           <div className='flex border border-gray-200 rounded-md bg-white p-4'>
             <HomeBoardPostList postList={postList} />
@@ -123,15 +142,22 @@ const Home: NextPage = ({
         </div>
         <div className='space-y-4'>
           <div className='flex items-center'>
-            <span className='font-bold'>짤방</span>
-            <a href='' className='ml-auto flex gap-1 items-center text-xs text-primary'>
+            <span className='font-bold text-base'>공지사항</span>
+            <Link href='/board/announcement' className='ml-auto flex gap-1 items-center text-xs text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
-            </a>
+            </Link>
           </div>
           <div className='flex border border-gray-200 rounded-md bg-white p-4'>
             <HomeBoardPostList postList={postList} />
           </div>
+        </div>
+      </div>
+
+      <div className='space-y-4 mt-7'>
+        <span className='font-bold text-base'>코인공지</span>
+        <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4 border border-gray-200 bg-white rounded-md p-5'>
+          {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
         </div>
       </div>
 
@@ -194,13 +220,14 @@ const Home: NextPage = ({
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>최근 추가된 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
-          {channels.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} desc={false} key={index} />;
+          {channels.map((channel: any) => {
+            return <GetChannels channels={channel} desc={true} key={channel.id} />;
           })}
         </div>
       </div>
 
       <div className='space-y-4 mt-7'>
+        <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4 space-y-4 md:space-y-0'>
           <HashtagBox channels={channels} />
           <HashtagBox channels={channels} />
@@ -219,8 +246,8 @@ const Home: NextPage = ({
       </div>
 
       <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
-        <div className='relative block space-x-2'>
+        <span className='font-bold text-base'>채널 해시태그</span>
+        <div className='relative block space-x-2 w-[97%] mx-auto'>
           <Slider {...settings}>
             {tags?.map((tag: any) => (
               <div key={tag.tag} className='mr-1'>
@@ -236,7 +263,7 @@ const Home: NextPage = ({
                             return element !== tag.tag;
                           })
                         )
-                      : setSelectedTags([...selectedTags, tag.tag]);
+                      : setSelectedTags([tag.tag]);
                   }}
                 >
                   {tag.tag}
@@ -246,13 +273,25 @@ const Home: NextPage = ({
           </Slider>
         </div>
         <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-          {channels.map((channel: any, index: number) => {
+          {taggedChannels.channel?.map((channel: any, index: number) => {
             return <GetChannels channels={channel} desc={true} key={index} />;
           })}
         </div>
+        <div className='p-5 flex justify-center'>
+          <Pagination
+            total={taggedChannels.total}
+            limit={15}
+            activePage={activePage}
+            onChangePage={setActivePage}
+            maxButtons={6}
+            last
+            first
+            ellipsis
+          />
+        </div>
       </div>
 
-      <div className='space-y-4 mt-7'>
+      {/* <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>채널 카테고리</span>
         <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {categories?.map((category: Category) => (
@@ -268,7 +307,7 @@ const Home: NextPage = ({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -301,7 +340,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   // Get Posts List
   const responsePost = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=null&category=null&postsperpage=6`,
+    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=stock&category=null&postsperpage=6`,
     {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -309,12 +348,37 @@ export const getServerSideProps: GetServerSideProps = async () => {
   );
   const postList = await responsePost.json();
 
+  // Get Grid Posts List
+  const gridPostQuery = {
+    board: 'coin_notice',
+    paginate: {
+      offset: 0,
+      limit: 4,
+    },
+    sort: {
+      field: 'created_at',
+      order: 'DESC',
+    },
+    filter: {
+      field: 'extra_01',
+      value: '1',
+    },
+    search: {
+      start: null,
+      end: null,
+      field: 'author',
+      value: null,
+    },
+  };
+  const responseGridPost = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, gridPostQuery);
+  const gridPostList = await responseGridPost.data;
+
   // Get Tag List
   const resultTag = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
   const tags = await resultTag.data;
 
   return {
-    props: { channels, channelsToday, categories, postList, tags },
+    props: { channels, channelsToday, categories, postList, gridPostList, tags },
   };
 };
 
