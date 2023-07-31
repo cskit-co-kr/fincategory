@@ -7,9 +7,8 @@ import Dialog from '@mui/material/Dialog';
 import { Loader } from 'rsuite';
 
 const Media = ({ medias }: any) => {
-  console.log('media: ', medias);
-
   const [selectedImage, setSelectedImage] = useState(undefined);
+  
   const handleImageClick = (event: any, image: any) => {
     setSelectedImage(image);
   }
