@@ -8,6 +8,7 @@ import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
+import MediaTest from './ChannelMediaTest';
 const Media = dynamic(() => import('./ChannelMedia'), { ssr: false });
 
 const Post3 = ({ channel, post }: any) => {
@@ -43,7 +44,7 @@ const Post3 = ({ channel, post }: any) => {
       </div>
       <div className='content'>
         {post.forwarded_from === null ? '' : <div className='forwarded-from' dangerouslySetInnerHTML={{ __html: post.forwarded_from }} />}
-        {post.post_media === null ? '' : <div className='media py-2'><Media medias={post.post_media} /></div>}
+        {post.post_media === null ? '' : <div className='media py-2'><MediaTest medias={post.post_media} /></div>}
         <div className='post' dangerouslySetInnerHTML={{
           __html: post.post,
         }} />
