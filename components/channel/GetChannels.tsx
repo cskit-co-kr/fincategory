@@ -9,15 +9,21 @@ import ChannelAvatar from './ChannelAvatar';
 type Props = {
   channels: Channel;
   desc: boolean;
+  extra2?: boolean;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc, extra2 }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
   return (
-    <div className='flex h-full border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black overflow-hidden transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
+    <div className='relative flex h-full border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
+      {extra2 === true && (
+        <div className='bg-primary rounded-full w-fit h-fit absolute -right-2 -top-2 px-2.5 py-1 text-xs text-white'>
+          +{channels.extra_02}
+        </div>
+      )}
       <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
         <ChannelAvatar id={channels.channel_id} title={channels.title} size='50' shape='rounded-full' />
       </Link>
