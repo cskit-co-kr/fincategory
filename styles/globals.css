@@ -364,3 +364,15 @@ body.twallpaper .no_bubble .tgme_widget_message_roundvideo_wrap,
   position: relative;
   overflow: hidden;
 }
+
+/* dddd */
+.link_preview_right_image {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  float: right;
+  border-radius: 6px;
+  margin-left: 10px;
+  background: no-repeat center;
+  background-size: cover;
+}
