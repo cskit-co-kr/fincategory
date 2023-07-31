@@ -30,7 +30,9 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc }) => {
           <span>
             {t['subscribers']} <b>{channels.subscription?.toLocaleString()}</b>
           </span>
-          <span>{channels.counter && '오늘' + channels.counter?.today + '/누적' + channels.counter?.total}</span>
+          <span>
+            오늘{channels.today && channels.today}/누적{channels.total && channels.total}
+          </span>
         </div>
         <div className='tags flex flex-wrap'>
           {channels.tags &&

@@ -16,16 +16,16 @@ const HashtagBox = ({ channels }: any) => {
       {channels.map((channel: Channel) => (
         <Link
           href={`/channel/${channel.username}`}
-          className='flex gap-2 justify-between mb-2 last:mb-0 hover:no-underline hover:text-black'
+          className='flex gap-2 justify-between mb-4 last:mb-0 hover:no-underline hover:text-black'
           key={channel.id}
         >
           <div className='space-y-2'>
-            <div>{channel.title}</div>
+            <div className='font-semibold'>{channel.title}</div>
             <div className='text-[12px] text-gray-500'>
               {t['subscribers']} <b>{channel.subscription?.toLocaleString()}</b>
             </div>
           </div>
-          <ChannelAvatar id={channel.channel_id} title={channel.title} size='72' shape='mask mask-squircle' />
+          <ChannelAvatar id={channel.channel_id} title={channel.title} size='50' shape='rounded-full' />
         </Link>
       ))}
     </div>

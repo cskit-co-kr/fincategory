@@ -32,10 +32,8 @@ export interface Channel {
   is_bot_connect: any;
   connected_bot_id: any;
   access_hash: any;
-  counter: {
-    today: number;
-    total: number;
-  };
+  today: number;
+  total: number;
   category: {
     id: string;
     name: string;
