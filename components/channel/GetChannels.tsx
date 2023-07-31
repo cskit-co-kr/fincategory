@@ -8,9 +8,10 @@ import ChannelAvatar from './ChannelAvatar';
 
 type Props = {
   channels: Channel;
+  desc: boolean;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -23,7 +24,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels }) => {
       <div className='space-y-2 overflow-hidden w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
           <h2 className='font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
-          <p className='text-[12px] h-9 overflow-hidden'>{channels.description}</p>
+          {desc === true && <p className='text-[12px] h-9 overflow-hidden'>{channels.description}</p>}
         </Link>
         <div className='flex justify-between text-[12px] text-gray-500'>
           <span>

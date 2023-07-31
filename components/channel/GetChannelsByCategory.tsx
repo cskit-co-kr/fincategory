@@ -20,7 +20,7 @@ export const GetChannelsByCategory = ({ value, label }: any) => {
         erp: 0,
         subscribers_from: null,
         subscribers_to: null,
-        paginate: { limit: 10, offset: 0 },
+        paginate: { limit: 5, offset: 0 },
         sort: { field: 'subscription', order: 'desc' },
       };
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
