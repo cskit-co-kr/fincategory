@@ -207,7 +207,7 @@ const Home: NextPage = ({
         <span className='font-bold text-base'>대부분의 구독자는 24시간 내에 채널을 늘렸습니다</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels24h.map((channel: any) => {
-            return <GetChannels channels={channel} desc={true} key={channel.id} />;
+            return <GetChannels channels={channel} desc={true} extra2={true} key={channel.id} />;
           })}
         </div>
       </div>

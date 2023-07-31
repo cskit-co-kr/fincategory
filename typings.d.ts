@@ -34,6 +34,8 @@ export interface Channel {
   access_hash: any;
   today: number;
   total: number;
+  extra_01: any;
+  extra_02: any;
   category: {
     id: string;
     name: string;
