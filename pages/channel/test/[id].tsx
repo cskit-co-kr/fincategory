@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Loader } from 'rsuite';
 
-import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
+import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
+import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
+import { enUS } from '../../../lang/en-US';
+import { koKR } from '../../../lang/ko-KR';
 
-const Post = dynamic(() => import('../../components/channel/Post'), {
+const Post = dynamic(() => import('../../../components/channel/Post'), {
   ssr: false,
 });
 
