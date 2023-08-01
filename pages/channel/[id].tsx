@@ -12,6 +12,8 @@ import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import Post2 from '../../components/channel/Post2';
+import Post3 from '../../components/channel/Post3';
 
 const Post = dynamic(() => import('../../components/channel/Post'), {
   ssr: false,
@@ -35,6 +37,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
   const t = locale === 'ko' ? koKR : enUS;
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
   const [posts, setPosts] = useState<any[]>([]);
+  const [postsLastId, setPostsLastId] = useState<number | null>(null);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
@@ -42,50 +45,66 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     getPosts();
   }, []);
 
-  // const getPosts = async () => {
-  //   const response = await axios.post(`http://localhost:8080/v1/channel/posts_`, {
-  //     username: channel.username
-  //   });
-  //   const result = await response?.data;
-  //   const posts = result.posts.messages.filter((msg: any) => msg["_"] === "message")
-  //   console.log("posts: ", posts);
-  //   result.length === 0 ? null : setPosts(posts);
-  //   result.length < 10 && setLoadMore(false);
-  // }
-  // console.log("channel: ", getPosts(channel.username));
-
   const getPosts = async () => {
-    const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
-    setSearchEvent(getPostData);
     setLoadMore(true);
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-      paginate: {
-        limit: getPostData.limit,
-        offset: getPostData.offset,
-      },
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
+      channel: channel.username,
+      last_id: null
     });
-
-    const result = await response?.data;
-    result.length === 0 ? null : setPosts(result);
-    result.length < 10 && setLoadMore(false);
+    const result = await response.data;
+    setPostsLastId(result.last_id);
+    console.log(result.posts.length);
+    result.posts.length === 0 ? null : setPosts(result.posts);
+    result.posts.length < 12 && setLoadMore(false);
   };
 
   const handleLoadMore = async (getPostData: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);
-    getPostData.offset = getPostData.offset + 20;
 
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-      paginate: {
-        limit: getPostData.limit,
-        offset: getPostData.offset,
-      },
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
+      channel: channel.username,
+      last_id: postsLastId,
     });
-    const result = await response?.data;
-    result.length < 10 && setLoadMore(false);
+    const result = await response.data;
+    result.last_id === null ? setLoadMore(false) : setLoadMore(true);
 
-    setPosts(posts.concat(result));
+    setPostsLastId(result.last_id);
+    setPosts(posts.concat(result.posts));
     setLoadMoreText(t['load-more']);
   };
+
+  // const getPosts = async () => {
+  //   const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
+  //   setSearchEvent(getPostData);
+  //   setLoadMore(true);
+  //   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+  //     paginate: {
+  //       limit: getPostData.limit,
+  //       offset: getPostData.offset,
+  //     },
+  //   });
+
+  //   const result = await response?.data;
+  //   result.length === 0 ? null : setPosts(result);
+  //   result.length < 10 && setLoadMore(false);
+  // };
+
+  // const handleLoadMore = async (getPostData: any) => {
+  //   setLoadMoreText(<Loader content={t['loading-text']} />);
+  //   getPostData.offset = getPostData.offset + 10;
+
+  //   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+  //     paginate: {
+  //       limit: getPostData.limit,
+  //       offset: getPostData.offset,
+  //     },
+  //   });
+  //   const result = await response?.data;
+  //   result.length < 10 && setLoadMore(false);
+
+  //   setPosts(posts.concat(result));
+  //   setLoadMoreText(t['load-more']);
+  // };
 
   const data = sub?.map((item: any) => {
     const date = new Date(item.created_at);
@@ -181,8 +200,8 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
 
               <div className='gap-4 flex flex-col w-full'>
                 {posts !== null ? (
-                  posts.map((post: any, index: number) => {
-                    return <Post channel={channel} post={post} key={index} />;
+                  posts.map((post: any) => {
+                    return post.post !== null ? <Post3 channel={channel} post={post} key={post.id} /> : <></>;
                   })
                 ) : (
                   <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>
