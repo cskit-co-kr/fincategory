@@ -42,7 +42,7 @@ const Post3 = ({ channel, post }: any) => {
           </div>
         </div>
       </div>
-      <div className='content'>
+      <div className='content max-w-[640px]'>
         {post.forwarded_from === null ? '' : <div className='forwarded-from' dangerouslySetInnerHTML={{ __html: post.forwarded_from }} />}
         {post.post_media === null ? '' : <div className='media py-2'><MediaTest medias={post.post_media} /></div>}
         <div className='post' dangerouslySetInnerHTML={{
