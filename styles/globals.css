@@ -242,7 +242,7 @@ a:hover .emoji > b {
   overflow: hidden;
 }
 
-.tgme_widget_message_voice_play,
+/* .tgme_widget_message_voice_play,
 .tgme_widget_message_voice_progress .bar s,
 .tgme_widget_message_document_icon,
 .tgme_widget_message_reply:after,
@@ -252,14 +252,14 @@ a:hover .emoji > b {
 .tgme_widget_message_poll_option_correct,
 .tgme_widget_message_poll_option_incorrect {
   background-color: #2481cc;
-}
+} */
 
 .tgme_widget_message_reply:after,
 .tgme_widget_message_link_preview:before,
 .tgme_widget_message_game:before {
   content: '';
   position: absolute;
-  background-color: #4ca3e2;
+  background-color: #e5e5e5;
   border-radius: 2px;
   width: 2px;
   left: 0;
@@ -366,13 +366,17 @@ body.twallpaper .no_bubble .tgme_widget_message_roundvideo_wrap,
 }
 
 /* dddd */
+.link_preview_image,
 .link_preview_right_image {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
+  display: block;
+  width: 180px;
+  height: 100px;
+  max-height: 100px;
+  max-width: 180px;
   float: right;
   border-radius: 6px;
   margin-left: 10px;
   background: no-repeat center;
   background-size: cover;
+  padding: 0 !important;
 }
