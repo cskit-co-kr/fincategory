@@ -20,7 +20,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, extra2 }) => {
   return (
     <div className='relative flex h-full border-b md:border border-gray-200 md:rounded-md bg-white p-4 gap-2.5 text-black transition ease-in-out hover:border-gray-400 duration-300 hover:shadow-sm'>
       {extra2 === true && (
-        <div className='bg-primary rounded-full w-fit h-fit absolute -right-2 -top-2 px-2.5 py-1 text-xs text-white'>
+        <div className='bg-primary rounded-full w-fit h-fit absolute -right-2 -top-3 px-2.5 py-1.5 text-xs text-white'>
           +{channels.extra_02}
         </div>
       )}

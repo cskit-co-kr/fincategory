@@ -120,7 +120,7 @@ const Home: NextPage = ({
   return (
     <div className='pt-7 px-4 lg:px-0 text-black'>
       <div className='space-y-4'>
-        <span className='font-bold text-base'>오늘 가장 많이 본 채널</span>
+        <span className='font-bold text-base'>(오늘)조회수 상위 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channelsToday.map((channel: any, index: number) => {
             return <GetChannels channels={channel} desc={true} key={index} />;
@@ -185,7 +185,7 @@ const Home: NextPage = ({
         </ul>
       </div> */}
       <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>최근 추가된 채널</span>
+        <span className='font-bold text-base'>최근 추가 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels.map((channel: any) => {
             return <GetChannels channels={channel} desc={true} key={channel.id} />;
@@ -204,7 +204,7 @@ const Home: NextPage = ({
       </div>
 
       <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>대부분의 구독자는 24시간 내에 채널을 늘렸습니다</span>
+        <span className='font-bold text-base'>구독자 상승 채널(24H)</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels24h.map((channel: any) => {
             return <GetChannels channels={channel} desc={true} extra2={true} key={channel.id} />;
@@ -241,20 +241,20 @@ const Home: NextPage = ({
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>코인공지</span>
-        <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4 border border-gray-200 bg-white rounded-md p-5'>
+        <div className='w-full text-sm mt-4 grid md:grid-cols-6 gap-5 border border-gray-200 bg-white rounded-md p-7'>
           {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
         </div>
       </div>
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>채널 해시태그</span>
-        <div className='relative block space-x-2 w-[97%] mx-auto'>
+        <div className='relative block space-x-3 w-[97%] mx-auto'>
           <Slider {...settings}>
             {tags?.map((tag: any) => (
               <div key={tag.tag} className='mr-1'>
                 <button
-                  className={`px-5 py-2 whitespace-nowrap border border-primary rounded-xl ${
-                    selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white' : 'text-primary'
+                  className={`px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white transition duration-300 ${
+                    selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white font-bold' : 'text-black bg-white'
                   }`}
                   key={tag.tag}
                   onClick={() => {
@@ -358,7 +358,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     board: 'coin_notice',
     paginate: {
       offset: 0,
-      limit: 4,
+      limit: 12,
     },
     sort: {
       field: 'created_at',

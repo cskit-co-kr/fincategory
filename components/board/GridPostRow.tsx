@@ -4,11 +4,11 @@ import { formatDate } from '../../lib/utils';
 
 const GridPostRow = ({ post }: any) => {
   return (
-    <div className=''>
+    <div className='space-y-2'>
       <Link href={`/board/post/${post.id}`}>
-        <img src={post.extra_02} alt={post.title} className='object-cover aspect-square' />
+        <img src={post.extra_02} alt={post.title} className='object-cover aspect-square rounded-md' />
       </Link>
-      <Link href={`/board/post/${post.id}`} className='break-words line-clamp-2 font-semibold'>
+      <Link href={`/board/post/${post.id}`} className='break-words line-clamp-2'>
         {post.title}
       </Link>
       <div className='mt-1'>{post.board?.title}</div>
