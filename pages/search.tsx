@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import { MultiValueOptions } from '../typings';
 import { enUS } from '../lang/en-US';
@@ -14,6 +14,10 @@ import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { FaXmark } from 'react-icons/fa6';
 import { colorStyles } from '../constants';
 import { useData } from '../context/context';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import ReactSlickSlider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -30,6 +34,73 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
+
+  const tags = props.tags;
+  const [selectedTags, setSelectedTags] = useState(['']);
+  function PrevArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div style={{ ...style, display: 'block' }} onClick={onClick}>
+        <ChevronLeftIcon className='text-gray-400 h-6 absolute top-2 -left-5 lg:-left-7 cursor-pointer hover:text-black' />
+      </div>
+    );
+  }
+  function NextArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div style={{ ...style, display: 'block' }} onClick={onClick}>
+        <ChevronRightIcon className='text-gray-400 h-6 absolute top-2 -right-5 lg:-right-7 cursor-pointer hover:text-black' />
+      </div>
+    );
+  }
+  const settings = {
+    className: 'slider variable-width',
+    variableWidth: true,
+    dots: false,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 1,
+    slidesToScroll: 8,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1340,
+        settings: {
+          slidesToShow: 8,
+          slidesToScroll: 5,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+    ],
+  };
+  const isFirstLoad = useRef(true); // Create a ref to track the first load
+  useEffect(() => {
+    // Skip the push on first load
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
+    }
+    const tag = selectedTags[0] ? `#${selectedTags[0]}` : undefined;
+    router.push({
+      pathname: 'search',
+      query: tag ? { q: tag } : {},
+    });
+  }, [selectedTags]);
 
   const [options, setOptions] = useState<Options[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -210,8 +281,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   };
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      //doSearch('');
-      router.push(`/search?q=${searchText}`);
+      router.push({
+        pathname: 'search',
+        query: searchText != '' ? { q: searchText } : undefined,
+      });
       e.target.blur();
     }
   };
@@ -261,7 +334,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 {/* Sidebar content here */}
                 <div className='flex flex-col md:min-w-[314px]'>
                   <div className='lg:sticky lg:top-4'>
-                    <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
+                    <div className='flex flex-col gap-3 border border-gray-200 rounded-xl pt-3 pb-5 px-4 bg-white'>
                       <label className='flex flex-col gap-2 relative'>
                         {t['by-keyword']}
                         <input
@@ -341,7 +414,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                         />
                       </label>
                     </div>
-                    <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
+                    <div className='flex flex-col gap-3 mt-4 border border-gray-200 rounded-xl pt-3 pb-5 px-3 bg-white'>
                       <label className='flex flex-col gap-2'>
                         {t['channels-age-from-months']}
                         <Box className='pl-3 pr-6'>
@@ -383,7 +456,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                         </Box>
                       </label>
                     </div>
-                    <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
+                    <div className='flex flex-col gap-3 mt-4 border border-gray-200 rounded-xl pt-3 pb-5 px-3 bg-white'>
                       <label className='flex flex-col gap-2'>
                         {t['subscribers']}
                         <div className='flex gap-2'>
@@ -632,8 +705,35 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div> */}
 
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+            <div className='md:col-span-3'>
+              <div className='relative block space-x-3 w-[95%] mx-auto'>
+                <ReactSlickSlider {...settings}>
+                  {tags?.map((tag: any) => (
+                    <div key={tag.tag} className='mr-1'>
+                      <button
+                        className={`px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white transition duration-300 ${
+                          selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                        }`}
+                        key={tag.tag}
+                        onClick={() => {
+                          selectedTags.find((e) => e === tag.tag)
+                            ? setSelectedTags((current) =>
+                                current.filter((element) => {
+                                  return element !== tag.tag;
+                                })
+                              )
+                            : setSelectedTags([tag.tag]);
+                        }}
+                      >
+                        {tag.tag}
+                      </button>
+                    </div>
+                  ))}
+                </ReactSlickSlider>
+              </div>
+            </div>
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-md p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
+              <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
                   {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
                   <b>{totalChannels}</b>
@@ -694,8 +794,11 @@ export const getServerSideProps = async () => {
   const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
   const languages = await resLanguage.data;
 
+  // Get Tag List
+  const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
+
   return {
-    props: { categories, countries, languages },
+    props: { categories, countries, languages, tags },
   };
 };
 

@@ -5,7 +5,7 @@ const ChannelAvatar = ({ id, title, size, shape }: any) => {
   const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${id}/avatar.jfif`;
   const [error, setError] = useState<boolean>(false);
   return (
-    <div className={`relative w-[${size}px] min-w-[${size}px] max-w-[${size}px]`}>
+    <div className={`relative min-w-[${size}px] max-w-[${size}px]`}>
       <Image
         src={error ? '/telegram-icon-96.png' : avatar}
         alt={'avatar of ' + title}
