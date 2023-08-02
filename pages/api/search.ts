@@ -10,7 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function searchChannel() {
-    const resp = await axios.post('https://api.fincategory.com/client/telegram/searchChannel', {
+    const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
       query: req.body.query,
       withDesc: req.body.withDesc,
       category: req.body.category,
@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       paginate: req.body.paginate,
       sort: req.body.sort,
     });
-    
+
     const data = await resp.data;
     if (resp.status === 200) {
       res.status(200).json(data);
