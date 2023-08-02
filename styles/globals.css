@@ -8,6 +8,8 @@
 @layer base {
   body {
     font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -36,6 +38,13 @@
   .dot {
     @apply before:content-[''] before:inline-block before:w-[2px] before:h-[2px] before:mt-0 before:mr-[5px] before:mb-[4px] before:ml-[2px] before:border-2 before:bg-gray-600 before:text-gray-600;
   }
+}
+
+.widget-ticker-tape-container {
+  @apply text-xs !important;
+}
+.js-copyright-label {
+  @apply hidden !important;
 }
 
 .ql-video {
@@ -114,7 +123,8 @@ a:hover .emoji > b {
   pointer-events: none;
 }
 
-.media_not_supported_cont, .media_not_supported .media_supported_cont {
+.media_not_supported_cont,
+.media_not_supported .media_supported_cont {
   display: none;
 }
 

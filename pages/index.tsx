@@ -16,6 +16,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Pagination } from 'rsuite';
 import GridPostRow from '../components/board/GridPostRow';
 import Link from 'next/link';
+import Tradingview from '../components/Tradingview';
 
 const Home: NextPage = ({
   channels,
@@ -30,7 +31,7 @@ const Home: NextPage = ({
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const [selectedTags, setSelectedTags] = useState([tags[6].tag]);
+  const [selectedTags, setSelectedTags] = useState([tags[5].tag]);
   const [taggedChannels, setTaggedChannels] = useState<any>([]);
 
   const [activePage, setActivePage] = useState(1);
@@ -119,11 +120,18 @@ const Home: NextPage = ({
 
   return (
     <div className='pt-7 px-4 lg:px-0 text-black'>
+      {/* <Tradingview /> */}
+
       <div className='space-y-4'>
         <span className='font-bold text-base'>(오늘)조회수 상위 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channelsToday.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} desc={true} key={index} />;
+            return (
+              <div className='relative' key={channel.id}>
+                <GetChannels channels={channel} desc={true} />
+                <div className='absolute mask mask-decagon bg-yellow-500 -right-2 -top-2.5 font-bold text-xs text-white p-2'>{++index}</div>
+              </div>
+            );
           })}
         </div>
       </div>
@@ -185,10 +193,13 @@ const Home: NextPage = ({
         </ul>
       </div> */}
       <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>최근 추가 채널</span>
-        <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
+        <div className='font-bold text-base items-center flex gap-2'>
+          <span>최근 추가 채널</span>
+          <span className='bg-[#D6e8FC] px-2 py-1 rounded-lg text-primary text-[11px] leading-none'>New</span>
+        </div>
+        <div className='grid md:grid-cols-5 border border-gray-200 rounded-xl bg-white p-1'>
           {channels.map((channel: any) => {
-            return <GetChannels channels={channel} desc={true} key={channel.id} />;
+            return <GetChannels channels={channel} desc={false} tag={false} views={false} bordered={false} key={channel.id} />;
           })}
         </div>
       </div>
@@ -196,10 +207,10 @@ const Home: NextPage = ({
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4 space-y-4 md:space-y-0'>
-          <HashtagBox channels={channels} />
-          <HashtagBox channels={channels} />
-          <HashtagBox channels={channels} />
-          <HashtagBox channels={channels} />
+          <HashtagBox channels={channelsToday} />
+          <HashtagBox channels={channels24h} />
+          <HashtagBox channels={channelsToday} />
+          <HashtagBox channels={channels24h} />
         </div>
       </div>
 
@@ -221,7 +232,7 @@ const Home: NextPage = ({
               <ChevronRightIcon className='h-3' />
             </Link>
           </div>
-          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
+          <div className='flex border border-gray-200 rounded-xl bg-white p-4'>
             <HomeBoardPostList postList={postList} />
           </div>
         </div>
@@ -233,7 +244,7 @@ const Home: NextPage = ({
               <ChevronRightIcon className='h-3' />
             </Link>
           </div>
-          <div className='flex border border-gray-200 rounded-md bg-white p-4'>
+          <div className='flex border border-gray-200 rounded-xl bg-white p-4'>
             <HomeBoardPostList postList={postList} />
           </div>
         </div>
@@ -241,7 +252,7 @@ const Home: NextPage = ({
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>코인공지</span>
-        <div className='w-full text-sm mt-4 grid md:grid-cols-6 gap-5 border border-gray-200 bg-white rounded-md p-7'>
+        <div className='w-full text-sm mt-4 grid md:grid-cols-6 gap-5 border border-gray-200 bg-white rounded-xl p-7'>
           {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
         </div>
       </div>
@@ -329,36 +340,40 @@ export const getServerSideProps: GetServerSideProps = async () => {
     sort: { field: 'created_at', order: 'desc' },
   };
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
-  const channels = await response.data.channel;
+  // Get recently added channels
+  data['paginate'] = { limit: 10, offset: 0 };
+  const channels = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
 
+  // Get most viewed channels today
+  data['paginate'] = { limit: 4, offset: 0 };
   data['sort'] = { field: 'today', order: 'desc' };
-  const responseToday = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
-  const channelsToday = await responseToday.data.channel;
+  const channelsToday = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
 
+  // Get most increased subscriptions in 24h channels
+  data['paginate'] = { limit: 4, offset: 0 };
   data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
-  const response24h = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data);
-  const channels24h = await response24h.data.channel;
+  const channels24h = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
 
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-  const categories = await result.data;
+  // Get Categories
+  const categories = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`).then((response) => response.data);
 
   // Get Posts List
-  const responsePost = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=stock&category=null&postsperpage=6`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    }
-  );
-  const postList = await responsePost.json();
+  const postList = await axios
+    .post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=stock&category=null&postsperpage=6`)
+    .then((response) => response.data);
 
   // Get Grid Posts List
   const gridPostQuery = {
     board: 'coin_notice',
     paginate: {
       offset: 0,
-      limit: 12,
+      limit: 9,
     },
     sort: {
       field: 'created_at',
@@ -375,12 +390,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
       value: null,
     },
   };
-  const responseGridPost = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, gridPostQuery);
-  const gridPostList = await responseGridPost.data;
+  const gridPostList = await axios
+    .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, gridPostQuery)
+    .then((response) => response.data);
 
   // Get Tag List
-  const resultTag = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
-  const tags = await resultTag.data;
+  const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
   return {
     props: { channels, channelsToday, channels24h, categories, postList, gridPostList, tags },
