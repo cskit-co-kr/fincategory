@@ -27,7 +27,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
   return (
     <div className={`${style} relative flex h-full md:rounded-xl bg-white p-4 gap-2.5 text-black`}>
       {extra2 === true && (
-        <div className='bg-primary rounded-full w-fit h-fit absolute -right-2 -top-3 px-2.5 py-1.5 text-xs text-white'>
+        <div className='bg-primary rounded-full w-fit h-fit absolute left-1 top-1 px-1.5 py-0.5 text-xs text-white z-10'>
           +{channels.extra_02}
         </div>
       )}
