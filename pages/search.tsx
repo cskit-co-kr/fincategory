@@ -20,6 +20,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
+import { LiaUserSolid } from 'react-icons/lia';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -482,68 +483,70 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div>
 
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
-              <div className='bg-white border border-gray-200 rounded-xl'>
-                <div className='flex justify-between items-center'>
-                  <div className='font-bold text-base pt-5 pb-1 px-5'>(오늘)조회수 상위 채널</div>
-                  <div className='flex pt-5 pb-1 px-5 text-xs'>
-                    <button
-                      onClick={() => setTodayOrTotal('today')}
-                      className={`rounded-full px-2 py-1 ${todayOrTotal === 'today' && 'bg-gray-100'}`}
-                    >
-                      오늘
-                    </button>
-                    <button
-                      onClick={() => setTodayOrTotal('total')}
-                      className={`rounded-full px-2 py-1 ${todayOrTotal === 'total' && 'bg-gray-100'}`}
-                    >
-                      누적
-                    </button>
+            {!router.query.q && (
+              <>
+                <div className='md:col-span-3 bg-white rounded-xl border border-gray-200'>
+                  <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
+                  <div className='grid md:grid-cols-3 gap-0 px-4'>
+                    {props.channels24h?.map((channel: any) => {
+                      return <GetChannels channels={channel} desc={false} extra2={true} key={channel.id} bordered={false} tag={false} />;
+                    })}
                   </div>
                 </div>
-                {props.channelsToday?.map((channel: Channel, index: number) => {
-                  return (
-                    <Link
-                      href={`/channel/${channel.username}`}
-                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                      key={channel.id}
-                    >
-                      <div className='font-semibold'>{++index}</div>
-                      <div className='flex items-center w-full justify-between'>
-                        <div className='flex items-center gap-2'>
-                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                        </div>
-                        <div className='text-green-500'>{todayOrTotal === 'today' ? channel.today : channel.total}</div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-              <div className='bg-white border border-gray-200 rounded-xl'>
-                <div className='font-bold text-base pt-5 pb-1 px-5'>최근 추가 채널</div>
-                {props.channelsNew?.map((channel: Channel, index: number) => {
-                  return (
-                    <Link
-                      href={`/channel/${channel.username}`}
-                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                      key={channel.id}
-                    >
-                      <div className='font-semibold'>{++index}</div>
-                      <div className='flex items-center w-full justify-between'>
-                        <div className='flex items-center gap-2'>
-                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                        </div>
-                        <div className='text-[12px] text-gray-500 font-bold'>
-                          {t['subscribers']} {channel.subscription?.toLocaleString()}
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+
+                <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
+                  <div className='bg-white border border-gray-200 rounded-xl'>
+                    <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
+
+                    {props.channelsToday?.map((channel: Channel, index: number) => {
+                      return (
+                        <Link
+                          href={`/channel/${channel.username}`}
+                          className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                          key={channel.id}
+                        >
+                          <div className='font-semibold'>{++index}</div>
+                          <div className='flex items-center w-full justify-between'>
+                            <div className='flex items-center gap-2'>
+                              <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                              <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                            </div>
+                            <div className='text-gray-500 text-[12px] font-bold'>
+                              오늘{channel.today && channel.today}/누적{channel.total && channel.total}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  <div className='bg-white border border-gray-200 rounded-xl'>
+                    <div className='font-bold pt-5 pb-1 px-5'>최근 추가 채널</div>
+                    {props.channelsNew?.map((channel: Channel, index: number) => {
+                      return (
+                        <Link
+                          href={`/channel/${channel.username}`}
+                          className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                          key={channel.id}
+                        >
+                          <div className='font-semibold'>{++index}</div>
+                          <div className='flex items-center w-full justify-between'>
+                            <div className='flex items-center gap-2'>
+                              <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                              <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                            </div>
+                            <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center'>
+                              <LiaUserSolid size={16} />
+                              {t['subscribers']} {channel.subscription?.toLocaleString()}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className='md:col-span-3 mt-3'>
               <div className='relative block space-x-3 w-[95%] mx-auto'>
@@ -662,11 +665,18 @@ export const getServerSideProps = async () => {
     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
     .then((response) => response.data.channel);
 
+  // Get most increased subscriptions in 24h channels
+  data['paginate'] = { limit: 6, offset: 0 };
+  data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+  const channels24h = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
+
   // Get Tag List
   const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
   return {
-    props: { categories, countries, languages, tags, channelsNew, channelsToday },
+    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h },
   };
 };
 
