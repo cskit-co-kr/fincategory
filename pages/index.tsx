@@ -105,23 +105,8 @@ const Home: NextPage = ({
     ],
   };
 
-  // const cats = categories?.map((item: any) => {
-  //   const obj = JSON.parse(item.name);
-  //   return {
-  //     value: item.id,
-  //     label: locale === 'ko' ? obj.ko : obj.en,
-  //   };
-  // });
-  // const [category, setCategory] = useState<any>([]);
-
-  // useEffect(() => {
-  //   setCategory(cats);
-  // }, [locale]);
-
   return (
     <div className='pt-7 px-4 lg:px-0 text-black'>
-      {/* <Tradingview /> */}
-
       <div className='space-y-4'>
         <span className='font-bold text-base'>(오늘)조회수 상위 채널</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
@@ -136,62 +121,6 @@ const Home: NextPage = ({
         </div>
       </div>
 
-      {/* <div className='flex border border-gray-200 rounded-md bg-white p-4 mt-4'>
-        <ul className='grid md:grid-cols-4 gap-4'>
-          <li className='flex md:flex-col gap-4 md:gap-0'>
-            <div className='w-1/3 md:w-full'>
-              <Image src='/blog.jpg' width={302} height={207} alt='' />
-            </div>
-            <div>
-              <div className='font-semibold mt-2'>탑 10 베스트 텔레그램 베팅 채널</div>
-              <div className='text-xs text-gray-400 mt-2'>어드민 2023년 02월 06일</div>
-              <div className='mt-2 text-sm leading-5 hidden md:inline'>
-                Telegram 베팅(카지노) 채널을 찾는 방법은 무엇입니까? Telegram은 통신 및 주변 정보 공유에 사용되는 매우 인기있는 메시징 응용
-                프로그램입니다.
-              </div>
-            </div>
-          </li>
-          <li className='flex md:flex-col gap-4 md:gap-0'>
-            <div className='w-1/3 md:w-full'>
-              <Image src='/blog.jpg' width={302} height={207} alt='' />
-            </div>
-            <div>
-              <div className='font-semibold mt-2'>탑 10 베스트 텔레그램 베팅 채널</div>
-              <div className='text-xs text-gray-400 mt-2'>어드민 2023년 02월 06일</div>
-              <div className='mt-2 text-sm leading-5 hidden md:inline'>
-                Telegram 베팅(카지노) 채널을 찾는 방법은 무엇입니까? Telegram은 통신 및 주변 정보 공유에 사용되는 매우 인기있는 메시징 응용
-                프로그램입니다.
-              </div>
-            </div>
-          </li>
-          <li className='flex md:flex-col gap-4 md:gap-0'>
-            <div className='w-1/3 md:w-full'>
-              <Image src='/blog.jpg' width={302} height={207} alt='' />
-            </div>
-            <div>
-              <div className='font-semibold mt-2'>탑 10 베스트 텔레그램 베팅 채널</div>
-              <div className='text-xs text-gray-400 mt-2'>어드민 2023년 02월 06일</div>
-              <div className='mt-2 text-sm leading-5 hidden md:inline'>
-                Telegram 베팅(카지노) 채널을 찾는 방법은 무엇입니까? Telegram은 통신 및 주변 정보 공유에 사용되는 매우 인기있는 메시징 응용
-                프로그램입니다.
-              </div>
-            </div>
-          </li>
-          <li className='flex md:flex-col gap-4 md:gap-0'>
-            <div className='w-1/3 md:w-full'>
-              <Image src='/blog.jpg' width={302} height={207} alt='' />
-            </div>
-            <div>
-              <div className='font-semibold mt-2'>탑 10 베스트 텔레그램 베팅 채널</div>
-              <div className='text-xs text-gray-400 mt-2'>어드민 2023년 02월 06일</div>
-              <div className='mt-2 text-sm leading-5 hidden md:inline'>
-                Telegram 베팅(카지노) 채널을 찾는 방법은 무엇입니까? Telegram은 통신 및 주변 정보 공유에 사용되는 매우 인기있는 메시징 응용
-                프로그램입니다.
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div> */}
       <div className='space-y-4 mt-7'>
         <div className='font-bold text-base items-center flex gap-2'>
           <span>최근 추가 채널</span>

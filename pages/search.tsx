@@ -2,7 +2,7 @@ import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
-import { MultiValueOptions } from '../typings';
+import { Channel, MultiValueOptions } from '../typings';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
 import { useRouter } from 'next/router';
@@ -18,6 +18,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import ReactSlickSlider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import ChannelAvatar from '../components/channel/ChannelAvatar';
+import Link from 'next/link';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -199,35 +201,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setSearchResultText(t['empty-search-text']);
   }, [locale, props]);
 
-  // useEffect(() => {
-  //   if(searchResult && posts.length === 0){
-  //     const socket = new WebSocket(`ws://localhost:8081`);
-
-  //     const data: any[] = []
-  //     searchResult.slice(0, 10).map((res: any) => {
-  //       const channel = {
-  //         username: res.username,
-  //         // access_hash: res.access_hash,
-  //         // channel_id: res.channel_id,
-  //       }
-  //       data.push(channel)
-  //     })
-  //     socket.addEventListener("open", (event) => {
-  //       socket.send(JSON.stringify(data));
-  //     });
-
-  //     socket.addEventListener("message", (event) => {
-  //       console.log(event.data);
-  //       // console.log("Message from server ", event.data);
-  //       // savePosts(JSON.parse(event.data));
-  //     });
-  //   }
-
-  // }, [searchResult])
-
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
-    // setLoadMore(true);
     goToTop();
     setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
@@ -295,10 +270,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
         return setSorting({ field: 'subscription', order: 'desc' });
       case 'subscription_asc':
         return setSorting({ field: 'subscription', order: 'asc' });
-      case 'name_asc':
-        return setSorting({ field: 'title', order: 'asc' });
-      case 'name_desc':
-        return setSorting({ field: 'title', order: 'desc' });
+      case 'today_asc':
+        return setSorting({ field: 'today', order: 'asc' });
+      case 'today_desc':
+        return setSorting({ field: 'today', order: 'desc' });
+      case 'total_asc':
+        return setSorting({ field: 'total', order: 'asc' });
+      case 'total_desc':
+        return setSorting({ field: 'total', order: 'desc' });
       default:
         return 'foo';
     }
@@ -310,6 +289,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       element.click();
     }
   }
+
+  const [todayOrTotal, setTodayOrTotal] = useState('today');
 
   return (
     <>
@@ -499,213 +480,72 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
           </div>
-          {/* <div className='flex flex-col w-0 lg:min-w-[314px]'>
-            <div className='lg:sticky lg:top-4'>
-              <div
-                className={`${
-                  sideBar ? 'left-0' : '-left-full'
-                } bg-gray-50 px-4 py-6 lg:bg-transparent lg:px-0 lg:py-0 fixed top-0 h-full transition-all transform duration-500 w-[80%] lg:w-full z-10 lg:sticky lg:top-4 overflow-y-auto lg:overflow-hidden`}
-              >
-                <div className='flex flex-col gap-3 border border-gray-200 rounded-md pt-3 pb-5 px-4 bg-white'>
-                  <label className='flex flex-col gap-2'>
-                    {t['by-keyword']}
-                    <input
-                      value={searchText}
-                      onChange={(e: any) => setSearchText(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder={t['type-here']}
-                      type='text'
-                      className='py-3 px-3 text-xs outline-none rounded-lg border border-gray-200'
-                    />
-                  </label>
-                  <label className='text-sm flex gap-2 cursor-pointer'>
-                    <input name='description' checked={selectDesc} onChange={() => setSelectDesc(!selectDesc)} type='checkbox' />
-                    {t['search-also-in-description']}
-                  </label>
-                  <label className='flex flex-col gap-2'>
-                    {t['channel-topic']}
-                    <Select
-                      instanceId='category'
-                      onChange={setSelectedCategory}
-                      name='category'
-                      isLoading={isLoading}
-                      styles={colorStyles}
-                      options={options}
-                      placeholder={t['select-topic']}
-                      isMulti
-                    />
-                  </label>
-                  <label className='flex flex-col gap-2'>
-                    {t['channel-country']}
-                    <Select
-                      value={{ value: 113, label: 'Korea, Republic of' }}
-                      instanceId='country'
-                      onChange={setSelectedCountry}
-                      name='country'
-                      isLoading={isLoadingCountries}
-                      styles={colorStyles}
-                      options={optionsCountries}
-                      placeholder={t['select-country']}
-                      isMulti
-                    />
-                  </label>
-                  <label className='flex flex-col gap-2'>
-                    {t['channel-language']}
-                    <Select
-                      value={{ value: 'ko', label: 'Korean' }}
-                      instanceId={'language'}
-                      onChange={setSelectedLanguage}
-                      name='language'
-                      isLoading={isLoadingLanguages}
-                      styles={colorStyles}
-                      options={optionsLanguages}
-                      placeholder={t['select-language']}
-                      isMulti
-                    />
-                  </label>
-                  <label className='flex flex-col gap-2'>
-                    {t['channel-type']}
-                    <Select
-                      instanceId={'type'}
-                      defaultValue={channelType}
-                      onChange={setChannelType}
-                      name='type'
-                      styles={colorStyles}
-                      options={optionsChannelTypes}
-                      placeholder={t['select-type']}
-                      isMulti
-                    />
-                  </label>
-                </div>
-                <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
-                  <label className='flex flex-col gap-2'>
-                    {t['channels-age-from-months']}
-                    <Box className='pl-3 pr-6'>
-                      <Slider
-                        name='channelsAge'
-                        valueLabelDisplay='auto'
-                        size='small'
-                        defaultValue={channelsAge}
-                        onChange={(event: Event, newValue: number | number[]) => {
-                          setChannelsAge(newValue as number);
-                        }}
-                        min={0}
-                        max={36}
-                        marks={[
-                          { value: 0, label: 0 },
-                          { value: 36, label: '36+' },
-                        ]}
-                      />
-                    </Box>
-                  </label>
-                  <label className='flex flex-col gap-2'>
-                    {t['engagement-rate-erp']}
-                    <Box className='pl-3 pr-6'>
-                      <Slider
-                        name='ERP'
-                        valueLabelDisplay='auto'
-                        size='small'
-                        defaultValue={channelsERP}
-                        onChange={(event: Event, newValue: number | number[]) => {
-                          setChannelsERP(newValue as number);
-                        }}
-                        min={0}
-                        max={100}
-                        marks={[
-                          { value: 1, label: '0%' },
-                          { value: 100, label: '100%+' },
-                        ]}
-                      />
-                    </Box>
-                  </label>
-                </div>
-                <div className='flex flex-col gap-3 mt-5 border border-gray-200 rounded-md pt-3 pb-5 px-3 bg-white'>
-                  <label className='flex flex-col gap-2'>
-                    {t['subscribers']}
-                    <div className='flex gap-2'>
-                      <input
-                        name='subscribersFrom'
-                        value={subscribersFrom}
-                        onChange={(e: any) => setSubscribersFrom(e.target.value)}
-                        placeholder='from'
-                        type='number'
-                        min={0}
-                        className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                      />
-                      <input
-                        name='subscribersTo'
-                        value={subscribersTo}
-                        onChange={(e: any) => setSubscribersTo(e.target.value)}
-                        placeholder='to'
-                        type='number'
-                        min={0}
-                        className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                      />
-                    </div>
-                  </label>
-                  
-            <label className='flex flex-col gap-2'>{t['average-post-reach']}
-                <div className='flex gap-2'>
-                <input 
-                    name='averagePostReachFrom'
-                    placeholder='from'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                <input 
-                    name='averagePostReachTo'
-                    placeholder='to'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                </div>
-            </label>
-            <label className='flex flex-col gap-2'>{t['average-post-reach-24hours']}
-                <div className='flex gap-2'>
-                <input 
-                    name='averagePostReach24From'
-                    placeholder='from'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                <input 
-                    name='averagePostReach24To'
-                    placeholder='to'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                </div>
-            </label>
-            <label className='flex flex-col gap-2'>{t['citation-index']}
-                <div className='flex gap-2'>
-                <input 
-                    name='citationIndexFrom'
-                    placeholder='from'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                <input 
-                    name='citationIndexTo'
-                    placeholder='to'
-                    type='number'
-                    className='py-2 px-3 text-sm outline-none rounded-lg border border-gray-200 w-1/2'
-                />
-                </div>
-            </label>
-            
-                  <button
-                    onClick={() => doSearch('')}
-                    className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
-                  >
-                    {t['search']}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <div className='md:col-span-3'>
+            <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
+              <div className='bg-white border border-gray-200 rounded-xl'>
+                <div className='flex justify-between items-center'>
+                  <div className='font-bold text-base pt-5 pb-1 px-5'>(오늘)조회수 상위 채널</div>
+                  <div className='flex pt-5 pb-1 px-5 text-xs'>
+                    <button
+                      onClick={() => setTodayOrTotal('today')}
+                      className={`rounded-full px-2 py-1 ${todayOrTotal === 'today' && 'bg-gray-100'}`}
+                    >
+                      오늘
+                    </button>
+                    <button
+                      onClick={() => setTodayOrTotal('total')}
+                      className={`rounded-full px-2 py-1 ${todayOrTotal === 'total' && 'bg-gray-100'}`}
+                    >
+                      누적
+                    </button>
+                  </div>
+                </div>
+                {props.channelsToday?.map((channel: Channel, index: number) => {
+                  return (
+                    <Link
+                      href={`/channel/${channel.username}`}
+                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                      key={channel.id}
+                    >
+                      <div className='font-semibold'>{++index}</div>
+                      <div className='flex items-center w-full justify-between'>
+                        <div className='flex items-center gap-2'>
+                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                        </div>
+                        <div className='text-green-500'>{todayOrTotal === 'today' ? channel.today : channel.total}</div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+              <div className='bg-white border border-gray-200 rounded-xl'>
+                <div className='font-bold text-base pt-5 pb-1 px-5'>최근 추가 채널</div>
+                {props.channelsNew?.map((channel: Channel, index: number) => {
+                  return (
+                    <Link
+                      href={`/channel/${channel.username}`}
+                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                      key={channel.id}
+                    >
+                      <div className='font-semibold'>{++index}</div>
+                      <div className='flex items-center w-full justify-between'>
+                        <div className='flex items-center gap-2'>
+                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                        </div>
+                        <div className='text-[12px] text-gray-500 font-bold'>
+                          {t['subscribers']} {channel.subscription?.toLocaleString()}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className='md:col-span-3 mt-3'>
               <div className='relative block space-x-3 w-[95%] mx-auto'>
                 <ReactSlickSlider {...settings}>
                   {tags?.map((tag: any) => (
@@ -794,11 +634,39 @@ export const getServerSideProps = async () => {
   const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
   const languages = await resLanguage.data;
 
+  let data: any = {
+    query: null,
+    withDesc: false,
+    category: [],
+    country: [],
+    language: [{ value: 'ko', label: 'Korean' }],
+    channel_type: null,
+    channel_age: 0,
+    erp: 0,
+    subscribers_from: null,
+    subscribers_to: null,
+    paginate: { limit: 4, offset: 0 },
+    sort: { field: 'created_at', order: 'desc' },
+  };
+
+  // Get recently added channels
+  data['paginate'] = { limit: 5, offset: 0 };
+  const channelsNew = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
+
+  // Get most viewed channels today
+  data['paginate'] = { limit: 5, offset: 0 };
+  data['sort'] = { field: 'today', order: 'desc' };
+  const channelsToday = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
+
   // Get Tag List
   const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
   return {
-    props: { categories, countries, languages, tags },
+    props: { categories, countries, languages, tags, channelsNew, channelsToday },
   };
 };
 
