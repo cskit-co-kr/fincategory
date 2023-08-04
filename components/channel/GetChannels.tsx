@@ -14,9 +14,10 @@ type Props = {
   views?: boolean;
   bordered?: boolean;
   extra2?: boolean;
+  background?: string;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra2 }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra2, background }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -25,9 +26,9 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
     bordered === true ? 'border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
 
   return (
-    <div className={`${style} relative flex h-full md:rounded-xl bg-white p-4 gap-2.5 text-black`}>
+    <div className={`${style} relative flex h-full md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
       {extra2 === true && (
-        <div className='bg-primary rounded-full w-fit h-fit absolute left-1 top-1 px-1.5 py-0.5 text-xs text-white z-10'>
+        <div className='bg-primary rounded-full w-fit h-fit absolute -right-1 -top-2 px-1.5 py-0.5 text-xs text-white z-10'>
           +{channels.extra_02}
         </div>
       )}
@@ -79,6 +80,7 @@ GetChannels.defaultProps = {
   tag: true,
   views: true,
   bordered: true,
+  background: 'bg-white',
 };
 
 export default GetChannels;
