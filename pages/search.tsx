@@ -196,7 +196,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
     // goToTop();
-    setSearchResult(null);
+    // setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     const data = {
@@ -582,11 +582,11 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </ReactSlickSlider>
               </div>
             </div>
-            {loadBar && (
+            {/* {loadBar && (
               <div className='md:col-span-3 mx-auto'>
                 <Loader />
               </div>
-            )}
+            )} */}
             {searchResult ? (
               <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
