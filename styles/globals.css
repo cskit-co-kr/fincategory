@@ -75,6 +75,15 @@
   display: none;
 }
 
+.tgme_widget_message_forwarded_from_name,
+.post a {
+  color: #0a5dc2;
+}
+
+.tgme_widget_message_forwarded_from_name:hover {
+  text-decoration: underline;
+}
+
 .emoji {
   font-style: normal;
 }
@@ -163,8 +172,11 @@ a:hover .emoji > b {
 }
 .link_preview_title {
   font-weight: 600;
+  color: #575757
 }
-
+.link_preview_description {
+  color: #575757;
+}
 .link_preview_image,
 .link_preview_right_image {
   display: block;
