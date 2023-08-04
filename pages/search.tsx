@@ -62,31 +62,16 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     dots: false,
     infinite: false,
     speed: 2000,
-    slidesToShow: 11,
+    slidesToShow: 8,
     slidesToScroll: 8,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
       {
-        breakpoint: 1340,
-        settings: {
-          slidesToShow: 11,
-          slidesToScroll: 5,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
         breakpoint: 480,
         settings: {
-          slidesToShow: 4,
-          slidesToScroll: 3,
+          slidesToShow: 2,
+          slidesToScroll: 2,
         },
       },
     ],
@@ -305,7 +290,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       <div className='flex flex-1 flex-col md:pt-7'>
         <div className='grid md:flex'>
           {/* Sidebar */}
-          <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-10'>
+          <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-20'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
             <div className='w-fit ml-auto mr-2'>
               {/* Page content here */}
@@ -322,7 +307,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               <div className='menu p-4 md:p-0 w-80 md:min-w-[314px] bg-base-200 md:bg-inherit'>
                 {/* Sidebar content here */}
                 <div className='flex flex-col md:min-w-[314px]'>
-                  <div className='lg:sticky lg:top-4'>
+                  <div>
+                    {/* <div className='lg:sticky lg:top-4'> */}
                     <div className='flex flex-col gap-3 border border-gray-200 rounded-xl pt-3 pb-5 px-4 bg-white'>
                       <label className='flex flex-col gap-2 relative'>
                         {t['by-keyword']}
@@ -490,7 +476,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div>
 
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <div className='md:col-span-3 bg-white rounded-xl border border-gray-200'>
+            <div className='md:col-span-3 bg-white rounded-xl border border-gray-200 m-4 md:m-0'>
               <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
               <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
                 {props.channels24h?.map((channel: any) => {
@@ -510,7 +496,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             </div>
 
             <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
-              <div className='bg-white border border-gray-200 rounded-xl'>
+              <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
 
                 {props.channelsToday?.map((channel: Channel, index: number) => {
@@ -535,7 +521,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 })}
               </div>
 
-              <div className='bg-white border border-gray-200 rounded-xl'>
+              <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='font-bold pt-5 pb-1 px-5'>최근 추가 채널</div>
                 {props.channelsNew?.map((channel: Channel, index: number) => {
                   return (
@@ -561,13 +547,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
 
-            <div className='md:col-span-3 mt-3'>
-              <div className='relative block space-x-3 w-[95%] mx-auto'>
+            <div className='md:col-span-3 mt-3 flex items-center gap-2 mx-4 md:mx-0'>
+              <div className='font-bold'>{t['tags']}:</div>
+              <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[960px] mx-auto'>
                 <ReactSlickSlider {...settings}>
                   {tags?.map((tag: any) => (
                     <div key={tag.tag} className='mr-1'>
                       <button
-                        className={`px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white transition duration-300 ${
+                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white ${
                           selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white font-bold' : 'text-black bg-white'
                         }`}
                         key={tag.tag}
@@ -582,6 +569,13 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                         }}
                       >
                         {tag.tag}
+                        <span
+                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 group-hover:text-black ${
+                            selectedTags.find((e) => e === tag.tag) ? 'text-black' : ''
+                          }`}
+                        >
+                          {tag.total}
+                        </span>
                       </button>
                     </div>
                   ))}
