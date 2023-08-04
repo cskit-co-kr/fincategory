@@ -70,14 +70,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       {
         breakpoint: 1340,
         settings: {
-          slidesToShow: 8,
+          slidesToShow: 1,
           slidesToScroll: 5,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -85,7 +85,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 1,
           slidesToScroll: 3,
         },
       },
@@ -98,8 +98,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       isFirstLoad.current = false;
       return;
     }
+    setLoadBar(true);
     const tag = selectedTags[0] ? `#${selectedTags[0]}` : undefined;
-    router.push({
+    router.replace({
       pathname: 'search',
       query: tag ? { q: tag } : {},
     });
@@ -174,6 +175,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const [totalChannels, setTotalChannels] = useState<number>(0);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
+  const [loadBar, setLoadBar] = useState(false);
 
   // useEffect(() => {
   //   doSearch('');
@@ -237,6 +239,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
     result.length < 60 ? setLoadMore(false) : setLoadMore(true);
+    setLoadBar(false);
   };
 
   const handleLoadMore = async (data: any) => {
@@ -483,70 +486,66 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div>
 
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            {!router.query.q && (
-              <>
-                <div className='md:col-span-3 bg-white rounded-xl border border-gray-200'>
-                  <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
-                  <div className='grid md:grid-cols-3 gap-0 px-4'>
-                    {props.channels24h?.map((channel: any) => {
-                      return <GetChannels channels={channel} desc={false} extra2={true} key={channel.id} bordered={false} tag={false} />;
-                    })}
-                  </div>
-                </div>
+            <div className='md:col-span-3 bg-white rounded-xl border border-gray-200'>
+              <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
+              <div className='grid md:grid-cols-3 gap-0 px-4'>
+                {props.channels24h?.map((channel: any) => {
+                  return <GetChannels channels={channel} desc={false} extra2={true} key={channel.id} bordered={false} tag={false} />;
+                })}
+              </div>
+            </div>
 
-                <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
-                  <div className='bg-white border border-gray-200 rounded-xl'>
-                    <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
+            <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
+              <div className='bg-white border border-gray-200 rounded-xl'>
+                <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
 
-                    {props.channelsToday?.map((channel: Channel, index: number) => {
-                      return (
-                        <Link
-                          href={`/channel/${channel.username}`}
-                          className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                          key={channel.id}
-                        >
-                          <div className='font-semibold'>{++index}</div>
-                          <div className='flex items-center w-full justify-between'>
-                            <div className='flex items-center gap-2'>
-                              <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                              <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                            </div>
-                            <div className='text-gray-500 text-[12px] font-bold'>
-                              오늘{channel.today && channel.today}/누적{channel.total && channel.total}
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
+                {props.channelsToday?.map((channel: Channel, index: number) => {
+                  return (
+                    <Link
+                      href={`/channel/${channel.username}`}
+                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                      key={channel.id}
+                    >
+                      <div className='font-semibold'>{++index}</div>
+                      <div className='flex items-center w-full justify-between'>
+                        <div className='flex items-center gap-2'>
+                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                        </div>
+                        <div className='text-gray-500 text-[12px] font-bold'>
+                          오늘{channel.today && channel.today}/누적{channel.total && channel.total}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
 
-                  <div className='bg-white border border-gray-200 rounded-xl'>
-                    <div className='font-bold pt-5 pb-1 px-5'>최근 추가 채널</div>
-                    {props.channelsNew?.map((channel: Channel, index: number) => {
-                      return (
-                        <Link
-                          href={`/channel/${channel.username}`}
-                          className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                          key={channel.id}
-                        >
-                          <div className='font-semibold'>{++index}</div>
-                          <div className='flex items-center w-full justify-between'>
-                            <div className='flex items-center gap-2'>
-                              <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                              <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                            </div>
-                            <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center'>
-                              <LiaUserSolid size={16} />
-                              {t['subscribers']} {channel.subscription?.toLocaleString()}
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              </>
-            )}
+              <div className='bg-white border border-gray-200 rounded-xl'>
+                <div className='font-bold pt-5 pb-1 px-5'>최근 추가 채널</div>
+                {props.channelsNew?.map((channel: Channel, index: number) => {
+                  return (
+                    <Link
+                      href={`/channel/${channel.username}`}
+                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
+                      key={channel.id}
+                    >
+                      <div className='font-semibold'>{++index}</div>
+                      <div className='flex items-center w-full justify-between'>
+                        <div className='flex items-center gap-2'>
+                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                        </div>
+                        <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center'>
+                          <LiaUserSolid size={16} />
+                          {t['subscribers']} {channel.subscription?.toLocaleString()}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className='md:col-span-3 mt-3'>
               <div className='relative block space-x-3 w-[95%] mx-auto'>
@@ -575,6 +574,11 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 </ReactSlickSlider>
               </div>
             </div>
+            {loadBar && (
+              <div className='md:col-span-3 mx-auto'>
+                <Loader />
+              </div>
+            )}
             {searchResult ? (
               <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
                 <span className='text-xs'>
