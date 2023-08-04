@@ -1,7 +1,6 @@
 import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIcon, UsersIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import { NextSeo } from 'next-seo';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -9,15 +8,10 @@ import { Loader } from 'rsuite';
 
 import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
 import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
+import Post3 from '../../components/channel/Post3';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import Post2 from '../../components/channel/Post2';
-import Post3 from '../../components/channel/Post3';
-
-const Post = dynamic(() => import('../../components/channel/Post'), {
-  ssr: false,
-});
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -233,7 +227,12 @@ export const getServerSideProps = async (context: any) => {
   let averageErr = 0;
 
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
+  
   const channel = response.data;
+
+  if(!channel) {
+    return { notFound: true };
+  }
 
   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
   const sub = responseSub.data;
