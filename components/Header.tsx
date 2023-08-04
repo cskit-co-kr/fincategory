@@ -368,7 +368,7 @@ const Header = () => {
                   {t['channel-rankings']}
                 </button>
               </li>
-              <Nav className='mt-1 custom-nav-menu z-20' appearance='subtle'>
+              <Nav className='mt-1 custom-nav-menu z-30' appearance='subtle'>
                 {groups?.map((group: GroupType) => (
                   <Nav.Menu key={group.id} title={group.name}>
                     {group.boards.map((board: any) => (
