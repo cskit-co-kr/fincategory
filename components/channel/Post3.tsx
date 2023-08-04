@@ -43,11 +43,24 @@ const Post3 = ({ channel, post }: any) => {
         </div>
       </div>
       <div className='content max-w-[640px]'>
-        {post.forwarded_from === null ? '' : <div className='forwarded-from' dangerouslySetInnerHTML={{ __html: post.forwarded_from }} />}
-        {post.post_media === null ? '' : <div className='media py-2'><MediaTest medias={post.post_media} /></div>}
-        <div className='post' dangerouslySetInnerHTML={{
-          __html: post.post,
-        }} />
+        {post.forwarded_from === null ? (
+          ''
+        ) : (
+          <div className='forwarded-from border-l-2 border-blue-400 pl-1 mb-4' dangerouslySetInnerHTML={{ __html: post.forwarded_from }} />
+        )}
+        {post.post_media === null ? (
+          ''
+        ) : (
+          <div className='media py-2'>
+            <MediaTest medias={post.post_media} />
+          </div>
+        )}
+        <div
+          className='post'
+          dangerouslySetInnerHTML={{
+            __html: post.post,
+          }}
+        />
       </div>
       <div className='footer flex flex-row-reverse gap-3 border-t border-gray-200 pt-3'>
         <div className='flex gap-1 text-xs py-1'>
@@ -62,14 +75,16 @@ const Post3 = ({ channel, post }: any) => {
           <LinkIcon className='h-4' />
         </a>
         <span className='flex text-xs'>
-          <b>{t['Author']}:</b> <span dangerouslySetInnerHTML={{
-            __html: post.author,
-          }} />
+          <b>{t['Author']}:</b>{' '}
+          <span
+            dangerouslySetInnerHTML={{
+              __html: post.author,
+            }}
+          />
         </span>
       </div>
-
     </div>
   );
-}
+};
 
-export default Post3
+export default Post3;
