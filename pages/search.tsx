@@ -60,9 +60,9 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     className: 'slider variable-width',
     variableWidth: true,
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 2000,
-    slidesToShow: 1,
+    slidesToShow: 11,
     slidesToScroll: 8,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -70,14 +70,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       {
         breakpoint: 1340,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 11,
           slidesToScroll: 5,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 4,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -85,7 +85,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 4,
           slidesToScroll: 3,
         },
       },
@@ -492,9 +492,19 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <div className='md:col-span-3 bg-white rounded-xl border border-gray-200'>
               <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
-              <div className='grid md:grid-cols-3 gap-0 px-4'>
+              <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
                 {props.channels24h?.map((channel: any) => {
-                  return <GetChannels channels={channel} desc={false} extra2={true} key={channel.id} bordered={false} tag={false} />;
+                  return (
+                    <GetChannels
+                      channels={channel}
+                      desc={false}
+                      extra2={true}
+                      key={channel.id}
+                      bordered={false}
+                      tag={false}
+                      background='bg-gray-50'
+                    />
+                  );
                 })}
               </div>
             </div>
