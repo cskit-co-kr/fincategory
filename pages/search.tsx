@@ -100,10 +100,14 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
     setLoadBar(true);
     const tag = selectedTags[0] ? `#${selectedTags[0]}` : undefined;
-    router.replace({
-      pathname: 'search',
-      query: tag ? { q: tag } : {},
-    });
+    router.push(
+      {
+        pathname: 'search',
+        query: tag ? { q: tag } : {},
+      },
+      undefined,
+      { shallow: true }
+    );
   }, [selectedTags]);
 
   const [options, setOptions] = useState<Options[]>([]);
@@ -206,7 +210,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
-    goToTop();
+    // goToTop();
     setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
 
@@ -512,7 +516,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                           <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
                           <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
                         </div>
-                        <div className='text-gray-500 text-[12px] font-bold'>
+                        <div className='text-gray-500 text-[12px] font-bold min-w-[100px]'>
                           오늘{channel.today && channel.today}/누적{channel.total && channel.total}
                         </div>
                       </div>
@@ -536,7 +540,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                           <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
                           <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
                         </div>
-                        <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center'>
+                        <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center min-w-[100px]'>
                           <LiaUserSolid size={16} />
                           {t['subscribers']} {channel.subscription?.toLocaleString()}
                         </div>
