@@ -13,7 +13,7 @@ import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 
-const Post = dynamic(() => import('../../../components/channel/Post'), {
+const Post = dynamic(() => import('../../../components/channel/PostDB'), {
   ssr: false,
 });
 

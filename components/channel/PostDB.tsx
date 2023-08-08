@@ -8,9 +8,9 @@ import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
-const Media = dynamic(() => import('./ChannelMedia'), { ssr: false });
+const Media = dynamic(() => import('./ChannelMediaDB'), { ssr: false });
 
-const Post = ({ channel, post }: any) => {
+const PostDB = ({ channel, post }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -94,4 +94,4 @@ const Post = ({ channel, post }: any) => {
   );
 };
 
-export default Post;
+export default PostDB;

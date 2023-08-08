@@ -8,17 +8,14 @@ import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
-import MediaTest from './ChannelMediaTest';
-const Media = dynamic(() => import('./ChannelMedia'), { ssr: false });
+import MediaWeb from './ChannelMediaWeb';
 
-const Post3 = ({ channel, post }: any) => {
+const PostWeb = ({ channel, post }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
   const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
   const [error, setError] = useState<boolean>(false);
-  const [descHeight, setDescHeight] = useState('h-fit overflow-hidden');
-  const postMedia = post.media && JSON.parse(post.media);
 
   return (
     <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
@@ -52,7 +49,7 @@ const Post3 = ({ channel, post }: any) => {
           ''
         ) : (
           <div className='media py-2'>
-            <MediaTest medias={post.post_media} />
+            <MediaWeb medias={post.post_media} />
           </div>
         )}
         <div
@@ -87,4 +84,4 @@ const Post3 = ({ channel, post }: any) => {
   );
 };
 
-export default Post3;
+export default PostWeb;
