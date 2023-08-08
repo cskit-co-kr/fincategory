@@ -8,7 +8,8 @@ import { Loader } from 'rsuite';
 
 import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
 import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
-import Post3 from '../../components/channel/Post3';
+import PostWeb from '../../components/channel/PostWeb';
+import PostDB from '../../components/channel/PostDB';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
@@ -34,12 +35,13 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
   const [postsLastId, setPostsLastId] = useState<number | null>(null);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
+  const [mode, setMode] = useState<string>('web');
 
   useEffect(() => {
-    getPosts();
+    getPostsWeb();
   }, []);
 
-  const getPosts = async () => {
+  const getPostsWeb = async () => {
     setLoadMore(true);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
       channel: channel.username,
@@ -47,12 +49,17 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
     });
     const result = await response.data;
     setPostsLastId(result.last_id);
-    console.log(result.posts.length);
-    result.posts.length === 0 ? null : setPosts(result.posts);
-    result.posts.length < 12 && setLoadMore(false);
+    if (result.posts.length === 0) {
+      setMode('db');
+      getPostsDB();
+    } else {
+      result.posts.length === 0 ? null : setPosts(result.posts);
+      result.posts.length < 12 && setLoadMore(false);
+      setMode('web');
+    }
   };
 
-  const handleLoadMore = async (getPostData: any) => {
+  const handleLoadMoreWeb = async (getPostData: any) => {
     setLoadMoreText(<Loader content={t['loading-text']} />);
 
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
@@ -60,45 +67,45 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
       last_id: postsLastId,
     });
     const result = await response.data;
-    result.last_id === null ? setLoadMore(false) : setLoadMore(true);
 
+    result.last_id === null ? setLoadMore(false) : setLoadMore(true);
     setPostsLastId(result.last_id);
-    setPosts(posts.concat(result.posts));
     setLoadMoreText(t['load-more']);
+    setPosts(posts.concat(result.posts));
   };
 
-  // const getPosts = async () => {
-  //   const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
-  //   setSearchEvent(getPostData);
-  //   setLoadMore(true);
-  //   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-  //     paginate: {
-  //       limit: getPostData.limit,
-  //       offset: getPostData.offset,
-  //     },
-  //   });
+  const getPostsDB = async () => {
+    const getPostData = { username: channel.channel_id, limit: 10, offset: 0 };
+    setSearchEvent(getPostData);
+    setLoadMore(true);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+      paginate: {
+        limit: getPostData.limit,
+        offset: getPostData.offset,
+      },
+    });
 
-  //   const result = await response?.data;
-  //   result.length === 0 ? null : setPosts(result);
-  //   result.length < 10 && setLoadMore(false);
-  // };
+    const result = await response?.data;
+    result.length === 0 ? null : setPosts(result);
+    result.length < 10 && setLoadMore(false);
+  };
 
-  // const handleLoadMore = async (getPostData: any) => {
-  //   setLoadMoreText(<Loader content={t['loading-text']} />);
-  //   getPostData.offset = getPostData.offset + 10;
+  const handleLoadMoreDB = async (getPostData: any) => {
+    setLoadMoreText(<Loader content={t['loading-text']} />);
+    getPostData.offset = getPostData.offset + 10;
 
-  //   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
-  //     paginate: {
-  //       limit: getPostData.limit,
-  //       offset: getPostData.offset,
-  //     },
-  //   });
-  //   const result = await response?.data;
-  //   result.length < 10 && setLoadMore(false);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail/${getPostData.username}/posts`, {
+      paginate: {
+        limit: getPostData.limit,
+        offset: getPostData.offset,
+      },
+    });
+    const result = await response?.data;
+    result.length < 10 && setLoadMore(false);
 
-  //   setPosts(posts.concat(result));
-  //   setLoadMoreText(t['load-more']);
-  // };
+    setPosts(posts.concat(result));
+    setLoadMoreText(t['load-more']);
+  };
 
   const data = sub?.map((item: any) => {
     const date = new Date(item.created_at);
@@ -195,7 +202,13 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
               <div className='gap-4 flex flex-col w-full'>
                 {posts !== null ? (
                   posts.map((post: any) => {
-                    return post.post !== null ? <Post3 channel={channel} post={post} key={post.id} /> : <></>;
+                    if(mode === 'web') {
+                      return post.post !== null ? <PostWeb channel={channel} post={post} key={post.id} /> : <></>;
+                    }
+
+                    if(mode === 'db') {
+                      return post.post !== null ? <PostDB channel={channel} post={post} key={post.id} /> : <></>;
+                    }
                   })
                 ) : (
                   <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>
@@ -203,7 +216,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                 {loadMore && (
                   <div className='flex justify-center col-span-3'>
                     <button
-                      onClick={() => handleLoadMore(searchEvent)}
+                      onClick={() => mode === 'web' ? handleLoadMoreWeb(searchEvent) : handleLoadMoreDB(searchEvent)}
                       className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0'
                     >
                       {loadMoreText}
@@ -227,10 +240,10 @@ export const getServerSideProps = async (context: any) => {
   let averageErr = 0;
 
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
-  
+
   const channel = response.data;
 
-  if(!channel) {
+  if (!channel) {
     return { notFound: true };
   }
 
