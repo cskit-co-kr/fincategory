@@ -39,7 +39,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const t = locale === 'ko' ? koKR : enUS;
 
   const tags = props.tags;
-  const [selectedTags, setSelectedTags] = useState(['']);
+  const [selectedTag, setSelectedTag] = useState('');
+
   function PrevArrow(props: any) {
     const { className, style, onClick } = props;
     return (
@@ -84,7 +85,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       return;
     }
     setLoadBar(true);
-    const tag = selectedTags[0] ? `#${selectedTags[0]}` : undefined;
+    const tag = selectedTag ? `#${selectedTag}` : undefined;
     router.push(
       {
         pathname: 'search',
@@ -93,18 +94,16 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       undefined,
       { shallow: true }
     );
-  }, [selectedTags]);
+  }, [selectedTag]);
 
   const [options, setOptions] = useState<Options[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCategory, setIsLoadingCategory] = useState(true);
 
   const [optionsCountries, setOptionsCountries] = useState<Options[]>([]);
   const [isLoadingCountries, setIsLoadingCountries] = useState(true);
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
-
-  const { savePosts, posts } = useData();
 
   const optionsChannelTypes = [
     {
@@ -164,6 +163,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const [totalChannels, setTotalChannels] = useState<number>(0);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadBar, setLoadBar] = useState(false);
 
   // useEffect(() => {
@@ -186,7 +186,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
 
-    setIsLoading(false);
+    setIsLoadingCategory(false);
     setIsLoadingCountries(false);
     setIsLoadingLanguages(false);
     setLoadMoreText(t['load-more']);
@@ -195,8 +195,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
-    // goToTop();
-    // setSearchResult(null);
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     const data = {
@@ -232,19 +230,15 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   };
 
   const handleLoadMore = async (data: any) => {
+    setIsLoading(true);
     setLoadMoreText(<Loader content={t['loading-text']} />);
     data['paginate'].limit = data['paginate'].limit + 60;
-    //const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
-    //const resultData = await response.data;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const resultData = await response.json();
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data);
+    const resultData = await response.data;
     const result = resultData.channel;
-    result.length - searchResult.length !== 60 && setLoadMore(false);
+    result.length - searchResult.length < 60 && setLoadMore(false);
     setSearchResult(result);
+    setIsLoading(false);
     setLoadMoreText(t['load-more']);
   };
   const handleKeyDown = (e: any) => {
@@ -283,7 +277,21 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   }
 
-  const [todayOrTotal, setTodayOrTotal] = useState('today');
+  // Mobile scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadMore === false) return;
+      const isMobile = window.innerWidth <= 768;
+      if (isLoading === false && isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+        handleLoadMore(searchEvent);
+        console.log('bottom', searchEvent.paginate.limit, searchResult.length);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [loadMore, searchEvent]);
 
   return (
     <>
@@ -292,11 +300,11 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           {/* Sidebar */}
           <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-20'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
-            <div className='w-fit ml-auto mr-2'>
+            <div className='w-fit ml-auto mr-4 mt-2 md:mt-0'>
               {/* Page content here */}
               <label
                 htmlFor='my-drawer-2'
-                className='border border-gray-200 rounded-lg bg-white px-2 py-1 whitespace-nowrap lg:hidden flex items-center gap-1 z-0'
+                className='border border-gray-200 rounded-lg bg-white px-2 py-1 whitespace-nowrap lg:hidden flex items-center gap-1'
               >
                 {t['search-filter']}
                 <AdjustmentsHorizontalIcon className='h-4' />
@@ -340,7 +348,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                           instanceId='category'
                           onChange={setSelectedCategory}
                           name='category'
-                          isLoading={isLoading}
+                          isLoading={isLoadingCategory}
                           styles={colorStyles}
                           options={options}
                           placeholder={t['select-topic']}
@@ -475,8 +483,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             </div>
           </div>
 
-          <div className='grid md:grid-cols-3 gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <div className='md:col-span-3 bg-white rounded-xl border border-gray-200 m-4 md:m-0'>
+          <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+            <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0'>
               <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
               <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
                 {props.channels24h?.map((channel: any) => {
@@ -495,7 +503,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
 
-            <div className='md:col-span-3 grid md:grid-cols-2 gap-4'>
+            <div className='grid md:grid-cols-2 gap-4'>
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
 
@@ -547,31 +555,25 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
 
-            <div className='md:col-span-3 mt-3 flex items-center gap-2 mx-4 md:mx-0'>
+            <div className='flex items-center gap-2 m-4 md:m-0'>
               <div className='font-bold'>{t['tags']}:</div>
-              <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[960px] mx-auto'>
+              <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[860px] mx-auto'>
                 <ReactSlickSlider {...settings}>
                   {tags?.map((tag: any) => (
                     <div key={tag.tag} className='mr-1'>
                       <button
-                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white ${
-                          selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl md:hover:bg-primary md:hover:text-white ${
+                          selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
                         }`}
                         key={tag.tag}
                         onClick={() => {
-                          selectedTags.find((e) => e === tag.tag)
-                            ? setSelectedTags((current) =>
-                                current.filter((element) => {
-                                  return element !== tag.tag;
-                                })
-                              )
-                            : setSelectedTags([tag.tag]);
+                          selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
                         }}
                       >
                         {tag.tag}
                         <span
-                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 group-hover:text-black ${
-                            selectedTags.find((e) => e === tag.tag) ? 'text-black' : ''
+                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                            selectedTag === tag.tag ? 'text-black' : ''
                           }`}
                         >
                           {tag.total}
@@ -588,10 +590,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             )} */}
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 md:col-span-3 border border-gray-200 mt-2 md:mt-0'>
+              <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
                 <span className='text-xs'>
                   {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
-                  <b>{totalChannels}</b>
+                  {loadBar ? <Loader /> : <b>{totalChannels}</b>}
                   {t['total-search-results2']}
                 </span>
                 <div className='ml-auto flex items-center'>
@@ -616,17 +618,19 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             ) : null}
             {searchResult ? (
-              searchResult.map((channel: any, index: number) => {
-                return <GetChannels channels={channel} desc={true} key={index} />;
-              })
+              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+                {searchResult.map((channel: Channel) => {
+                  return <GetChannels channels={channel} desc={true} key={channel.id} />;
+                })}
+              </div>
             ) : (
-              <div className='text-center mt-2 md:mt-0 md:col-span-3'>{searchResultText}</div>
+              <div className='text-center mt-2 md:mt-0'>{searchResultText}</div>
             )}
             {loadMore && (
-              <div className='flex justify-center md:col-span-3'>
+              <div className='flex justify-center'>
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
-                  className='bg-primary px-8 rounded-full text-sm py-2 my-4 md:my-0 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                  className='bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
                 >
                   {loadMoreText}
                 </button>

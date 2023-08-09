@@ -11,7 +11,9 @@ const Layout = ({ children, memberInfo }: any) => {
       <div className='wrapper bg-gray-50'>
         <Header />
         <main>
-          <div className='container'>{children}</div>
+          <div className='container' id='main'>
+            {children}
+          </div>
         </main>
         <Footer />
       </div>
