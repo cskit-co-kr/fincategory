@@ -26,27 +26,27 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
     bordered === true ? 'border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
 
   return (
-    <div className={`${style} relative flex h-full md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
+    <div className={`${style} relative flex md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
       {extra2 === true && (
         <div className='bg-primary rounded-full w-fit h-fit absolute -right-1 -top-2 px-1.5 py-0.5 text-xs text-white z-10'>
           +{channels.extra_02}
         </div>
       )}
-      <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
+      <Link href={`/channel/${channels.username}`} target='_blank'>
         <ChannelAvatar id={channels.channel_id} title={channels.title} size='50' shape='rounded-full' />
       </Link>
-      <div className='space-y-3 overflow-hidden w-full'>
+      <div className='space-y-3 w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
           <h2 className='font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
-          {desc === true && <p className='text-[12px] h-9 overflow-hidden'>{channels.description}</p>}
+          {desc === true && <p className='text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
         </Link>
-        <div className='flex items-center justify-between text-[12px] text-gray-500 font-bold'>
+        <div className='flex items-center justify-between text-xs text-gray-500 font-semibold'>
           <span className='flex gap-0.5 items-center'>
             <LiaUserSolid size={16} />
             {t['subscribers']} {channels.subscription?.toLocaleString()}
           </span>
           {views === true && (
-            <span className='flex items-center gap-0.5'>
+            <span>
               오늘{channels.today && channels.today}/누적{channels.total && channels.total}
             </span>
           )}
@@ -63,7 +63,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
                       query: { q: '#' + tag.tag },
                     });
                   }}
-                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
+                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
                   key={tag.id}
                 >
                   #{tag.tag}
