@@ -554,7 +554,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
 
-            <div className='flex items-center gap-2 m-4 md:m-0'>
+            <div className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'>
               <div className='font-bold'>{t['tags']}:</div>
               <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[860px] mx-auto'>
                 <ReactSlickSlider {...settings}>
@@ -619,7 +619,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} />;
+                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8' />;
                 })}
               </div>
             ) : (
