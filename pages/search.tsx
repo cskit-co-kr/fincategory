@@ -265,6 +265,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
         return setSorting({ field: 'total', order: 'asc' });
       case 'total_desc':
         return setSorting({ field: 'total', order: 'desc' });
+      case 'created_desc':
+        return setSorting({ field: 'created_at', order: 'desc' });
       default:
         return 'foo';
     }
@@ -291,6 +293,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       window.removeEventListener('scroll', handleScroll);
     };
   }, [loadMore, searchEvent]);
+
+  const ref = useRef(null);
 
   return (
     <>
@@ -529,7 +533,22 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
-                <div className='font-bold pt-5 pb-1 px-5'>최근 추가 채널</div>
+                <div className='flex justify-between items-center pt-5 pb-1 px-5'>
+                  <div className='font-bold'>최근 추가 채널</div>
+                  <button
+                    className='flex gap-1 text-primary items-center'
+                    onClick={() => {
+                      setSelectedSorting('created_desc');
+                      doFilter('created_desc');
+                      if (ref.current) {
+                        (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    {t['see-more']}
+                    <ChevronRightIcon className='h-3' />
+                  </button>
+                </div>
                 {props.channelsNew?.map((channel: Channel, index: number) => {
                   return (
                     <Link
@@ -554,7 +573,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               </div>
             </div>
 
-            <div className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'>
+            <div
+              className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
+              ref={ref}
+            >
               <div className='font-bold'>{t['tags']}:</div>
               <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[860px] mx-auto'>
                 <ReactSlickSlider {...settings}>
@@ -612,6 +634,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                     <option value='today_asc'>오늘 조회수 순 &uarr;</option>
                     <option value='total_desc'>누적 조회수 순 &darr;</option>
                     <option value='total_asc'>누적 조회수 순 &uarr;</option>
+                    <option value='created_desc'>최근 추가</option>
                   </select>
                 </div>
               </div>

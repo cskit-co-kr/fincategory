@@ -95,6 +95,7 @@ export const enUS = {
     "channel-add": " channel is successfully added!",
     "channel-add-error": " channel is not added!",
     /* detail */
+    "date-registered": "Registered date on Finca",
     "views-per-post": "Views per post",
     "posts-per-month": "Posts per month",
     "ERR": "ERR",
