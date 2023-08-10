@@ -95,6 +95,7 @@ export const koKR = {
     "channel-add": " 채널이 성공적으로 추가되었습니다!",
     "channel-add-error": " channel is not added!",
     /* detail */
+    "date-registered": "Finca에 등록된 날짜",
     "views-per-post": "조회수 게시",
     "posts-per-month": "월별 게시물",
     "ERR": "ERR",

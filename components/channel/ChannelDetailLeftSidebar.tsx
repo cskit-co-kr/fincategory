@@ -11,9 +11,10 @@ import { koKR } from '../../lang/ko-KR';
 import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
 import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
+import { formatDate } from '../../lib/utils';
 
 interface DataTags {
-  tag: string
+  tag: string;
 }
 
 const ChannelDetailLeftSidebar = ({ channel }: any) => {
@@ -54,10 +55,10 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     }, []);
 
     setTagsList(tagsList);
-  }
+  };
 
   useEffect(() => {
-    const tags = channel.tags.reduce((acc: Array<string>, e: { id: number, channel_id: number, tag: string }) => {
+    const tags = channel.tags.reduce((acc: Array<string>, e: { id: number; channel_id: number; tag: string }) => {
       acc.push(e.tag);
       return acc;
     }, []);
@@ -71,18 +72,18 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   const showInput = () => {
     setInputVisible(true);
-  }
+  };
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
     setTags(newTags);
-  }
+  };
 
   const handleEditInputChange = (value: string, e: ChangeEvent<HTMLInputElement>) => {
     const val = value.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
 
     setEditInputValue(val);
-  }
+  };
 
   const handleEditInputConfirm = () => {
     const newTags = [...tags];
@@ -90,7 +91,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setTags(newTags);
     setEditInputIndex(-1);
     setInputValue('');
-  }
+  };
 
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
@@ -99,7 +100,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setInputVisible(false);
     setInputValue('');
     setData([]);
-  }
+  };
 
   const handleSearch = async (newValue: string) => {
     const val = newValue.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
@@ -112,7 +113,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       setData([]);
       setInputValue('');
     }
-  }
+  };
 
   const onSelect = (data: string) => {
     if (data && tags.indexOf(data) === -1) {
@@ -121,24 +122,24 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setInputVisible(false);
     setInputValue('');
     setData([]);
-  }
+  };
 
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
       handleInputConfirm();
     }
-  }
+  };
 
   const tagInputStyle: React.CSSProperties = {
     width: 160,
     verticalAlign: 'top',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  };
 
   const saveTag = async () => {
     const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`, {
       tags: tags,
-      channel: channel.channel_id
+      channel: channel.channel_id,
     });
 
     const data = res.data;
@@ -146,16 +147,16 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     if (res.status === 200 && data.code === 200) {
       toaster.push(message('info', t['tag-saved']), {
         placement: 'topEnd',
-        duration: 5000
+        duration: 5000,
       });
     } else {
       toaster.push(message('error', 'UnSuccessfull'), {
         placement: 'topEnd',
-        duration: 5000
+        duration: 5000,
       });
     }
     loadTags();
-  }
+  };
 
   return (
     <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4'>
@@ -180,20 +181,24 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             <ArrowTopRightOnSquareIcon className='h-4' />
           </a>
           <p className='break-all'>{channel.description}</p>
-          <div className='flex flex-col justify-between w-full'>
+          <div className='w-full'>
             <span className='text-gray-400'>{t['category']}</span>
             <span className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</span>
           </div>
-          <div className='flex flex-col justify-between w-full'>
+          <div className='w-full'>
             <span className='text-gray-400'>{t['channel-region-and-language']}</span>
             <div className='flex gap-5'>
               <span>{t[channel.country.iso as keyof typeof t]}</span>
               <span>{channel.language && t[channel.language.value as keyof typeof t]}</span>
             </div>
           </div>
+          <div className='w-full'>
+            <div className='text-gray-400'>{t['date-registered']}</div>
+            <div>{formatDate(channel.created_at)}</div>
+          </div>
           <div className='flex flex-col justify-between w-full'>
             <span className='text-gray-400'>{t['tags']}</span>
-            {session?.user.type === 2 ?
+            {session?.user.type === 2 ? (
               <div className='admin-mode mt-1'>
                 <div className='mb-1 '>
                   {tags.map((tag, index: number) => {
@@ -202,7 +207,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                         <Input
                           ref={editInputRef}
                           key={tag}
-                          size="xs"
+                          size='xs'
                           style={tagInputStyle}
                           value={editInputValue}
                           onChange={handleEditInputChange}
@@ -215,17 +220,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                     const isLongTag = tag.length > 20;
                     const tagElem = (
                       <Whisper key={tag} trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
-                        <Tag
-                          key={tag}
-                          closable={true}
-                          style={{ userSelect: 'none', marginBottom: 4 }}
-                          onClose={() => handleClose(tag)}
-                        >
-                          <span onDoubleClick={(e) => {
-                            setEditInputIndex(index);
-                            setEditInputValue(tag);
-                            e.preventDefault();
-                          }}
+                        <Tag key={tag} closable={true} style={{ userSelect: 'none', marginBottom: 4 }} onClose={() => handleClose(tag)}>
+                          <span
+                            onDoubleClick={(e) => {
+                              setEditInputIndex(index);
+                              setEditInputValue(tag);
+                              e.preventDefault();
+                            }}
                           >
                             {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                           </span>
@@ -256,22 +257,33 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                   </div>
                 ) : (
                   <div className='border-t-[1px] pt-2 flex items-center'>
-                    <span className='flex items-center bg-[#3498ff] text-white border border-dashed text-[12px] rounded-md pr-2 mr-2' onClick={showInput}>
+                    <span
+                      className='flex items-center bg-[#3498ff] text-white border border-dashed text-[12px] rounded-md pr-2 mr-2'
+                      onClick={showInput}
+                    >
                       <PlusSmallIcon className='h-6 w-6 text-white' /> New Tag
                     </span>
-                    <Button appearance='primary' size='xs' className='bg-[#3498ff] border border-dashed' onClick={saveTag}>Save</Button>
+                    <Button appearance='primary' size='xs' className='bg-[#3498ff] border border-dashed' onClick={saveTag}>
+                      Save
+                    </Button>
                   </div>
                 )}
               </div>
-              :
+            ) : (
               <div className='hashtags flex gap-1'>
-                {channel.tags.map((tag: { id: number, channel_id: number, tag: string }) => {
+                {channel.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
                   return (
-                    <Link href={`/search?q=#${tag.tag}`} className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700' key={tag.id}>#{tag.tag}</Link>
-                  )
+                    <Link
+                      href={`/search?q=#${tag.tag}`}
+                      className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
+                      key={tag.id}
+                    >
+                      #{tag.tag}
+                    </Link>
+                  );
                 })}
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
