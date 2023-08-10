@@ -38,7 +38,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
       <div className='space-y-3 w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
           <h2 className='font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
-          {desc === true && <p className='text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
+          {desc === true && <p className='break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
         </Link>
         <div className='flex items-center justify-between text-xs text-gray-500 font-semibold'>
           <span className='flex gap-0.5 items-center'>
