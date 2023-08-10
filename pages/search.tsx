@@ -284,7 +284,6 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       const isMobile = window.innerWidth <= 768;
       if (isLoading === false && isMobile && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
         handleLoadMore(searchEvent);
-        console.log('bottom', searchEvent.paginate.limit, searchResult.length);
       }
     };
     window.addEventListener('scroll', handleScroll);
