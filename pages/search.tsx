@@ -13,7 +13,6 @@ import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { FaXmark } from 'react-icons/fa6';
 import { colorStyles } from '../constants';
-import { useData } from '../context/context';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import ReactSlickSlider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -21,6 +20,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
 import { LiaUserSolid } from 'react-icons/lia';
+import Section1 from '../components/search/Section1';
+import Section2_1 from '../components/search/Section2_1';
+import Section2_2 from '../components/search/Section2_2';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -154,7 +156,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   });
   const [selectedSorting, setSelectedSorting] = useState<string>('subscription_desc');
 
-  const [searchResult, setSearchResult] = useState<any | null>(null);
+  const [searchResult, setSearchResult] = useState<any | null>(props.channels);
   const [searchResultText, setSearchResultText] = useState<any>(t['empty-search-text']);
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
 
@@ -208,7 +210,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
       subscribers_to: subscribersTo === '' ? null : subscribersTo,
-      paginate: { limit: 60, offset: 0 },
+      paginate: { limit: 48, offset: 0 },
       sort: sorting,
     };
     setSearchEvent(data);
@@ -225,18 +227,18 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-    result.length < 60 ? setLoadMore(false) : setLoadMore(true);
+    result.length < 48 ? setLoadMore(false) : setLoadMore(true);
     setLoadBar(false);
   };
 
   const handleLoadMore = async (data: any) => {
     setIsLoading(true);
     setLoadMoreText(<Loader content={t['loading-text']} />);
-    data['paginate'].limit = data['paginate'].limit + 60;
+    data['paginate'].limit = data['paginate'].limit + 48;
     const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data);
     const resultData = await response.data;
     const result = resultData.channel;
-    result.length - searchResult.length < 60 && setLoadMore(false);
+    result.length - searchResult.length < 48 && setLoadMore(false);
     setSearchResult(result);
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
@@ -487,50 +489,10 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0'>
-              <div className='font-bold pt-5 pb-1 px-5'>구독자 상승 채널(24H)</div>
-              <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
-                {props.channels24h?.map((channel: any) => {
-                  return (
-                    <GetChannels
-                      channels={channel}
-                      desc={false}
-                      extra2={true}
-                      key={channel.id}
-                      bordered={false}
-                      tag={false}
-                      background='bg-gray-50'
-                    />
-                  );
-                })}
-              </div>
-            </div>
+            <Section1 channels24h={props.channels24h} />
 
             <div className='grid md:grid-cols-2 gap-4'>
-              <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
-                <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
-
-                {props.channelsToday?.map((channel: Channel, index: number) => {
-                  return (
-                    <Link
-                      href={`/channel/${channel.username}`}
-                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                      key={channel.id}
-                    >
-                      <div className='font-semibold'>{++index}</div>
-                      <div className='flex items-center w-full justify-between'>
-                        <div className='flex items-center gap-2'>
-                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                        </div>
-                        <div className='text-gray-500 text-[12px] font-bold min-w-[100px]'>
-                          오늘{channel.today && channel.today}/누적{channel.total && channel.total}
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
+              <Section2_1 channelsToday={props.channelsToday} />
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -549,27 +511,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                     <ChevronRightIcon className='h-3' />
                   </button>
                 </div>
-                {props.channelsNew?.map((channel: Channel, index: number) => {
-                  return (
-                    <Link
-                      href={`/channel/${channel.username}`}
-                      className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
-                      key={channel.id}
-                    >
-                      <div className='font-semibold'>{++index}</div>
-                      <div className='flex items-center w-full justify-between'>
-                        <div className='flex items-center gap-2'>
-                          <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                          <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
-                        </div>
-                        <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center min-w-[100px]'>
-                          <LiaUserSolid size={16} />
-                          {t['subscribers']} {channel.subscription?.toLocaleString()}
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+                <Section2_2 channelsNew={props.channelsNew} />
               </div>
             </div>
 
@@ -577,8 +519,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
-              <div className='font-bold'>{t['tags']}:</div>
-              <div className='relative block space-x-3 w-[75%] md:w-[88%] max-w-[320px] lg:max-w-[860px] mx-auto'>
+              <div className='font-bold'>#</div>
+              <div className='relative block space-x-3 w-[87%] md:w-[94%] max-w-[340px] lg:max-w-[900px] mx-auto'>
                 <ReactSlickSlider {...settings}>
                   {tags?.map((tag: any) => (
                     <div key={tag.tag} className='mr-1'>
@@ -710,11 +652,18 @@ export const getServerSideProps = async () => {
     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
     .then((response) => response.data.channel);
 
+  // Get channels
+  data['paginate'] = { limit: 48, offset: 0 };
+  data['sort'] = { field: 'subscription', order: 'desc' };
+  const channels = await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+    .then((response) => response.data.channel);
+
   // Get Tag List
   const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
   return {
-    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h },
+    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h, channels },
   };
 };
 

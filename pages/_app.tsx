@@ -1,6 +1,4 @@
 import 'rsuite/dist/rsuite.min.css';
-// import '../styles/widget-frame.css';
-// import '../styles/telegram-web.css';
 import '../styles/globals.css';
 
 import axios from 'axios';
@@ -136,27 +134,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           </Layout>
         </DataProvider>
       </SessionProvider>
-      {/* <Script
-        id='hi-stat'
-        dangerouslySetInnerHTML={{
-          __html: `
-            var _Hasync= _Hasync|| [];
-            _Hasync.push(['Histats.start', '1,4764338,4,0,0,0,00010000']);
-            _Hasync.push(['Histats.fasi', '1']);
-            _Hasync.push(['Histats.track_hits', '']);
-            (function() {
-            var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
-            hs.src = ('//s10.histats.com/js15_as.js');
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
-            })();
-          `,
-        }}
-      />
-      <noscript>
-        <a href='/' target='_blank' className='hidden'>
-          <img src='//sstatic1.histats.com/0.gif?4764338&101' alt='free stats' />
-        </a>
-      </noscript> */}
     </>
   );
 }

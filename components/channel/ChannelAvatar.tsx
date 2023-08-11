@@ -13,6 +13,7 @@ const ChannelAvatar = ({ id, title, size, shape }: any) => {
         height={size}
         className={`object-contain ${shape} z-0`}
         onError={() => setError(true)}
+        priority
       />
     </div>
   );
