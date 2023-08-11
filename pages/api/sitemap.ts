@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { formatDate } from '../../lib/utils';
+import { formatDate, toDateformat } from '../../lib/utils';
 import axios from 'axios';
 import { number } from 'yup';
 
@@ -13,8 +13,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function getSitemap() {
-    const yesterday = formatDate(new Date(new Date().setDate(new Date().getDate() - 1)).toString());
-    const month = formatDate(new Date(new Date().setDate(new Date().getDate() - 30)).toString());
+    const yesterday = toDateformat(new Date(new Date().setDate(new Date().getDate() - 1)).toString(), '-');
+    const month = toDateformat(new Date(new Date().setDate(new Date().getDate() - 30)).toString(), '-');
 
     const priority8 = 0.8;
     const priority3 = 0.3;
