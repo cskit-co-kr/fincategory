@@ -14,8 +14,8 @@ module.exports = {
     localeDetection: false,
   },
   images: {
-    domains: ['fincategory.com', 'cdn5.telegram-cdn.org'],
-    // unoptimized: true,
+    // domains: ['fincategory.com', 'cdn5.telegram-cdn.org'],
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,10 +24,6 @@ module.exports = {
       {
         protocol: 'https',
         hostname: '**.fincategory.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.finca.co.kr',
       },
     ],
   },
