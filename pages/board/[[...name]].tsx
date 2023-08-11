@@ -4,7 +4,7 @@ import { getSession, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Loader, Pagination } from 'rsuite';
 import BoardSidebar from '../../components/board/BoardSidebar';
 import ListPostRow from '../../components/board/ListPostRow';
