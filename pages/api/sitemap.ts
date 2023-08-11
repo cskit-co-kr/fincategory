@@ -78,7 +78,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                       <priority>${priority3}</priority>
                     </url>
                     <url>
-                      <loc>https://finca.co.kr/member/signin?callbackUrl=https://finca.co.kr/search</loc>
+                      <loc>https://finca.co.kr/member/signin</loc>
                       <lastmod>${month}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
