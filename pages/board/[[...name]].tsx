@@ -315,7 +315,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       <div className='' key={post.id}>
                         <div className=''>
                           <Link href={`/board/post/${post.id}`}>
-                            <img src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
+                            <Image src={post.extra_02} width='200' height='200' alt='Image' className='object-cover aspect-square' />
                           </Link>
                         </div>
                         <div className='font-semibold'>
