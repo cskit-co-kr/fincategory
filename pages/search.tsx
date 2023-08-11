@@ -28,13 +28,6 @@ type Options = {
   options: Array<MultiValueOptions>;
 };
 
-const goToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-};
-
 const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { locale } = router;
