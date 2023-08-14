@@ -1,5 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
-import { Bars3Icon, Cog6ToothIcon, MagnifyingGlassIcon, PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  Bars3Icon,
+  Cog6ToothIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
 import { ChartBarIcon, EnvelopeIcon } from '@heroicons/react/24/solid';
 import { FaCaretDown, FaTelegramPlane } from 'react-icons/fa';
 import { useRouter } from 'next/router';
@@ -328,10 +335,15 @@ const Header = () => {
                         className='absolute top-7 right-0 border shadow-md bg-white flex flex-col rounded-xl min-w-[100px] text-xs'
                         ref={browseRef}
                       >
-                        <Link href='/member/profile' onClick={() => setUserMenu(false)} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
-                          내 정보
+                        <Link
+                          href='/member/profile'
+                          onClick={() => setUserMenu(false)}
+                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                        >
+                          <UserCircleIcon className='h-4' />내 정보
                         </Link>
-                        <Link href='#' onClick={() => signOut()} className='px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                        <Link href='#' onClick={() => signOut()} className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                          <ArrowRightOnRectangleIcon className='h-4' />
                           {t['sign-out']}
                         </Link>
                       </div>

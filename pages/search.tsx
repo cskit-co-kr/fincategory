@@ -512,8 +512,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
-              <div className='font-bold'>#</div>
-              <div className='relative block space-x-3 w-[87%] md:w-[94%] max-w-[340px] lg:max-w-[900px] mx-auto'>
+              <div className='font-bold text-xl'>#</div>
+              <div className='relative block space-x-3 w-[87%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
                 <ReactSlickSlider {...settings}>
                   {tags?.map((tag: any) => (
                     <div key={tag.tag} className='mr-1'>
