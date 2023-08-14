@@ -24,6 +24,19 @@ function formatDate(date: string) {
   return formattedDateTime;
 }
 
+const toDateformat = (date: string, separator = '') => {
+  let newDate = new Date(date);
+  const timezoneOffset = newDate.getTimezoneOffset();
+
+  const localDate = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+
+  let year = localDate.getFullYear();
+  let month = localDate.getMonth() + 1;
+  let day = localDate.getDate();
+
+  return `${year}${separator}${`00${month}`.slice(-2)}${separator}${`00${day}`.slice(-2)}`;
+}
+
 const toDateTimeformat = (date: string, separator = '') => {
   let newDate = new Date(date);
   const timezoneOffset = newDate.getTimezoneOffset();
@@ -36,10 +49,8 @@ const toDateTimeformat = (date: string, separator = '') => {
   let hour = localDate.getHours();
   let minute = localDate.getMinutes();
 
-  return `${year}${separator}${`00${month}`.slice(-2)}${separator}${`00${day}`.slice(-2)} ${`00${hour}`.slice(-2)}:${`00${minute}`.slice(
-    -2
-  )}`;
-};
+  return `${year}${separator}${`00${month}`.slice(-2)}${separator}${`00${day}`.slice(-2)} ${`00${hour}`.slice(-2)}:${`00${minute}`.slice(-2)}`;
+}
 
 function getHrefValue(str: string) {
   const $ = cheerio.load(str);
@@ -58,4 +69,4 @@ const formatKoreanNumber = (value: number): string => {
   return value.toLocaleString().toString();
 };
 
-export { formatDate, toDateTimeformat, getHrefValue, formatKoreanNumber };
+export { formatDate, toDateTimeformat, toDateformat, getHrefValue, formatKoreanNumber };
