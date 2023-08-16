@@ -57,7 +57,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     variableWidth: true,
     dots: false,
     infinite: false,
-    speed: 2000,
+    speed: 1000,
     slidesToShow: 8,
     slidesToScroll: 8,
     nextArrow: <NextArrow />,
@@ -67,7 +67,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
         breakpoint: 480,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll: 3,
         },
       },
     ],
@@ -149,7 +149,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   });
   const [selectedSorting, setSelectedSorting] = useState<string>('subscription_desc');
 
-  const [searchResult, setSearchResult] = useState<any | null>(props.channels);
+  const [searchResult, setSearchResult] = useState<any | null>(null);
   const [searchResultText, setSearchResultText] = useState<any>(t['empty-search-text']);
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
 
@@ -203,7 +203,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
       subscribers_to: subscribersTo === '' ? null : subscribersTo,
-      paginate: { limit: 48, offset: 0 },
+      paginate: { limit: 45, offset: 0 },
       sort: sorting,
     };
     setSearchEvent(data);
@@ -220,18 +220,18 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
     setTotalChannels(resultData.total);
     result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-    result.length < 48 ? setLoadMore(false) : setLoadMore(true);
+    result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     setLoadBar(false);
   };
 
   const handleLoadMore = async (data: any) => {
     setIsLoading(true);
     setLoadMoreText(<Loader content={t['loading-text']} />);
-    data['paginate'].limit = data['paginate'].limit + 48;
+    data['paginate'].limit = data['paginate'].limit + 45;
     const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data);
     const resultData = await response.data;
     const result = resultData.channel;
-    result.length - searchResult.length < 48 && setLoadMore(false);
+    result.length - searchResult.length < 45 && setLoadMore(false);
     setSearchResult(result);
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
@@ -645,18 +645,11 @@ export const getServerSideProps = async () => {
     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
     .then((response) => response.data.channel);
 
-  // Get channels
-  data['paginate'] = { limit: 48, offset: 0 };
-  data['sort'] = { field: 'subscription', order: 'desc' };
-  const channels = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
-
   // Get Tag List
   const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
   return {
-    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h, channels },
+    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h },
   };
 };
 
