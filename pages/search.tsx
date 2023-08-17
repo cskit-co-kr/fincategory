@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useTransition } from 'react';
 import Select from 'react-select';
 import { Channel, MultiValueOptions } from '../typings';
 import { enUS } from '../lang/en-US';
@@ -28,12 +28,12 @@ type Options = {
   options: Array<MultiValueOptions>;
 };
 
-const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Search = () => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const tags = props.tags;
+  // const tags = props.tags;
   const [selectedTag, setSelectedTag] = useState('');
 
   function PrevArrow(props: any) {
@@ -107,31 +107,31 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     },
   ];
 
-  const cats = props.categories?.map((item: any) => {
-    const obj = JSON.parse(item.name);
-    return {
-      value: item.id,
-      label: locale === 'ko' ? obj.ko : obj.en,
-    };
-  });
+  // const cats = props.categories?.map((item: any) => {
+  //   const obj = JSON.parse(item.name);
+  //   return {
+  //     value: item.id,
+  //     label: locale === 'ko' ? obj.ko : obj.en,
+  //   };
+  // });
 
-  const countries = props.countries?.map((item: any) => {
-    const disable = item.nicename === 'Korea, Republic of' ? false : true;
-    return {
-      value: item.id,
-      label: t[item.iso as keyof typeof t],
-      isDisabled: disable,
-    };
-  });
+  // const countries = props.countries?.map((item: any) => {
+  //   const disable = item.nicename === 'Korea, Republic of' ? false : true;
+  //   return {
+  //     value: item.id,
+  //     label: t[item.iso as keyof typeof t],
+  //     isDisabled: disable,
+  //   };
+  // });
 
-  const languages = props.languages?.map((item: any) => {
-    const disable = item.value === 'Korean' ? false : true;
-    return {
-      value: item.id,
-      label: t[item.value as keyof typeof t],
-      isDisabled: disable,
-    };
-  });
+  // const languages = props.languages?.map((item: any) => {
+  //   const disable = item.value === 'Korean' ? false : true;
+  //   return {
+  //     value: item.id,
+  //     label: t[item.value as keyof typeof t],
+  //     isDisabled: disable,
+  //   };
+  // });
 
   const [searchText, setSearchText] = useState<any>('');
   const [selectDesc, setSelectDesc] = useState(false);
@@ -156,17 +156,140 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
   const [totalChannels, setTotalChannels] = useState<number>(0);
+  const [channelsNew, setChannelsNew] = useState<any[]>([]);
+  const [channelsToday, setChannelsToday] = useState<any[]>([]);
+  const [channels24, setChannels24] = useState<any[]>([]);
+
+  const [cats, setCats] = useState<any[]>([]);
+  const [countries, setCountries] = useState<any[]>([]);
+  const [languages, setLangueges] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadBar, setLoadBar] = useState(false);
 
+  const [isPending, startTransition] = useTransition();
+
+
+  let data: any = {
+    query: null,
+    withDesc: false,
+    category: [],
+    country: [],
+    language: [{ value: 'ko', label: 'Korean' }],
+    channel_type: null,
+    channel_age: 0,
+    erp: 0,
+    subscribers_from: null,
+    subscribers_to: null,
+    paginate: { limit: 4, offset: 0 },
+    sort: { field: 'created_at', order: 'desc' },
+  };
   // useEffect(() => {
   //   doSearch('');
   // }, []);
   // useEffect(() => {
   //   doSearch('');
   // }, [sorting]);
+
+
+  useEffect(() => {
+    const newChannels = async () => {
+      // Get recently added channels
+      data['paginate'] = { limit: 5, offset: 0 };
+      const channelsNew = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsNew(channelsNew);
+    }
+
+    newChannels();
+
+  }, [router]);
+
+
+  useEffect(() => {
+    const todayChannels = async () => {
+      // Get most viewed channels today
+      data['paginate'] = { limit: 5, offset: 0 };
+      data['sort'] = { field: 'today', order: 'desc' };
+      const channelsToday = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsToday(channelsToday)
+    }
+    todayChannels();
+  }, [router]);
+
+
+  useEffect(() => {
+    const _channels24 = async () => {
+      // Get most increased subscriptions in 24h channels
+      data['paginate'] = { limit: 6, offset: 0 };
+      data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+      const channels24h = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+
+      setChannels24(channels24h)
+    }
+
+    _channels24();
+  }, [router]);
+
+  useEffect(() => {
+    const exec = async () => {
+      const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
+
+      const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+      const _languages = await resLanguage.data;
+
+
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+      const _categories = await result.data;
+
+      const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+      const _countries = await resCountry.data;
+
+
+      const cats = _categories?.map((item: any) => {
+        const obj = JSON.parse(item.name);
+        return {
+          value: item.id,
+          label: locale === 'ko' ? obj.ko : obj.en,
+        };
+      });
+
+      const countries = _countries?.map((item: any) => {
+        const disable = item.nicename === 'Korea, Republic of' ? false : true;
+        return {
+          value: item.id,
+          label: t[item.iso as keyof typeof t],
+          isDisabled: disable,
+        };
+      });
+
+      const languages = _languages?.map((item: any) => {
+        const disable = item.value === 'Korean' ? false : true;
+        return {
+          value: item.id,
+          label: t[item.value as keyof typeof t],
+          isDisabled: disable,
+        };
+      });
+      startTransition(() => {
+        setTags(tags);
+        setLangueges(languages);
+        setCountries(countries);
+        setCats(cats)
+      })
+
+    }
+
+    exec();
+
+  }, [router]);
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -177,16 +300,16 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   }, [router, sorting]);
 
   useEffect(() => {
-    setOptions(cats);
-    setOptionsCountries(countries);
-    setOptionsLanguages(languages);
+    // setOptions(cats);
+    // setOptionsCountries(countries);
+    // setOptionsLanguages(languages);
 
     setIsLoadingCategory(false);
     setIsLoadingCountries(false);
     setIsLoadingLanguages(false);
     setLoadMoreText(t['load-more']);
     setSearchResultText(t['empty-search-text']);
-  }, [locale, props]);
+  }, [locale]);
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
@@ -482,10 +605,12 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <Section1 channels24h={props.channels24h} />
+            {/* <Section1 channels24h={props.channels24h} /> */}
+            <Section1 channels24h={channels24} />
 
             <div className='grid md:grid-cols-2 gap-4'>
-              <Section2_1 channelsToday={props.channelsToday} />
+              {/* <Section2_1 channelsToday={props.channelsToday} /> */}
+              <Section2_1 channelsToday={channelsToday} />
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -504,7 +629,7 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                     <ChevronRightIcon className='h-3' />
                   </button>
                 </div>
-                <Section2_2 channelsNew={props.channelsNew} />
+                <Section2_2 channelsNew={channelsNew} />
               </div>
             </div>
 
@@ -518,9 +643,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                   {tags?.map((tag: any) => (
                     <div key={tag.tag} className='mr-1'>
                       <button
-                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl md:hover:bg-primary md:hover:text-white ${
-                          selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                        }`}
+                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
                         key={tag.tag}
                         onClick={() => {
                           selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -528,9 +652,8 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                       >
                         {tag.tag}
                         <span
-                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
-                            selectedTag === tag.tag ? 'text-black' : ''
-                          }`}
+                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
                         >
                           {tag.total}
                         </span>
@@ -600,57 +723,57 @@ const Search = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   );
 };
 
-export const getServerSideProps = async () => {
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-  const categories = await result.data;
+// export const getServerSideProps = async () => {
+//   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+//   const categories = await result.data;
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-  const countries = await resCountry.data;
+//   const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+//   const countries = await resCountry.data;
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-  const languages = await resLanguage.data;
+//   const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+//   const languages = await resLanguage.data;
 
-  let data: any = {
-    query: null,
-    withDesc: false,
-    category: [],
-    country: [],
-    language: [{ value: 'ko', label: 'Korean' }],
-    channel_type: null,
-    channel_age: 0,
-    erp: 0,
-    subscribers_from: null,
-    subscribers_to: null,
-    paginate: { limit: 4, offset: 0 },
-    sort: { field: 'created_at', order: 'desc' },
-  };
+//   let data: any = {
+//     query: null,
+//     withDesc: false,
+//     category: [],
+//     country: [],
+//     language: [{ value: 'ko', label: 'Korean' }],
+//     channel_type: null,
+//     channel_age: 0,
+//     erp: 0,
+//     subscribers_from: null,
+//     subscribers_to: null,
+//     paginate: { limit: 4, offset: 0 },
+//     sort: { field: 'created_at', order: 'desc' },
+//   };
 
-  // Get recently added channels
-  data['paginate'] = { limit: 5, offset: 0 };
-  const channelsNew = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
+//   // Get recently added channels
+//   data['paginate'] = { limit: 5, offset: 0 };
+//   const channelsNew = await axios
+//     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+//     .then((response) => response.data.channel);
 
-  // Get most viewed channels today
-  data['paginate'] = { limit: 5, offset: 0 };
-  data['sort'] = { field: 'today', order: 'desc' };
-  const channelsToday = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
+//   // Get most viewed channels today
+//   data['paginate'] = { limit: 5, offset: 0 };
+//   data['sort'] = { field: 'today', order: 'desc' };
+//   const channelsToday = await axios
+//     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+//     .then((response) => response.data.channel);
 
-  // Get most increased subscriptions in 24h channels
-  data['paginate'] = { limit: 6, offset: 0 };
-  data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
-  const channels24h = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
+//   // Get most increased subscriptions in 24h channels
+//   data['paginate'] = { limit: 6, offset: 0 };
+//   data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+//   const channels24h = await axios
+//     .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+//     .then((response) => response.data.channel);
 
-  // Get Tag List
-  const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
+//   // Get Tag List
+//   const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
-  return {
-    props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h },
-  };
-};
+//   return {
+//     props: { categories, countries, languages, tags, channelsNew, channelsToday, channels24h },
+//   };
+// };
 
 export default Search;
