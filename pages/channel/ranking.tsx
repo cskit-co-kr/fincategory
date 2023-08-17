@@ -263,7 +263,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                           src={
                             error
                               ? '/telegram-icon-96.png'
-                              : `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`
+                              : `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`
                           }
                           alt={'avatar of ' + rowData.title}
                           width={40}
@@ -272,7 +272,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                           onError={() => setError(true)}
                         /> */}
                         <Image
-                          src={`${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${rowData.channel_id}/avatar.jfif`}
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_UR}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`}
                           alt={rowData.title}
                           width={40}
                           height={40}

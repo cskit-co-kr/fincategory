@@ -38,7 +38,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
+  const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/300/${channel.channel_id}/avatar.jfif`;
 
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>
