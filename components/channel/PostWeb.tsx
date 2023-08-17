@@ -4,9 +4,6 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import LinkPreview from './LinkPreview';
-import RenderPost from './RenderPost';
-import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
 import MediaWeb from './ChannelMediaWeb';
 
