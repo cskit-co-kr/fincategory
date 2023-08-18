@@ -8,6 +8,7 @@ import {
 import { useRouter } from "next/router";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
+import { Skeleton } from "@mui/material";
 
 const ChannelDetailNav = ({ channel }: any) => {
   const router = useRouter();
@@ -62,4 +63,9 @@ const ChannelDetailNav = ({ channel }: any) => {
   );
 };
 
-export default ChannelDetailNav;
+const ChannelDetailNavSkeleton = () => {
+  return (
+    <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width="100%" height={54} className='h-min-[54px]' />
+  )
+}
+export {ChannelDetailNavSkeleton, ChannelDetailNav};

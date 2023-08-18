@@ -8,7 +8,7 @@ import { koKR } from '../lang/ko-KR';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import GetChannels from '../components/channel/GetChannels';
+import { GetChannels, GetChannelsSkeleton } from '../components/channel/GetChannels';
 import { Loader } from 'rsuite';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { FaXmark } from 'react-icons/fa6';
@@ -21,8 +21,9 @@ import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
 import { LiaUserSolid } from 'react-icons/lia';
 import Section1 from '../components/search/Section1';
-import Section2_1 from '../components/search/Section2_1';
+import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
 import Section2_2 from '../components/search/Section2_2';
+import { Skeleton } from '@mui/material';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -156,14 +157,14 @@ const Search = () => {
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
   const [totalChannels, setTotalChannels] = useState<number>(0);
-  const [channelsNew, setChannelsNew] = useState<any[]>([]);
-  const [channelsToday, setChannelsToday] = useState<any[]>([]);
-  const [channels24, setChannels24] = useState<any[]>([]);
+  const [channelsNew, setChannelsNew] = useState<any>(null);
+  const [channelsToday, setChannelsToday] = useState<any>(null);
+  const [channels24, setChannels24] = useState<any>(null);
 
   const [cats, setCats] = useState<any[]>([]);
   const [countries, setCountries] = useState<any[]>([]);
   const [languages, setLangueges] = useState<any[]>([]);
-  const [tags, setTags] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: "................" }));
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -193,22 +194,6 @@ const Search = () => {
   //   doSearch('');
   // }, [sorting]);
 
-
-  useEffect(() => {
-    const newChannels = async () => {
-      // Get recently added channels
-      data['paginate'] = { limit: 5, offset: 0 };
-      const channelsNew = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
-      setChannelsNew(channelsNew);
-    }
-
-    newChannels();
-
-  }, [router]);
-
-
   useEffect(() => {
     const todayChannels = async () => {
       // Get most viewed channels today
@@ -219,11 +204,14 @@ const Search = () => {
         .then((response) => response.data.channel);
       setChannelsToday(channelsToday)
     }
-    todayChannels();
-  }, [router]);
-
-
-  useEffect(() => {
+    const newChannels = async () => {
+      // Get recently added channels
+      data['paginate'] = { limit: 5, offset: 0 };
+      const channelsNew = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsNew(channelsNew);
+    }
     const _channels24 = async () => {
       // Get most increased subscriptions in 24h channels
       data['paginate'] = { limit: 6, offset: 0 };
@@ -231,14 +219,9 @@ const Search = () => {
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
-
       setChannels24(channels24h)
     }
 
-    _channels24();
-  }, [router]);
-
-  useEffect(() => {
     const exec = async () => {
       const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
 
@@ -287,9 +270,14 @@ const Search = () => {
 
     }
 
-    exec();
+    todayChannels();
+    _channels24();
+    newChannels();
 
+    exec();
   }, [router]);
+
+
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -359,6 +347,7 @@ const Search = () => {
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
   };
+
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
       router.push({
@@ -606,11 +595,15 @@ const Search = () => {
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {/* <Section1 channels24h={props.channels24h} /> */}
+
             <Section1 channels24h={channels24} />
 
-            <div className='grid md:grid-cols-2 gap-4'>
+            <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               {/* <Section2_1 channelsToday={props.channelsToday} /> */}
-              <Section2_1 channelsToday={channelsToday} />
+              {
+                channelsToday ? <Section2_1 channelsToday={channelsToday} />
+                  : <Section2_1Skeleton />
+              }
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -696,16 +689,23 @@ const Search = () => {
                   </select>
                 </div>
               </div>
-            ) : null}
+            ) : <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave"
+              className='min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 ' />}
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-                {searchResult.map((channel: Channel) => {
+                {searchResult?.map((channel: Channel) => {
                   return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4' />;
                 })}
               </div>
-            ) : (
-              <div className='text-center mt-2 md:mt-0'>{searchResultText}</div>
-            )}
+            ) :
+              (
+                <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+                  {Array(10).fill(1).map(() => {
+                    return <GetChannelsSkeleton />
+                  })}
+                </div>
+              )
+            }
             {loadMore && (
               <div className='flex justify-center'>
                 <button
