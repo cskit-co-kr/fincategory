@@ -6,13 +6,14 @@ import { useEffect, useState, useTransition } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Loader } from 'rsuite';
 
-import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
-import PostWeb from '../../components/channel/PostWeb';
+import { ChannelDetailLeftSidebar, ChannelDetailLeftSidebarSkeleton } from '../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailNav, ChannelDetailNavSkeleton } from '../../components/channel/ChannelDetailNav';
+import { PostWeb, PostWebSkeleton } from '../../components/channel/PostWeb';
 import PostDB from '../../components/channel/PostDB';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import { Skeleton } from '@mui/material';
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -31,8 +32,8 @@ const ChannelDetail = ({ }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
-  const [posts, setPosts] = useState<any[]>([]);
-  const [channel, setChannel] = useState<any>();
+  const [posts, setPosts] = useState<any>(null);
+  const [channel, setChannel] = useState<any>(null);
   const [sub, setSub] = useState<any>();
   const [averageViews, setAverageViews] = useState<any>();
   const [averagePosts, setAveragePosts] = useState<any>();
@@ -58,7 +59,7 @@ const ChannelDetail = ({ }: any) => {
   }, [router]);
 
   useEffect(() => {
-    if(channel){
+    if (channel) {
       getPostsWeb();
     }
   }, [channel]);
@@ -117,7 +118,7 @@ const ChannelDetail = ({ }: any) => {
         });
       }
     }
-    if(channel){
+    if (channel) {
       average();
     }
 
@@ -217,9 +218,12 @@ const ChannelDetail = ({ }: any) => {
       />
       <div className='md:pt-7 bg-gray-50'>
         <div className='md:flex mx-auto px-3 md:px-0'>
-          {channel && <ChannelDetailLeftSidebar channel={channel} /> }
+          {channel
+            ? <ChannelDetailLeftSidebar channel={channel} />
+            : <ChannelDetailLeftSidebarSkeleton />
+          }
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
-           {channel &&  <ChannelDetailNav channel={channel} /> }
+            {channel ? <ChannelDetailNav channel={channel} /> : <ChannelDetailNavSkeleton />}
             <div className='flex flex-col lg:flex-row-reverse gap-4'>
               <div className='rightsidebar'>
                 <div className='sticky inset-y-4 gap-4 flex flex-col md:grid md:grid-cols-5 lg:flex lg:flex-col'>
@@ -285,7 +289,7 @@ const ChannelDetail = ({ }: any) => {
                 {posts !== null ? (
                   posts.map((post: any) => {
                     if (mode === 'web') {
-                      return post.post !== null ? <PostWeb channel={channel} post={post} key={post.id} /> : <></>;
+                      return <PostWeb channel={channel} post={post} key={post.id} />
                     }
 
                     if (mode === 'db') {
@@ -293,7 +297,10 @@ const ChannelDetail = ({ }: any) => {
                     }
                   })
                 ) : (
-                  <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>
+                  Array(4).fill(1).map(() => {
+                    return <PostWebSkeleton />
+                  })
+
                 )}
                 {loadMore && (
                   <div className='flex justify-center col-span-3'>

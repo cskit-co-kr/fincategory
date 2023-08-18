@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ChannelAvatar from './ChannelAvatar';
 import { LiaUserSolid } from 'react-icons/lia';
+import { Skeleton } from '@mui/material';
 
 type Props = {
   channels: Channel;
@@ -76,6 +77,12 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
   );
 };
 
+
+const GetChannelsSkeleton = () => {
+  return (
+    <Skeleton className={`relative flex md:rounded-xl p-4 gap-2.5 text-black `} sx={{ bgcolor: 'grey.100' }} variant="rectangular" animation="wave" width={310} height={192}/>
+  )
+}
 GetChannels.defaultProps = {
   tag: true,
   views: true,
@@ -83,4 +90,4 @@ GetChannels.defaultProps = {
   background: 'bg-white',
 };
 
-export default GetChannels;
+export {GetChannels, GetChannelsSkeleton};
