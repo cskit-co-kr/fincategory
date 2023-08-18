@@ -20,7 +20,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
 import { LiaUserSolid } from 'react-icons/lia';
-import Section1 from '../components/search/Section1';
+import {Section1, Section1Skeleton} from '../components/search/Section1';
 import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
 import Section2_2 from '../components/search/Section2_2';
 import { Skeleton } from '@mui/material';
@@ -596,7 +596,10 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {/* <Section1 channels24h={props.channels24h} /> */}
 
-            <Section1 channels24h={channels24} />
+            {
+              channels24 ? <Section1 channels24h={channels24} />
+              : <Section1Skeleton/>
+            }
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               {/* <Section2_1 channelsToday={props.channelsToday} /> */}
