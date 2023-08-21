@@ -706,8 +706,8 @@ const Search = () => {
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {Array(10)
                   .fill(1)
-                  .map(() => {
-                    return <GetChannelsSkeleton />;
+                  .map((val, index) => {
+                    return <GetChannelsSkeleton key={index} />;
                   })}
               </div>
             )}

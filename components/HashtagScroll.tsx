@@ -1,13 +1,12 @@
 const HashtagScroll = ({ tags, selectedTag, setSelectedTag }: any) => {
   return (
     <div className='flex scrollable-container select-none'>
-      {tags?.map((tag: any) => (
-        <div key={tag.tag} className='mr-1'>
+      {tags?.map((tag: any, index: any) => (
+        <div key={index} className='mr-1'>
           <button
             className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
               selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
             }`}
-            key={tag.tag}
             onClick={() => {
               selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
             }}
