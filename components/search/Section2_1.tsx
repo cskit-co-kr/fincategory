@@ -37,22 +37,30 @@ const Section2_1Skeleton = () => {
   return (
     <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
       <div className='font-bold pt-5 pb-1 px-5'>(오늘)조회수 상위</div>
-      {
-        Array(5).fill(1).map((val, index) => {
-          return <div className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'>
-            <Skeleton variant='text' animation="wave" sx={{ bgcolor: 'grey.100' }} width={20} height={20} />
-            <div className='flex items-center w-full justify-between'>
-              <div className='flex items-center gap-2'>
-                <Skeleton variant='circular' animation="wave" sx={{ bgcolor: 'grey.100' }} width={30} height={30} />
-                <Skeleton variant='text' animation="wave" sx={{ bgcolor: 'grey.100' }} width={60} height={10} />
+      {Array(5)
+        .fill(1)
+        .map((val, index) => {
+          return (
+            <div className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none' key={index}>
+              <Skeleton variant='text' animation='wave' sx={{ bgcolor: 'grey.100' }} width={20} height={20} />
+              <div className='flex items-center w-full justify-between'>
+                <div className='flex items-center gap-2'>
+                  <Skeleton variant='circular' animation='wave' sx={{ bgcolor: 'grey.100' }} width={30} height={30} />
+                  <Skeleton variant='text' animation='wave' sx={{ bgcolor: 'grey.100' }} width={60} height={10} />
+                </div>
+                <Skeleton
+                  variant='text'
+                  animation='wave'
+                  sx={{ bgcolor: 'grey.100' }}
+                  width={60}
+                  height={10}
+                  className='text-gray-500 text-[12px] font-bold min-w-[100px]'
+                />
               </div>
-              <Skeleton variant='text' animation="wave" sx={{ bgcolor: 'grey.100' }} width={60} height={10} className='text-gray-500 text-[12px] font-bold min-w-[100px]' />
             </div>
-          </div>
-        })
-      }
+          );
+        })}
     </div>
-  )
-
-}
+  );
+};
 export { Section2_1Skeleton, Section2_1 };
