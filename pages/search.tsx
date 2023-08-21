@@ -23,6 +23,8 @@ import { LiaUserSolid } from 'react-icons/lia';
 import { Section1, Section1Skeleton } from '../components/search/Section1';
 import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
 import Section2_2 from '../components/search/Section2_2';
+import { Skeleton } from '@mui/material';
+import HashtagScroll from '../components/HashtagScroll';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -156,17 +158,121 @@ const Search = () => {
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
   const [totalChannels, setTotalChannels] = useState<number>(0);
+  const [channelsNew, setChannelsNew] = useState<any>(null);
+  const [channelsToday, setChannelsToday] = useState<any>(null);
+  const [channels24, setChannels24] = useState<any>(null);
+
+  const [cats, setCats] = useState<any[]>([]);
+  const [countries, setCountries] = useState<any[]>([]);
+  const [languages, setLangueges] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: '................' }));
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadBar, setLoadBar] = useState(false);
 
+  const [isPending, startTransition] = useTransition();
+
+  let data: any = {
+    query: null,
+    withDesc: false,
+    category: [],
+    country: [],
+    language: [{ value: 'ko', label: 'Korean' }],
+    channel_type: null,
+    channel_age: 0,
+    erp: 0,
+    subscribers_from: null,
+    subscribers_to: null,
+    paginate: { limit: 4, offset: 0 },
+    sort: { field: 'created_at', order: 'desc' },
+  };
   // useEffect(() => {
   //   doSearch('');
   // }, []);
   // useEffect(() => {
   //   doSearch('');
   // }, [sorting]);
+
+  useEffect(() => {
+    const todayChannels = async () => {
+      // Get most viewed channels today
+      data['paginate'] = { limit: 5, offset: 0 };
+      data['sort'] = { field: 'today', order: 'desc' };
+      const channelsToday = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsToday(channelsToday);
+    };
+    const newChannels = async () => {
+      // Get recently added channels
+      data['paginate'] = { limit: 5, offset: 0 };
+      const channelsNew = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsNew(channelsNew);
+    };
+    const _channels24 = async () => {
+      // Get most increased subscriptions in 24h channels
+      data['paginate'] = { limit: 6, offset: 0 };
+      data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+      const channels24h = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannels24(channels24h);
+    };
+
+    const exec = async () => {
+      const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
+
+      const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+      const _languages = await resLanguage.data;
+
+      const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+      const _categories = await result.data;
+
+      const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+      const _countries = await resCountry.data;
+
+      const cats = _categories?.map((item: any) => {
+        const obj = JSON.parse(item.name);
+        return {
+          value: item.id,
+          label: locale === 'ko' ? obj.ko : obj.en,
+        };
+      });
+
+      const countries = _countries?.map((item: any) => {
+        const disable = item.nicename === 'Korea, Republic of' ? false : true;
+        return {
+          value: item.id,
+          label: t[item.iso as keyof typeof t],
+          isDisabled: disable,
+        };
+      });
+
+      const languages = _languages?.map((item: any) => {
+        const disable = item.value === 'Korean' ? false : true;
+        return {
+          value: item.id,
+          label: t[item.value as keyof typeof t],
+          isDisabled: disable,
+        };
+      });
+      startTransition(() => {
+        setTags(tags);
+        setLangueges(languages);
+        setCountries(countries);
+        setCats(cats);
+      });
+    };
+
+    todayChannels();
+    _channels24();
+    newChannels();
+
+    exec();
+  }, [router]);
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -483,10 +589,13 @@ const Search = () => {
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <Section1 channels24h={props.channels24h} />
+            {/* <Section1 channels24h={props.channels24h} /> */}
 
-            <div className='grid md:grid-cols-2 gap-4'>
-              <Section2_1 channelsToday={props.channelsToday} />
+            {channels24 ? <Section1 channels24h={channels24} /> : <Section1Skeleton />}
+
+            <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
+              {/* <Section2_1 channelsToday={props.channelsToday} /> */}
+              {channelsToday ? <Section2_1 channelsToday={channelsToday} /> : <Section2_1Skeleton />}
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -514,31 +623,36 @@ const Search = () => {
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
-              <div className='relative block space-x-3 w-[87%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
-                <ReactSlickSlider {...settings}>
-                  {tags?.map((tag: any) => (
-                    <div key={tag.tag} className='mr-1'>
-                      <button
-                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl md:hover:bg-primary md:hover:text-white ${
-                          selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                        }`}
-                        key={tag.tag}
-                        onClick={() => {
-                          selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
-                        }}
-                      >
-                        {tag.tag}
-                        <span
-                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
-                            selectedTag === tag.tag ? 'text-black' : ''
+              <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
+                <div className='hidden md:block'>
+                  <ReactSlickSlider {...settings}>
+                    {tags?.map((tag: any) => (
+                      <div key={tag.tag} className='mr-1'>
+                        <button
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
                           }`}
+                          key={tag.tag}
+                          onClick={() => {
+                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
+                          }}
                         >
-                          {tag.total}
-                        </span>
-                      </button>
-                    </div>
-                  ))}
-                </ReactSlickSlider>
+                          {tag.tag}
+                          <span
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
+                          >
+                            {tag.total}
+                          </span>
+                        </button>
+                      </div>
+                    ))}
+                  </ReactSlickSlider>
+                </div>
+                <div className='md:hidden'>
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+                </div>
               </div>
             </div>
             {/* {loadBar && (
