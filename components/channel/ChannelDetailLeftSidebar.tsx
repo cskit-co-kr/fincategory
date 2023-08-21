@@ -12,6 +12,7 @@ import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from '@heroicons/r
 import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { formatDate } from '../../lib/utils';
+import { Skeleton } from '@mui/material';
 
 interface DataTags {
   tag: string;
@@ -38,7 +39,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
+  const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/300/${channel.channel_id}/avatar.jfif`;
 
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>
@@ -160,7 +161,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   return (
     <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4'>
-      <div className='sticky inset-y-4'>
+      <div className='sticky inset-y-4 min-h-[289px]'>
         <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
           <Image
             src={error ? '/telegram-icon-96.png' : avatar}
@@ -289,6 +290,22 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       </div>
     </div>
   );
+
+
 };
 
-export default ChannelDetailLeftSidebar;
+const ChannelDetailLeftSidebarSkeleton = () => {
+  return (
+    <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4 min-h-[289px]'>
+      <div className='sticky inset-y-4'>
+        <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
+          <Skeleton variant="circular" sx={{ bgcolor: 'grey.100' }} animation="wave" width={170} height={170} />
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" width={"70%"} height={40} />
+          <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={"90%"} height={300} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export {ChannelDetailLeftSidebarSkeleton, ChannelDetailLeftSidebar};

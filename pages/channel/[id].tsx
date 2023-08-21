@@ -2,17 +2,18 @@ import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIc
 import axios from 'axios';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Loader } from 'rsuite';
 
-import ChannelDetailLeftSidebar from '../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../components/channel/ChannelDetailNav';
-import PostWeb from '../../components/channel/PostWeb';
+import { ChannelDetailLeftSidebar, ChannelDetailLeftSidebarSkeleton } from '../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailNav, ChannelDetailNavSkeleton } from '../../components/channel/ChannelDetailNav';
+import { PostWeb, PostWebSkeleton } from '../../components/channel/PostWeb';
 import PostDB from '../../components/channel/PostDB';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
+import { Skeleton } from '@mui/material';
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -26,25 +27,107 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }: any) => {
+const ChannelDetail = ({ }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
   const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<any>(null);
+  const [channel, setChannel] = useState<any>(null);
+  const [sub, setSub] = useState<any>();
+  const [averageViews, setAverageViews] = useState<any>();
+  const [averagePosts, setAveragePosts] = useState<any>();
+  const [averageErr, setAverageErr] = useState<any>();
+
   const [postsLastId, setPostsLastId] = useState<number | null>(null);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
   const [mode, setMode] = useState<string>('web');
 
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
-    getPostsWeb();
-  }, []);
+    const _channel = async () => {
+      const id = router.query['id'];
+
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: id });
+      const channel = response.data;
+      setChannel(channel);
+    }
+
+    _channel();
+  }, [router]);
+
+  useEffect(() => {
+    if (channel) {
+      getPostsWeb();
+    }
+  }, [channel]);
+
+  useEffect(() => {
+    const sub = async () => {
+      const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel?.channel_id });
+      const sub = responseSub.data;
+      setSub(sub);
+    }
+
+    sub();
+  }, [router, channel]);
+
+  useEffect(() => {
+    const average = async () => {
+
+
+      let averageViews = 0;
+      let averagePosts = 0;
+      let averageErr = 0;
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ channel_id: channel.channel_id }),
+      });
+      const combinedReturn = await res.json();
+      if (combinedReturn[0].total.length > 0) {
+        averageViews = Math.round(
+          combinedReturn[0].average.reduce((a: any, b: any) => {
+            return a + b.average;
+          }, 0) / combinedReturn[0].average.length
+        );
+
+        averagePosts = Math.round(
+          combinedReturn[0].average.slice(-30).reduce((a: any, b: any) => {
+            return a + b.posts;
+          }, 0) / combinedReturn[0].average.slice(-30).length
+        );
+
+        const errPercent = combinedReturn[0].average.map((item: any) => ({
+          date: item.date,
+          views: Math.round((item.average * 100) / channel.subscription),
+        }));
+
+        averageErr =
+          errPercent.reduce((a: any, b: any) => {
+            return a + b.views;
+          }, 0) / errPercent.length;
+
+        startTransition(() => {
+          setAverageViews(averageViews);
+          setAveragePosts(averagePosts);
+          setAverageErr(averageErr);
+        });
+      }
+    }
+    if (channel) {
+      average();
+    }
+
+  }, [router, channel])
 
   const getPostsWeb = async () => {
     setLoadMore(true);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
-      channel: channel.username,
+      channel: channel?.username,
       last_id: null
     });
     const result = await response.data;
@@ -123,21 +206,24 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
       <NextSeo
         noindex={true}
         nofollow={true}
-        title={channel.title}
-        description={channel.description}
+        title={channel?.title}
+        description={channel?.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa ` },
-          { name: 'og:title', content: channel.title },
-          { name: 'og:description', content: channel.description },
-          { name: 'twitter:title', content: channel.title },
-          { name: 'twitter:description', content: channel.description },
+          { name: 'title', content: `${channel?.title} | FinCa ` },
+          { name: 'og:title', content: channel?.title },
+          { name: 'og:description', content: channel?.description },
+          { name: 'twitter:title', content: channel?.title },
+          { name: 'twitter:description', content: channel?.description },
         ]}
       />
       <div className='md:pt-7 bg-gray-50'>
         <div className='md:flex mx-auto px-3 md:px-0'>
-          <ChannelDetailLeftSidebar channel={channel} />
+          {channel
+            ? <ChannelDetailLeftSidebar channel={channel} />
+            : <ChannelDetailLeftSidebarSkeleton />
+          }
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
-            <ChannelDetailNav channel={channel} />
+            {channel ? <ChannelDetailNav channel={channel} /> : <ChannelDetailNavSkeleton />}
             <div className='flex flex-col lg:flex-row-reverse gap-4'>
               <div className='rightsidebar'>
                 <div className='sticky inset-y-4 gap-4 flex flex-col md:grid md:grid-cols-5 lg:flex lg:flex-col'>
@@ -158,7 +244,7 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                       </AreaChart>
                     </ResponsiveContainer>
                     <a
-                      href={`/channel/${channel.username}/subscribers`}
+                      href={`/channel/${channel?.username}/subscribers`}
                       className='flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5'
                     >
                       <ChartBarSquareIcon className='h-5' />
@@ -172,14 +258,14 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
                         <UsersIcon className='w-5 h-5 text-primary' />
                         {t['subscribers']}
                       </div>
-                      <div className='text-center font-semibold text-base'>{channel.subscription?.toLocaleString()}</div>
+                      <div className='text-center font-semibold text-base'>{channel?.subscription?.toLocaleString()}</div>
                     </div>
                     <div className='flex flex-col gap-1'>
                       <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
                         <ClipboardDocumentListIcon className='w-5 h-5 text-[#55A348]' />
                         {t['views-per-post']}
                       </div>
-                      <div className='text-center font-semibold text-base'>~{averageViews.toLocaleString()}</div>
+                      <div className='text-center font-semibold text-base'>~{averageViews?.toLocaleString()}</div>
                     </div>
                     <div className='flex flex-col gap-1 border-r'>
                       <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
@@ -202,16 +288,19 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
               <div className='gap-4 flex flex-col w-full'>
                 {posts !== null ? (
                   posts.map((post: any) => {
-                    if(mode === 'web') {
-                      return post.post !== null ? <PostWeb channel={channel} post={post} key={post.id} /> : <></>;
+                    if (mode === 'web') {
+                      return <PostWeb channel={channel} post={post} key={post.id} />
                     }
 
-                    if(mode === 'db') {
+                    if (mode === 'db') {
                       return post.post !== null ? <PostDB channel={channel} post={post} key={post.id} /> : <></>;
                     }
                   })
                 ) : (
-                  <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-posts']}</div>
+                  Array(4).fill(1).map(() => {
+                    return <PostWebSkeleton />
+                  })
+
                 )}
                 {loadMore && (
                   <div className='flex justify-center col-span-3'>
@@ -232,62 +321,62 @@ const ChannelDetail = ({ channel, sub, averageViews, averagePosts, averageErr }:
   );
 };
 
-export const getServerSideProps = async (context: any) => {
-  const getId = context.query['id'];
+// export const getServerSideProps = async (context: any) => {
+//   const getId = context.query['id'];
 
-  let averageViews = 0;
-  let averagePosts = 0;
-  let averageErr = 0;
+//   let averageViews = 0;
+//   let averagePosts = 0;
+//   let averageErr = 0;
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
+//   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
 
-  const channel = response.data;
+//   const channel = response.data;
 
-  if (!channel) {
-    return { notFound: true };
-  }
+//   if (!channel) {
+//     return { notFound: true };
+//   }
 
-  const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
-  const sub = responseSub.data;
+//   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
+//   const sub = responseSub.data;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ channel_id: channel.channel_id }),
-  });
-  const combinedReturn = await res.json();
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
+//     method: 'POST',
+//     headers: { 'content-type': 'application/json' },
+//     body: JSON.stringify({ channel_id: channel.channel_id }),
+//   });
+//   const combinedReturn = await res.json();
 
-  if (combinedReturn[0].total.length > 0) {
-    averageViews = Math.round(
-      combinedReturn[0].average.reduce((a: any, b: any) => {
-        return a + b.average;
-      }, 0) / combinedReturn[0].average.length
-    );
+//   if (combinedReturn[0].total.length > 0) {
+//     averageViews = Math.round(
+//       combinedReturn[0].average.reduce((a: any, b: any) => {
+//         return a + b.average;
+//       }, 0) / combinedReturn[0].average.length
+//     );
 
-    averagePosts = Math.round(
-      combinedReturn[0].average.slice(-30).reduce((a: any, b: any) => {
-        return a + b.posts;
-      }, 0) / combinedReturn[0].average.slice(-30).length
-    );
+//     averagePosts = Math.round(
+//       combinedReturn[0].average.slice(-30).reduce((a: any, b: any) => {
+//         return a + b.posts;
+//       }, 0) / combinedReturn[0].average.slice(-30).length
+//     );
 
-    const errPercent = combinedReturn[0].average.map((item: any) => ({
-      date: item.date,
-      views: Math.round((item.average * 100) / channel.subscription),
-    }));
+//     const errPercent = combinedReturn[0].average.map((item: any) => ({
+//       date: item.date,
+//       views: Math.round((item.average * 100) / channel.subscription),
+//     }));
 
-    averageErr =
-      errPercent.reduce((a: any, b: any) => {
-        return a + b.views;
-      }, 0) / errPercent.length;
-  }
+//     averageErr =
+//       errPercent.reduce((a: any, b: any) => {
+//         return a + b.views;
+//       }, 0) / errPercent.length;
+//   }
 
-  if (channel !== '') {
-    return {
-      props: { channel, sub, averageViews, averagePosts, averageErr },
-    };
-  } else {
-    return { notFound: true };
-  }
-};
+//   if (channel !== '') {
+//     return {
+//       props: { channel, sub, averageViews, averagePosts, averageErr },
+//     };
+//   } else {
+//     return { notFound: true };
+//   }
+// };
 
 export default ChannelDetail;

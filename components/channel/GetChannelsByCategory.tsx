@@ -44,7 +44,7 @@ export const GetChannelsByCategory = ({ value, label }: any) => {
                 width={28}
                 height={28}
                 alt={channel.title}
-                src={`${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${channel.channel_id}/avatar.jfif`}
               />
               <span className='truncate w-[220px] md:w-[280px]'>{channel.title}</span>
 

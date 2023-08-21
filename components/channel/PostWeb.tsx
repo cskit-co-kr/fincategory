@@ -4,17 +4,15 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
-import LinkPreview from './LinkPreview';
-import RenderPost from './RenderPost';
-import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
 import MediaWeb from './ChannelMediaWeb';
+import { Skeleton } from '@mui/material';
 
 const PostWeb = ({ channel, post }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
-  const avatar = `${process.env.NEXT_PUBLIC_AVATAR_URL}/telegram/files/${channel.channel_id}/avatar.jfif`;
+  const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${channel.channel_id}/avatar.jfif`;
   const [error, setError] = useState<boolean>(false);
 
   return (
@@ -83,5 +81,19 @@ const PostWeb = ({ channel, post }: any) => {
     </div>
   );
 };
+const PostWebSkeleton = () => {
+  return (
+    <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
+      <div className='header flex gap-4 border-b border-gray-200 pb-2 w-full'>
+        <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={40} height={40} />
+        <div className='w-full flex-col align-center pt-2'>
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={15} width="30%" />
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={10} width="50%" />
+        </div>
+      </div>
+      <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={600} height={400} />
+    </div>
+  )
 
-export default PostWeb;
+}
+export {PostWeb, PostWebSkeleton};
