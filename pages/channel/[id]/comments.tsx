@@ -9,8 +9,8 @@ import { Button, Loader, Message, useToaster } from 'rsuite';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
 
-import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
 
 import ChannelComment from '../../../components/channel/ChannelComment';
 import { enUS } from '../../../lang/en-US';
