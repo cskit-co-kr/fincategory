@@ -22,7 +22,7 @@ import Link from 'next/link';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Section1, Section1Skeleton } from '../components/search/Section1';
 import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
-import Section2_2 from '../components/search/Section2_2';
+import {Section2_2,  Section2_2Skeleton } from '../components/search/Section2_2';
 import { Skeleton } from '@mui/material';
 import HashtagScroll from '../components/HashtagScroll';
 
@@ -195,6 +195,15 @@ const Search = () => {
   // }, [sorting]);
 
   useEffect(() => {
+    const newChannels = async () => {
+      // Get recently added channels
+      data['paginate'] = { limit: 5, offset: 0 };
+      const channelsNew = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsNew(channelsNew);
+    };
+
     const todayChannels = async () => {
       // Get most viewed channels today
       data['paginate'] = { limit: 5, offset: 0 };
@@ -204,14 +213,7 @@ const Search = () => {
         .then((response) => response.data.channel);
       setChannelsToday(channelsToday);
     };
-    const newChannels = async () => {
-      // Get recently added channels
-      data['paginate'] = { limit: 5, offset: 0 };
-      const channelsNew = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
-      setChannelsNew(channelsNew);
-    };
+   
     const _channels24 = async () => {
       // Get most increased subscriptions in 24h channels
       data['paginate'] = { limit: 6, offset: 0 };
@@ -267,9 +269,9 @@ const Search = () => {
       });
     };
 
+    newChannels();
     todayChannels();
     _channels24();
-    newChannels();
 
     exec();
   }, [router]);
@@ -595,7 +597,7 @@ const Search = () => {
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               {/* <Section2_1 channelsToday={props.channelsToday} /> */}
-              {channelsToday ? <Section2_1 channelsToday={channelsToday} /> : <Section2_1Skeleton />}
+              {channelsToday ? <Section2_1 channelsToday={channelsToday} /> : <Section2_1Skeleton/>}
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -614,7 +616,8 @@ const Search = () => {
                     <ChevronRightIcon className='h-3' />
                   </button>
                 </div>
-                <Section2_2 channelsNew={channelsNew} />
+                {channelsNew ? <Section2_2 channelsNew={channelsNew} />
+                :  <Section2_2Skeleton/>}
               </div>
             </div>
 

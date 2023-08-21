@@ -6,6 +6,7 @@ import { LiaUserSolid } from 'react-icons/lia';
 import { useRouter } from 'next/router';
 import { koKR } from '../../lang/ko-KR';
 import { enUS } from '../../lang/en-US';
+import { Skeleton } from '@mui/material';
 
 const Section2_2 = ({ channelsNew }: any) => {
   const router = useRouter();
@@ -37,5 +38,31 @@ const Section2_2 = ({ channelsNew }: any) => {
     </>
   );
 };
-
-export default Section2_2;
+const Section2_2Skeleton = () => {
+  return (
+    Array(5)
+      .fill(1)
+      .map((val, index) => {
+        return (
+          <div className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none' key={index}>
+            <Skeleton variant='text' animation='wave' sx={{ bgcolor: 'grey.100' }} width={20} height={20} />
+            <div className='flex items-center w-full justify-between'>
+              <div className='flex items-center gap-2'>
+                <Skeleton variant='circular' animation='wave' sx={{ bgcolor: 'grey.100' }} width={30} height={30} />
+                <Skeleton variant='text' animation='wave' sx={{ bgcolor: 'grey.100' }} width={60} height={10} />
+              </div>
+              <Skeleton
+                variant='text'
+                animation='wave'
+                sx={{ bgcolor: 'grey.100' }}
+                width={60}
+                height={10}
+                className='text-gray-500 text-[12px] font-bold min-w-[100px]'
+              />
+            </div>
+          </div>
+        );
+      })
+  )
+};
+export {Section2_2, Section2_2Skeleton};
