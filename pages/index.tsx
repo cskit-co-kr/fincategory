@@ -6,7 +6,7 @@ import { koKR } from '../lang/ko-KR';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { GetChannelsByCategory } from '../components/channel/GetChannelsByCategory';
 import { Category, PostType } from '../typings';
-import GetChannels from '../components/channel/GetChannels';
+import { GetChannels } from '../components/channel/GetChannels';
 import HashtagBox from '../components/HashtagBox';
 import HomeBoardPostList from '../components/HomeBoardPostList';
 import { useEffect, useState } from 'react';
