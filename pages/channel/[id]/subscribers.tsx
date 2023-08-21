@@ -2,13 +2,13 @@ import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
 import { AreaChart, Area, Tooltip, XAxis, ResponsiveContainer, Brush, YAxis, CartesianGrid } from 'recharts';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { Pagination } from 'rsuite';
-import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
 import { NextSeo } from 'next-seo';
 
 const ITEMS_PER_PAGE = 30;

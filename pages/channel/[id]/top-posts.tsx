@@ -3,8 +3,8 @@ import { InferGetServerSidePropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
 import PostMini from '../../../components/channel/PostMini';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
@@ -25,7 +25,7 @@ function TopPosts(props: InferGetServerSidePropsType<typeof getServerSideProps>)
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa `},
+          { name: 'title', content: `${channel.title} | FinCa ` },
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },

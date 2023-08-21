@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Area, AreaChart, Brush, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import ChannelDetailLeftSidebar from '../../../components/channel/ChannelDetailLeftSidebar';
-import ChannelDetailNav from '../../../components/channel/ChannelDetailNav';
+import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
+import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
 
 import { NextSeo } from 'next-seo';
 import { enUS } from '../../../lang/en-US';
@@ -154,7 +154,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa `},
+          { name: 'title', content: `${channel.title} | FinCa ` },
           { name: 'og:title', content: channel.title },
           { name: 'og:description', content: channel.description },
           { name: 'twitter:title', content: channel.title },
