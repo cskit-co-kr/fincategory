@@ -13,6 +13,7 @@ const PostWeb = ({ channel, post }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
   const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${channel.channel_id}/avatar.jfif`;
+
   const [error, setError] = useState<boolean>(false);
 
   return (
@@ -51,7 +52,7 @@ const PostWeb = ({ channel, post }: any) => {
           </div>
         )}
         <div
-          className='post'
+          className='post break-all'
           dangerouslySetInnerHTML={{
             __html: post.post,
           }}
