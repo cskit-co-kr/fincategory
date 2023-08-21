@@ -20,10 +20,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
 import { LiaUserSolid } from 'react-icons/lia';
-import {Section1, Section1Skeleton} from '../components/search/Section1';
+import { Section1, Section1Skeleton } from '../components/search/Section1';
 import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
 import Section2_2 from '../components/search/Section2_2';
 import { Skeleton } from '@mui/material';
+import HashtagScroll from '../components/HashtagScroll';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -164,14 +165,13 @@ const Search = () => {
   const [cats, setCats] = useState<any[]>([]);
   const [countries, setCountries] = useState<any[]>([]);
   const [languages, setLangueges] = useState<any[]>([]);
-  const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: "................" }));
+  const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: '................' }));
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadBar, setLoadBar] = useState(false);
 
   const [isPending, startTransition] = useTransition();
-
 
   let data: any = {
     query: null,
@@ -202,8 +202,8 @@ const Search = () => {
       const channelsToday = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
-      setChannelsToday(channelsToday)
-    }
+      setChannelsToday(channelsToday);
+    };
     const newChannels = async () => {
       // Get recently added channels
       data['paginate'] = { limit: 5, offset: 0 };
@@ -211,7 +211,7 @@ const Search = () => {
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
       setChannelsNew(channelsNew);
-    }
+    };
     const _channels24 = async () => {
       // Get most increased subscriptions in 24h channels
       data['paginate'] = { limit: 6, offset: 0 };
@@ -219,8 +219,8 @@ const Search = () => {
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
-      setChannels24(channels24h)
-    }
+      setChannels24(channels24h);
+    };
 
     const exec = async () => {
       const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
@@ -228,13 +228,11 @@ const Search = () => {
       const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
       const _languages = await resLanguage.data;
 
-
       const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
       const _categories = await result.data;
 
       const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
       const _countries = await resCountry.data;
-
 
       const cats = _categories?.map((item: any) => {
         const obj = JSON.parse(item.name);
@@ -265,10 +263,9 @@ const Search = () => {
         setTags(tags);
         setLangueges(languages);
         setCountries(countries);
-        setCats(cats)
-      })
-
-    }
+        setCats(cats);
+      });
+    };
 
     todayChannels();
     _channels24();
@@ -276,8 +273,6 @@ const Search = () => {
 
     exec();
   }, [router]);
-
-
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -596,17 +591,11 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             {/* <Section1 channels24h={props.channels24h} /> */}
 
-            {
-              channels24 ? <Section1 channels24h={channels24} />
-              : <Section1Skeleton/>
-            }
+            {channels24 ? <Section1 channels24h={channels24} /> : <Section1Skeleton />}
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               {/* <Section2_1 channelsToday={props.channelsToday} /> */}
-              {
-                channelsToday ? <Section2_1 channelsToday={channelsToday} />
-                  : <Section2_1Skeleton />
-              }
+              {channelsToday ? <Section2_1 channelsToday={channelsToday} /> : <Section2_1Skeleton />}
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -634,29 +623,36 @@ const Search = () => {
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
-              <div className='relative block space-x-3 w-[87%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
-                <ReactSlickSlider {...settings}>
-                  {tags?.map((tag: any) => (
-                    <div key={tag.tag} className='mr-1'>
-                      <button
-                        className={`group flex gap-1 px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+              <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
+                <div className='hidden md:block'>
+                  <ReactSlickSlider {...settings}>
+                    {tags?.map((tag: any) => (
+                      <div key={tag.tag} className='mr-1'>
+                        <button
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
                           }`}
-                        key={tag.tag}
-                        onClick={() => {
-                          selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
-                        }}
-                      >
-                        {tag.tag}
-                        <span
-                          className={`text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
-                            }`}
+                          key={tag.tag}
+                          onClick={() => {
+                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
+                          }}
                         >
-                          {tag.total}
-                        </span>
-                      </button>
-                    </div>
-                  ))}
-                </ReactSlickSlider>
+                          {tag.tag}
+                          <span
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
+                          >
+                            {tag.total}
+                          </span>
+                        </button>
+                      </div>
+                    ))}
+                  </ReactSlickSlider>
+                </div>
+                <div className='md:hidden'>
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+                </div>
               </div>
             </div>
             {/* {loadBar && (
@@ -692,23 +688,29 @@ const Search = () => {
                   </select>
                 </div>
               </div>
-            ) : <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave"
-              className='min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 ' />}
+            ) : (
+              <Skeleton
+                variant='rectangular'
+                sx={{ bgcolor: 'grey.100' }}
+                animation='wave'
+                className='min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 '
+              />
+            )}
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: Channel) => {
                   return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4' />;
                 })}
               </div>
-            ) :
-              (
-                <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-                  {Array(10).fill(1).map(() => {
-                    return <GetChannelsSkeleton />
+            ) : (
+              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+                {Array(10)
+                  .fill(1)
+                  .map(() => {
+                    return <GetChannelsSkeleton />;
                   })}
-                </div>
-              )
-            }
+              </div>
+            )}
             {loadMore && (
               <div className='flex justify-center'>
                 <button
