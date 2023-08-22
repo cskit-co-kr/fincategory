@@ -163,6 +163,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             {t['add-channel']}
           </button>
         </div>
+        <div className='mx-auto mt-8 text-[#3687E2] font-[500]'>* 채널을 추가하면 24시간~48시간 이내 관리자의 승인 후 채널이 등록됩니다.</div>
       </div>
     </div>
   );
