@@ -58,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.statusCode = 200;
     res.setHeader('Content-type', 'text/xml');
 
-    const xml = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    const xml = `<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
                     <url>
                       <loc>https://finca.co.kr/search</loc>
                       <lastmod>${yesterday}</lastmod>
