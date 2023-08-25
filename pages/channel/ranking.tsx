@@ -87,7 +87,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       paginate: { limit: 100, offset: 0 },
       sort: sorting,
     };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(searchData),
