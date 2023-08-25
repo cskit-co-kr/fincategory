@@ -95,7 +95,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     });
     const resultData = await response.json();
     const result = resultData.channel;
-    console.log(result);
     for (let i = 0; i < result.length; i++) {
       const obj = result[i];
       obj.rank = i + 1;
