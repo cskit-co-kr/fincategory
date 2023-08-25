@@ -132,7 +132,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   // Table
-  const [sortColumn, setSortColumn] = useState('subscription');
+  const [sortColumn, setSortColumn] = useState('increase24h');
   const [sortType, setSortType] = useState<SortType>('desc');
   const [loading, setLoading] = useState(false);
 
@@ -230,9 +230,9 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
         <div className='mt-4'>
           <Table
             autoHeight
-            data={data}
-            // sortColumn={sortColumn}
-            // sortType={sortType}
+            data={getData()}
+            sortColumn={sortColumn}
+            sortType={sortType}
             onSortColumn={handleSortColumn}
             loading={loading}
             rowHeight={68}
