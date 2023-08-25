@@ -211,21 +211,12 @@ const Search = () => {
     const todayChannels = async () => {
       // Get most viewed channels today
       data['paginate'] = { limit: 5, offset: 0 };
-      data['sort'] = { field: 'total', order: 'desc' };
-
-      const channelsTotal = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
-
-
-      data['paginate'] = { limit: 5, offset: 0 };
       data['sort'] = { field: 'today', order: 'desc' };
       const channelsToday = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
 
       setChannelsToday(channelsToday);
-      setChannelsTotal(channelsTotal);
       setChannelsTotalToday(channelsToday)
     };
 
@@ -302,6 +293,22 @@ const Search = () => {
 
     exec();
   }, [router]);
+
+
+  useEffect(() => {
+    const getTotal = async () => {
+
+      data['paginate'] = { limit: 5, offset: 0 };
+      data['sort'] = { field: 'total', order: 'desc' };
+      const channelsTotal = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsTotal(channelsTotal);
+
+    }
+    getTotal();
+  }, [router])
+
 
   useEffect(() => {
     if (router.query.q !== undefined) {
