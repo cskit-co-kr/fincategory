@@ -18,6 +18,7 @@ const Section2_2 = ({ channelsNew }: any) => {
         return (
           <Link
             href={`/channel/${channel.username}`}
+            target='_blank'
             className='flex items-center gap-5 px-5 py-2 hover:no-underline border-b border-gray-100 last:border-none'
             key={channel.id}
           >

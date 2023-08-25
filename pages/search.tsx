@@ -232,7 +232,19 @@ const Search = () => {
     const _channels24 = async () => {
       // Get most increased subscriptions in 24h channels
       data['paginate'] = { limit: 6, offset: 0 };
-      data['sort'] = { field: 'subscription', order: 'desc'};
+      data['sort'] = { field: 'extra_02', order: 'desc', type: "integer" };
+      data['country'] = [
+        {
+          "value": 113,
+          "label": "Korea, Republic of"
+        }
+      ]
+      data['language'] = [
+        {
+          "value": "ko",
+          "label": "Korean"
+        }
+      ]
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
@@ -623,6 +635,7 @@ const Search = () => {
                 <Link
                   className='flex gap-1 text-primary items-center'
                   href={`/channel/ranking`}
+                  target='_blank'
                 >
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
@@ -638,17 +651,17 @@ const Search = () => {
                   <div className='flex'>
                     <div className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`} onClick={() => {
                       switchTodayTotalSortType(1)
-                    }}>(오늘)조회수 상위</div>
+                    }}>(오늘)조회수</div>
                     <div className='font-bold pt-5 pb-1 '>{"|"}</div>
                     <div className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`} onClick={() => {
                       switchTodayTotalSortType(2)
-                    }}>(누적)조회수 상위</div>
+                    }}>(누적)조회수</div>
                   </div>
                   <button
                     className='flex gap-1 text-primary items-center pt-5 pb-1'
                     onClick={() => {
-                      ( sortType === 1) ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc') ;
-                      ( sortType === 1) ? doFilter('today_desc') : doFilter('total_desc') ;
+                      (sortType === 1) ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
+                      (sortType === 1) ? doFilter('today_desc') : doFilter('total_desc');
                       if (ref.current) {
                         (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth' });
                       }

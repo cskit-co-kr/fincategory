@@ -70,8 +70,9 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   // Data
   const doSearch = async () => {
     const sorting = {
-      field: 'subscription',
+      field: 'extra_02',
       order: 'desc',
+      type: "integer"
     };
     const searchData = {
       query: null,
@@ -94,6 +95,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     });
     const resultData = await response.json();
     const result = resultData.channel;
+    console.log(result);
     for (let i = 0; i < result.length; i++) {
       const obj = result[i];
       obj.rank = i + 1;
@@ -102,14 +104,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       obj.increase24h = splitExtra[0];
       obj.increase7d = splitExtra[1];
       obj.increase30d = splitExtra[2];
-      // try {
-      //   const data = await getSubsHistory(obj.channel_id);
-      //   obj.increase24h = data.inc24h;
-      //   obj.increase7d = data.inc7d;
-      //   obj.increase30d = data.inc30d;
-      // } catch (error) {
-      //   console.error(error);
-      // }
     }
     setData(result);
   };
@@ -236,9 +230,9 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
         <div className='mt-4'>
           <Table
             autoHeight
-            data={getData()}
-            sortColumn={sortColumn}
-            sortType={sortType}
+            data={data}
+            // sortColumn={sortColumn}
+            // sortType={sortType}
             onSortColumn={handleSortColumn}
             loading={loading}
             rowHeight={68}
