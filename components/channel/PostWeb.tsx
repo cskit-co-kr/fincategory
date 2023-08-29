@@ -87,12 +87,12 @@ const PostWebSkeleton = () => {
     <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
       <div className='header flex gap-4 border-b border-gray-200 pb-2 w-full'>
         <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={40} height={40} />
-        <div className='w-full flex-col align-center pt-2'>
+        <div className='w-full flex-col align-center pt-2 '>
           <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={15} width="30%" />
           <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={10} width="50%" />
         </div>
       </div>
-      <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={600} height={400} />
+      <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} className='w-full' animation="wave"  height={400}   />
     </div>
   )
 
