@@ -72,7 +72,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     const sorting = {
       field: 'extra_02',
       order: 'desc',
-      type: "integer"
+      type: 'integer',
     };
     const searchData = {
       query: null,
@@ -178,7 +178,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
 
   return (
     <div className='md:pt-7 bg-gray-50'>
-      <div className='border border-gray-200 bg-white rounded-md p-[30px]'>
+      <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px]'>
         <div className='mb-7 font-semibold text-lg leading-none'>{t['telegram-channels-rating']}</div>
         <div className='md:flex gap-5 z-10'>
           <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
@@ -240,17 +240,17 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             renderEmpty={() => <div className='text-center py-10'>{t['loading-text']}</div>}
             renderLoading={() => <div className='text-center py-10'>{t['loading-text']}</div>}
           >
-            <Column width={70} align='center'>
+            <Column width={50} align='center' fixed>
               <HeaderCell>{t['rank']}</HeaderCell>
               <Cell dataKey='rank' />
             </Column>
 
-            <Column flexGrow={2} minWidth={400}>
+            <Column flexGrow={2} minWidth={120} fixed>
               <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
                 {(rowData) => (
                   <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
-                    <div className='flex gap-4 items-center'>
+                    <div className='flex gap-2 md:gap-4 items-center'>
                       <div className='relative w-10 min-w-10 max-w-10'>
                         {/* <Image
                           src={
@@ -269,7 +269,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                           alt={rowData.title}
                           width={40}
                           height={40}
-                          className='object-contain rounded-full z-0'
+                          className='object-contain rounded-full z-0 min-w-[20px]'
                         />
                       </div>
                       <div className='flex flex-col'>
