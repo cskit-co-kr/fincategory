@@ -12,6 +12,8 @@ import { SortType } from 'rsuite/esm/Table';
 import Image from 'next/image';
 import Link from 'next/link';
 import { colorStyles } from '../../constants';
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { useMediaQuery } from '@mui/material';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -176,56 +178,70 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     setIsLoadingLanguages(false);
   }, [locale, props, selectedCategory]);
 
+  const [filterShow, setFilterShow] = useState(false);
+  const isMedium = useMediaQuery('(min-width:768px)');
+
   return (
     <div className='md:pt-7 bg-gray-50'>
       <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px]'>
-        <div className='mb-7 font-semibold text-lg leading-none'>{t['telegram-channels-rating']}</div>
-        <div className='md:flex gap-5 z-10'>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-            {t['channel-topic']}
-            <Select
-              instanceId='category'
-              onChange={setSelectedCategory}
-              name='category'
-              isLoading={isLoading}
-              styles={colorStyles}
-              options={options}
-              placeholder={t['select-topic']}
-              isMulti
-              className='w-full'
-            />
-          </label>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-            {t['channel-country']}
-            <Select
-              value={{ value: 113, label: t['KR'] }}
-              instanceId='country'
-              onChange={setSelectedCountry}
-              name='country'
-              isLoading={isLoadingCountries}
-              styles={colorStyles}
-              options={optionsCountries}
-              placeholder={t['select-country']}
-              isMulti
-              className='w-full'
-            />
-          </label>
-          <label className='flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-            {t['channel-language']}
-            <Select
-              value={{ value: 'ko', label: t['Korean'] }}
-              instanceId={'language'}
-              onChange={setSelectedLanguage}
-              name='language'
-              isLoading={isLoadingLanguages}
-              styles={colorStyles}
-              options={optionsLanguages}
-              placeholder={t['select-language']}
-              isMulti
-              className='w-full'
-            />
-          </label>
+        <div className='mb-4 md:mb-7 font-semibold text-lg leading-none'>{t['telegram-channels-rating']}</div>
+        <div className='flex justify-end'>
+          <button
+            onClick={() => setFilterShow((prev) => !prev)}
+            className='rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap mb-2 flex md:hidden gap-1 justify-center items-center'
+          >
+            <AdjustmentsHorizontalIcon className='h-4' />
+            {t['channel-filter']}
+          </button>
         </div>
+        {(isMedium === true || filterShow === true) && (
+          <div className='md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0'>
+            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
+              {t['channel-topic']}
+              <Select
+                instanceId='category'
+                onChange={setSelectedCategory}
+                name='category'
+                isLoading={isLoading}
+                styles={colorStyles}
+                options={options}
+                placeholder={t['select-topic']}
+                isMulti
+                className='w-full mb-2 md:mb-0'
+              />
+            </label>
+            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
+              {t['channel-country']}
+              <Select
+                value={{ value: 113, label: t['KR'] }}
+                instanceId='country'
+                onChange={setSelectedCountry}
+                name='country'
+                isLoading={isLoadingCountries}
+                styles={colorStyles}
+                options={optionsCountries}
+                placeholder={t['select-country']}
+                isMulti
+                className='w-full mb-2 md:mb-0'
+              />
+            </label>
+            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
+              {t['channel-language']}
+              <Select
+                value={{ value: 'ko', label: t['Korean'] }}
+                instanceId={'language'}
+                onChange={setSelectedLanguage}
+                name='language'
+                isLoading={isLoadingLanguages}
+                styles={colorStyles}
+                options={optionsLanguages}
+                placeholder={t['select-language']}
+                isMulti
+                className='w-full'
+              />
+            </label>
+          </div>
+        )}
         <div className='mt-4'>
           <Table
             autoHeight
@@ -236,7 +252,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             loading={loading}
             rowHeight={68}
             bordered
-            className='z-0'
+            className='z-0 rounded-lg'
             renderEmpty={() => <div className='text-center py-10'>{t['loading-text']}</div>}
             renderLoading={() => <div className='text-center py-10'>{t['loading-text']}</div>}
           >
@@ -245,7 +261,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='rank' />
             </Column>
 
-            <Column flexGrow={2} minWidth={120} fixed>
+            <Column flexGrow={2} minWidth={170} fixed>
               <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
                 {(rowData) => (
@@ -282,12 +298,12 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column width={120} align='center' sortable>
+            <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'subscription' ? 'font-bold text-primary' : ''}>{t['subscribers']}</HeaderCell>
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
             </Column>
 
-            <Column width={120} align='center' sortable>
+            <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase24h' ? 'font-bold text-primary' : ''}>{t['increase-24h']}</HeaderCell>
               <Cell dataKey='increase24h'>
                 {(rowData) =>
@@ -300,7 +316,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column width={120} align='center' sortable>
+            <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase7d' ? 'font-bold text-primary' : ''}>{t['increase-7d']}</HeaderCell>
               <Cell dataKey='increase7d'>
                 {(rowData) =>
@@ -313,7 +329,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column width={120} align='center' sortable>
+            <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase30d' ? 'font-bold text-primary' : ''}>{t['increase-30d']}</HeaderCell>
               <Cell dataKey='increase30d'>
                 {(rowData) =>

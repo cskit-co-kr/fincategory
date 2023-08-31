@@ -169,6 +169,7 @@ export const koKR = {
     "channel-rankings": "채널 랭킹",
     "rank": "랭킹",
     "telegram-channels-rating": "텔레그램 채널 랭킹",
+    "channel-filter": "채널 필터",
     "increase-24h": "상승(24h)",
     "increase-7d": "상승(7d)",
     "increase-30d": "상승(30d)",

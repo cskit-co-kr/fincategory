@@ -169,6 +169,7 @@ export const enUS = {
     "channel-rankings": "Channel Rankings",
     "rank": "Rank",
     "telegram-channels-rating": "Telegram channels rating",
+    "channel-filter": "Channel Filter",
     "increase-24h": "Increase (24h)",
     "increase-7d": "Increase (7d)",
     "increase-30d": "Increase (30d)",
