@@ -14,6 +14,13 @@ ENV NEXT_PUBLIC_IMAGE_URL=https://file.fincategory.com
 
 WORKDIR /app
 
+RUN apk update && apk add --no-cache --virtual \
+    .build-deps \
+    udev \
+    ttf-opensans \
+    chromium \
+    ca-certificates
+
 COPY . .
 
 RUN yarn
@@ -23,6 +30,3 @@ RUN yarn build
 EXPOSE 3000
 
 ENTRYPOINT ["yarn", "start"]
-
-
-
