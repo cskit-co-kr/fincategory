@@ -1,3 +1,8 @@
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+console.log(`.env.${process.env.NODE_ENV}`);
+console.log(`.env.${process.env.NEXT_PUBLIC_API_URL}`);
+console.log(`.env.${process.env.NEXT_PUBLIC_BACKEND_URL}`);
+
 import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
 import React, { useEffect, useRef, useState, useTransition } from 'react';
