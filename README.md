@@ -1,6 +1,4 @@
 
-docker build -t fincat .
+docker build -t registry.gitlab.com/cskit.fincat/fincategory .
 
-docker tag fincat 175.125.92.63:5000/fincat
-
-docker push 175.125.92.63:5000/fincat
+docker push registry.gitlab.com/cskit.fincat/fincat
