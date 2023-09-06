@@ -13,7 +13,7 @@ COPY . .
 
 RUN yarn
 
-RUN yarn build
+RUN yarn build:test
 
 EXPOSE 3000
 
