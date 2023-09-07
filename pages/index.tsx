@@ -17,7 +17,6 @@ import { Pagination } from 'rsuite';
 import GridPostRow from '../components/board/GridPostRow';
 import Link from 'next/link';
 import Tradingview from '../components/Tradingview';
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 const Home: NextPage = ({
   channels,
