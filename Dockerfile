@@ -2,6 +2,8 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+COPY package.json yarn.lock
+
 RUN apk update && apk add --no-cache --virtual \
     .build-deps \
     udev \
@@ -9,9 +11,9 @@ RUN apk update && apk add --no-cache --virtual \
     chromium \
     ca-certificates
 
-COPY . .
-
 RUN yarn
+
+COPY . .
 
 RUN yarn build:test
 
