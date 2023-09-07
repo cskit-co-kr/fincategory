@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "env-cmd -f env/.env.local next dev",
+    "dev": "env-cmd -f env/.env.test next dev",
     "build": "next build",
     "start": "next start",
     "build:prod": "env-cmd -f env/.env.production yarn build",
@@ -24,7 +24,7 @@
     "cheerio": "^1.0.0-rc.12",
     "cookies-next": "^2.1.1",
     "dotenv": "^16.3.1",
-    "env-cmd": "^10.1.0",
+    "env-cmd": "^10.1.0", 
     "formik": "^2.2.9",
     "i18next": "^22.4.9",
     "i18next-browser-languagedetector": "^7.0.1",
