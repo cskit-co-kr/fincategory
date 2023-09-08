@@ -217,25 +217,25 @@ const Search = () => {
         .then((response) => response.data.channel);
 
       setChannelsToday(channelsToday);
-      setChannelsTotalToday(channelsToday)
+      setChannelsTotalToday(channelsToday);
     };
 
     const _channels24 = async () => {
       // Get most increased subscriptions in 24h channels
       data['paginate'] = { limit: 6, offset: 0 };
-      data['sort'] = { field: 'extra_02', order: 'desc', type: "integer" };
+      data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
       data['country'] = [
         {
-          "value": 113,
-          "label": "Korea, Republic of"
-        }
-      ]
+          value: 113,
+          label: 'Korea, Republic of',
+        },
+      ];
       data['language'] = [
         {
-          "value": "ko",
-          "label": "Korean"
-        }
-      ]
+          value: 'ko',
+          label: 'Korean',
+        },
+      ];
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
@@ -294,21 +294,17 @@ const Search = () => {
     exec();
   }, [router]);
 
-
   useEffect(() => {
     const getTotal = async () => {
-
       data['paginate'] = { limit: 5, offset: 0 };
       data['sort'] = { field: 'total', order: 'desc' };
       const channelsTotal = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
       setChannelsTotal(channelsTotal);
-
-    }
+    };
     getTotal();
-  }, [router])
-
+  }, [router]);
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -420,12 +416,12 @@ const Search = () => {
   const switchTodayTotalSortType = (type: number) => {
     if (type === 1) {
       setSortType(1);
-      setChannelsTotalToday(channelsToday)
+      setChannelsTotalToday(channelsToday);
     } else {
       setSortType(2);
-      setChannelsTotalToday(channelsTotal)
+      setChannelsTotalToday(channelsTotal);
     }
-  }
+  };
 
   // Mobile scrolling
   useEffect(() => {
@@ -639,11 +635,7 @@ const Search = () => {
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
               <div className='flex justify-between items-center pt-5 pb-3 px-5'>
                 <div className='font-bold'>구독자 상승 채널(24H)</div>
-                <Link
-                  className='flex gap-1 text-primary items-center'
-                  href={`/channel/ranking`}
-                  target='_blank'
-                >
+                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking`} target='_blank'>
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>
@@ -652,23 +644,32 @@ const Search = () => {
             </div>
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
-
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex flex-row justify-between items-center t-5 pb-1 px-5'>
                   <div className='flex'>
-                    <div className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`} onClick={() => {
-                      switchTodayTotalSortType(1)
-                    }}>(오늘)조회수</div>
-                    <div className='font-bold pt-5 pb-1 '>{"|"}</div>
-                    <div className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`} onClick={() => {
-                      switchTodayTotalSortType(2)
-                    }}>(누적)조회수</div>
+                    <div
+                      className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`}
+                      onClick={() => {
+                        switchTodayTotalSortType(1);
+                      }}
+                    >
+                      (오늘)조회수
+                    </div>
+                    <div className='font-bold pt-5 pb-1 '>{'|'}</div>
+                    <div
+                      className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`}
+                      onClick={() => {
+                        switchTodayTotalSortType(2);
+                      }}
+                    >
+                      (누적)조회수
+                    </div>
                   </div>
                   <button
                     className='flex gap-1 text-primary items-center pt-5 pb-1'
                     onClick={() => {
-                      (sortType === 1) ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
-                      (sortType === 1) ? doFilter('today_desc') : doFilter('total_desc');
+                      sortType === 1 ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
+                      sortType === 1 ? doFilter('today_desc') : doFilter('total_desc');
                       if (ref.current) {
                         (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth' });
                       }
@@ -680,7 +681,6 @@ const Search = () => {
                 </div>
                 {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
               </div>
-
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -699,8 +699,7 @@ const Search = () => {
                     <ChevronRightIcon className='h-3' />
                   </button>
                 </div>
-                {channelsNew ? <Section2_2 channelsNew={channelsNew} />
-                  : <Section2_2Skeleton />}
+                {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
               </div>
             </div>
 
@@ -715,8 +714,9 @@ const Search = () => {
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
                         <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                            }`}
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
                           key={tag.tag}
                           onClick={() => {
                             selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -724,8 +724,9 @@ const Search = () => {
                         >
                           {tag.tag}
                           <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
-                              }`}
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
                           >
                             {tag.total}
                           </span>
@@ -783,7 +784,7 @@ const Search = () => {
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4' />;
+                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4 bg-white' />;
                 })}
               </div>
             ) : (

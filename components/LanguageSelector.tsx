@@ -39,7 +39,7 @@ function LanguageSelector() {
         className='flex gap-1 min-w-[66px] items-center text-[12px] font-bold'
       >
         {locale !== 'en' ? (
-          <div className='flex gap-1'>
+          <div className='flex gap-1 items-center'>
             <Image src='/south-korea.png' width={20} height={20} alt='' />
             {t['Korean']}
           </div>

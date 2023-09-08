@@ -17,6 +17,7 @@ module.exports = {
     },
     fontFamily: {
       raleway: 'Raleway, sans-serif',
+      rubik: 'Rubik, sans-serif',
     },
   },
   plugins: [require('daisyui')],

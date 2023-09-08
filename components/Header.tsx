@@ -391,6 +391,11 @@ const Header = () => {
                   </Nav.Menu>
                 ))}
               </Nav>
+              <li>
+                <button className={getPath === '/member/ads' ? activePath : normalPath} onClick={() => router.push('/member/ads')}>
+                  광고 상품
+                </button>
+              </li>
             </ul>
             <button
               className={`${getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}`}
