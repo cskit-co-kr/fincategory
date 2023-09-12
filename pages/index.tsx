@@ -147,7 +147,7 @@ const Home: NextPage = ({
         <span className='font-bold text-base'>구독자 상승 채널(24H)</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels24h.map((channel: any) => {
-            return <GetChannels channels={channel} desc={true} extra2={true} key={channel.id} />;
+            return <GetChannels channels={channel} desc={true} extra={1} key={channel.id} />;
           })}
         </div>
       </div>
