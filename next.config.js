@@ -1,4 +1,8 @@
+require('dotenv').config()
 /** @type {import('next').NextConfig} */
+
+const webpack = require('webpack')
+
 module.exports = {
   reactStrictMode: false,
   webpack(config) {
@@ -6,6 +10,9 @@ module.exports = {
       test: /.svg$/,
       use: ['@svgr/webpack'],
     });
+    config.plugins.push(
+      new webpack.EnvironmentPlugin(process.env)
+    )
     return config;
   },
   i18n: {
