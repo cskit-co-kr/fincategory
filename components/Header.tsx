@@ -380,6 +380,11 @@ const Header = () => {
                   {t['channel-rankings']}
                 </button>
               </li>
+              <li>
+                <button className={getPath === '/board/[[...name]]' ? activePath : normalPath} onClick={() => router.push('/board')}>
+                  {t['view-all-articles']}
+                </button>
+              </li>
               <Nav className='mt-1 custom-nav-menu z-30' appearance='subtle'>
                 {groups?.map((group: GroupType) => (
                   <Nav.Menu key={group.id} title={group.name}>
@@ -391,6 +396,11 @@ const Header = () => {
                   </Nav.Menu>
                 ))}
               </Nav>
+              <li>
+                <button className={getPath === '/member/ads' ? activePath : normalPath} onClick={() => router.push('/member/ads')}>
+                  광고 상품
+                </button>
+              </li>
             </ul>
             <button
               className={`${getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}`}

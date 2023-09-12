@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { InferGetServerSidePropsType } from 'next';
 import React, { useEffect, useRef, useState, useTransition } from 'react';
 import Select from 'react-select';
 import { Channel, MultiValueOptions } from '../typings';
@@ -17,9 +16,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import ReactSlickSlider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import ChannelAvatar from '../components/channel/ChannelAvatar';
 import Link from 'next/link';
-import { LiaUserSolid } from 'react-icons/lia';
 import { Section1, Section1Skeleton } from '../components/search/Section1';
 import { Section2_1Skeleton, Section2_1 } from '../components/search/Section2_1';
 import { Section2_2, Section2_2Skeleton } from '../components/search/Section2_2';
@@ -35,7 +32,6 @@ const Search = () => {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  // const tags = props.tags;
   const [selectedTag, setSelectedTag] = useState('');
   const [sortType, setSortType] = useState(1);
 
@@ -110,32 +106,6 @@ const Search = () => {
     },
   ];
 
-  // const cats = props.categories?.map((item: any) => {
-  //   const obj = JSON.parse(item.name);
-  //   return {
-  //     value: item.id,
-  //     label: locale === 'ko' ? obj.ko : obj.en,
-  //   };
-  // });
-
-  // const countries = props.countries?.map((item: any) => {
-  //   const disable = item.nicename === 'Korea, Republic of' ? false : true;
-  //   return {
-  //     value: item.id,
-  //     label: t[item.iso as keyof typeof t],
-  //     isDisabled: disable,
-  //   };
-  // });
-
-  // const languages = props.languages?.map((item: any) => {
-  //   const disable = item.value === 'Korean' ? false : true;
-  //   return {
-  //     value: item.id,
-  //     label: t[item.value as keyof typeof t],
-  //     isDisabled: disable,
-  //   };
-  // });
-
   const [searchText, setSearchText] = useState<any>('');
   const [selectDesc, setSelectDesc] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
@@ -165,10 +135,10 @@ const Search = () => {
   const [channelsTotalToday, setChannelsTotalToday] = useState<any>(channelsToday);
 
   const [channels24, setChannels24] = useState<any>(null);
+  const [channels7d, setChannels7d] = useState<any>(null);
+  const [channels30d, setChannels30d] = useState<any>(null);
+  const [channels24_7_30, setChannels24_7_30] = useState();
 
-  const [cats, setCats] = useState<any[]>([]);
-  const [countries, setCountries] = useState<any[]>([]);
-  const [languages, setLangueges] = useState<any[]>([]);
   const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: '................' }));
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
@@ -181,7 +151,7 @@ const Search = () => {
     query: null,
     withDesc: false,
     category: [],
-    country: [],
+    country: [{ value: 113, label: 'Korea, Republic of' }],
     language: [{ value: 'ko', label: 'Korean' }],
     channel_type: null,
     channel_age: 0,
@@ -191,12 +161,6 @@ const Search = () => {
     paginate: { limit: 4, offset: 0 },
     sort: { field: 'created_at', order: 'desc' },
   };
-  // useEffect(() => {
-  //   doSearch('');
-  // }, []);
-  // useEffect(() => {
-  //   doSearch('');
-  // }, [sorting]);
 
   useEffect(() => {
     const newChannels = async () => {
@@ -217,29 +181,32 @@ const Search = () => {
         .then((response) => response.data.channel);
 
       setChannelsToday(channelsToday);
-      setChannelsTotalToday(channelsToday)
+      setChannelsTotalToday(channelsToday);
     };
 
     const _channels24 = async () => {
-      // Get most increased subscriptions in 24h channels
+      // Get most increased subscriptions in 24h
       data['paginate'] = { limit: 6, offset: 0 };
-      data['sort'] = { field: 'extra_02', order: 'desc', type: "integer" };
-      data['country'] = [
-        {
-          "value": 113,
-          "label": "Korea, Republic of"
-        }
-      ]
-      data['language'] = [
-        {
-          "value": "ko",
-          "label": "Korean"
-        }
-      ]
+      data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
+      // Get most increased subscriptions in 7d
+      data['sort'] = { field: 'extra_03', order: 'desc', type: 'integer' };
+      const channels7d = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      // Get most increased subscriptions in 30d
+      data['sort'] = { field: 'extra_04', order: 'desc', type: 'integer' };
+      const channels30d = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+
       setChannels24(channels24h);
+      setChannels7d(channels7d);
+      setChannels30d(channels30d);
+
+      setChannels24_7_30(channels24h);
     };
 
     const exec = async () => {
@@ -281,11 +248,24 @@ const Search = () => {
       });
       startTransition(() => {
         setTags(tags);
-        setLangueges(languages);
-        setCountries(countries);
-        setCats(cats);
+        setOptions(cats);
+        setOptionsCountries(countries);
+        setOptionsLanguages(languages);
+        setIsLoadingCategory(false);
+        setIsLoadingCountries(false);
+        setIsLoadingLanguages(false);
       });
     };
+
+    const getTotal = async () => {
+      data['paginate'] = { limit: 5, offset: 0 };
+      data['sort'] = { field: 'total', order: 'desc' };
+      const channelsTotal = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel);
+      setChannelsTotal(channelsTotal);
+    };
+    getTotal();
 
     newChannels();
     todayChannels();
@@ -293,22 +273,6 @@ const Search = () => {
 
     exec();
   }, [router]);
-
-
-  useEffect(() => {
-    const getTotal = async () => {
-
-      data['paginate'] = { limit: 5, offset: 0 };
-      data['sort'] = { field: 'total', order: 'desc' };
-      const channelsTotal = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
-      setChannelsTotal(channelsTotal);
-
-    }
-    getTotal();
-  }, [router])
-
 
   useEffect(() => {
     if (router.query.q !== undefined) {
@@ -319,13 +283,6 @@ const Search = () => {
   }, [router, sorting]);
 
   useEffect(() => {
-    // setOptions(cats);
-    // setOptionsCountries(countries);
-    // setOptionsLanguages(languages);
-
-    setIsLoadingCategory(false);
-    setIsLoadingCountries(false);
-    setIsLoadingLanguages(false);
     setLoadMoreText(t['load-more']);
     setSearchResultText(t['empty-search-text']);
   }, [locale]);
@@ -355,8 +312,6 @@ const Search = () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(data),
     });
-    // const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data)
-    // const resultData = await response.data;
     const resultData = await response.json();
     const result = resultData.channel;
 
@@ -420,12 +375,12 @@ const Search = () => {
   const switchTodayTotalSortType = (type: number) => {
     if (type === 1) {
       setSortType(1);
-      setChannelsTotalToday(channelsToday)
+      setChannelsTotalToday(channelsToday);
     } else {
       setSortType(2);
-      setChannelsTotalToday(channelsTotal)
+      setChannelsTotalToday(channelsTotal);
     }
-  }
+  };
 
   // Mobile scrolling
   useEffect(() => {
@@ -443,6 +398,20 @@ const Search = () => {
   }, [loadMore, searchEvent]);
 
   const ref = useRef(null);
+
+  const [text24730, setText24730] = useState(1);
+  const change24_7_30 = (x: number) => {
+    if (x === 24) {
+      setChannels24_7_30(channels24);
+      setText24730(1);
+    } else if (x === 7) {
+      setChannels24_7_30(channels7d);
+      setText24730(2);
+    } else if (x === 30) {
+      setChannels24_7_30(channels30d);
+      setText24730(3);
+    }
+  };
 
   return (
     <>
@@ -635,40 +604,56 @@ const Search = () => {
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            {/* <Section1 channels24h={props.channels24h} /> */}
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
-              <div className='flex justify-between items-center pt-5 pb-3 px-5'>
-                <div className='font-bold'>구독자 상승 채널(24H)</div>
-                <Link
-                  className='flex gap-1 text-primary items-center'
-                  href={`/channel/ranking`}
-                  target='_blank'
-                >
+              <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
+                <div className='font-bold flex gap-3'>
+                  <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
+                    구독자 상승 채널(24H)
+                  </button>
+                  |
+                  <button onClick={() => change24_7_30(7)} className={`${text24730 === 2 && 'text-primary'}`}>
+                    {t['increase-7d']}
+                  </button>
+                  |
+                  <button onClick={() => change24_7_30(30)} className={`${text24730 === 3 && 'text-primary'}`}>
+                    {t['increase-30d']}
+                  </button>
+                </div>
+                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking`} target='_blank'>
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>
               </div>
-              {channels24 ? <Section1 channels24h={channels24} /> : <Section1Skeleton />}
+              {channels24 ? <Section1 channels24h={channels24_7_30} extra={text24730} /> : <Section1Skeleton />}
             </div>
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
-
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex flex-row justify-between items-center t-5 pb-1 px-5'>
                   <div className='flex'>
-                    <div className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`} onClick={() => {
-                      switchTodayTotalSortType(1)
-                    }}>(오늘)조회수</div>
-                    <div className='font-bold pt-5 pb-1 '>{"|"}</div>
-                    <div className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`} onClick={() => {
-                      switchTodayTotalSortType(2)
-                    }}>(누적)조회수</div>
+                    <div
+                      className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`}
+                      onClick={() => {
+                        switchTodayTotalSortType(1);
+                      }}
+                    >
+                      (오늘)조회수
+                    </div>
+                    <div className='font-bold pt-5 pb-1 '>{'|'}</div>
+                    <div
+                      className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`}
+                      onClick={() => {
+                        switchTodayTotalSortType(2);
+                      }}
+                    >
+                      (누적)조회수
+                    </div>
                   </div>
                   <button
                     className='flex gap-1 text-primary items-center pt-5 pb-1'
                     onClick={() => {
-                      (sortType === 1) ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
-                      (sortType === 1) ? doFilter('today_desc') : doFilter('total_desc');
+                      sortType === 1 ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
+                      sortType === 1 ? doFilter('today_desc') : doFilter('total_desc');
                       if (ref.current) {
                         (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth' });
                       }
@@ -680,7 +665,6 @@ const Search = () => {
                 </div>
                 {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
               </div>
-
 
               <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
@@ -699,8 +683,7 @@ const Search = () => {
                     <ChevronRightIcon className='h-3' />
                   </button>
                 </div>
-                {channelsNew ? <Section2_2 channelsNew={channelsNew} />
-                  : <Section2_2Skeleton />}
+                {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
               </div>
             </div>
 
@@ -715,8 +698,9 @@ const Search = () => {
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
                         <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                            }`}
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
                           key={tag.tag}
                           onClick={() => {
                             selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -724,8 +708,9 @@ const Search = () => {
                         >
                           {tag.tag}
                           <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
-                              }`}
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
                           >
                             {tag.total}
                           </span>
@@ -783,7 +768,7 @@ const Search = () => {
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4' />;
+                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4 bg-white' />;
                 })}
               </div>
             ) : (

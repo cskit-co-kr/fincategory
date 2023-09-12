@@ -36,6 +36,8 @@ export interface Channel {
   total: number;
   extra_01: any;
   extra_02: any;
+  extra_03: any;
+  extra_04: any;
   category: {
     id: string;
     name: string;

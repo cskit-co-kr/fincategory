@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
 @layer base {
   body {
     font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: black;
   }
 }
 
@@ -41,6 +43,18 @@
   .drawer-side {
     @apply lg:static !important;
   }
+  .white-box {
+    @apply w-full border border-gray-200 bg-white rounded-lg p-[30px] shadow-sm;
+  }
+  .blue-button {
+    @apply bg-primary font-semibold text-white py-2 px-5 text-sm w-fit rounded-xl items-center gap-2 flex justify-center;
+  }
+  .gradient-button {
+    @apply bg-gradient-to-r from-blue-500 to-pink-500 rounded-full px-4 py-2 font-semibold;
+  }
+  .profile-card {
+    @apply white-box relative justify-center grid pt-4 px-4 text-center;
+  }
 }
 
 .widget-ticker-tape-container {
@@ -50,6 +64,10 @@
   @apply hidden !important;
 }
 
+/* Board post write editor */
+.ql-editor p {
+  @apply px-5 py-8 text-sm !important;
+}
 .ql-video {
   @apply w-full md:w-3/5 h-fit aspect-video mx-auto;
 }
@@ -57,8 +75,9 @@
 .post-image {
   @apply mx-auto;
 }
+/* Header nav menu */
 .rs-nav-item {
-  @apply text-gray-600 hover:text-primary !important;
+  @apply text-black items-start flex hover:text-primary !important;
 }
 .rs-nav-item:hover,
 .rs-nav-item:focus,
@@ -78,6 +97,7 @@
   display: none;
 }
 
+/* Telegram post */
 .tgme_widget_message_forwarded_from_name,
 .post a {
   color: #0a5dc2;
@@ -175,7 +195,7 @@ a:hover .emoji > b {
 }
 .link_preview_title {
   font-weight: 600;
-  color: #575757
+  color: #575757;
 }
 .link_preview_description {
   color: #575757;

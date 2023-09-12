@@ -35,6 +35,7 @@ export const enUS = {
     "temp-password-sent": "Temporary password sent successfully!",
     "find-password": "Find Password",
     "updated-successfully": "Updated successfully!",
+    "edit-basic-info": "Edit Basic Info",
     "home": "Home",
     "search0": "Search",
     "search": "Search",
