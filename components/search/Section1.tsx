@@ -2,7 +2,7 @@ import React from 'react';
 import { GetChannels, GetChannelsSkeleton } from '../channel/GetChannels';
 import { Skeleton } from '@mui/material';
 
-const Section1 = ({ channels24h }: any) => {
+const Section1 = ({ channels24h, extra }: any) => {
   return (
     <div>
       <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
@@ -11,7 +11,7 @@ const Section1 = ({ channels24h }: any) => {
             <GetChannels
               channels={channel}
               desc={false}
-              extra2={true}
+              extra={extra}
               key={channel.id}
               bordered={false}
               tag={false}
@@ -26,7 +26,7 @@ const Section1 = ({ channels24h }: any) => {
 
 const Section1Skeleton = () => {
   return (
-    <div >
+    <div>
       <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
         {Array(6)
           .fill(0)

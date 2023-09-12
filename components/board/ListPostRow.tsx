@@ -3,9 +3,10 @@ import React from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import Link from 'next/link';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { TbPhotoCircle, TbHeartFilled } from 'react-icons/tb';
+import { PiChatCircleTextLight } from 'react-icons/pi';
 import { useSession } from 'next-auth/react';
-import { formatDate } from '../../lib/utils';
+import { formatDate, getToday } from '../../lib/utils';
 import Image from 'next/image';
 
 const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, userType }: any) => {
@@ -27,7 +28,7 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
           className='hidden md:block'
         />
       )}
-      <div className='hidden md:block text-center p-2 min-w-[80px]'>
+      <div className='hidden md:block text-center px-2 py-2.5 min-w-[80px]'>
         {router.query.name && router.query.name?.length > 0 ? (
           post.category ? (
             <Link href={`/board/${boardName}/${post.category?.id}`}>{post.category?.category}</Link>
@@ -38,14 +39,26 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
           <Link href={`/board/${post?.board?.name}`}>{post?.board?.title}</Link>
         )}
       </div>
-      <div className='pt-4 px-4 md:p-2 flex-grow flex items-center gap-1'>
+      <div className='pt-4 px-4 md:px-2 md:py-2.5 flex-grow flex items-center gap-1'>
         <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-3 md:line-clamp-1'>
           {post.title}
         </Link>
-        {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+        {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} />}
+        {post?.comment > 0 && (
+          <div className='flex gap-0.5 items-center text-[12px] font-semibold text-blue-500'>
+            <PiChatCircleTextLight size={14} />
+            {post.comment}
+          </div>
+        )}
+        {post.reaction && (
+          <div className='flex gap-0.5 items-center font-semibold text-red-500 text-[12px]'>
+            <TbHeartFilled size={14} />
+            {JSON.parse(post.reaction).length}
+          </div>
+        )}
         {post.extra_01 === '1' && (
           <span>
-            <PhotoIcon className='hidden md:block h-[14px] text-gray-400' />
+            <TbPhotoCircle size={16} className='hidden md:block text-green-500' />
           </span>
         )}
         {post.extra_01 === '1' && (
@@ -58,10 +71,10 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
           />
         )}
       </div>
-      <div className='flex gap-3 md:gap-0 px-4 pb-4 pt-1.5 md:p-0 text-gray-400 md:text-gray-600 text-xs'>
-        <div className='md:block text-left md:p-2 md:min-w-[128px]'>{post.user?.nickname}</div>
-        <div className='md:block md:text-center md:p-2 md:min-w-[96px]'>{formatDate(post.created_at)}</div>
-        <div className='md:block md:text-center md:p-2 md:min-w-[48px]'>
+      <div className='flex gap-3 md:gap-0 px-4 pb-4 pt-1.5 md:p-0 text-gray-400 md:text-gray-900'>
+        <div className='md:block text-left md:px-2 md:py-2.5 md:min-w-[128px]'>{post.user?.nickname}</div>
+        <div className='md:block md:text-center md:px-2 md:py-2.5 md:min-w-[96px]'>{formatDate(post.created_at)}</div>
+        <div className='md:block md:text-center md:px-2 md:py-2.5 md:min-w-[48px]'>
           <span className='md:hidden'>조회</span> {post.views}
         </div>
       </div>

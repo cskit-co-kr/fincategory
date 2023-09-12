@@ -220,14 +220,14 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   return (
     <>
-      <div className='flex gap-4 md:pt-7 md:bg-gray-50'>
+      <div className='flex gap-4 md:pt-7 md:bg-gray-50 text-base md:text-[13px]'>
         {/* Sidebar */}
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
           <div className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
           <div className='hidden md:flex justify-between items-center text-xs mt-4 pb-2.5'>
-            <div>{postsList.total} 개의 글</div>
+            <div className='text-[13px]'>{postsList.total} 개의 글</div>
             <div className='flex items-center gap-3 relative'>
               <button onClick={() => setViewPort('list')}>
                 <ListBulletIcon className={`h-5 ${viewPort === 'list' && 'text-primary'}`} />
@@ -286,7 +286,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
                   <div className='text-center p-2 min-w-[48px]'>조회</div>
                 </div>
-                <div className='text-base md:text-xs'>
+                <div>
                   {loading && (
                     <div className='text-center w-full p-4'>
                       <Loader />

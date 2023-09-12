@@ -14,11 +14,11 @@ type Props = {
   tag?: boolean;
   views?: boolean;
   bordered?: boolean;
-  extra2?: boolean;
+  extra?: number;
   background?: string;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra2, background }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -28,9 +28,9 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
 
   return (
     <div className={`${style} relative flex md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
-      {extra2 === true && (
+      {extra && (
         <div className='bg-primary rounded-full w-fit h-fit absolute -right-1 -top-2 px-1.5 py-0.5 text-xs text-white z-10'>
-          +{channels.extra_02}
+          +{extra === 1 ? channels.extra_02 : extra === 2 ? channels.extra_03 : extra === 3 && channels.extra_04}
         </div>
       )}
       <Link href={`/channel/${channels.username}`} target='_blank'>
@@ -77,12 +77,18 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
   );
 };
 
-
 const GetChannelsSkeleton = () => {
   return (
-    <Skeleton className={`relative flex md:rounded-xl p-4 gap-2.5 text-black `} sx={{ bgcolor: 'grey.100' }} variant="rectangular" animation="wave" width={310} height={192}/>
-  )
-}
+    <Skeleton
+      className={`relative flex md:rounded-xl p-4 gap-2.5 text-black `}
+      sx={{ bgcolor: 'grey.100' }}
+      variant='rectangular'
+      animation='wave'
+      width={310}
+      height={192}
+    />
+  );
+};
 GetChannels.defaultProps = {
   tag: true,
   views: true,
@@ -90,4 +96,4 @@ GetChannels.defaultProps = {
   background: 'bg-white',
 };
 
-export {GetChannels, GetChannelsSkeleton};
+export { GetChannels, GetChannelsSkeleton };

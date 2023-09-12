@@ -11,6 +11,7 @@
     font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: black;
   }
 }
 
@@ -56,10 +57,6 @@
   }
 }
 
-.rs-nav-item {
-  @apply items-start flex;
-}
-
 .widget-ticker-tape-container {
   @apply text-xs !important;
 }
@@ -67,6 +64,10 @@
   @apply hidden !important;
 }
 
+/* Board post write editor */
+.ql-editor p {
+  @apply px-5 py-8 text-sm !important;
+}
 .ql-video {
   @apply w-full md:w-3/5 h-fit aspect-video mx-auto;
 }
@@ -74,8 +75,9 @@
 .post-image {
   @apply mx-auto;
 }
+/* Header nav menu */
 .rs-nav-item {
-  @apply text-gray-600 hover:text-primary !important;
+  @apply text-black items-start flex hover:text-primary !important;
 }
 .rs-nav-item:hover,
 .rs-nav-item:focus,
@@ -95,6 +97,7 @@
   display: none;
 }
 
+/* Telegram post */
 .tgme_widget_message_forwarded_from_name,
 .post a {
   color: #0a5dc2;
