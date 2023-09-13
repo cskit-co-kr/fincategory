@@ -43,8 +43,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       body: JSON.stringify({
         mode: 'full',
         sort: {
-          field: null,
-          order: null,
+          field: 'id',
+          order: 'asc',
         },
       }),
     });

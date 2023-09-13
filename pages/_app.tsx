@@ -11,8 +11,10 @@ import { GoogleAnalytics } from 'nextjs-google-analytics';
 import { useEffect } from 'react';
 import Layout from '../components/layout';
 import { DataProvider } from '../context/context';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  const router = useRouter();
   const env = process.env.NODE_ENV;
   const setVisit = async () => {
     if (env !== 'development') {
@@ -130,7 +132,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <SessionProvider session={session}>
         <DataProvider>
           <Layout>
-            <Component {...pageProps} />
+            <Component key={router.asPath} {...pageProps} />
           </Layout>
         </DataProvider>
       </SessionProvider>

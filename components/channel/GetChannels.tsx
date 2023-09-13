@@ -33,6 +33,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
           +{extra === 1 ? channels.extra_02 : extra === 2 ? channels.extra_03 : extra === 3 && channels.extra_04}
         </div>
       )}
+      {/* <div className='absolute bottom-0 right-0 bg-primary/80 px-2 py-[1px] text-[10px] rounded-tl-lg rounded-br-lg text-white'>ad</div> */}
       <Link href={`/channel/${channels.username}`} target='_blank'>
         <ChannelAvatar id={channels.channel_id} title={channels.title} size='50' shape='rounded-full' />
       </Link>
