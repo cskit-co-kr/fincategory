@@ -285,6 +285,7 @@ const Header = () => {
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className='outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm'
+                aria-label='Search'
               />
               <button
                 className='text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center'
@@ -318,7 +319,7 @@ const Header = () => {
                   </button>
                 </div>
               )}
-              <button onClick={handleSubmit}>
+              <button onClick={handleSubmit} name='search'>
                 <MagnifyingGlassIcon className='h-5 text-primary mr-1' />
               </button>
             </div>
@@ -385,11 +386,6 @@ const Header = () => {
                   onClick={() => router.push('/channel/ranking')}
                 >
                   {t['channel-rankings']}
-                </button>
-              </li>
-              <li>
-                <button className={getPath === '/board/[[...name]]' ? activePath : normalPath} onClick={() => router.push('/board')}>
-                  {t['view-all-articles']}
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-30 flex' appearance='subtle'>

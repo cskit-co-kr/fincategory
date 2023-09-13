@@ -63,7 +63,7 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
         )}
         {post.extra_01 === '1' && (
           <Image
-            src={post.extra_02}
+            src={post.extra_02 || '/logo.png'}
             width='56'
             height='56'
             alt='Image'

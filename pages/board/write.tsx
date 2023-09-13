@@ -143,7 +143,7 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       const result = await response.json();
       setLoading(false);
       if (result.code === 201 && result.message === 'Updated') {
-        router.push('/board');
+        router.push(`/board/${router.query.board}`);
       }
     } else {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
@@ -162,7 +162,7 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       const result = await response.json();
       setLoading(false);
       if (result.code === 201 && result.message === 'Inserted') {
-        router.push('/board');
+        router.push(`/board/${router.query.board}`);
       }
     }
   };
