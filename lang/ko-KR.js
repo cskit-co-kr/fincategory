@@ -35,6 +35,7 @@ export const koKR = {
     "temp-password-sent": "메일로 인증 정보를 담은 메일이 발송되었습니다. 메일이 보이지 않으면 스팸보관함을 열어보시길 바랍니다.",
     "find-password": "비번 찾기",
     "updated-successfully": "변경 등록 되었습니다.",
+    "edit-basic-info": "기본 정보 수정",
     "home": "홈",
     "search0": "검색",
     "search": "채널 검색",

@@ -1,6 +1,6 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { ArrowPathIcon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { MemberType, GroupType } from '../../typings';
+import { GroupType } from '../../typings';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
@@ -17,17 +17,6 @@ const BoardSidebar = ({ memberInfo }: any) => {
   const postBoardName = getCookie('postboardname');
   const { data: session } = useSession();
   const [groups, setGroups] = useState([]);
-  // const [memberInfo, setMemberInfo] = useState<MemberType>();
-
-  // Get Member Information
-  // const getMember = async () => {
-  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
-  //     method: 'POST',
-  //     headers: { 'content-type': 'application/json' },
-  //   });
-  //   const memberInfo = await responseMember.json();
-  //   setMemberInfo(memberInfo);
-  // };
 
   useEffect(() => {
     const getGroups = async () => {
@@ -41,15 +30,9 @@ const BoardSidebar = ({ memberInfo }: any) => {
     getGroups();
   }, []);
 
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     getMember();
-  //   }
-  // }, [session]);
-
   return (
     <>
-      <div className='hidden lg:block lg:min-w-[310px] text-sm md:text-xs'>
+      <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
             {session?.user ? (
@@ -92,25 +75,41 @@ const BoardSidebar = ({ memberInfo }: any) => {
               </>
             )}
             <div className='border-y border-gray-200 py-2 font-semibold'>
-              <Link href='/board'>{t['view-all-articles']}</Link>
+              <Link href='/board' className={`${router.asPath === '/board' && 'text-primary'}`}>
+                {t['view-all-articles']}
+              </Link>
             </div>
             <div className='flex flex-col gap-1 pb-2'>
-              {groups?.map((group: GroupType, index) => (
-                <div key={index} className='flex flex-col gap-1'>
-                  <div className='font-semibold py-2'>{group.name}</div>
-                  {group.boards.map((board: any, key) => (
+              {groups?.map((group: GroupType, index) =>
+                group.id !== 99 ? (
+                  <div key={index} className='flex flex-col gap-1'>
+                    <div className='font-semibold py-2'>{group.name}</div>
+                    {group.boards.map((board: any, key) => (
+                      <Link
+                        key={key}
+                        href={`/board/${board.name}`}
+                        className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''} ${
+                          router.query.id && postBoardName === board.name ? 'text-primary' : ''
+                        }`}
+                      >
+                        {board.title}
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  group.boards.map((board: any, key) => (
                     <Link
                       key={key}
                       href={`/board/${board.name}`}
-                      className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''} ${
+                      className={`focus:no-underline py-2 ${board.name === name ? 'text-primary' : ''} ${
                         router.query.id && postBoardName === board.name ? 'text-primary' : ''
                       }`}
                     >
                       {board.title}
                     </Link>
-                  ))}
-                </div>
-              ))}
+                  ))
+                )
+              )}
             </div>
             <div className='justify-between hidden'>
               <div className='font-semibold'>{t['connected-members']}</div>
