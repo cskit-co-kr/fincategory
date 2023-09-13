@@ -17,7 +17,6 @@ import { GroupType, MemberType } from '../typings';
 import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
-import { Sankey } from 'recharts';
 
 const Header = () => {
   const router = useRouter();
@@ -237,16 +236,24 @@ const Header = () => {
                           </Link>
                         </div>
                         <div className='flex flex-col gap-2 py-2'>
-                          {groups?.map((group: GroupType) => (
-                            <div key={group.id} className='flex flex-col gap-2'>
-                              <div className='font-semibold py-1 flex gap-1 items-center'>{group.name}</div>
-                              {group.boards.map((board: any) => (
-                                <Link key={board.id} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
+                          {groups?.map((group: GroupType) =>
+                            group.id !== 99 ? (
+                              <div key={group.id} className='flex flex-col gap-2'>
+                                <div className='font-semibold py-1 flex gap-1 items-center'>{group.name}</div>
+                                {group.boards.map((board: any) => (
+                                  <Link key={board.id} href={`/board/${board.name}`} className='ml-3' onClick={handleClick}>
+                                    {board.title}
+                                  </Link>
+                                ))}
+                              </div>
+                            ) : (
+                              group.boards.map((board: any) => (
+                                <Link key={board.id} href={`/board/${board.name}`} className='py-1' onClick={handleClick}>
                                   {board.title}
                                 </Link>
-                              ))}
-                            </div>
-                          ))}
+                              ))
+                            )
+                          )}
                         </div>
                       </div>
                     </div>
@@ -385,22 +392,30 @@ const Header = () => {
                   {t['view-all-articles']}
                 </button>
               </li>
-              <Nav className='mt-1 custom-nav-menu z-30' appearance='subtle'>
-                {groups?.map((group: GroupType) => (
-                  <Nav.Menu key={group.id} title={group.name}>
-                    {group.boards.map((board: any) => (
+              <Nav className='mt-1 custom-nav-menu z-30 flex' appearance='subtle'>
+                {groups?.map((group: GroupType) =>
+                  group.id !== 99 ? (
+                    <Nav.Menu key={group.id} title={group.name}>
+                      {group.boards.map((board: any) => (
+                        <Nav.Item key={board.id} as={Link} href={`/board/${board.name}`}>
+                          {board.title}
+                        </Nav.Item>
+                      ))}
+                    </Nav.Menu>
+                  ) : (
+                    group.boards.map((board: any) => (
                       <Nav.Item key={board.id} as={Link} href={`/board/${board.name}`}>
                         {board.title}
                       </Nav.Item>
-                    ))}
-                  </Nav.Menu>
-                ))}
+                    ))
+                  )
+                )}
               </Nav>
-              <li>
+              {/* <li>
                 <button className={getPath === '/member/ads' ? activePath : normalPath} onClick={() => router.push('/member/ads')}>
                   광고 상품
                 </button>
-              </li>
+              </li> */}
             </ul>
             <button
               className={`${getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}`}

@@ -17,14 +17,14 @@ import {
 import Link from 'next/link';
 
 const cards = [
-  {
-    title: '핀코인',
-    icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
-    iconBg: 'bg-[#EAFFE7]',
-    link: '/member/wallet',
-    tooltip: '',
-    content: 500000,
-  },
+  // {
+  //   title: '핀코인',
+  //   icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
+  //   iconBg: 'bg-[#EAFFE7]',
+  //   link: '/member/wallet',
+  //   tooltip: '',
+  //   content: 500000,
+  // },
   {
     title: '상품구매내역',
     icon: <DocumentTextIcon className='h-6 text-[#B61CEC]' />,

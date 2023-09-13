@@ -80,22 +80,36 @@ const BoardSidebar = ({ memberInfo }: any) => {
               </Link>
             </div>
             <div className='flex flex-col gap-1 pb-2'>
-              {groups?.map((group: GroupType, index) => (
-                <div key={index} className='flex flex-col gap-1'>
-                  <div className='font-semibold py-2'>{group.name}</div>
-                  {group.boards.map((board: any, key) => (
+              {groups?.map((group: GroupType, index) =>
+                group.id !== 99 ? (
+                  <div key={index} className='flex flex-col gap-1'>
+                    <div className='font-semibold py-2'>{group.name}</div>
+                    {group.boards.map((board: any, key) => (
+                      <Link
+                        key={key}
+                        href={`/board/${board.name}`}
+                        className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''} ${
+                          router.query.id && postBoardName === board.name ? 'text-primary' : ''
+                        }`}
+                      >
+                        {board.title}
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  group.boards.map((board: any, key) => (
                     <Link
                       key={key}
                       href={`/board/${board.name}`}
-                      className={`focus:no-underline ml-3 py-0.5 ${board.name === name ? 'text-primary' : ''} ${
+                      className={`focus:no-underline py-2 ${board.name === name ? 'text-primary' : ''} ${
                         router.query.id && postBoardName === board.name ? 'text-primary' : ''
                       }`}
                     >
                       {board.title}
                     </Link>
-                  ))}
-                </div>
-              ))}
+                  ))
+                )
+              )}
             </div>
             <div className='justify-between hidden'>
               <div className='font-semibold'>{t['connected-members']}</div>
