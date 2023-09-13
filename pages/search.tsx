@@ -605,7 +605,7 @@ const Search = () => {
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
-            <Section3 />
+            {/* <Section3 /> */}
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
               <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
                 <div className='font-bold flex gap-3'>
