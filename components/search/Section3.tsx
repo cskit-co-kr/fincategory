@@ -23,7 +23,7 @@ const Section3 = () => {
       list: posts1,
     },
     {
-      title: '광고홍보',
+      title: '광고/홍보',
       link: '/board/advertising',
       list: posts2,
     },

@@ -37,10 +37,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <>
       <Head>
         <link rel='icon' href='/favicon.ico' />
+        <link rel='apple-touch-icon' href='/logo.png' />
       </Head>
       <DefaultSeo
         title='핀카'
-        titleTemplate='%s | FinCa'
+        titleTemplate='%s | FinCa - 텔레그램 채널정보, 핀카'
         description='가장 큰 한국 텔레그램 채널정보는 핀카 | finca'
         additionalMetaTags={[
           {
