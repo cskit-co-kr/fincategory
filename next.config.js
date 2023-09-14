@@ -1,7 +1,7 @@
-require('dotenv').config()
+require('dotenv').config();
 /** @type {import('next').NextConfig} */
 
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 module.exports = {
   reactStrictMode: false,
@@ -44,6 +44,7 @@ module.exports = {
       },
     ];
   },
+  poweredByHeader: false,
   // async headers() {
   //   return [
   //     {

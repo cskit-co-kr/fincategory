@@ -248,7 +248,7 @@ const Header = () => {
                               </div>
                             ) : (
                               group.boards.map((board: any) => (
-                                <Link key={board.id} href={`/board/${board.name}`} className='py-1' onClick={handleClick}>
+                                <Link key={board.id} href={`/board/${board.name}`} className='py-1 font-semibold' onClick={handleClick}>
                                   {board.title}
                                 </Link>
                               ))

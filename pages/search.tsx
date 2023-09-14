@@ -694,7 +694,9 @@ const Search = () => {
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
-              <div className='font-bold text-xl'>#</div>
+              <div className='font-bold text-xl'>
+                <h1>#</h1>
+              </div>
               <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
                 <div className='hidden md:block'>
                   <ReactSlickSlider {...settings}>

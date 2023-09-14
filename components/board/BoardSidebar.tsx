@@ -101,7 +101,7 @@ const BoardSidebar = ({ memberInfo }: any) => {
                     <Link
                       key={key}
                       href={`/board/${board.name}`}
-                      className={`focus:no-underline py-2 ${board.name === name ? 'text-primary' : ''} ${
+                      className={`focus:no-underline py-2 font-semibold ${board.name === name ? 'text-primary' : ''} ${
                         router.query.id && postBoardName === board.name ? 'text-primary' : ''
                       }`}
                     >
