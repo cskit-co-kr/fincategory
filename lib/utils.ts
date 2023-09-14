@@ -16,7 +16,7 @@ function formatDate(date: string) {
   // const timeDifference: any = currentDate - localDate;
   // const oneDay = 24 * 60 * 60 * 1000;
   // const isWithin24Hours = timeDifference < oneDay;
-  const isWithin24Hours = currentDate.getDate() === day ? true : false;
+  const isWithin24Hours = currentDate.getDate() === day && currentDate.getMonth() + 1 === month ? true : false;
 
   const formattedDateTime = isWithin24Hours
     ? hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0')
