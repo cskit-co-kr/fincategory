@@ -1,4 +1,4 @@
-import 'rsuite/dist/rsuite.min.css';
+import 'rsuite/dist/rsuite-no-reset.min.css';
 import '../styles/globals.css';
 
 import axios from 'axios';

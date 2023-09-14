@@ -459,7 +459,7 @@ const Search = () => {
                           </button>
                         )}
                       </label>
-                      <label className='text-sm flex gap-2 cursor-pointer'>
+                      <label className='text-xs flex gap-2 cursor-pointer'>
                         <input name='description' checked={selectDesc} onChange={() => setSelectDesc(!selectDesc)} type='checkbox' />
                         {t['search-also-in-description']}
                       </label>
