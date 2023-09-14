@@ -10,9 +10,6 @@ module.exports = {
       test: /.svg$/,
       use: ['@svgr/webpack'],
     });
-    config.plugins.push(
-      new webpack.EnvironmentPlugin(process.env)
-    )
     return config;
   },
   i18n: {
