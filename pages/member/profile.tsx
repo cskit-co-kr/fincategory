@@ -1,10 +1,9 @@
-import React from 'react';
+import { getSession, useSession } from 'next-auth/react';
 import Sidebar from '../../components/member/Sidebar';
 import Image from 'next/image';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 import {
   QuestionMarkCircleIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -16,42 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-const cards = [
-  // {
-  //   title: '핀코인',
-  //   icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
-  //   iconBg: 'bg-[#EAFFE7]',
-  //   link: '/member/wallet',
-  //   tooltip: '',
-  //   content: 500000,
-  // },
-  {
-    title: '상품구매내역',
-    icon: <DocumentTextIcon className='h-6 text-[#B61CEC]' />,
-    iconBg: 'bg-[#F7E1FF]',
-    link: '',
-    tooltip: '',
-    content: 75,
-  },
-  {
-    title: '내가 쓴 글',
-    icon: <PencilSquareIcon className='h-6 text-[#F6C619]' />,
-    iconBg: 'bg-[#FFF8DD]',
-    link: '',
-    tooltip: '',
-    content: 826,
-  },
-  {
-    title: '내가 쓴 댓글',
-    icon: <ChatBubbleBottomCenterTextIcon className='h-6 text-primary' />,
-    iconBg: 'bg-[#E3F0FF]',
-    link: '',
-    tooltip: '',
-    content: 14,
-  },
-];
-
-const Profile = () => {
+const Profile = ({ memberInfo }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -62,6 +26,41 @@ const Profile = () => {
       router.push('/member/signin');
     },
   });
+
+  const cards = [
+    // {
+    //   title: '핀코인',
+    //   icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
+    //   iconBg: 'bg-[#EAFFE7]',
+    //   link: '/member/wallet',
+    //   tooltip: '',
+    //   content: 500000,
+    // },
+    {
+      title: '상품구매내역',
+      icon: <DocumentTextIcon className='h-6 text-[#B61CEC]' />,
+      iconBg: 'bg-[#F7E1FF]',
+      link: '',
+      tooltip: '',
+      content: 75,
+    },
+    {
+      title: '내가 쓴 글',
+      icon: <PencilSquareIcon className='h-6 text-[#F6C619]' />,
+      iconBg: 'bg-[#FFF8DD]',
+      link: '',
+      tooltip: '',
+      content: memberInfo?.post,
+    },
+    {
+      title: '내가 쓴 댓글',
+      icon: <ChatBubbleBottomCenterTextIcon className='h-6 text-primary' />,
+      iconBg: 'bg-[#E3F0FF]',
+      link: '',
+      tooltip: '',
+      content: memberInfo?.comment,
+    },
+  ];
 
   return (
     <>
@@ -119,6 +118,24 @@ const Profile = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
+  // Return
+  return {
+    props: { memberInfo },
+  };
 };
 
 export default Profile;

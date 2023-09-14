@@ -345,7 +345,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             )}
           </div>
           <div className='hidden md:flex items-center'>
-            {session?.user && memberInfo.member.type === 2 && (
+            {session?.user && memberInfo?.member?.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
                   Delete selected posts

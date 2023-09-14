@@ -26,6 +26,9 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
   const style =
     bordered === true ? 'border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
 
+  // const style2 =
+  //   bordered === true ? 'border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
+  // background = 'bg-primary/5';
   return (
     <div className={`${style} relative flex md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
       {extra && (
