@@ -39,7 +39,7 @@ const Header = () => {
     if (searchField !== '') {
       if (searchSection === 1) {
         router.push({
-          pathname: 'search',
+          pathname: '/search',
           query: { q: searchField },
         });
       } else if (searchSection === 2) {
