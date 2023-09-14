@@ -609,7 +609,7 @@ const Search = () => {
             <Section3 />
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
               <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
-                <div className='font-bold flex gap-3'>
+                <div className='font-bold flex gap-2 lg:gap-3 text-xs lg:text-sm'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
                     구독자 상승 채널(24H)
                   </button>
