@@ -48,7 +48,7 @@ const BoardSidebar = ({ memberInfo }: any) => {
                 </div>
                 <div className='gap-1.5 grid'>
                   <div className='flex'>
-                    가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
+                    가입<div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
                   </div>
                   <div className='flex'>
                     <Link href={`/board?member=${session?.user.nickname}&show=posts`}>내가 쓴 글 보기</Link>
