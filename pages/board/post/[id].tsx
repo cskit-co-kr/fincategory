@@ -308,7 +308,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     </div>
                     {session?.user && (session?.user.id === post.user.id || session?.user.type === 2) && (
                       <div className='md:flex gap-2 ml-2'>
-                        <ButtonLink url={`/board/write?mode=edit&id=${post.id}`} text={t['edit']} icon={<PencilIcon className='h-3' />} />
+                        <ButtonLink
+                          url={`/board/write?board=${post.board.name}&mode=edit&id=${post.id}`}
+                          text={t['edit']}
+                          icon={<PencilIcon className='h-3' />}
+                        />
                         <button
                           className='flex whitespace-nowrap gap-1 md:gap-[10px] items-center h-[35px] px-5 bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] hover:text-primary'
                           onClick={handleOpen}

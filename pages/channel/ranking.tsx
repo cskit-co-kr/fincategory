@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { colorStyles } from '../../constants';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useMediaQuery } from '@mui/material';
+import ChannelAvatar from '../../components/channel/ChannelAvatar';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -260,13 +261,15 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
                     <div className='flex gap-2 md:gap-4 items-center'>
                       <div className='relative w-10 min-w-10 max-w-10'>
-                        <Image
+                        <ChannelAvatar id={rowData.channel_id} title={rowData.title} size={40} shape='rounded-full min-w-[20px]' />
+                        {/* <Image
                           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`}
+                          onError={() => '/telegram-icon-96.png'}
                           alt={rowData.title}
                           width={40}
                           height={40}
                           className='object-contain rounded-full z-0 min-w-[20px]'
-                        />
+                        /> */}
                       </div>
                       <div className='flex flex-col'>
                         <span>{rowData.title}</span>
