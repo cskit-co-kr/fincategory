@@ -108,7 +108,7 @@ const MemberSignIn = () => {
                 </div>
                 <div className='py-4 space-x-2 items-center flex'>
                   <input type='checkbox' id='rememberme' checked={rememberMe} onChange={() => setRememberMe((prev) => !prev)} />
-                  <label htmlFor='rememberme'>아이디/비번 기억하기</label>
+                  <label htmlFor='rememberme'>로그인 상태 유지</label>
                 </div>
                 {errorMessage && <p className='text-xs text-red-600 mt-2'>{errorMessage}</p>}
                 <button

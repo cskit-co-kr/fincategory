@@ -10,8 +10,6 @@ docker tag registry.gitlab.com/cskit.fincat/fincategory registry.gitlab.com/cski
 docker push registry.gitlab.com/cskit.fincat/fincategory:test
 ```
 
-.%ryDE.2TJU53w@
-
 ## Test server deer
 
 ```bash
