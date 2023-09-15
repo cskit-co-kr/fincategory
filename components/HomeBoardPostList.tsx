@@ -16,7 +16,7 @@ const HomeBoardPostList = ({ postList }: any) => {
           </span>
           <div className='flex'>
             <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-1'>
-              {post.title}
+              <h1>{post.title}</h1>
             </Link>
             {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} />}
             {post?.comment > 0 && (
@@ -33,7 +33,7 @@ const HomeBoardPostList = ({ postList }: any) => {
             )}
             {post.extra_01 === '1' && (
               <span>
-                <TbPhotoCircle size={16} className='hidden md:block text-green-500' />
+                <TbPhotoCircle size={16} className='text-green-500' />
               </span>
             )}
           </div>

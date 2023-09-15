@@ -243,7 +243,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         board: req.body.board,
         status: req.body.status,
         category: req.body.category === 0 ? null : req.body.category,
-        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : 0,
+        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : null,
         extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,
       }),
     });

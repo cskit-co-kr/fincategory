@@ -116,7 +116,8 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   // Table
-  const [sortColumn, setSortColumn] = useState('increase24h');
+  const column = router.query.column ? (router.query.column as string) : 'increase24h';
+  const [sortColumn, setSortColumn] = useState(column);
   const [sortType, setSortType] = useState<SortType>('desc');
   const [loading, setLoading] = useState(false);
 
