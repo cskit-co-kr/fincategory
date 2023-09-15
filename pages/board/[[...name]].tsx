@@ -349,7 +349,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             {session?.user && memberInfo?.member?.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
-                  Delete selected posts
+                  선택삭제
                 </button>
               </div>
             )}
