@@ -401,17 +401,21 @@ const Search = () => {
 
   const ref = useRef(null);
 
+  const [channelRankingUrl, setChannelRankingUrl] = useState('?column=increase24h');
   const [text24730, setText24730] = useState(1);
   const change24_7_30 = (x: number) => {
     if (x === 24) {
       setChannels24_7_30(channels24);
       setText24730(1);
+      setChannelRankingUrl('?column=increase24h');
     } else if (x === 7) {
       setChannels24_7_30(channels7d);
       setText24730(2);
+      setChannelRankingUrl('?column=increase7d');
     } else if (x === 30) {
       setChannels24_7_30(channels30d);
       setText24730(3);
+      setChannelRankingUrl('?column=increase30d');
     }
   };
 
@@ -622,7 +626,7 @@ const Search = () => {
                     {t['increase-30d']}
                   </button>
                 </div>
-                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking`} target='_blank'>
+                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking${channelRankingUrl}`} target='_blank'>
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>
@@ -694,9 +698,7 @@ const Search = () => {
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
-              <div className='font-bold text-xl'>
-                <h1>#</h1>
-              </div>
+              <div className='font-bold text-xl'>#</div>
               <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
                 <div className='hidden md:block'>
                   <ReactSlickSlider {...settings}>

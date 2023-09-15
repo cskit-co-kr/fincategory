@@ -31,3 +31,25 @@ docker container prune
 ```bash
 docker compose up -d
 ```
+
+## Production server deer
+
+```bash
+docker pull registry.gitlab.com/cskit.fincat/fincategory:prod
+```
+
+```bash
+docker images
+```
+
+```bash
+docker compose up -d
+```
+
+```bash
+docker images prune
+```
+
+```bash
+docker ps
+```

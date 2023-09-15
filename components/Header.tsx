@@ -164,7 +164,7 @@ const Header = () => {
                           </span>
                           <button
                             onClick={() => {
-                              signOut();
+                              signOut({ callbackUrl: '/search' });
                               handleClick();
                             }}
                             className='bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs'
@@ -350,7 +350,11 @@ const Header = () => {
                         >
                           <UserCircleIcon className='h-4' />내 정보
                         </Link>
-                        <Link href='#' onClick={() => signOut()} className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                        <Link
+                          href='#'
+                          onClick={() => signOut({ callbackUrl: '/search' })}
+                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                        >
                           <ArrowRightOnRectangleIcon className='h-4' />
                           {t['sign-out']}
                         </Link>
