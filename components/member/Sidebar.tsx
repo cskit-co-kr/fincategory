@@ -57,7 +57,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className='hidden lg:block lg:min-w-[310px] text-sm md:text-xs'>
+      <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white'>
             {session?.user ? (

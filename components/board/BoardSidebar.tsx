@@ -1,5 +1,12 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { ArrowPathIcon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathIcon,
+  ChevronDownIcon,
+  UserCircleIcon,
+  PencilSquareIcon,
+  ChatBubbleBottomCenterTextIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 import { GroupType } from '../../typings';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -49,16 +56,24 @@ const BoardSidebar = ({ memberInfo }: any) => {
                     {t['sign-out']}
                   </button>
                 </div>
-                <div className='gap-1.5 grid'>
+                <div className='space-y-2.5'>
                   <div className='flex'>
-                    가입<div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
+                    <div className='flex items-center gap-2.5 text-sm'>
+                      <UserIcon className='h-5' />
+                      가입
+                    </div>
+                    <div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
                   </div>
                   <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=posts`}>내가 쓴 글 보기</Link>
+                    <Link href={`/board?member=${session?.user.nickname}&show=posts`} className='flex items-center gap-2.5 text-sm'>
+                      <PencilSquareIcon className='h-5' /> 내가 쓴 글 보기
+                    </Link>
                     <div className='ml-auto'>{memberInfo?.post}</div>
                   </div>
                   <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=comments`}>내가 쓴 댓글 보기</Link>
+                    <Link href={`/board?member=${session?.user.nickname}&show=comments`} className='flex items-center gap-2.5 text-sm'>
+                      <ChatBubbleBottomCenterTextIcon className='h-5' /> 내가 쓴 댓글 보기
+                    </Link>
                     <div className='ml-auto'>{memberInfo?.comment}</div>
                   </div>
                 </div>
