@@ -47,7 +47,7 @@ const SearchFilterBar = ({ totalChannels, doFilter, selectedSorting, setSelected
 
   return (
     <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
-      <span className='text-xs'>
+      <span className='text-sm'>
         {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
         {loadBar ? <Loader /> : <b>{totalChannels}</b>}
         {t['total-search-results2']}
