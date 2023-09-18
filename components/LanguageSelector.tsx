@@ -40,12 +40,12 @@ function LanguageSelector() {
       >
         {locale !== 'en' ? (
           <div className='flex gap-1 items-center'>
-            <Image src='/south-korea.png' width={20} height={20} alt='' />
+            <Image src='/south-korea.png' width={20} height={20} alt='Korean' />
             {t['Korean']}
           </div>
         ) : (
           <div className='flex gap-1'>
-            <Image src='/united-states.png' width={20} height={20} alt='' />
+            <Image src='/united-states.png' width={20} height={20} alt='English' />
             {t['English']}
           </div>
         )}
@@ -56,12 +56,12 @@ function LanguageSelector() {
       {isOpen && (
         <div className='absolute top-7 border shadow-md bg-white flex flex-col rounded-md w-[110px]' ref={browseRef}>
           <button className='flex gap-1 hover:bg-gray-50 py-1 pt-2 px-3 text-[12px] font-bold' onClick={() => handleClick('ko')}>
-            <Image src='/south-korea.png' width={20} height={20} alt='' />
+            <Image src='/south-korea.png' width={20} height={20} alt='Korean' />
             {t['Korean']}
             <span className='text-gray-400'>KO</span>
           </button>
           <button className='flex gap-1 hover:bg-gray-50 py-1 pb-2 px-3 text-[12px] font-bold' onClick={() => handleClick('en')}>
-            <Image src='/united-states.png' width={20} height={20} alt='' />
+            <Image src='/united-states.png' width={20} height={20} alt='English' />
             {t['English']}
             <span className='text-gray-400'>EN</span>
           </button>

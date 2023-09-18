@@ -28,6 +28,22 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
+  let initSearchTerm = 'title';
+  let initSearchTermText = t['st-title'];
+  if (router.query.show === 'posts') {
+    initSearchTerm = 'author';
+    initSearchTermText = t['st-author'];
+  } else if (router.query.show === 'comments') {
+    initSearchTerm = 'commenter';
+    initSearchTermText = t['st-commenter'];
+  }
+  let initSearchInput = '';
+  if (router.query.member) {
+    initSearchInput = router.query.member as string;
+  } else if (router.query.q) {
+    initSearchInput = router.query.q as string;
+  }
+
   const [postsList, setPostsList] = useState(postList);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -48,10 +64,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchDate, setSearchDate] = useState('all');
   const [searchStartDate, setSearchStartDate] = useState('');
   const [searchEndDate, setSearchEndDate] = useState('');
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(initSearchInput);
   const [inputRef, setInputFocus] = useFocus();
-  const [searchTerm, setSearchTerm] = useState('title');
-  const [searchTermText, setSearchTermText] = useState(t['st-title']);
+  const [searchTerm, setSearchTerm] = useState(initSearchTerm);
+  const [searchTermText, setSearchTermText] = useState(initSearchTermText);
 
   // useEffect(() => {
   //   // if (hasCookie('page')) {
@@ -96,9 +112,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   const setSearchTermHandler = (label: string, value: string) => {
-    setSearchTerm(value);
+    setSearchTerm((prev) => value);
     setSearchTermPopup(false);
-    setSearchTermText(label);
+    setSearchTermText((prev) => label);
   };
 
   const resetSearch = () => {
@@ -115,6 +131,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     const board = boardQuery === undefined ? 'null' : boardQuery[0];
     const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
     const q = router.query.member ? router.query.member : router.query.q ? router.query.q : null;
+
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postsPerPage}&offset=${activePage}`,
       {
@@ -147,22 +164,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     setCookie('perPage', postsPerPage);
     setCookie('page', activePage);
   }, [postsPerPage, activePage, viewPort]);
-
-  useEffect(() => {
-    if (router.query.show === 'posts') {
-      setSearchTermHandler(t['st-author'], 'author');
-    } else if (router.query.show === 'comments') {
-      setSearchTermHandler(t['st-commenter'], 'commenter');
-    } else {
-      setSearchTermHandler(t['st-title'], 'title');
-    }
-    if (router.query.member) {
-      setSearchInput(router.query.member as string);
-    } else if (router.query.q) {
-      setSearchInput(router.query.q as string);
-    }
-    setClickCheck((prev) => !prev);
-  }, [router]);
 
   // Checkbox functions
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
@@ -280,7 +281,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             {viewPort === 'list' && (
               <div className='w-full'>
                 <div className='border-b border-gray-200 hidden md:flex font-bold'>
-                  <div className='text-center p-2 min-w-[80px]'>{postsList.board ? '말머리' : ''}</div>
+                  <div className='text-center p-2 min-w-[80px]'>{postsList.board ? '글번호' : ''}</div>
                   <div className='text-center p-2 flex-grow'>제목</div>
                   <div className='text-left p-2 min-w-[128px]'>작성자</div>
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
@@ -299,7 +300,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       key={idx}
                       checkedItems={checkedItems}
                       handleCheckboxChange={handleCheckboxChange}
-                      userType={memberInfo.member?.type}
+                      userType={memberInfo?.member?.type}
                     />
                   ))}
                   {isEndOfList && <div>- -</div>}
@@ -348,7 +349,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             {session?.user && memberInfo?.member?.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
-                  Delete selected posts
+                  선택삭제
                 </button>
               </div>
             )}

@@ -42,7 +42,7 @@ const Profile = ({ memberInfo }: any) => {
       iconBg: 'bg-[#F7E1FF]',
       link: '',
       tooltip: '',
-      content: 75,
+      content: 0,
     },
     {
       title: '내가 쓴 글',

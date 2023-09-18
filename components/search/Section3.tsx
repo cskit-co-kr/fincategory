@@ -23,7 +23,7 @@ const Section3 = () => {
       list: posts1,
     },
     {
-      title: '광고홍보',
+      title: '광고/홍보',
       link: '/board/advertising',
       list: posts2,
     },
@@ -69,7 +69,7 @@ const Section3 = () => {
   }, []);
 
   return (
-    <div className='grid md:grid-cols-3 gap-4'>
+    <div className='grid md:grid-cols-3 gap-4 px-5 lg:px-0 mt-5 lg:mt-0'>
       {items.map((item, index) => (
         <div className='space-y-2.5' key={index}>
           <div className='flex items-center'>

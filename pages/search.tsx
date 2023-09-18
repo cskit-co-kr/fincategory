@@ -401,17 +401,21 @@ const Search = () => {
 
   const ref = useRef(null);
 
+  const [channelRankingUrl, setChannelRankingUrl] = useState('?column=increase24h');
   const [text24730, setText24730] = useState(1);
   const change24_7_30 = (x: number) => {
     if (x === 24) {
       setChannels24_7_30(channels24);
       setText24730(1);
+      setChannelRankingUrl('?column=increase24h');
     } else if (x === 7) {
       setChannels24_7_30(channels7d);
       setText24730(2);
+      setChannelRankingUrl('?column=increase7d');
     } else if (x === 30) {
       setChannels24_7_30(channels30d);
       setText24730(3);
+      setChannelRankingUrl('?column=increase30d');
     }
   };
 
@@ -609,7 +613,7 @@ const Search = () => {
             <Section3 />
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
               <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
-                <div className='font-bold flex gap-3'>
+                <div className='font-bold flex gap-1 lg:gap-3 text-xs lg:text-sm'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
                     구독자 상승 채널(24H)
                   </button>
@@ -622,7 +626,7 @@ const Search = () => {
                     {t['increase-30d']}
                   </button>
                 </div>
-                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking`} target='_blank'>
+                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking${channelRankingUrl}`} target='_blank'>
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>

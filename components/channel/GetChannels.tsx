@@ -26,9 +26,8 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
   const style =
     bordered === true ? 'border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
 
-  // const style2 =
-  //   bordered === true ? 'border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300' : '';
-  // background = 'bg-primary/5';
+  // const style2 = 'text-white border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300';
+  // background = 'bg-primary';
   return (
     <div className={`${style} relative flex md:rounded-xl p-4 gap-2.5 text-black ${background}`}>
       {extra && (
@@ -42,7 +41,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
       </Link>
       <div className='space-y-3 w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
-          <h2 className='font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
+          <h2 className='break-all md:break-words font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
           {desc === true && <p className='break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
         </Link>
         <div className='flex items-center justify-between text-xs text-gray-500 font-semibold'>

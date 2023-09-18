@@ -164,7 +164,7 @@ const Header = () => {
                           </span>
                           <button
                             onClick={() => {
-                              signOut();
+                              signOut({ callbackUrl: '/search' });
                               handleClick();
                             }}
                             className='bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs'
@@ -174,7 +174,7 @@ const Header = () => {
                         </div>
                         <div className='gap-1.5 grid'>
                           <div className='flex'>
-                            가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
+                            가입<div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
                           </div>
                           <div className='flex'>
                             <Link href={`/board?member=${session?.user.nickname}&show=posts`} onClick={handleClick}>
@@ -248,7 +248,7 @@ const Header = () => {
                               </div>
                             ) : (
                               group.boards.map((board: any) => (
-                                <Link key={board.id} href={`/board/${board.name}`} className='py-1' onClick={handleClick}>
+                                <Link key={board.id} href={`/board/${board.name}`} className='py-1 font-semibold' onClick={handleClick}>
                                   {board.title}
                                 </Link>
                               ))
@@ -350,7 +350,11 @@ const Header = () => {
                         >
                           <UserCircleIcon className='h-4' />내 정보
                         </Link>
-                        <Link href='#' onClick={() => signOut()} className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                        <Link
+                          href='#'
+                          onClick={() => signOut({ callbackUrl: '/search' })}
+                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                        >
                           <ArrowRightOnRectangleIcon className='h-4' />
                           {t['sign-out']}
                         </Link>

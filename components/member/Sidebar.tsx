@@ -67,7 +67,10 @@ const Sidebar = () => {
                   <span className='font-semibold'>
                     <Link href='/member/profile'>{session?.user.nickname}</Link>
                   </span>
-                  <button onClick={() => signOut()} className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/search' })}
+                    className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'
+                  >
                     {t['sign-out']}
                   </button>
                 </div>
