@@ -112,7 +112,9 @@ const Profile = ({ memberInfo }: any) => {
               <AtSymbolIcon className='h-20 text-white' />
             </div>
             <span className='text-2xl mt-5'>텔레그램 채널을 추가하세요</span>
-            <button className='blue-button justify-self-center mt-5'>채널 추가</button>
+            <button className='blue-button justify-self-center mt-5' onClick={() => router.push('/add')}>
+              채널 추가
+            </button>
           </div>
         </div>
       </div>
