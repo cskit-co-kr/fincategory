@@ -23,6 +23,7 @@ import { Section2_2, Section2_2Skeleton } from '../components/search/Section2_2'
 import { Skeleton } from '@mui/material';
 import HashtagScroll from '../components/HashtagScroll';
 import Section3 from '../components/search/Section3';
+import SearchFilterBar from '../components/search/SearchFilterBar';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -737,6 +738,7 @@ const Search = () => {
               </div>
             )} */}
             {searchResult ? (
+              // <SearchFilterBar totalChannels={totalChannels} doFilter={doFilter} />
               <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
                 <span className='text-xs'>
                   {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
