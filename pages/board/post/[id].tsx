@@ -575,8 +575,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
 export const getServerSideProps = async (context: any) => {
   const req = context.req;
-  const page = getCookie('page', { req }) as string;
-  const perPage = getCookie('perPage', { req }) as string;
+  const page = (getCookie('page', { req }) as string) || '1';
+  const perPage = (getCookie('perPage', { req }) as string) || '20';
 
   // Get Member Information
   let memberInfo = '';
