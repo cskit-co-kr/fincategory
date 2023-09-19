@@ -62,6 +62,7 @@ const SearchFilterBar = ({ totalChannels, doFilter, selectedSorting, setSelected
           cleanable={false}
           searchable={false}
           size='sm'
+          placement='bottomEnd'
         />
         {/* <select
           onChange={(e) => {

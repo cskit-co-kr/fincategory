@@ -193,7 +193,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         setReactionTotal(reactionTotal - 1);
       }
     } else {
-      toastShow('error', 'An error occurred while trying to save your reaction.');
+      toastShow('error', t['error-save-reaction']);
     }
   };
 

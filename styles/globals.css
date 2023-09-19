@@ -59,6 +59,10 @@
   }
 }
 
+.rs-picker-select-menu-item {
+  @apply whitespace-nowrap;
+}
+
 .widget-ticker-tape-container {
   @apply text-xs !important;
 }

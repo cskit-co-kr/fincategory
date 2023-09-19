@@ -166,6 +166,7 @@ export const enUS = {
     "post-url-copied": "Board Post URL copied to clipboard.",
     "search-filter": "Search filter",
     "login-to-comment": "You must be logged in to post a comment.",
+    "error-save-reaction": "An error occurred while trying to save your reaction.",
     /* rating */
     "channel-rankings": "Channel Rankings",
     "rank": "Rank",
