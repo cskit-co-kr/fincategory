@@ -166,6 +166,7 @@ export const koKR = {
     "post-url-copied": "URL이 복사되었습니다. 원하는 곳에 붙여 넣으세요.",
     "search-filter": "검색 필터",
     "login-to-comment": "로그인을 하셔야 댓글을 작성할 수 있습니다.",
+    "error-save-reaction": "로그인 후 좋아요를 할수 있습니다.",
     /* rating */
     "channel-rankings": "채널 랭킹",
     "rank": "랭킹",

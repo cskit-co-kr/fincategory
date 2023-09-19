@@ -613,11 +613,11 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <Section3 />
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
-              <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승</div>
+              <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승 채널</div>
               <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
                 <div className='font-bold flex gap-1 lg:gap-3'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
-                    채널(24H)
+                    {t['increase-24h']}
                   </button>
                   |
                   <button onClick={() => change24_7_30(7)} className={`${text24730 === 2 && 'text-primary'}`}>
