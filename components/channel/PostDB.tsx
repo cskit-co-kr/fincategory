@@ -1,7 +1,7 @@
 import { ChatBubbleLeftRightIcon, EyeIcon, LinkIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import LinkPreview from './LinkPreview';
@@ -19,6 +19,16 @@ const PostDB = ({ channel, post }: any) => {
   const [descHeight, setDescHeight] = useState('h-fit overflow-hidden');
   const postMedia = post.media && JSON.parse(post.media);
 
+  const [postDate, setPostDate] = useState('');
+  useEffect(() => {
+    const d = new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    setPostDate(d);
+  }, []);
+
   return (
     <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
       <div className='flex gap-4 border-b border-gray-200 pb-2 w-full'>
@@ -32,18 +42,7 @@ const PostDB = ({ channel, post }: any) => {
         />
         <div className='flex flex-col gap-0.5'>
           <div className='text-sm font-bold'>{channel.title}</div>
-          <div className='text-xs text-gray-500'>
-            {/* {new Date(post.date).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })} */}
-            {new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </div>
+          <div className='text-xs text-gray-500'>{postDate}</div>
         </div>
       </div>
       <div className='flex flex-col gap-2.5 justify-center'>
