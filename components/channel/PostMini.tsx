@@ -5,6 +5,8 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
+import { useEffect, useState } from 'react';
+import { toDateTimeformat } from '../../lib/utils';
 
 const PostMini = ({ channel, post }: any) => {
   const router = useRouter();
@@ -12,6 +14,16 @@ const PostMini = ({ channel, post }: any) => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const postMedia = post.media && JSON.parse(post.media);
+
+  const [postDate, setPostDate] = useState('');
+  useEffect(() => {
+    const d = new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    setPostDate(d);
+  }, []);
 
   return (
     <div className='w-full gap-4 border flex border-gray-200 rounded-md bg-white'>
@@ -31,18 +43,16 @@ const PostMini = ({ channel, post }: any) => {
           </div>
         )}
         <div>
-          <a href={`https://t.me/${channel.username}/${post.id}`} target='_blank' className='flex items-center gap-2 hover:no-underline w-fit'>
+          <a
+            href={`https://t.me/${channel.username}/${post.id}`}
+            target='_blank'
+            className='flex items-center gap-2 hover:no-underline w-fit'
+          >
             <LinkIcon className='h-5' />
             Post #{post.id}
           </a>
         </div>
-        <div className='text-gray-500'>
-          {new Date(post.date).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })}
-        </div>
+        <div className='text-gray-500'>{postDate}</div>
       </div>
 
       <div className='w-3/4 flex flex-col gap-2.5 p-4'>
