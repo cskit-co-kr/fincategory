@@ -29,15 +29,28 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     };
   });
 
+  const types = [
+    {
+      value: 'channel',
+      label: t["channel-type-channel"],
+    },
+    {
+      value: 'group',
+      label: t["channel-type-group"],
+    }
+  ]
+
   const [input, setInput] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>('');
 
   const [errorInput, setErrorInput] = useState<string | null>(null);
   const [errorCountry, setErrorCountry] = useState<string | null>(null);
   const [errorLanguage, setErrorLanguage] = useState<string | null>(null);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<string | null>(null);
 
   const [resultState, setResultState] = useState<string | null>(null);
 
@@ -46,6 +59,8 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
     selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
+    selectedType === '' ? setErrorType(t['please-type']) : setErrorType(null);
+
 
     let text = '';
     let arr = [];
@@ -64,6 +79,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         country: selectedCountry,
         language: selectedLanguage,
         category: selectedCategory,
+        type: selectedType
       };
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
         method: 'POST',
@@ -77,6 +93,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         setSelectedCountry('');
         setSelectedLanguage('');
         setSelectedCategory('');
+        setSelectedType('')
       } else {
         setResultState(`"${text}" ${t['channel-add-error']}`);
       }
@@ -156,6 +173,25 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             })}
           </select>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
+
+          <label>{t['channel-type']}</label>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className='border border-gray-200 rounded-md p-2 outline-none'
+            name='type'
+          >
+            <option value=''>{t['choose-type']}</option>
+            {types.map((cat: any, index: number) => {
+              return (
+                <option value={cat.value} key={index}>
+                  {cat.label}
+                </option>
+              );
+            })}
+          </select>
+          {errorType !== null ? <div className='text-red-500 -mt-3 italic'>{errorType}</div> : ''}
+
           <button
             onClick={() => handleSubmit()}
             className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
@@ -170,18 +206,27 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
 };
 
 export const getServerSideProps = async () => {
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-  const categories = await result.data;
+  try {
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-  const countries = await resCountry.data;
+    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+    const categories = await result.data;
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-  const languages = await resLanguage.data;
+    const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+    const countries = await resCountry.data;
 
-  return {
-    props: { categories, countries, languages },
-  };
+    const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+    const languages = await resLanguage.data;
+
+    return {
+      props: { categories, countries, languages },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: { categories: [], countries: [], languages: [] }
+    }
+  }
+
 };
 
 export default add;

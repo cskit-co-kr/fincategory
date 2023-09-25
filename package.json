@@ -4,9 +4,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:prod": "env-cmd -f env/.env yarn build",
-    "build:test": "env-cmd -f env/.env.test yarn build",
-    "build:local": "env-cmd -f env/.env.local yarn build"
+    "build:prod": " yarn build",
+    "build:test": "yarn build",
+    "build:local": "yarn build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -25,7 +25,6 @@
     "cookies-next": "^2.1.1",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
-    "env-cmd": "^10.1.0",
     "formik": "^2.2.9",
     "i18next": "^22.4.9",
     "i18next-browser-languagedetector": "^7.0.1",
