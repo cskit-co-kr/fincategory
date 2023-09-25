@@ -157,7 +157,7 @@ const Profile = () => {
             className='hidden md:flex gap-1 items-center border border-gray-200 rounded-full px-4 py-2 mb-4 text-xs'
           >
             <ArrowLeftIcon className='h-4' />
-            Back
+            뒤로
           </button>
           <div className='white-box'>
             <div className='font-semibold'>{t['edit-basic-info']}</div>
@@ -178,7 +178,7 @@ const Profile = () => {
                 <input type='text' className='input_field' defaultValue={session?.user.email} {...register('email')} />
                 <p className='text-xs text-red-600'>{errors.email?.message?.toString()}</p>
               </div>
-              <button className='blue-button ml-auto' type='submit'>
+              <button className='blue-button place-self-center' type='submit'>
                 {loading && <Loader />}등록
               </button>
             </form>
@@ -203,7 +203,7 @@ const Profile = () => {
                 <input type='password' className='input_field' {...register2('confirmPassword')} />
                 <p className='text-xs text-red-600'>{errors2.confirmPassword?.message?.toString()}</p>
               </div>
-              <button className='blue-button ml-auto' type='submit'>
+              <button className='blue-button place-self-center' type='submit'>
                 {loading2 && <Loader />}등록
               </button>
             </form>

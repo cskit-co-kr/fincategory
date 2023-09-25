@@ -15,6 +15,7 @@ import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
 import ChannelComment from '../../../components/channel/ChannelComment';
 import { enUS } from '../../../lang/en-US';
 import { koKR } from '../../../lang/ko-KR';
+import RightSidebar from '../../../components/channel/RightSidebar';
 
 type TComment = {
   id: number;
@@ -61,7 +62,19 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
 
   const toaster = useToaster();
 
+  const [data, setData] = useState();
   useEffect(() => {
+    const data = sub?.map((item: any) => {
+      const date = new Date(item.created_at);
+      const formattedDate = date.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+
+      return { name: formattedDate, sub: item.count };
+    });
+    setData(data);
     getComments();
   }, []);
 
@@ -108,17 +121,6 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     setComments(comments.concat(result.comments));
     setLoadMoreText(t['load-more']);
   };
-
-  const data = sub?.map((item: any) => {
-    const date = new Date(item.created_at);
-    const formattedDate = date.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-
-    return { name: formattedDate, sub: item.count };
-  });
 
   // Save Comment
   const saveReview = async () => {
@@ -167,65 +169,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
             <div className='flex flex-col lg:flex-row-reverse gap-4'>
-              <div className='rightsidebar'>
-                <div className='sticky inset-y-4 gap-4 flex flex-col md:grid md:grid-cols-5 lg:flex lg:flex-col'>
-                  <div className='w-full md:col-span-3 lg:w-[250px] xl:w-[310px] gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white'>
-                    <div className='font-bold'>{t['subscribers']}</div>
-                    <ResponsiveContainer width='100%' minWidth={0} height={120}>
-                      <AreaChart width={270} height={120} data={data && data !== null ? data.slice(-30) : []}>
-                        <defs>
-                          <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
-                            <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
-                            <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
-                          </linearGradient>
-                        </defs>
-                        <Tooltip content={<CustomTooltip />} />
-                        <XAxis dataKey='name' hide />
-                        <YAxis type='number' domain={['dataMin', 'dataMax']} hide />
-                        <Area type='monotone' dataKey='sub' stroke='#3886E2' strokeWidth={2} fillOpacity={1} fill='url(#color)' />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                    <a
-                      href={`/channel/${channel.username}/subscribers`}
-                      className='flex text-center justify-center gap-2 rounded-full border text-sm py-2 text-primary hover:bg-gray-100 hover:no-underline mt-2.5'
-                    >
-                      <ChartBarSquareIcon className='h-5' />
-                      {t['Subscribers']} {t['statistics']}
-                    </a>
-                  </div>
-
-                  <div className='text-xs grid grid-cols-2 w-full md:h-[247px] lg:h-[146px] md:col-span-2 lg:w-[250px] xl:w-[310px] gap-4 h-fit border border-gray-200 rounded-md p-4 bg-white'>
-                    <div className='flex flex-col gap-1 border-r'>
-                      <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
-                        <UsersIcon className='w-5 h-5 text-primary' />
-                        {t['subscribers']}
-                      </div>
-                      <div className='text-center font-semibold text-base'>{channel.subscription?.toLocaleString()}</div>
-                    </div>
-                    <div className='flex flex-col gap-1'>
-                      <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
-                        <ClipboardDocumentListIcon className='w-5 h-5 text-[#55A348]' />
-                        {t['views-per-post']}
-                      </div>
-                      <div className='text-center font-semibold text-base'>~{averageViews.toLocaleString()}</div>
-                    </div>
-                    <div className='flex flex-col gap-1 border-r'>
-                      <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
-                        <CalendarDaysIcon className='w-5 h-5 text-[#9B7C0C]' />
-                        {t['posts-per-month']}
-                      </div>
-                      <div className='text-center font-semibold text-base'>~{averagePosts}</div>
-                    </div>
-                    <div className='flex flex-col gap-1'>
-                      <div className='flex sm:flex-col lg:flex-row items-center gap-2 text-gray-400'>
-                        <BoltIcon className='w-5 h-5 text-[#CD5066]' />
-                        {t['ERR']}
-                      </div>
-                      <div className='text-center font-semibold text-base'>{parseFloat(averageErr).toFixed(2)}%</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <RightSidebar channel={channel} data={data} averageViews={averageViews} averagePosts={averagePosts} averageErr={averageErr} />
 
               <div className='gap-4 flex flex-col w-full'>
                 <div className='bg-[#f2f2f2]'>

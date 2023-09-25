@@ -73,8 +73,8 @@ const Section3 = () => {
       {items.map((item, index) => (
         <div className='space-y-2.5' key={index}>
           <div className='flex items-center'>
-            <span className='font-bold text-sm'>{item.title}</span>
-            <Link href={item.link} className='ml-auto flex gap-1 items-center text-xs text-primary'>
+            <span className='font-bold text-lg lg:text-base'>{item.title}</span>
+            <Link href={item.link} className='ml-auto flex gap-1 items-center text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
             </Link>

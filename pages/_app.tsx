@@ -16,18 +16,18 @@ import { useRouter } from 'next/router';
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
   const env = process.env.NODE_ENV;
-  const setVisit = async () => {
-    if (env !== 'development') {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
-      const data = await res.data;
-      if (data.code === 200) {
-        const today = new Date();
-        setCookie('visit', today.getTime());
-      }
-    }
-  };
 
   useEffect(() => {
+    const setVisit = async () => {
+      if (env !== 'development') {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
+        const data = await res.data;
+        if (data.code === 200) {
+          const today = new Date();
+          setCookie('visit', today.getTime());
+        }
+      }
+    };
     if (!hasCookie('visit')) {
       setVisit();
     }

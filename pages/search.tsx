@@ -23,6 +23,7 @@ import { Section2_2, Section2_2Skeleton } from '../components/search/Section2_2'
 import { Skeleton } from '@mui/material';
 import HashtagScroll from '../components/HashtagScroll';
 import Section3 from '../components/search/Section3';
+import SearchFilterBar from '../components/search/SearchFilterBar';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -612,10 +613,11 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <Section3 />
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
-              <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
-                <div className='font-bold flex gap-1 lg:gap-3 text-xs lg:text-sm'>
+              <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승 채널</div>
+              <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
+                <div className='font-bold flex gap-1 lg:gap-3'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
-                    구독자 상승 채널(24H)
+                    {t['increase-24h']}
                   </button>
                   |
                   <button onClick={() => change24_7_30(7)} className={`${text24730 === 2 && 'text-primary'}`}>
@@ -731,39 +733,15 @@ const Search = () => {
                 </div>
               </div>
             </div>
-            {/* {loadBar && (
-              <div className='md:col-span-3 mx-auto'>
-                <Loader />
-              </div>
-            )} */}
+
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
-                <span className='text-xs'>
-                  {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
-                  {loadBar ? <Loader /> : <b>{totalChannels}</b>}
-                  {t['total-search-results2']}
-                </span>
-                <div className='ml-auto flex items-center'>
-                  <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
-                  <select
-                    onChange={(e) => {
-                      setSelectedSorting(e.target.value);
-                      doFilter(e.target.value);
-                    }}
-                    value={selectedSorting}
-                    className='border rounded-md pl-2 pr-4 py-1'
-                    name='select'
-                  >
-                    <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
-                    <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
-                    <option value='today_desc'>오늘 조회수 순 &darr;</option>
-                    <option value='today_asc'>오늘 조회수 순 &uarr;</option>
-                    <option value='total_desc'>누적 조회수 순 &darr;</option>
-                    <option value='total_asc'>누적 조회수 순 &uarr;</option>
-                    <option value='created_desc'>최근 추가</option>
-                  </select>
-                </div>
-              </div>
+              <SearchFilterBar
+                totalChannels={totalChannels}
+                doFilter={doFilter}
+                setSelectedSorting={setSelectedSorting}
+                selectedSorting={selectedSorting}
+                loadBar={loadBar}
+              />
             ) : (
               <Skeleton
                 variant='rectangular'
