@@ -55,6 +55,7 @@ export const enUS = {
     "channel-type": "Channel Type",
     "select-type": "Select Channel Type...",
     "channel": "Channel",
+    "group": "Group",
     "channels-age-from-months": "Channel's age from (months)",
     "engagement-rate-erp": "Engagement Rate (ERP)",
     "subscribers": "Subscribers",
