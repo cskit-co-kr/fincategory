@@ -55,6 +55,7 @@ export const koKR = {
     "channel-type": "타입",
     "select-type": "채널 유형 선택...",
     "channel": "채널",
+    "group": "채널",
     "channels-age-from-months": "채널 생성 (월)",
     "engagement-rate-erp": "참여율 (ERP)",
     "subscribers": "구독자",
