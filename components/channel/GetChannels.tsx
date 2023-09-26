@@ -41,10 +41,14 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
       </Link>
       <div className='space-y-3 w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
-          <h2 className='break-all md:break-words font-semibold text-sm line-clamp-1 text-ellipsis overflow-hidden'>{channels.title}</h2>
-          {desc === true && <p className='break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
+          <h2 className='break-all md:break-words font-semibold text-base md:text-sm line-clamp-1 text-ellipsis overflow-hidden'>
+            {channels.title}
+          </h2>
+          {desc === true && (
+            <p className='break-all md:break-words text-sm md:text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>
+          )}
         </Link>
-        <div className='flex items-center justify-between text-xs text-gray-500 font-semibold'>
+        <div className='flex items-center justify-between text-sm md:text-xs text-gray-500 font-semibold'>
           <span className='flex gap-0.5 items-center'>
             <LiaUserSolid size={16} />
             {t['subscribers']} {channels.subscription?.toLocaleString()}
@@ -67,7 +71,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
                       query: { q: '#' + tag.tag },
                     });
                   }}
-                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
+                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
                   key={tag.id}
                 >
                   #{tag.tag}
