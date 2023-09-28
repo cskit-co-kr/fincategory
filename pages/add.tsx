@@ -35,7 +35,11 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       label: t["channel-type-channel"],
     },
     {
-      value: 'group',
+      value: 'public_group',
+      label: t["channel-type-group"],
+    },
+    {
+      value: 'private_group',
       label: t["channel-type-group"],
     }
   ]
@@ -123,6 +127,24 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             className='border border-gray-200 rounded-md p-2 outline-none'
           />
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
+          <label>{t['channel-type']}</label>
+          
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className='border border-gray-200 rounded-md p-2 outline-none'
+            name='type'
+          >
+            <option value=''>{t['choose-type']}</option>
+            {types.map((cat: any, index: number) => {
+              return (
+                <option value={cat.value} key={index}>
+                  {cat.label}
+                </option>
+              );
+            })}
+          </select>
+          {errorType !== null ? <div className='text-red-500 -mt-3 italic'>{errorType}</div> : ''}
           <label>{t['country']}</label>
           <select
             value={selectedCountry}
@@ -174,23 +196,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           </select>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
 
-          <label>{t['channel-type']}</label>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className='border border-gray-200 rounded-md p-2 outline-none'
-            name='type'
-          >
-            <option value=''>{t['choose-type']}</option>
-            {types.map((cat: any, index: number) => {
-              return (
-                <option value={cat.value} key={index}>
-                  {cat.label}
-                </option>
-              );
-            })}
-          </select>
-          {errorType !== null ? <div className='text-red-500 -mt-3 italic'>{errorType}</div> : ''}
+
 
           <button
             onClick={() => handleSubmit()}
@@ -206,18 +212,18 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
 };
 
 export const getServerSideProps = async () => {
-    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-    const categories = await result.data;
+  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+  const categories = await result.data;
 
-    const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-    const countries = await resCountry.data;
+  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+  const countries = await resCountry.data;
 
-    const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-    const languages = await resLanguage.data;
+  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+  const languages = await resLanguage.data;
 
-    return {
-      props: { categories, countries, languages },
-    };
+  return {
+    props: { categories, countries, languages },
+  };
 };
 
 export default add;
