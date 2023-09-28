@@ -3,11 +3,11 @@ docker build -t registry.gitlab.com/cskit.fincat/fincategory .
 ```
 
 ```bash
-docker tag registry.gitlab.com/cskit.fincat/fincategory registry.gitlab.com/cskit.fincat/fincategory:test2
+docker tag registry.gitlab.com/cskit.fincat/fincategory registry.gitlab.com/cskit.fincat/fincategory:test
 ```
 
 ```bash
-docker push registry.gitlab.com/cskit.fincat/fincategory:test2
+docker push registry.gitlab.com/cskit.fincat/fincategory:test
 ```
 
 ## Test server deer

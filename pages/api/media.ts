@@ -12,7 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   async function start() {
     const executablePath = process.env.IS_LOCAL === 'true' ? null : '/usr/bin/google-chrome';
-    const browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox', '--disable-setuid-sandbox'],  executablePath });
+    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox'],  executablePath });
     const page = await browser.newPage();
     await page.goto(`https://t.me/${req.body.channel.username}/${req.body.post.id}?embed=1&mode=tme`);
     const elementExists = (await page.$('.tgme_widget_message_photo_wrap')) !== null;

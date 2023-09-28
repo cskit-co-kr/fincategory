@@ -11,7 +11,7 @@ ENV NEXTAUTH_URL=https://test-fincat.fincategory.com
 ENV KAKAO_CLIENT_ID=940492
 ENV KAKAO_CLIENT_SECRET=15d7f66e31a6069527a4ed2c970e097c
 ENV NEXT_LOCAL_API_URL=ws://localhost:8081
-ENV NEXT_PUBLIC_IMAGE_URL=https://file.fincategory.com
+ENV NEXT_PUBLIC_IMAGE_URL=https://test-file.fincategory.com
 ENV IS_LOCAL=false
 
 
@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 
 WORKDIR /app
 
-COPY package.json yarn.lock
+COPY package.json .
+COPY yarn.lock .
 
 RUN yarn
 
