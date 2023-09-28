@@ -206,8 +206,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
 };
 
 export const getServerSideProps = async () => {
-  try {
-
     const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
     const categories = await result.data;
 
@@ -220,13 +218,6 @@ export const getServerSideProps = async () => {
     return {
       props: { categories, countries, languages },
     };
-  } catch (err) {
-    console.log(err);
-    return {
-      props: { categories: [], countries: [], languages: [] }
-    }
-  }
-
 };
 
 export default add;

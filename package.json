@@ -3,10 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "build:prod": " yarn build",
-    "build:test": "yarn build",
-    "build:local": "yarn build"
+    "start": "next start"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
