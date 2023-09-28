@@ -117,7 +117,7 @@ const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<any | null>([{ value: 113, label: 'Korea, Republic of' }]);
   const [selectedLanguage, setSelectedLanguage] = useState<any | null>([{ value: 'ko', label: 'Korean' }]);
-  const [channelType, setChannelType] = useState<any | null>([{value: "group", label: 'Group'}]);
+  const [channelType, setChannelType] = useState<any | null>(null);
   const [channelsAge, setChannelsAge] = useState<number>(0);
   const [channelsERP, setChannelsERP] = useState<number>(0);
   const [subscribersFrom, setSubscribersFrom] = useState<any | null>('');
@@ -157,11 +157,11 @@ const Search = () => {
     const data: any = {
       query: null, //searchText === '' ? null : searchText,
       withDesc: selectDesc,
-      category: selectedCategory  === null ? [] : selectedCategory,
-      country: selectedCountry    === null ? [] : selectedCountry,
-      language: selectedLanguage  === null ? [] : selectedLanguage,
-      channel_type: channelType   === null ? [] : channelType,
-      channel_age: channelsAge, 
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: selectedCountry === null ? [] : selectedCountry,
+      language: selectedLanguage === null ? [] : selectedLanguage,
+      channel_type: channelType === null ? [] : channelType,
+      channel_age: channelsAge,
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
       subscribers_to: subscribersTo === '' ? null : subscribersTo,
@@ -300,10 +300,10 @@ const Search = () => {
     const data = {
       query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
       withDesc: selectDesc,
-      category: selectedCategory  === null ? [] : selectedCategory,
-      country: selectedCountry    === null ? [] : selectedCountry,
-      language: selectedLanguage  === null ? [] : selectedLanguage,
-      channel_type: channelType   === null ? [] : channelType,
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: selectedCountry === null ? [] : selectedCountry,
+      language: selectedLanguage === null ? [] : selectedLanguage,
+      channel_type: channelType === null ? [] : channelType,
       channel_age: channelsAge,
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
@@ -323,7 +323,8 @@ const Search = () => {
 
     if (result) {
       setTotalChannels(resultData.total);
-      result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
+      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
+      setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     }
 
@@ -713,8 +714,9 @@ const Search = () => {
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
                         <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                            }`}
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
                           key={tag.tag}
                           onClick={() => {
                             selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -722,8 +724,9 @@ const Search = () => {
                         >
                           {tag.tag}
                           <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
-                              }`}
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
                           >
                             {tag.total}
                           </span>
