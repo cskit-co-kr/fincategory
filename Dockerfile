@@ -26,16 +26,11 @@ ENV IS_LOCAL=false
 # ENV KAKAO_CLIENT_ID=940492
 # ENV KAKAO_CLIENT_SECRET=15d7f66e31a6069527a4ed2c970e097c
 # ENV NEXT_LOCAL_API_URL=ws://localhost:8081
-# ENV NEXT_PUBLIC_IMAGE_URL=https://file.fincategory.com
+# ENV NEXT_PUBLIC_IMAGE_URL=https://test-file.fincategory.com
+# ENV IS_LOCAL=false
+
 # # Install Google Chrome Stable and fonts
 # # Note: this installs the necessary libs to make the browser work with Puppeteer.
-
-RUN apt-get update && apt-get install gnupg wget -y && \
-    wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-    apt-get update && \
-    apt-get install google-chrome-stable -y --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
