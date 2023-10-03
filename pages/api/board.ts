@@ -377,8 +377,8 @@ const processContent = async (htmlContent: string) => {
       const binaryData = base64ToBinary(base64Data);
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
-      $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" class='post-image' />`);
-    } else if (src && src.startsWith('https://fincategory.com')) {
+      $(element).replaceWith(`<img src="${process.env.NEXT_PUBLIC_AVATAR_URL}${changedPath}" alt="Image" class='post-image' />`);
+    } else if (src && src.startsWith(`${process.env.NEXT_PUBLIC_AVATAR_URL}`)) {
       $(element).replaceWith(`<img src="${src}" alt="Image" class='post-image' />`);
     }
   }
