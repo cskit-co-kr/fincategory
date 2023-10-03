@@ -213,7 +213,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         status: req.body.status,
         user: req.body.user,
         extra_01: haveImage === 1 ? 1 : 0,
-        extra_02: haveImage === 1 ? 'https://fincategory.com' + haveImageUrl : '',
+        extra_02: haveImage === 1 ? `${process.env.NEXT_PUBLIC_AVATAR_URL}` + haveImageUrl : '',
       }),
     });
 
