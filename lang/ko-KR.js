@@ -91,6 +91,7 @@ export const koKR = {
     "choose-type": "카테고리를 구분...",
     "channel-type-channel": "채널",
     "channel-type-group": "그룹",
+    "channel-type-group-private": "그룹",
     "send": "보내다",
     "register": "등록",
     "please-username": "* 사용자 이름을 입력하세요",

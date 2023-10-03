@@ -1,6 +1,6 @@
-FROM node:slim
+FROM node:18-alpine
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV NEXT_PUBLIC_CLIENT_API_URL=https://test-fincat.fincategory.com
 ENV NEXT_PUBLIC_AVATAR_URL=https://test-fincat.fincategory.com
 ENV NEXT_PUBLIC_API_URL=https://test-api.fincategory.com
@@ -31,7 +31,16 @@ ENV IS_LOCAL=false
 
 # # Install Google Chrome Stable and fonts
 # # Note: this installs the necessary libs to make the browser work with Puppeteer.
-
+RUN apk add --no-cache \
+      chromium \
+      nss \
+      freetype \
+      harfbuzz \
+      ca-certificates \
+      ttf-freefont \
+      nodejs \
+      yarn
+      
 WORKDIR /app
 
 COPY package.json .

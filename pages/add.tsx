@@ -37,10 +37,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     {
       value: 'public_group',
       label: t["channel-type-group"],
-    },
-    {
-      value: 'private_group',
-      label: t["channel-type-group"],
     }
   ]
 
@@ -85,6 +81,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         category: selectedCategory,
         type: selectedType
       };
+      console.log(text);
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
