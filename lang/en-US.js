@@ -56,6 +56,8 @@ export const enUS = {
     "select-type": "Select Channel Type...",
     "channel": "Channel",
     "group": "Group",
+    "public-group": "Public Group",
+    "private-group": "Private Group",
     "channels-age-from-months": "Channel's age from (months)",
     "engagement-rate-erp": "Engagement Rate (ERP)",
     "subscribers": "Subscribers",

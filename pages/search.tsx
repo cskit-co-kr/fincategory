@@ -107,8 +107,12 @@ const Search = () => {
       label: t['channel'],
     },
     {
-      value: 'group',
-      label: t['group'],
+      value: 'public_group',
+      label: t['public-group'],
+    },
+    {
+      value: 'private_group',
+      label: t['private-group'],
     },
   ];
 
