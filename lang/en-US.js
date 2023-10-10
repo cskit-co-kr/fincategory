@@ -92,7 +92,7 @@ export const enUS = {
     "choose-category": "Choose a category...",
     "choose-type": "Choose a type...",
     "channel-type-channel": "Channel",
-    "channel-type-group": "Group", 
+    "channel-type-group": "Public Group", 
     "channel-type-group-private": "Private Group", 
     "send": "Send",
     "register": "Post",
