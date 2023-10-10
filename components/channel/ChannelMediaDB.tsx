@@ -3,28 +3,39 @@ import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Dialog from '@mui/material/Dialog';
+import moment from "moment";
 
 import { Loader } from 'rsuite';
 
 const Media = ({ channel, post }: any) => {
-  const [images, setImages] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [images, setImages] = useState<any[]>([]);
+  const [videos, setVideos] = useState<any[]>([]);
   const getMediaData = { channel: channel, post: post };
 
   useEffect(() => {
     async function fetchMedia() {
       try {
         if (post.media.includes('photo') || post.media.includes('video')) {
-          await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/media`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(getMediaData),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              setImages(data.backgroundImageUrls);
-              setVideos(data.srcValues);
-            });
+          const media = JSON.parse(post.media);
+          if (media._ === "messageMediaPhoto") {
+            const photo = media.photo;
+            const date1 = moment(photo.date * 1000).format('YYYY-MM-DD_HH-mm-ss');
+            const date2 = moment(photo.date * 1000).format('YYYY/MM/DD');
+
+            const fileName = `photo_${date1}.png`
+            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/500/${channel.channel_id}/${date2}/${fileName}`;
+            setImages([url])
+          } else if (media._ === "messageMediaDocument") {
+            const document = media.document;
+            const foldername = `${channel.channel_id}/${moment(document.date*1000).format('YYYY/MM/DD')}`
+            
+            const fileattr = document.attributes.find((a: any) => a._ === "documentAttributeFilename");
+            const fileName = fileattr ? fileattr.file_name : `${document.date}.png`;
+
+            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1000/${foldername}/${fileName}`;
+            setImages([url])
+
+          }
         }
       } catch (error) {
         console.error(error);

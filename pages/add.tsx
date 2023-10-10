@@ -37,6 +37,10 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     {
       value: 'public_group',
       label: t["channel-type-group"],
+    },
+    {
+      value: 'private_group',
+      label: t["channel-type-group-private"],
     }
   ]
 
@@ -64,7 +68,10 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
 
     let text = '';
     let arr = [];
-    if (input.includes('@')) {
+    if (input.includes('+')) {
+      arr = input.split('+');
+      text = arr.reverse()[0];
+    } else if (input.includes('@')) {
       arr = input.split('@');
       text = arr.reverse()[0];
     } else if (input.includes('/')) {
@@ -74,6 +81,8 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       text = input;
     }
     if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
+      console.log(text);
+      
       const data = {
         title: text.trim(),
         country: selectedCountry,
@@ -82,6 +91,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         type: selectedType
       };
       console.log(text);
+      console.log(JSON.stringify(data));
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
