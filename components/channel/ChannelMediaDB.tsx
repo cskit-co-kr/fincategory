@@ -19,11 +19,10 @@ const Media = ({ channel, post }: any) => {
       try {
         if (post.media.includes('photo') || post.media.includes('video')) {
           const media = JSON.parse(post.media);
-          console.log(media);
+          console.log(post.date);
           if (media._ === "messageMediaPhoto") {
-            const photo = media.photo;
-            const date1 = moment(photo.date * 1000).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
-            const date2 = moment(photo.date * 1000).tz("Asia/Seoul").format('YYYY/MM/DD');
+            const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
+            const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
 
             const fileName = `photo_${date1}.png`
             const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1000/${channel.channel_id}/${date2}/${fileName}`;
@@ -31,9 +30,12 @@ const Media = ({ channel, post }: any) => {
           } else if (media._ === "messageMediaDocument") {
 
             const document = media.document;
-            const foldername = `${channel.channel_id}/${moment(document.date * 1000).tz("Asia/Seoul").format('YYYY/MM/DD')}`
+            const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
+            const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
+
+            const foldername = `${channel.channel_id}/${date2}`
             const fileattr = document.attributes.find((a: any) => a._ === "documentAttributeFilename");
-            const fileName = fileattr ? fileattr.file_name : `${document.date}.png`;
+            const fileName = fileattr ? `${fileattr.file_name}_${date1}` : `${document.date}.png`;
             const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
 
 
