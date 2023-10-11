@@ -3,13 +3,15 @@ import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Dialog from '@mui/material/Dialog';
-import moment from "moment";
+var moment = require('moment-timezone');
+import * as LottiePlayer from "@lottiefiles/lottie-player";
 
 import { Loader } from 'rsuite';
 
 const Media = ({ channel, post }: any) => {
   const [images, setImages] = useState<any[]>([]);
   const [videos, setVideos] = useState<any[]>([]);
+  const [stickers, setStickers] = useState<any[]>([]);
   const getMediaData = { channel: channel, post: post };
 
   useEffect(() => {
@@ -17,24 +19,29 @@ const Media = ({ channel, post }: any) => {
       try {
         if (post.media.includes('photo') || post.media.includes('video')) {
           const media = JSON.parse(post.media);
+          console.log(media);
           if (media._ === "messageMediaPhoto") {
             const photo = media.photo;
-            const date1 = moment(photo.date * 1000).format('YYYY-MM-DD_HH-mm-ss');
-            const date2 = moment(photo.date * 1000).format('YYYY/MM/DD');
+            const date1 = moment(photo.date * 1000).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
+            const date2 = moment(photo.date * 1000).tz("Asia/Seoul").format('YYYY/MM/DD');
 
             const fileName = `photo_${date1}.png`
-            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/500/${channel.channel_id}/${date2}/${fileName}`;
-            setImages([url])
+            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1000/${channel.channel_id}/${date2}/${fileName}`;
+            setImages([url]);
           } else if (media._ === "messageMediaDocument") {
+
             const document = media.document;
-            const foldername = `${channel.channel_id}/${moment(document.date*1000).format('YYYY/MM/DD')}`
-            
+            const foldername = `${channel.channel_id}/${moment(document.date * 1000).tz("Asia/Seoul").format('YYYY/MM/DD')}`
             const fileattr = document.attributes.find((a: any) => a._ === "documentAttributeFilename");
             const fileName = fileattr ? fileattr.file_name : `${document.date}.png`;
+            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
 
-            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1000/${foldername}/${fileName}`;
-            setImages([url])
 
+            if (document.mime_type === "application/x-tgsticker") {
+              setStickers([url]);
+            } else if (document.mime_type === "video/webm") {
+              setVideos([url]);
+            }
           }
         }
       } catch (error) {
@@ -51,7 +58,7 @@ const Media = ({ channel, post }: any) => {
 
   return (
     <>
-      {images?.length !== 0 || videos?.length !== 0 ? (
+      {images?.length !== 0 || videos?.length !== 0 || stickers?.length !== 0 ? (
         <Box>
           <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
             {images?.map((url: any, index: number) => (
@@ -66,12 +73,20 @@ const Media = ({ channel, post }: any) => {
                 />
               </ImageListItem>
             ))}
+            {stickers?.length > 0 &&
+              stickers?.map((url: any, index: number) => (
+                  <tgs-player key={index} autoplay loop mode="normal" src={url} style={{width: 300, height: 300}}>
+                  </tgs-player>
+              ))}
+
             {videos?.length > 0 &&
               videos?.map((url: any, index: number) => (
                 <ImageListItem key={index}>
-                  <video src={url}></video>
+                  <video autoPlay loop src={url}></video>
                 </ImageListItem>
               ))}
+
+
           </ImageList>
           <Dialog open={selectedImage !== undefined} onClose={() => setSelectedImage(undefined)}>
             <img src={selectedImage} alt='' />
