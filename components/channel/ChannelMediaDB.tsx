@@ -47,28 +47,29 @@ const Media = ({ channel, post }: any) => {
       {images?.length !== 0 || videos?.length !== 0 || stickers?.length !== 0 ? (
         <Box>
           <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
-            {images?.map((url: any, index: number) => (
+            {images?.map(({url, w, h}: any, index: number) => (
               <ImageListItem key={index}>
                 <img
-                  src={`${url}?w=248&fit=crop&auto=format`}
-                  srcSet={`${url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${url}`}
+                  srcSet={`${url}`}
                   alt=''
                   loading='lazy'
+                  style={{width: w, height: h}}
                   className='max-h-[360px] aspect-auto !object-contain cursor-pointer'
                   onClick={(event) => handleImageClick(event, url)}
                 />
               </ImageListItem>
             ))}
             {stickers?.length > 0 &&
-              stickers?.map((url: any, index: number) => (
+              stickers?.map(({url, w, h}: any, index: number) => (
                   <tgs-player key={index} autoplay loop mode="normal" src={url} style={{width: 250, height: 250}}>
                   </tgs-player>
               ))}
 
             {videos?.length > 0 &&
-              videos?.map((url: any, index: number) => (
+              videos?.map(({url, w, h}: any, index: number) => (
                 <ImageListItem key={index}>
-                  <video autoPlay loop src={url}></video>
+                  <video autoPlay loop src={url} style={{width: w, height: h}}></video>
                 </ImageListItem>
               ))}
 
