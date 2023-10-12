@@ -26,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const thumb_size = thumb_sizes[thumb_sizes.length-1];
   
       const fileName = `photo_${date1}.png`
-      const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1200/${channel.channel_id}/${date2}/${fileName}`;
+      const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/2000/${channel.channel_id}/${date2}/${fileName}`;
       images.push({url, w: thumb_size.w, h: thumb_size.h});
     } else if (media._ === "messageMediaDocument") {
 
@@ -50,7 +50,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         videos.push({url, w: thumb_size.w, h: thumb_size.h});
 
       } else if (document.mime_type === "image/webp") {
-        const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1200/${foldername}/${fileName}`;
+        const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/2000/${foldername}/${fileName}`;
         images.push({url, w: thumb_size.w, h: thumb_size.h});
       }
     }
