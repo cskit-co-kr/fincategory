@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { getSession } from 'next-auth/react';
 import { Loader } from 'rsuite';
-import CryptoJS from 'crypto-js';
+// import CryptoJS from 'crypto-js';
 
 const secretKey = 'TemuulenGuai';
 
@@ -195,15 +195,15 @@ export async function getServerSideProps(context: any) {
   };
 }
 
-function encryptData(data: any, secretKey: any) {
-  const dataString = JSON.stringify(data);
-  const encryptedData = CryptoJS.AES.encrypt(dataString, secretKey).toString();
-  return encryptedData;
-}
-function decryptData(encryptedData: any, secretKey: any) {
-  const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(CryptoJS.enc.Utf8);
-  const dataObject = JSON.parse(decryptedData);
-  return dataObject;
-}
+// function encryptData(data: any, secretKey: any) {
+//   const dataString = JSON.stringify(data);
+//   const encryptedData = CryptoJS.AES.encrypt(dataString, secretKey).toString();
+//   return encryptedData;
+// }
+// function decryptData(encryptedData: any, secretKey: any) {
+//   const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(CryptoJS.enc.Utf8);
+//   const dataObject = JSON.parse(decryptedData);
+//   return dataObject;
+// }
 
 export default MemberSignIn;

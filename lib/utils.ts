@@ -34,8 +34,7 @@ const toDateformat = (date: string, separator = '') => {
   let month = localDate.getMonth() + 1;
   let day = localDate.getDate();
 
-  const formattedDateTime = `${year}.${`00${month}`.slice(-2)}.${`00${day}`.slice(-2)}
-  }`;
+  const formattedDateTime = `${year}.${`00${month}`.slice(-2)}.${`00${day}`.slice(-2)}`;
   return formattedDateTime;
 };
 
