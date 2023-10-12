@@ -230,8 +230,8 @@ const ChannelDetail = ({}: any) => {
   return (
     <>
       <NextSeo
-        noindex={true}
-        nofollow={true}
+        noindex={false}
+        nofollow={false}
         title={channel?.title}
         description={channel?.description}
         additionalMetaTags={[
