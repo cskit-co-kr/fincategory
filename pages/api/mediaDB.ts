@@ -17,43 +17,51 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const images = [];
     const stickers = [];
     const videos = [];
+    const pdfs = [];
+    const files = [];
+    
 
     if (media._ === "messageMediaPhoto") {
       const photo = media.photo;
       const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
       const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
-      const thumb_sizes = photo.sizes.filter((thumb: any) => thumb._ === "photoSize");
-      const thumb_size = thumb_sizes[thumb_sizes.length-1];
-  
+      const thumb_sizes = photo.sizes?.filter((thumb: any) => thumb._ === "photoSize");
+      const thumb_size = thumb_sizes?.length > 0 && thumb_sizes[thumb_sizes.length-1];
+      const {w, h} = thumb_size;
+
+      const foldername = `${channel.channel_id}/${date2}/${moment.utc(post.date).valueOf()}`;
       const fileName = `photo_${date1}.png`
-      const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/2000/${channel.channel_id}/${date2}/${fileName}`;
-      images.push({url, w: thumb_size.w, h: thumb_size.h});
+      const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/2000/${foldername}/${fileName}`;
+      images.push({url, w, h});
+
     } else if (media._ === "messageMediaDocument") {
 
       const document = media.document;
-      const thumb_sizes = document.thumbs.filter((thumb: any) => thumb._ === "photoSize");
-      const thumb_size = thumb_sizes[thumb_sizes.length-1];
+      const thumb_sizes = document.thumbs?.filter((thumb: any) => thumb._ === "photoSize");
+      const thumb_size = thumb_sizes?.length > 0 && thumb_sizes[thumb_sizes.length-1];
+      const {w, h} = thumb_size;
 
-      const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
       const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
 
-      const foldername = `${channel.channel_id}/${date2}`
+      const foldername = `${channel.channel_id}/${date2}/${moment.utc(post.date).valueOf()}`
       const fileattr = document.attributes.find((a: any) => a._ === "documentAttributeFilename");
-      const fileName = fileattr ? `${fileattr.file_name}_${date1}` : `${document.date}.png`;
+      const fileName = fileattr ? `${fileattr.file_name}` : `${document.date}.png`;
+      const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
 
       if (document.mime_type === "application/x-tgsticker") {
-        const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
-        stickers.push({url, w: thumb_size.w, h: thumb_size.h});
+        stickers.push({url, w, h});
 
       } else if (document.mime_type === "video/webm" || document.mime_type === "video/mp4") {
-        const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
-        videos.push({url, w: thumb_size.w, h: thumb_size.h});
+        videos.push({url, w, h});
 
       } else if (document.mime_type === "image/webp") {
         const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/2000/${foldername}/${fileName}`;
-        images.push({url, w: thumb_size.w, h: thumb_size.h});
+        images.push({url, w, h});
+
+      } else if (document.mime_type === "application/pdf" || document.mime_type === "text/plain"){
+        files.push({url, fileName})
       }
     }
-    res.status(200).json({ images, stickers, videos });
+    res.status(200).json({ images, stickers, videos, files });
   }
 }
