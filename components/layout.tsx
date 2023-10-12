@@ -9,6 +9,7 @@ const Layout = ({ children }: any) => {
     <>
       <Head>
         <link rel='icon' href='/favicon.ico' />
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@0.4.0/dist/tgs-player.js"></script>
       </Head>
       <div className='relative wrapper bg-gray-50'>
         <Link
