@@ -18,33 +18,17 @@ const Media = ({ channel, post }: any) => {
     async function fetchMedia() {
       try {
         if (post.media.includes('photo') || post.media.includes('video')) {
-          const media = JSON.parse(post.media);
-          console.log(post.date);
-          if (media._ === "messageMediaPhoto") {
-            const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
-            const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
-
-            const fileName = `photo_${date1}.png`
-            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/1000/${channel.channel_id}/${date2}/${fileName}`;
-            setImages([url]);
-          } else if (media._ === "messageMediaDocument") {
-
-            const document = media.document;
-            const date1 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD_HH-mm-ss');
-            const date2 = moment.utc(post.date).tz("Asia/Seoul").format('YYYY/MM/DD');
-
-            const foldername = `${channel.channel_id}/${date2}`
-            const fileattr = document.attributes.find((a: any) => a._ === "documentAttributeFilename");
-            const fileName = fileattr ? `${fileattr.file_name}_${date1}` : `${document.date}.png`;
-            const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
-
-
-            if (document.mime_type === "application/x-tgsticker") {
-              setStickers([url]);
-            } else if (document.mime_type === "video/webm") {
-              setVideos([url]);
-            }
-          }
+          await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/mediaDB`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(getMediaData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setImages(data.images);
+              setVideos(data.videos);
+              setStickers(data.stickers);
+            });
         }
       } catch (error) {
         console.error(error);
@@ -77,7 +61,7 @@ const Media = ({ channel, post }: any) => {
             ))}
             {stickers?.length > 0 &&
               stickers?.map((url: any, index: number) => (
-                  <tgs-player key={index} autoplay loop mode="normal" src={url} style={{width: 300, height: 300}}>
+                  <tgs-player key={index} autoplay loop mode="normal" src={url} style={{width: 250, height: 250}}>
                   </tgs-player>
               ))}
 
