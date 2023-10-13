@@ -54,8 +54,8 @@ const Media = ({ channel, post }: any) => {
   return (
     <>
       {images?.length !== 0 || videos?.length !== 0 || stickers?.length !== 0 || files?.length !== 0 || audios?.length !== 0 ? (
-        <Box>
-          <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
+        <Box >
+          <ImageList  variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
             {images?.map(({ url, w, h }: any, index: number) => (
               <ImageListItem key={index}>
                 <img
@@ -69,10 +69,13 @@ const Media = ({ channel, post }: any) => {
                 />
               </ImageListItem>
             ))}
+
             {stickers?.length > 0 &&
               stickers?.map(({ url, w, h }: any, index: number) => (
-                <tgs-player key={index} autoplay loop mode="normal" src={url} style={{ width: 250, height: 250 }}>
-                </tgs-player>
+                <div className='flex flex-col'>
+                  <tgs-player key={index} autoplay loop mode="normal" src={url} style={{ width: 250, height: 250 }}>
+                  </tgs-player>
+                </div>
               ))}
 
             {videos?.length > 0 &&
@@ -96,20 +99,23 @@ const Media = ({ channel, post }: any) => {
               </audio>}
             {files?.length > 0 &&
               files?.map(({ url, fileName, mime_type }: any, index: number) => (
-                <div className='h-full w-full flex flex-col justify-start' >
-                  <div className='flex flex-row justify-start'>
-                    <p className='font-semibold'>{fileName}</p>
-                    <BiSolidDownload onClick={() => download(url, fileName)} size={14} className='m-1 cursor-pointer hover:text-blue-500' color='#ccc' />
+                url === null ? <div>
+                  <p>{`${fileName} is too large.`}</p>
+                </div> :
+                  <div className='h-full w-full flex flex-col justify-start' >
+                    <div className='flex flex-row justify-start'>
+                      <p className='font-semibold'>{fileName}</p>
+                      <BiSolidDownload onClick={() => download(url, fileName)} size={14} className='m-1 cursor-pointer hover:text-blue-500' color='#ccc' />
+                    </div>
+                    {
+                      isInProgress && (
+                        <div>
+                          <label >Downloading progress:</label>
+                          <progress className="progress progress-accent w-56" id="file" value={percentage} max="100" />
+                        </div>
+                      )
+                    }
                   </div>
-                  {
-                    isInProgress && (
-                      <div>
-                        <label >Downloading progress:</label>
-                        <progress className="progress progress-accent w-56" id="file" value={percentage} max="100" />
-                      </div>
-                    )
-                  }
-                </div>
               ))}
           </ImageList>
           <Dialog open={selectedImage !== undefined} onClose={() => setSelectedImage(undefined)}>

@@ -3,14 +3,13 @@ import Footer from './Footer';
 import Header from './Header';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Script from 'next/script';
 
 const Layout = ({ children }: any) => {
   return (
     <>
       <Head>
         <link rel='icon' href='/favicon.ico' />
-        <Script src="https://unpkg.com/@lottiefiles/lottie-player@0.4.0/dist/tgs-player.js"/>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@0.4.0/dist/tgs-player.js"></script>
       </Head>
       <div className='relative wrapper bg-gray-50'>
         <Link
