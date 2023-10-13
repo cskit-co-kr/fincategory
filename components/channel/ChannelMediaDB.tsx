@@ -3,22 +3,21 @@ import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Dialog from '@mui/material/Dialog';
-var moment = require('moment-timezone');
-import * as LottiePlayer from "@lottiefiles/lottie-player";
-import { FaCaretDown, } from 'react-icons/fa';
 import { BiSolidDownload } from 'react-icons/bi';
+import useDownloader from 'react-use-downloader';
 
 import { Loader } from 'rsuite';
-import axios from 'axios';
-import Link from 'next/link';
 
 const Media = ({ channel, post }: any) => {
   const [images, setImages] = useState<any[]>([]);
   const [videos, setVideos] = useState<any[]>([]);
   const [stickers, setStickers] = useState<any[]>([]);
   const [files, setFiles] = useState<any[]>([]);
+  const [audios, setAudios] = useState<any[]>([]);
 
   const getMediaData = { channel: channel, post: post };
+  const { size, elapsed, percentage, download, cancel, error, isInProgress } =
+    useDownloader();
 
   useEffect(() => {
     async function fetchMedia() {
@@ -35,6 +34,8 @@ const Media = ({ channel, post }: any) => {
               setVideos(data.videos);
               setStickers(data.stickers);
               setFiles(data.files);
+              setAudios(data.audios);
+
             });
         }
       } catch (error) {
@@ -52,7 +53,7 @@ const Media = ({ channel, post }: any) => {
 
   return (
     <>
-      {images?.length !== 0 || videos?.length !== 0 || stickers?.length !== 0 || files?.length !== 0 ? (
+      {images?.length !== 0 || videos?.length !== 0 || stickers?.length !== 0 || files?.length !== 0 || audios?.length !== 0 ? (
         <Box>
           <ImageList variant='masonry' cols={images?.length === 1 ? 1 : 2} gap={8}>
             {images?.map(({ url, w, h }: any, index: number) => (
@@ -75,22 +76,41 @@ const Media = ({ channel, post }: any) => {
               ))}
 
             {videos?.length > 0 &&
-              videos?.map(({ url, w, h }: any, index: number) => (
-                <ImageListItem key={index}>
-                  <video autoPlay loop src={url}></video>
-                </ImageListItem>
-              ))}
+              <video width="500" height="300" controls autoPlay loop>
+                {
+                  videos.map(({ url, w, h, mime_type }, i) => (
+                    <source key={i} src={url} type={mime_type}></source >
+                  ))
+                }
 
+              </video>}
+
+            {audios?.length > 0 &&
+              <audio controls>
+                {
+                  audios.map(({ url, w, h, mime_type }, i) => (
+                    <source key={i} src={url} type={mime_type}></source >
+                  ))
+                }
+
+              </audio>}
             {files?.length > 0 &&
-              files?.map(({ url, fileName }: any, index: number) => (
-                <div className='flex flex-row justify-start'>
-                  <p className='font-semibold'>{fileName}</p>
-                  <Link href={url} target='#'>
-                    <BiSolidDownload size={14} className='m-1 cursor-pointer hover:text-blue-500' color='#ccc' />
-                  </Link>
+              files?.map(({ url, fileName, mime_type }: any, index: number) => (
+                <div className='h-full w-full flex flex-col justify-start' >
+                  <div className='flex flex-row justify-start'>
+                    <p className='font-semibold'>{fileName}</p>
+                    <BiSolidDownload onClick={() => download(url, fileName)} size={14} className='m-1 cursor-pointer hover:text-blue-500' color='#ccc' />
+                  </div>
+                  {
+                    isInProgress && (
+                      <div>
+                        <label >Downloading progress:</label>
+                        <progress className="progress progress-accent w-56" id="file" value={percentage} max="100" />
+                      </div>
+                    )
+                  }
                 </div>
               ))}
-
           </ImageList>
           <Dialog open={selectedImage !== undefined} onClose={() => setSelectedImage(undefined)}>
             <img src={selectedImage} alt='' />
