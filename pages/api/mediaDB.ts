@@ -57,8 +57,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const fileName = fileattr ? fileattr.file_name : `${document.date}.png`;
         const url = `${process.env.NEXT_PUBLIC_IMAGE_URL}/static/${foldername}/${fileName}`;
 
-        if(parseInt(document.size) > 10485863){
+        if(parseInt(document.size) < 10485863){
           files.push({ url: null, fileName, mime_type: document.mime_type })
+
         } else if (document.mime_type === "application/x-tgsticker") {
           stickers.push({ url, w, h, mime_type: document.mime_type });
 
