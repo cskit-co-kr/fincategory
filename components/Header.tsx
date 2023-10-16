@@ -17,6 +17,7 @@ import { GroupType, MemberType } from '../typings';
 import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
+import useData from '../hooks/useData';
 
 const Header = () => {
   const router = useRouter();
@@ -39,7 +40,7 @@ const Header = () => {
     if (searchField !== '') {
       if (searchSection === 1) {
         router.push({
-          pathname: 'search',
+          pathname: '/search',
           query: { q: searchField },
         });
       } else if (searchSection === 2) {
@@ -81,36 +82,40 @@ const Header = () => {
     return () => window.removeEventListener('click', handleClick, true);
   }, [searchSectionMenu]);
 
-  const [groups, setGroups] = useState([]);
-  const [memberInfo, setMemberInfo] = useState<MemberType>();
+  // const [groups, setGroups] = useState([]);
+  // const [memberInfo, setMemberInfo] = useState<MemberType>();
 
-  // Get Member Information
-  const getMember = async () => {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    const memberInfo = await responseMember.json();
-    setMemberInfo(memberInfo);
-  };
+  // const getMember = async () => {
+  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   });
+  //   const memberInfo = await responseMember.json();
+  //   setMemberInfo(memberInfo);
+  // };
 
-  useEffect(() => {
-    const getGroups = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-      });
-      const result = await response.json();
-      setGroups(result.groups);
-    };
-    getGroups();
-  }, []);
+  // useEffect(() => {
+  //   const getGroups = async () => {
+  //     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
+  //       method: 'POST',
+  //       headers: { 'content-type': 'application/json' },
+  //     });
+  //     const result = await response.json();
+  //     setGroups(result.groups);
+  //   };
+  //   getGroups();
+  // }, []);
 
-  useEffect(() => {
-    if (session?.user) {
-      getMember();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     getMember();
+  //   }
+  // }, [session]);
+
+  const resultGroup: any = useData(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, 'POST');
+  const groups = resultGroup?.groups;
+
+  const memberInfo: any = useData(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, 'POST');
 
   useEffect(() => {
     const s = router.query.q === undefined ? '' : (router.query.q as string);
@@ -164,7 +169,7 @@ const Header = () => {
                           </span>
                           <button
                             onClick={() => {
-                              signOut();
+                              signOut({ callbackUrl: '/search' });
                               handleClick();
                             }}
                             className='bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs'
@@ -174,7 +179,7 @@ const Header = () => {
                         </div>
                         <div className='gap-1.5 grid'>
                           <div className='flex'>
-                            가입<div className='ml-auto'>{memberInfo?.member.created_at.substring(0, 10).replaceAll('-', '.')}</div>
+                            가입<div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
                           </div>
                           <div className='flex'>
                             <Link href={`/board?member=${session?.user.nickname}&show=posts`} onClick={handleClick}>
@@ -248,7 +253,7 @@ const Header = () => {
                               </div>
                             ) : (
                               group.boards.map((board: any) => (
-                                <Link key={board.id} href={`/board/${board.name}`} className='py-1' onClick={handleClick}>
+                                <Link key={board.id} href={`/board/${board.name}`} className='py-1 font-semibold' onClick={handleClick}>
                                   {board.title}
                                 </Link>
                               ))
@@ -285,6 +290,7 @@ const Header = () => {
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className='outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm'
+                aria-label='Search'
               />
               <button
                 className='text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center'
@@ -318,7 +324,7 @@ const Header = () => {
                   </button>
                 </div>
               )}
-              <button onClick={handleSubmit}>
+              <button onClick={handleSubmit} name='search'>
                 <MagnifyingGlassIcon className='h-5 text-primary mr-1' />
               </button>
             </div>
@@ -349,7 +355,11 @@ const Header = () => {
                         >
                           <UserCircleIcon className='h-4' />내 정보
                         </Link>
-                        <Link href='#' onClick={() => signOut()} className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'>
+                        <Link
+                          href='#'
+                          onClick={() => signOut({ callbackUrl: '/search' })}
+                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                        >
                           <ArrowRightOnRectangleIcon className='h-4' />
                           {t['sign-out']}
                         </Link>
@@ -385,11 +395,6 @@ const Header = () => {
                   onClick={() => router.push('/channel/ranking')}
                 >
                   {t['channel-rankings']}
-                </button>
-              </li>
-              <li>
-                <button className={getPath === '/board/[[...name]]' ? activePath : normalPath} onClick={() => router.push('/board')}>
-                  {t['view-all-articles']}
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-30 flex' appearance='subtle'>

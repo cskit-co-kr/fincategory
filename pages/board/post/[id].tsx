@@ -1,5 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PencilIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
+import { TbPhotoCircle, TbHeartFilled } from 'react-icons/tb';
+import { PiChatCircleTextLight } from 'react-icons/pi';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie, setCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
@@ -191,7 +193,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         setReactionTotal(reactionTotal - 1);
       }
     } else {
-      toastShow('error', 'An error occurred while trying to save your reaction.');
+      toastShow('error', t['error-save-reaction']);
     }
   };
 
@@ -306,7 +308,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     </div>
                     {session?.user && (session?.user.id === post.user.id || session?.user.type === 2) && (
                       <div className='md:flex gap-2 ml-2'>
-                        <ButtonLink url={`/board/write?mode=edit&id=${post.id}`} text={t['edit']} icon={<PencilIcon className='h-3' />} />
+                        <ButtonLink
+                          url={`/board/write?board=${post.board.name}&mode=edit&id=${post.id}`}
+                          text={t['edit']}
+                          icon={<PencilIcon className='h-3' />}
+                        />
                         <button
                           className='flex whitespace-nowrap gap-1 md:gap-[10px] items-center h-[35px] px-5 bg-white border border-[#d9d9d9] rounded-[5px] text-black text-[13px] hover:text-primary'
                           onClick={handleOpen}
@@ -505,17 +511,28 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                               <Link href={`/board/post/${post.id}`} className='break-all md:line-clamp-1'>
                                 {post.title}
                               </Link>
-                              {post?.comment > 0 && <span className='text-[11px] font-semibold'>[{post.comment}]</span>}
+                              {post?.comment > 0 && (
+                                <div className='flex gap-0.5 items-center text-[12px] font-semibold text-blue-500'>
+                                  <PiChatCircleTextLight size={14} />
+                                  {post.comment}
+                                </div>
+                              )}
                             </>
+                          )}
+                          {post.reaction && (
+                            <div className='flex gap-0.5 items-center font-semibold text-red-500 text-[12px]'>
+                              <TbHeartFilled size={14} />
+                              {JSON.parse(post.reaction).length}
+                            </div>
                           )}
                           {post.extra_01 === '1' && (
                             <span>
-                              <PhotoIcon className='hidden md:block h-[14px] text-gray-400' />
+                              <TbPhotoCircle size={16} className='hidden md:block text-green-500' />
                             </span>
                           )}
                           {post.extra_01 === '1' && (
                             <Image
-                              src={post.extra_02}
+                              src={post.extra_02 || '/logo.png'}
                               width='56'
                               height='56'
                               alt='Image'
@@ -558,8 +575,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
 export const getServerSideProps = async (context: any) => {
   const req = context.req;
-  const page = getCookie('page', { req }) as string;
-  const perPage = getCookie('perPage', { req }) as string;
+  const page = (getCookie('page', { req }) as string) || '1';
+  const perPage = (getCookie('perPage', { req }) as string) || '20';
 
   // Get Member Information
   let memberInfo = '';

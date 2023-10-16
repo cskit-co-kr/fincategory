@@ -57,7 +57,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className='hidden lg:block lg:min-w-[310px] text-sm md:text-xs'>
+      <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white'>
             {session?.user ? (
@@ -67,7 +67,10 @@ const Sidebar = () => {
                   <span className='font-semibold'>
                     <Link href='/member/profile'>{session?.user.nickname}</Link>
                   </span>
-                  <button onClick={() => signOut()} className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/search' })}
+                    className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'
+                  >
                     {t['sign-out']}
                   </button>
                 </div>

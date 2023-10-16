@@ -23,6 +23,7 @@ import { Section2_2, Section2_2Skeleton } from '../components/search/Section2_2'
 import { Skeleton } from '@mui/material';
 import HashtagScroll from '../components/HashtagScroll';
 import Section3 from '../components/search/Section3';
+import SearchFilterBar from '../components/search/SearchFilterBar';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -105,6 +106,14 @@ const Search = () => {
       value: 'channel',
       label: t['channel'],
     },
+    {
+      value: 'public_group',
+      label: t['public-group'],
+    },
+    {
+      value: 'private_group',
+      label: t['private-group'],
+    },
   ];
 
   const [searchText, setSearchText] = useState<any>('');
@@ -148,24 +157,24 @@ const Search = () => {
 
   const [isPending, startTransition] = useTransition();
 
-  let data: any = {
-    query: null,
-    withDesc: false,
-    category: [],
-    country: [{ value: 113, label: 'Korea, Republic of' }],
-    language: [{ value: 'ko', label: 'Korean' }],
-    channel_type: null,
-    channel_age: 0,
-    erp: 0,
-    subscribers_from: null,
-    subscribers_to: null,
-    paginate: { limit: 4, offset: 0 },
-    sort: { field: 'created_at', order: 'desc' },
-  };
-
   useEffect(() => {
+    const data: any = {
+      query: null, //searchText === '' ? null : searchText,
+      withDesc: selectDesc,
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: selectedCountry === null ? [] : selectedCountry,
+      language: selectedLanguage === null ? [] : selectedLanguage,
+      channel_type: channelType === null ? [] : channelType,
+      channel_age: channelsAge,
+      erp: channelsERP,
+      subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
+      subscribers_to: subscribersTo === '' ? null : subscribersTo,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
     const newChannels = async () => {
       // Get recently added channels
+      data['sort'] = { field: 'created_at', order: 'desc' };
       data['paginate'] = { limit: 5, offset: 0 };
       const channelsNew = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
@@ -298,7 +307,7 @@ const Search = () => {
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
       language: selectedLanguage === null ? [] : selectedLanguage,
-      channel_type: channelType === '' ? null : channelType,
+      channel_type: channelType === null ? [] : channelType,
       channel_age: channelsAge,
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
@@ -316,9 +325,13 @@ const Search = () => {
     const resultData = await response.json();
     const result = resultData.channel;
 
-    setTotalChannels(resultData.total);
-    result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-    result.length < 45 ? setLoadMore(false) : setLoadMore(true);
+    if (result) {
+      setTotalChannels(resultData.total);
+      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
+      setSearchResult(result);
+      result.length < 45 ? setLoadMore(false) : setLoadMore(true);
+    }
+
     setLoadBar(false);
   };
 
@@ -400,17 +413,21 @@ const Search = () => {
 
   const ref = useRef(null);
 
+  const [channelRankingUrl, setChannelRankingUrl] = useState('?column=increase24h');
   const [text24730, setText24730] = useState(1);
   const change24_7_30 = (x: number) => {
     if (x === 24) {
       setChannels24_7_30(channels24);
       setText24730(1);
+      setChannelRankingUrl('?column=increase24h');
     } else if (x === 7) {
       setChannels24_7_30(channels7d);
       setText24730(2);
+      setChannelRankingUrl('?column=increase7d');
     } else if (x === 30) {
       setChannels24_7_30(channels30d);
       setText24730(3);
+      setChannelRankingUrl('?column=increase30d');
     }
   };
 
@@ -459,7 +476,7 @@ const Search = () => {
                           </button>
                         )}
                       </label>
-                      <label className='text-sm flex gap-2 cursor-pointer'>
+                      <label className='text-xs flex gap-2 cursor-pointer'>
                         <input name='description' checked={selectDesc} onChange={() => setSelectDesc(!selectDesc)} type='checkbox' />
                         {t['search-also-in-description']}
                       </label>
@@ -605,11 +622,13 @@ const Search = () => {
           </div>
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+            <Section3 />
             <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
-              <div className='flex justify-between items-center pt-5 pb-3 px-5 mb-4'>
-                <div className='font-bold flex gap-3'>
+              <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승 채널</div>
+              <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
+                <div className='font-bold flex gap-1 lg:gap-3'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
-                    구독자 상승 채널(24H)
+                    {t['increase-24h']}
                   </button>
                   |
                   <button onClick={() => change24_7_30(7)} className={`${text24730 === 2 && 'text-primary'}`}>
@@ -620,7 +639,7 @@ const Search = () => {
                     {t['increase-30d']}
                   </button>
                 </div>
-                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking`} target='_blank'>
+                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking${channelRankingUrl}`} target='_blank'>
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>
@@ -688,8 +707,6 @@ const Search = () => {
               </div>
             </div>
 
-            <Section3 />
-
             <div
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
@@ -727,39 +744,15 @@ const Search = () => {
                 </div>
               </div>
             </div>
-            {/* {loadBar && (
-              <div className='md:col-span-3 mx-auto'>
-                <Loader />
-              </div>
-            )} */}
+
             {searchResult ? (
-              <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
-                <span className='text-xs'>
-                  {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
-                  {loadBar ? <Loader /> : <b>{totalChannels}</b>}
-                  {t['total-search-results2']}
-                </span>
-                <div className='ml-auto flex items-center'>
-                  <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
-                  <select
-                    onChange={(e) => {
-                      setSelectedSorting(e.target.value);
-                      doFilter(e.target.value);
-                    }}
-                    value={selectedSorting}
-                    className='border rounded-md pl-2 pr-4 py-1'
-                    name='select'
-                  >
-                    <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
-                    <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
-                    <option value='today_desc'>오늘 조회수 순 &darr;</option>
-                    <option value='today_asc'>오늘 조회수 순 &uarr;</option>
-                    <option value='total_desc'>누적 조회수 순 &darr;</option>
-                    <option value='total_asc'>누적 조회수 순 &uarr;</option>
-                    <option value='created_desc'>최근 추가</option>
-                  </select>
-                </div>
-              </div>
+              <SearchFilterBar
+                totalChannels={totalChannels}
+                doFilter={doFilter}
+                setSelectedSorting={setSelectedSorting}
+                selectedSorting={selectedSorting}
+                loadBar={loadBar}
+              />
             ) : (
               <Skeleton
                 variant='rectangular'

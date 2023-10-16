@@ -18,18 +18,18 @@ const Section3 = () => {
 
   const items = [
     {
-      title: '전체글보기',
-      link: '/board',
+      title: '자유게시판',
+      link: '/board/free',
       list: posts1,
     },
     {
-      title: '주식',
-      link: '/board/stock',
+      title: '광고/홍보',
+      link: '/board/advertising',
       list: posts2,
     },
     {
-      title: '가상화폐',
-      link: '/board/coin',
+      title: '공지사항',
+      link: '/board/announcement',
       list: posts3,
     },
   ];
@@ -37,7 +37,7 @@ const Section3 = () => {
   useEffect(() => {
     (async () => {
       let data: any = {
-        board: null,
+        board: 'free',
         paginate: {
           offset: 0,
           limit: 5,
@@ -59,22 +59,22 @@ const Section3 = () => {
       };
       const result = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, data).then((response) => response.data);
       setPosts1(result);
-      data['board'] = 'stock';
+      data['board'] = 'advertising';
       const result2 = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, data).then((response) => response.data);
       setPosts2(result2);
-      data['board'] = 'coin';
+      data['board'] = 'announcement';
       const result3 = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, data).then((response) => response.data);
       setPosts3(result3);
     })();
   }, []);
 
   return (
-    <div className='grid md:grid-cols-3 gap-4'>
+    <div className='grid md:grid-cols-3 gap-4 px-5 lg:px-0 mt-5 lg:mt-0'>
       {items.map((item, index) => (
         <div className='space-y-2.5' key={index}>
           <div className='flex items-center'>
-            <span className='font-bold text-sm'>{item.title}</span>
-            <Link href={item.link} className='ml-auto flex gap-1 items-center text-xs text-primary'>
+            <span className='font-bold text-lg lg:text-base'>{item.title}</span>
+            <Link href={item.link} className='ml-auto flex gap-1 items-center text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
             </Link>

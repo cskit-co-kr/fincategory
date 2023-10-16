@@ -1,4 +1,4 @@
-import 'rsuite/dist/rsuite.min.css';
+import 'rsuite/dist/rsuite-no-reset.min.css';
 import '../styles/globals.css';
 
 import axios from 'axios';
@@ -16,18 +16,18 @@ import { useRouter } from 'next/router';
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
   const env = process.env.NODE_ENV;
-  const setVisit = async () => {
-    if (env !== 'development') {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
-      const data = await res.data;
-      if (data.code === 200) {
-        const today = new Date();
-        setCookie('visit', today.getTime());
-      }
-    }
-  };
 
   useEffect(() => {
+    const setVisit = async () => {
+      if (env !== 'development') {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
+        const data = await res.data;
+        if (data.code === 200) {
+          const today = new Date();
+          setCookie('visit', today.getTime());
+        }
+      }
+    };
     if (!hasCookie('visit')) {
       setVisit();
     }
@@ -37,10 +37,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <>
       <Head>
         <link rel='icon' href='/favicon.ico' />
+        <link rel='apple-touch-icon' href='/logo.png' />
       </Head>
       <DefaultSeo
         title='핀카'
-        titleTemplate='%s | FinCa'
+        titleTemplate='%s | FinCa - 텔레그램 채널정보, 핀카'
         description='가장 큰 한국 텔레그램 채널정보는 핀카 | finca'
         additionalMetaTags={[
           {

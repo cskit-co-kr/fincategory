@@ -17,6 +17,7 @@ import { Pagination } from 'rsuite';
 import GridPostRow from '../components/board/GridPostRow';
 import Link from 'next/link';
 import Tradingview from '../components/Tradingview';
+import Section3 from '../components/search/Section3';
 
 const Home: NextPage = ({
   channels,
@@ -143,7 +144,7 @@ const Home: NextPage = ({
         </div>
       </div>
 
-      <div className='space-y-4 mt-7'>
+      <div className='space-y-4 my-7'>
         <span className='font-bold text-base'>구독자 상승 채널(24H)</span>
         <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
           {channels24h.map((channel: any) => {
@@ -152,32 +153,7 @@ const Home: NextPage = ({
         </div>
       </div>
 
-      <div className='mt-7 grid md:grid-cols-2 gap-4'>
-        <div className='space-y-4'>
-          <div className='flex items-center'>
-            <span className='font-bold text-base'>주식</span>
-            <Link href='/board/stock' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-              {t['see-more']}
-              <ChevronRightIcon className='h-3' />
-            </Link>
-          </div>
-          <div className='flex border border-gray-200 rounded-xl bg-white p-4'>
-            <HomeBoardPostList postList={postList} />
-          </div>
-        </div>
-        <div className='space-y-4'>
-          <div className='flex items-center'>
-            <span className='font-bold text-base'>공지사항</span>
-            <Link href='/board/announcement' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-              {t['see-more']}
-              <ChevronRightIcon className='h-3' />
-            </Link>
-          </div>
-          <div className='flex border border-gray-200 rounded-xl bg-white p-4'>
-            <HomeBoardPostList postList={postList} />
-          </div>
-        </div>
-      </div>
+      <Section3 />
 
       <div className='space-y-4 mt-7'>
         <span className='font-bold text-base'>코인공지</span>

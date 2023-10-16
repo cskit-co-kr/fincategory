@@ -29,15 +29,32 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     };
   });
 
+  const types = [
+    {
+      value: 'channel',
+      label: t["channel-type-channel"],
+    },
+    {
+      value: 'public_group',
+      label: t["channel-type-group"],
+    },
+    {
+      value: 'private_group',
+      label: t["channel-type-group-private"],
+    }
+  ]
+
   const [input, setInput] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>('');
 
   const [errorInput, setErrorInput] = useState<string | null>(null);
   const [errorCountry, setErrorCountry] = useState<string | null>(null);
   const [errorLanguage, setErrorLanguage] = useState<string | null>(null);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<string | null>(null);
 
   const [resultState, setResultState] = useState<string | null>(null);
 
@@ -46,10 +63,15 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
     selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
+    selectedType === '' ? setErrorType(t['please-type']) : setErrorType(null);
+
 
     let text = '';
     let arr = [];
-    if (input.includes('@')) {
+    if (input.includes('+')) {
+      arr = input.split('+');
+      text = arr.reverse()[0];
+    } else if (input.includes('@')) {
       arr = input.split('@');
       text = arr.reverse()[0];
     } else if (input.includes('/')) {
@@ -59,12 +81,17 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       text = input;
     }
     if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
+      console.log(text);
+      
       const data = {
         title: text.trim(),
         country: selectedCountry,
         language: selectedLanguage,
         category: selectedCategory,
+        type: selectedType
       };
+      console.log(text);
+      console.log(JSON.stringify(data));
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -77,6 +104,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         setSelectedCountry('');
         setSelectedLanguage('');
         setSelectedCategory('');
+        setSelectedType('')
       } else {
         setResultState(`"${text}" ${t['channel-add-error']}`);
       }
@@ -106,6 +134,24 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             className='border border-gray-200 rounded-md p-2 outline-none'
           />
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
+          <label>{t['channel-type']}</label>
+          
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className='border border-gray-200 rounded-md p-2 outline-none'
+            name='type'
+          >
+            <option value=''>{t['choose-type']}</option>
+            {types.map((cat: any, index: number) => {
+              return (
+                <option value={cat.value} key={index}>
+                  {cat.label}
+                </option>
+              );
+            })}
+          </select>
+          {errorType !== null ? <div className='text-red-500 -mt-3 italic'>{errorType}</div> : ''}
           <label>{t['country']}</label>
           <select
             value={selectedCountry}
@@ -156,6 +202,9 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             })}
           </select>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
+
+
+
           <button
             onClick={() => handleSubmit()}
             className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'

@@ -143,7 +143,7 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       const result = await response.json();
       setLoading(false);
       if (result.code === 201 && result.message === 'Updated') {
-        router.push('/board');
+        router.push(`/board/${router.query.board === undefined ? '' : router.query.board}`);
       }
     } else {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
@@ -162,7 +162,7 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       const result = await response.json();
       setLoading(false);
       if (result.code === 201 && result.message === 'Inserted') {
-        router.push('/board');
+        router.push(`/board/${router.query.board === undefined ? '' : router.query.board}`);
       }
     }
   };
@@ -285,18 +285,29 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
                   value={selectedBoard}
                 >
                   <option value='0'>게시판을 선택해 주세요.</option>
-                  {groupsList?.groups.map((group: any) => (
-                    <optgroup label={group.name} key={group.id}>
-                      {group.boards.map(
+                  {groupsList?.groups.map((group: any) =>
+                    group.id !== 99 ? (
+                      <optgroup label={group.name} key={group.id}>
+                        {group.boards.map(
+                          (board: any) =>
+                            (board.write_level !== 2 || session?.user.type === 2) && (
+                              <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
+                                {board.title}
+                              </option>
+                            )
+                        )}
+                      </optgroup>
+                    ) : (
+                      group.boards.map(
                         (board: any) =>
                           (board.write_level !== 2 || session?.user.type === 2) && (
                             <option value={board.id} className='block px-2 py-1 text-sm' key={board.id}>
                               {board.title}
                             </option>
                           )
-                      )}
-                    </optgroup>
-                  ))}
+                      )
+                    )
+                  )}
                 </select>
 
                 <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
