@@ -18,7 +18,6 @@ const PostDB = ({ channel, post }: any) => {
   const [error, setError] = useState<boolean>(false);
   const [descHeight, setDescHeight] = useState('h-fit overflow-hidden');
   const postMedia = post.media && JSON.parse(post.media);
-
   const [postDate, setPostDate] = useState('');
   useEffect(() => {
     const d = new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {

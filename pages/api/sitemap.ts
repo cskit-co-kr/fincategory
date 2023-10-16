@@ -59,7 +59,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader('Content-type', 'text/xml');
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-                  <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+                  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
                     <url>
                       <loc>https://finca.co.kr/search</loc>
                       <lastmod>${yesterday}</lastmod>
@@ -68,19 +68,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     </url>
                     <url>
                       <loc>https://finca.co.kr/channel/ranking</loc>
-                      <lastmod>${month}</lastmod>
-                      <changefreq>monthly</changefreq>
+                      <lastmod>${yesterday}</lastmod>
+                      <changefreq>daily</changefreq>
                       <priority>${priority3}</priority>
                     </url>
                     <url>
                       <loc>https://finca.co.kr/add</loc>
-                      <lastmod>${month}</lastmod>
+                      <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
                     </url>
                     <url>
                       <loc>https://finca.co.kr/member/signin</loc>
-                      <lastmod>${month}</lastmod>
+                      <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
                     </url>
@@ -88,8 +88,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return (
         `<url>
                         <loc>https://finca.co.kr/channel/${channel.username}</loc>
-                        <lastmod>${month}</lastmod>
-                        <changefreq>monthly</changefreq>
+                        <lastmod>${yesterday}</lastmod>
+                        <changefreq>daily</changefreq>
                         <priority>${priority3}</priority>
                     </url>`)
     }).join('')}
@@ -98,7 +98,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         `<url>
                         <loc>https://finca.co.kr/board/${board.name}</loc>
                         <lastmod>${month}</lastmod>
-                        <changefreq>monthly</changefreq>
+                        <changefreq>daily</changefreq>
                         <priority>${priority3}</priority>
                     </url>`)
     }).join('')}
