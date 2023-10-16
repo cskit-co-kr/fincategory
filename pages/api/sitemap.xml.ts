@@ -13,8 +13,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function getSitemap() {
-    const yesterday = toDateformat(new Date(new Date().setDate(new Date().getDate() - 1)).toString(), '-');
+    // const yesterday = toDateformat(new Date(new Date().setDate(new Date().getDate() - 1)).toString(), '-');
+  var d = new Date();
+  d.setDate(d.getDate() - 1);
+  const yesterday = d.toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }).split('/').reverse().join('-');
+
     const month = toDateformat(new Date(new Date().setDate(new Date().getDate() - 30)).toString(), '-');
+
 
     const priority8 = 0.8;
     const priority3 = 0.3;
@@ -103,6 +112,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                     </url>`)
     }).join('')}
                   </urlset>`
-    res.end(xml);
+                  res.write(xml);
+    res.end();
   }
 }
