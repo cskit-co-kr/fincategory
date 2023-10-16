@@ -16,7 +16,7 @@ const HomeBoardPostList = ({ postList }: any) => {
           </span>
           <div className='flex items-center'>
             <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-1'>
-              <h1>{post.title}</h1>
+              <h1 className='text-[13px]'>{post.title}</h1>
             </Link>
             {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} />}
             {post?.comment > 0 && (
