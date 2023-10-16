@@ -276,7 +276,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           <div className='md:border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm'>
             <div className='border-b border-gray-200 mb-4 pb-2 flex items-center'>
               <div className='post-header flex flex-1 flex-col'>
-                <div className='title text-xl font-bold mb-[26px] break-all md:break-normal'>{post.title}</div>
+                <div className='title text-[24px] font-normal mb-[26px] break-all md:break-normal'>{post.title}</div>
                 <div className='flex'>
                   <div className='avatar mr-2.5'>
                     <Avatar circle className='bg-gray-200 pt-1.5 text-center'>
@@ -287,7 +287,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>
                       {post.user.nickname} [{post.user.username}]
                     </p>
-                    <p className='m-0 pt-[5px] text-[12px] leading-[14px]'>
+                    <p className='m-0 pt-[5px] text-[13px] leading-[16px] text-[#949494]'>
                       {toDateTimeformat(post.created_at, '.')} 조회 {post.views}
                     </p>
                   </div>
@@ -330,7 +330,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               dangerouslySetInnerHTML={{
                 __html: post.content as string,
               }}
-              className='break-all md:break-words text-base md:text-sm'
+              className='break-all md:break-words text-base leading-[16px]'
             />
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
