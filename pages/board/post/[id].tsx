@@ -280,12 +280,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 <div className='flex'>
                   <div className='avatar mr-2.5'>
                     <Avatar circle className='bg-gray-200 pt-1.5 text-center'>
-                      {post.user.nickname.slice(0, 1)}
+                      {post.user?.nickname.slice(0, 1)}
                     </Avatar>
                   </div>
                   <div className='username flex flex-col'>
                     <p className='m-0 p-0 text-[14px] leading-[16px] font-medium'>
-                      {post.user.nickname} [{post.user.username}]
+                      {post.user?.nickname} [{post.user?.username}]
                     </p>
                     <p className='m-0 pt-[5px] text-[13px] leading-[16px] text-[#949494]'>
                       {toDateTimeformat(post.created_at, '.')} 조회 {post.views}
@@ -306,7 +306,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         </span>
                       </span>
                     </div>
-                    {session?.user && (session?.user.id === post.user.id || session?.user.type === 2) && (
+                    {session?.user && (session?.user.id === post.user?.id || session?.user.type === 2) && (
                       <div className='md:flex gap-2 ml-2'>
                         <ButtonLink
                           url={`/board/write?board=${post.board.name}&mode=edit&id=${post.id}`}
@@ -335,17 +335,17 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>
               <Avatar circle className='bg-gray-200 mr-[10px] leading-none' size='sm'>
-                {post.user.nickname.slice(0, 1)}
+                {post.user?.nickname.slice(0, 1)}
               </Avatar>
               <button
                 onClick={() =>
                   router
-                    .push(`/board?member=${post.user.nickname}&show=posts`)
-                    .then(() => router.push(`/board?member=${post.user.nickname}&show=posts`))
+                    .push(`/board?member=${post.user?.nickname}&show=posts`)
+                    .then(() => router.push(`/board?member=${post.user?.nickname}&show=posts`))
                 }
                 className='flex text-black hover:underline items-center'
               >
-                <span className='mr-[8px]'>{post.user.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
+                <span className='mr-[8px]'>{post.user?.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
               </button>
             </div>
             <div className='comment' ref={commentListRef}>
