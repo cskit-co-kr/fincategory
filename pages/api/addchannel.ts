@@ -20,7 +20,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       approved: false,
     });
     const data = await resp.data;
-    console.log(data);
 
     if (resp.status === 200) {
       res.status(200).json('OK');
