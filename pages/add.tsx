@@ -59,7 +59,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
   const [errorType, setErrorType] = useState<string | null>(null);
 
   const [resultState, setResultState] = useState<string | null>(null);
-  const [checkStatus, setCheckStatus] = useState<string>();
 
   async function handleSubmit() {
 
