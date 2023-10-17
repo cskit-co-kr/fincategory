@@ -24,6 +24,7 @@ import { Skeleton } from '@mui/material';
 import HashtagScroll from '../components/HashtagScroll';
 import Section3 from '../components/search/Section3';
 import SearchFilterBar from '../components/search/SearchFilterBar';
+import Ads from './member/ads';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -706,7 +707,8 @@ const Search = () => {
                 {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
               </div>
             </div>
-
+            shineodoooo
+            <Ads />
             <div
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
@@ -764,7 +766,7 @@ const Search = () => {
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4 bg-white' />;
+                  return <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />;
                 })}
               </div>
             ) : (

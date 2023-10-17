@@ -185,4 +185,6 @@ export const koKR = {
     "increase-24h": "상승(24h)",
     "increase-7d": "상승(7d)",
     "increase-30d": "상승(30d)",
+    /* Group */
+    "Group": "그룹",
 }
