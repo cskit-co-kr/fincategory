@@ -59,17 +59,15 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
   const [errorType, setErrorType] = useState<string | null>(null);
 
   const [resultState, setResultState] = useState<string | null>(null);
-  const [checkStatus, setCheckStatus] = useState<"idle" | "pending" | "correct" | "wrong">("idle");
-
-  const [channelData, setChannelData] = useState({});
+  const [checkStatus, setCheckStatus] = useState<string>();
 
   async function handleSubmit() {
+
     input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
     selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
     selectedType === '' ? setErrorType(t['please-type']) : setErrorType(null);
-
 
     if (!errorInput && !errorCountry && !errorLanguage && !errorCategory && !errorType) {
       let text = extractUsername(input);
@@ -80,13 +78,12 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           country: selectedCountry,
           language: selectedLanguage,
           category: selectedCategory,
-          type: selectedType,
-          approved: false
+          type: selectedType
         };
         const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({data, ...channelData}),
+          body: JSON.stringify(data),
         });
         const result = await response.json();
         if (result === 'OK') {
@@ -122,35 +119,22 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     return text;
   }
 
-  const checkUsername = async () => {
-    if (input !== "") {
-      setCheckStatus("pending")
-      const username = extractUsername(input);
+  const checkUsername = async (e: any) => {
+    if (e.target.value !== "") {
+      const username = extractUsername(e.target.value);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
       const data = await res.data;
-
-      if (data) {
-        if (data.message === "existed") {
-          setErrorInput(t["username-existed"]);
-          setCheckStatus("idle");
-        } else if (data.message === "wrong") {
-          setErrorInput(t["username-wrong"]);
-          setCheckStatus("idle")
-        } else if (data.message === "correct") {
-          setErrorInput(null);
-          setCheckStatus('correct');
-          setChannelData(data.data);
-          setSelectedType(data.data.type)
-        }
+      if (data.existed) {
+        setErrorInput(t["username-existed"]);
       }
-
     }
   }
 
   const onChangeInput = (e: any) => {
     setInput(e.target.value);
-    setCheckStatus("idle")
+    setErrorInput(null);
   }
+
   return (
     <div className='flex flex-col pt-7 bg-gray-50 min-h-screen'>
       <Head>
@@ -168,33 +152,16 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           <label>
             {t['link-to']}
           </label>
-          <label htmlFor="copy-button " className=' flex flex-row border border-gray-200 rounded-md p-2 outline-none w-full'>
-            <input
-              name="copy-button"
-              value={input}
-              onChange={onChangeInput}
-              // onMouseLeave={(e) => onLeaveUsername(e)}
-              type='text'
-              placeholder='@username, t.me/ASRJIfjdk..., t.me/+ABCD12345'
-              className='outline-none w-full'
-            />
+          <input
+            value={input}
+            onChange={onChangeInput}
+            onMouseLeave={(e) => checkUsername(e)}
+            type='text'
+            placeholder='@username, t.me/ASRJIfjdk..., t.me/+ABCD12345'
+            className='border border-gray-200 rounded-md p-2 outline-non'
+          />
 
-            {checkStatus === "idle" &&
-              <button onClick={() => checkUsername()} className='bg-primary px-5 rounded-full text-sm w-fit py-1 self-center text-white active:bg-[#143A66]'>
-                {t["check-username"]}
-              </button>}
-            {checkStatus === "pending" && <SpinnerIcon pulse style={{ fontSize: '1em' }} />}
-            {checkStatus === "correct" &&
-              <Image
-                src={'/tick-mark.png'}
-                width={20}
-                height={20}
-                alt='Image'
-                className='h-5'
-              />
-            }
 
-          </label>
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
 
           <label>{t['channel-type']}</label>
@@ -280,6 +247,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     </div>
   );
 };
+
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
