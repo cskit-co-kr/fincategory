@@ -1,6 +1,4 @@
 
 User-agent: *
 Allow: /
-Disallow: /api
 Disallow: /node_modules
-Sitemap: https://finca.co.kr/api/sitemap
