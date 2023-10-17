@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "config/env/getEnv.js", "pages/sitemap.xml.ts"  ],
+, "config/env/getEnv.js", "pages/api/sitemap.xml.ts"  ],
   "exclude": [
     "node_modules"
   ]
