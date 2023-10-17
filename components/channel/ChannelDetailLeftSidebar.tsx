@@ -183,6 +183,15 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           </a>
           <p className='break-all'>{channel.description}</p>
           <div className='w-full'>
+            <div
+              className={`text-white text-[13px] w-fit rounded-full px-2 py-0.5 ${
+                channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+              }`}
+            >
+              {channel.type === 'channel' ? t['channel'] : t['Group']}
+            </div>
+          </div>
+          <div className='w-full'>
             <div className='text-gray-400'>{t['category']}</div>
             <div className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</div>
           </div>

@@ -183,4 +183,6 @@ export const enUS = {
     "increase-24h": "Increase (24h)",
     "increase-7d": "Increase (7d)",
     "increase-30d": "Increase (30d)",
+    /* Group */
+    "Group": "Group",
 }
