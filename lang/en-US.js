@@ -96,13 +96,18 @@ export const enUS = {
     "channel-type-group-private": "Private Group", 
     "send": "Send",
     "register": "Post",
+    "check-username": "Check",
     "please-username": "* Please input username",
     "please-country": "* Please select a country",
     "please-language": "* Please select a language",
     "please-category": "* Please select a category",
     "please-type": "* Please select a type",
+    "username-existed": "* Username is already registered.",
+    "username-wrong": "* Username is wrong",
+
     "channel-add": " channel is successfully added!",
     "channel-add-error": " channel is not added!",
+
     /* detail */
     "date-registered": "Registered date on Finca",
     "views-per-post": "Views per post",
