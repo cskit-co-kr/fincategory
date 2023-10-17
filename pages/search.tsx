@@ -767,7 +767,7 @@ const Search = () => {
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} background='px-8 md:px-4 bg-white' />;
+                  return <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />;
                 })}
               </div>
             ) : (

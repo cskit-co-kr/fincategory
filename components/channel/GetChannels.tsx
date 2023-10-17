@@ -16,9 +16,10 @@ type Props = {
   bordered?: boolean;
   extra?: number;
   background?: string;
+  showType?: boolean;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background, showType }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -37,7 +38,14 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
       )}
       {/* <div className='absolute bottom-0 right-0 bg-primary/80 px-2 py-[1px] text-[10px] rounded-tl-lg rounded-br-lg text-white'>ad</div> */}
       <Link href={`/channel/${channels.username}`} target='_blank'>
-        <ChannelAvatar id={channels.channel_id} title={channels.title} size='50' shape='rounded-full' />
+        <ChannelAvatar
+          id={channels.channel_id}
+          title={channels.title}
+          type={channels.type}
+          showType={showType}
+          size='50'
+          shape='rounded-full'
+        />
       </Link>
       <div className='space-y-3 w-full'>
         <Link href={`/channel/${channels.username}`} className='hover:no-underline hover:text-black' target='_blank'>
@@ -101,6 +109,7 @@ GetChannels.defaultProps = {
   views: true,
   bordered: true,
   background: 'bg-white',
+  showType: false,
 };
 
 export { GetChannels, GetChannelsSkeleton };
