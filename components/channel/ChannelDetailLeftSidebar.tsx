@@ -173,7 +173,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           />
           <div className='text-xl font-semibold text-center'>{channel.title}</div>
           <a
-            href={`https://t.me/${channel.type !== 'private_group' && '+'}${channel.username}`}
+            href={`https://t.me/${channel.type === 'private_group' ? '+' : ''}${channel.username}`}
             target='_blank'
             className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
                             transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
