@@ -2,7 +2,7 @@ import cheerio from 'cheerio';
 
 function formatDate(date: string) {
   let newDate = new Date(date);
-  const timezoneOffset = -540; //newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
   const localDate: any = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
@@ -26,7 +26,7 @@ function formatDate(date: string) {
 
 const toDateformat = (date: string, separator = '') => {
   let newDate = new Date(date);
-  const timezoneOffset = -540; //newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
   const localDate: any = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
@@ -40,7 +40,7 @@ const toDateformat = (date: string, separator = '') => {
 
 const getToday = (separator = '') => {
   let newDate = new Date();
-  const timezoneOffset = -540; //newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
   const localDate = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
@@ -53,7 +53,7 @@ const getToday = (separator = '') => {
 
 const toDateTimeformat = (date: string, separator = '') => {
   let newDate = new Date(date);
-  const timezoneOffset = -540; //newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
   const localDate = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 

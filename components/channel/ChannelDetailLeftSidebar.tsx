@@ -173,7 +173,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           />
           <div className='text-xl font-semibold text-center'>{channel.title}</div>
           <a
-            href={`https://t.me/${channel.username}`}
+            href={`https://t.me/${channel.type === 'private_group' ? '+' : ''}${channel.username}`}
             target='_blank'
             className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
                             transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
@@ -182,6 +182,15 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             <ArrowTopRightOnSquareIcon className='h-4' />
           </a>
           <p className='break-all'>{channel.description}</p>
+          <div className='w-full'>
+            <div
+              className={`text-white text-[13px] w-fit rounded-full px-2 py-0.5 ${
+                channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+              }`}
+            >
+              {channel.type === 'channel' ? t['channel'] : t['Group']}
+            </div>
+          </div>
           <div className='w-full'>
             <div className='text-gray-400'>{t['category']}</div>
             <div className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</div>

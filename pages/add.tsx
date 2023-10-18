@@ -6,6 +6,8 @@ import { koKR } from '../lang/ko-KR';
 import { useRouter } from 'next/router';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Language } from '../typings';
+import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
+import Image from 'next/image';
 
 type Languages = Array<Language>;
 
@@ -28,46 +30,58 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       label: locale === 'ko' ? obj.ko : obj.en,
     };
   });
-
-  const types = [
-    {
-      value: 'channel',
-      label: t["channel-type-channel"],
-    },
-    {
-      value: 'public_group',
-      label: t["channel-type-group"],
-    },
-    {
-      value: 'private_group',
-      label: t["channel-type-group-private"],
-    }
-  ]
-
   const [input, setInput] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [selectedType, setSelectedType] = useState<string>('');
 
   const [errorInput, setErrorInput] = useState<string | null>(null);
   const [errorCountry, setErrorCountry] = useState<string | null>(null);
   const [errorLanguage, setErrorLanguage] = useState<string | null>(null);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
-  const [errorType, setErrorType] = useState<string | null>(null);
 
   const [resultState, setResultState] = useState<string | null>(null);
 
   async function handleSubmit() {
-    input === '' ? setErrorInput(t['please-username']) : setErrorInput(null);
+
+    input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
     selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
-    selectedType === '' ? setErrorType(t['please-type']) : setErrorType(null);
 
+    if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
+      let text = extractUsername(input);
+      if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
 
-    let text = '';
+        const data = {
+          title: text.trim(),
+          country: selectedCountry,
+          language: selectedLanguage,
+          category: selectedCategory,
+        };
+        const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result === 'OK') {
+          setResultState(`${text} ${t['channel-add']}`);
+          setInput('');
+          setSelectedCountry('');
+          setSelectedLanguage('');
+          setSelectedCategory('');
+        } else {
+          setResultState(`"${text}" ${t['channel-add-error']}`);
+        }
+      }
+    }
+
+  }
+  const extractUsername = (input: any) => {
     let arr = [];
+    let text = '';
+
     if (input.includes('+')) {
       arr = input.split('+');
       text = arr.reverse()[0];
@@ -80,35 +94,23 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     } else {
       text = input;
     }
-    if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
-      console.log(text);
-      
-      const data = {
-        title: text.trim(),
-        country: selectedCountry,
-        language: selectedLanguage,
-        category: selectedCategory,
-        type: selectedType
-      };
-      console.log(text);
-      console.log(JSON.stringify(data));
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (result === 'OK') {
-        setResultState(`${text} ${t['channel-add']}`);
-        setInput('');
-        setSelectedCountry('');
-        setSelectedLanguage('');
-        setSelectedCategory('');
-        setSelectedType('')
-      } else {
-        setResultState(`"${text}" ${t['channel-add-error']}`);
+    return text;
+  }
+
+  const checkUsername = async (e: any) => {
+    if (e.target.value !== "") {
+      const username = extractUsername(e.target.value);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
+      const data = await res.data;
+      if (data.existed) {
+        setErrorInput(t["username-existed"]);
       }
     }
+  }
+
+  const onChangeInput = (e: any) => {
+    setInput(e.target.value);
+    setErrorInput(null);
   }
 
   return (
@@ -125,33 +127,19 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           ) : (
             ''
           )}
-          <label>{t['link-to']}</label>
+          <label>
+            {t['link-to']}
+          </label>
           <input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={onChangeInput}
+            onMouseLeave={(e) => checkUsername(e)}
             type='text'
-            placeholder='@username, t.me/ASRJIfjdk...'
-            className='border border-gray-200 rounded-md p-2 outline-none'
+            placeholder='@username, t.me/ASRJIfjdk..., t.me/+ABCD12345'
+            className='border border-gray-200 rounded-md p-2 outline-non'
           />
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
-          <label>{t['channel-type']}</label>
-          
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className='border border-gray-200 rounded-md p-2 outline-none'
-            name='type'
-          >
-            <option value=''>{t['choose-type']}</option>
-            {types.map((cat: any, index: number) => {
-              return (
-                <option value={cat.value} key={index}>
-                  {cat.label}
-                </option>
-              );
-            })}
-          </select>
-          {errorType !== null ? <div className='text-red-500 -mt-3 italic'>{errorType}</div> : ''}
+
           <label>{t['country']}</label>
           <select
             value={selectedCountry}
@@ -217,6 +205,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     </div>
   );
 };
+
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
