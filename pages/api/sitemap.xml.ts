@@ -13,8 +13,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function getSitemap() {
-    const yesterday = toDateformat(new Date(new Date().setDate(new Date().getDate() - 1)).toString(), '-');
+    // const yesterday = toDateformat(new Date(new Date().setDate(new Date().getDate() - 1)).toString(), '-');
+  var d = new Date();
+  d.setDate(d.getDate() - 1);
+  const yesterday = d.toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+            }).split('/').reverse().join('-');
+
     const month = toDateformat(new Date(new Date().setDate(new Date().getDate() - 30)).toString(), '-');
+
 
     const priority8 = 0.8;
     const priority3 = 0.3;
@@ -55,54 +64,37 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const boardData = await responseBoad.data;
 
-    res.statusCode = 200;
+    // res.statusCode = 200;
     res.setHeader('Content-type', 'text/xml');
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-                  <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+                  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
                     <url>
-                      <loc>https://finca.co.kr/search</loc>
+                      <loc>https://test-fincat.fincategory.com/search</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>daily</changefreq>
                       <priority>${priority8}</priority>
                     </url>
                     <url>
-                      <loc>https://finca.co.kr/channel/ranking</loc>
-                      <lastmod>${month}</lastmod>
+                      <loc>https://test-fincat.fincategory.com/channel/ranking</loc>
+                      <lastmod>${yesterday}</lastmod>
+                      <changefreq>daily</changefreq>
+                      <priority>${priority3}</priority>
+                    </url>
+                    <url>
+                      <loc>https://test-fincat.fincategory.com/add</loc>
+                      <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
                     </url>
                     <url>
-                      <loc>https://finca.co.kr/add</loc>
-                      <lastmod>${month}</lastmod>
+                      <loc>https://test-fincat.fincategory.com/member/signin</loc>
+                      <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
                     </url>
-                    <url>
-                      <loc>https://finca.co.kr/member/signin</loc>
-                      <lastmod>${month}</lastmod>
-                      <changefreq>monthly</changefreq>
-                      <priority>${priority3}</priority>
-                    </url>
-                    ${channelData.channel.map((channel: any) => {
-      return (
-        `<url>
-                        <loc>https://finca.co.kr/channel/${channel.username}</loc>
-                        <lastmod>${month}</lastmod>
-                        <changefreq>monthly</changefreq>
-                        <priority>${priority3}</priority>
-                    </url>`)
-    }).join('')}
-    ${boardData.boards.map((board: any) => {
-      return (
-        `<url>
-                        <loc>https://finca.co.kr/board/${board.name}</loc>
-                        <lastmod>${month}</lastmod>
-                        <changefreq>monthly</changefreq>
-                        <priority>${priority3}</priority>
-                    </url>`)
-    }).join('')}
                   </urlset>`
-    res.end(xml);
+    res.write(xml);
+    res.end();
   }
 }

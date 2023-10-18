@@ -55,6 +55,9 @@ export const enUS = {
     "channel-type": "Channel Type",
     "select-type": "Select Channel Type...",
     "channel": "Channel",
+    "group": "Group",
+    "public-group": "Public Group",
+    "private-group": "Private Group",
     "channels-age-from-months": "Channel's age from (months)",
     "engagement-rate-erp": "Engagement Rate (ERP)",
     "subscribers": "Subscribers",
@@ -87,14 +90,24 @@ export const enUS = {
     "choose-language": "Choose a language...",
     "channel-category": "Channel's category",
     "choose-category": "Choose a category...",
+    "choose-type": "Choose a type...",
+    "channel-type-channel": "Channel",
+    "channel-type-group": "Public Group", 
+    "channel-type-group-private": "Private Group", 
     "send": "Send",
     "register": "Post",
+    "check-username": "Check",
     "please-username": "* Please input username",
     "please-country": "* Please select a country",
     "please-language": "* Please select a language",
     "please-category": "* Please select a category",
+    "please-type": "* Please select a type",
+    "username-existed": "* Username is already registered.",
+    "username-wrong": "* Username is wrong",
+
     "channel-add": " channel is successfully added!",
     "channel-add-error": " channel is not added!",
+
     /* detail */
     "date-registered": "Registered date on Finca",
     "views-per-post": "Views per post",
@@ -166,6 +179,7 @@ export const enUS = {
     "post-url-copied": "Board Post URL copied to clipboard.",
     "search-filter": "Search filter",
     "login-to-comment": "You must be logged in to post a comment.",
+    "error-save-reaction": "An error occurred while trying to save your reaction.",
     /* rating */
     "channel-rankings": "Channel Rankings",
     "rank": "Rank",
@@ -174,4 +188,6 @@ export const enUS = {
     "increase-24h": "Increase (24h)",
     "increase-7d": "Increase (7d)",
     "increase-30d": "Increase (30d)",
+    /* Group */
+    "Group": "Group",
 }

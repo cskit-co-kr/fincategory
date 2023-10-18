@@ -11,11 +11,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   async function addChannel() {
-    const resp = await axios.post('https://api.fincategory.com/client/telegram/addChannel', {
+    const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/addChannel`, {
       title: req.body.title,
       country: req.body.country,
       language: req.body.language,
       category: req.body.category,
+      type: req.body.type,
       approved: false,
     });
     const data = await resp.data;
@@ -23,6 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (resp.status === 200) {
       res.status(200).json('OK');
     } else {
+      console.log(resp);
       res.status(resp.status).json('NO');
     }
   }

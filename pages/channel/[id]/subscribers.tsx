@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
@@ -389,7 +388,6 @@ const subscribers = ({ channel, sub }: any) => {
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 bg-white'>
               <span className='font-semibold text-lg mb-1'>{t['by-days']}</span>
               <div className=''>
-                {/* <SubscriberGrowthTable growthData2={growthData2} /> */}
                 {currentItems.map((item: any, index: number) => (
                   <div className='flex space-between w-full p-2.5 border-t' key={index}>
                     <div className='basis-1/3 text-gray-400'>

@@ -1,7 +1,7 @@
 import { ChatBubbleLeftRightIcon, EyeIcon, LinkIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { toDateTimeformat } from '../../lib/utils';
@@ -16,6 +16,16 @@ const PostWeb = ({ channel, post }: any) => {
 
   const [error, setError] = useState<boolean>(false);
 
+  const [postDate, setPostDate] = useState('');
+  useEffect(() => {
+    const d = new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    setPostDate(d);
+  }, []);
+
   return (
     <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
       <div className='header flex gap-4 border-b border-gray-200 pb-2 w-full'>
@@ -29,13 +39,7 @@ const PostWeb = ({ channel, post }: any) => {
         />
         <div className='flex flex-col gap-0.5'>
           <div className='text-sm font-bold'>{channel.title}</div>
-          <div className='text-xs text-gray-500'>
-            {new Date(post.date).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
-          </div>
+          <div className='text-xs text-gray-500'>{postDate}</div>
         </div>
       </div>
       <div className='content max-w-[640px]'>
@@ -86,15 +90,14 @@ const PostWebSkeleton = () => {
   return (
     <div className='w-full p-[20px] gap-4 border flex flex-col border-gray-200 rounded-md bg-white'>
       <div className='header flex gap-4 border-b border-gray-200 pb-2 w-full'>
-        <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={40} height={40} />
+        <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation='wave' width={40} height={40} />
         <div className='w-full flex-col align-center pt-2 '>
-          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={15} width="30%" />
-          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" height={10} width="50%" />
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation='wave' height={15} width='30%' />
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation='wave' height={10} width='50%' />
         </div>
       </div>
-      <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} className='w-full' animation="wave"  height={400}   />
+      <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} className='w-full' animation='wave' height={400} />
     </div>
-  )
-
-}
-export {PostWeb, PostWebSkeleton};
+  );
+};
+export { PostWeb, PostWebSkeleton };

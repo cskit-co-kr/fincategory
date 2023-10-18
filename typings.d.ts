@@ -115,8 +115,8 @@ export type PostType = {
   views: number;
   comment: number;
   board_id: number;
-  created_at: timestamp;
-  updated_at: timestamp;
+  created_at: any;
+  updated_at: any;
   extra_01: string;
   extra_02: string;
   extra_03: string;

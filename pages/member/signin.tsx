@@ -4,9 +4,12 @@ import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getSession } from 'next-auth/react';
 import { Loader } from 'rsuite';
+// import CryptoJS from 'crypto-js';
+
+const secretKey = 'TemuulenGuai';
 
 const MemberSignIn = () => {
   const router = useRouter();
@@ -20,6 +23,7 @@ const MemberSignIn = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [forgotResultText, setForgotResultText] = useState('');
+  // const [rememberMe, setRememberMe] = useState(false);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -34,6 +38,13 @@ const MemberSignIn = () => {
       setErrorMessage('Invalid email or password');
       setLoading(false);
     } else if (result?.status === 200) {
+      // if (rememberMe === true) {
+      //   localStorage.setItem('_ssa', encryptData(usernameInput, secretKey));
+      //   localStorage.setItem('_ssb', encryptData(passwordInput, secretKey));
+      // } else {
+      //   localStorage.removeItem('_ssa');
+      //   localStorage.removeItem('_ssb');
+      // }
       router.push(result?.url as string);
     }
   };
@@ -55,6 +66,14 @@ const MemberSignIn = () => {
       setForgotResultText(result.message);
     }
   };
+
+  // useEffect(() => {
+  //   if (localStorage.getItem('_ssa') && localStorage.getItem('_ssb')) {
+  //     setUsernameInput(decryptData(localStorage.getItem('_ssa'), secretKey) || '');
+  //     setPasswordInput(decryptData(localStorage.getItem('_ssb'), secretKey) || '');
+  //     setRememberMe(true);
+  //   }
+  // }, []);
 
   return (
     <>
@@ -87,6 +106,10 @@ const MemberSignIn = () => {
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />
                 </div>
+                {/* <div className='py-4 space-x-2 items-center flex'>
+                  <input type='checkbox' id='rememberme' checked={rememberMe} onChange={() => setRememberMe((prev) => !prev)} />
+                  <label htmlFor='rememberme'>로그인 상태 유지</label>
+                </div> */}
                 {errorMessage && <p className='text-xs text-red-600 mt-2'>{errorMessage}</p>}
                 <button
                   className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center'
@@ -171,5 +194,16 @@ export async function getServerSideProps(context: any) {
     props: {},
   };
 }
+
+// function encryptData(data: any, secretKey: any) {
+//   const dataString = JSON.stringify(data);
+//   const encryptedData = CryptoJS.AES.encrypt(dataString, secretKey).toString();
+//   return encryptedData;
+// }
+// function decryptData(encryptedData: any, secretKey: any) {
+//   const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(CryptoJS.enc.Utf8);
+//   const dataObject = JSON.parse(decryptedData);
+//   return dataObject;
+// }
 
 export default MemberSignIn;

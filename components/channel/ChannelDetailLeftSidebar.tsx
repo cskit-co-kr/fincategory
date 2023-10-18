@@ -173,7 +173,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           />
           <div className='text-xl font-semibold text-center'>{channel.title}</div>
           <a
-            href={`https://t.me/${channel.username}`}
+            href={`https://t.me/${channel.type === 'private_group' ? '+' : ''}${channel.username}`}
             target='_blank'
             className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
                             transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
@@ -183,8 +183,17 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           </a>
           <p className='break-all'>{channel.description}</p>
           <div className='w-full'>
-            <span className='text-gray-400'>{t['category']}</span>
-            <span className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</span>
+            <div
+              className={`text-white text-[13px] w-fit rounded-full px-2 py-0.5 ${
+                channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+              }`}
+            >
+              {channel.type === 'channel' ? t['channel'] : t['Group']}
+            </div>
+          </div>
+          <div className='w-full'>
+            <div className='text-gray-400'>{t['category']}</div>
+            <div className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</div>
           </div>
           <div className='w-full'>
             <span className='text-gray-400'>{t['channel-region-and-language']}</span>
@@ -290,8 +299,6 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       </div>
     </div>
   );
-
-
 };
 
 const ChannelDetailLeftSidebarSkeleton = () => {
@@ -299,13 +306,13 @@ const ChannelDetailLeftSidebarSkeleton = () => {
     <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4 min-h-[289px]'>
       <div className='sticky inset-y-4'>
         <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
-          <Skeleton variant="circular" sx={{ bgcolor: 'grey.100' }} animation="wave" width={170} height={170} />
-          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation="wave" width={"70%"} height={40} />
-          <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width={"90%"} height={300} />
+          <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation='wave' width={170} height={170} />
+          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation='wave' width={'70%'} height={40} />
+          <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation='wave' width={'90%'} height={300} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export {ChannelDetailLeftSidebarSkeleton, ChannelDetailLeftSidebar};
+export { ChannelDetailLeftSidebarSkeleton, ChannelDetailLeftSidebar };

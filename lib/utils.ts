@@ -2,9 +2,9 @@ import cheerio from 'cheerio';
 
 function formatDate(date: string) {
   let newDate = new Date(date);
-  const timezoneOffset = newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
-  const localDate: any = newDate; //new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+  const localDate: any = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
   let year = localDate.getFullYear();
   let month = localDate.getMonth() + 1;
@@ -16,7 +16,7 @@ function formatDate(date: string) {
   // const timeDifference: any = currentDate - localDate;
   // const oneDay = 24 * 60 * 60 * 1000;
   // const isWithin24Hours = timeDifference < oneDay;
-  const isWithin24Hours = currentDate.getDate() === day ? true : false;
+  const isWithin24Hours = currentDate.getDate() === day && currentDate.getMonth() + 1 === month ? true : false;
 
   const formattedDateTime = isWithin24Hours
     ? hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0')
@@ -26,22 +26,23 @@ function formatDate(date: string) {
 
 const toDateformat = (date: string, separator = '') => {
   let newDate = new Date(date);
-  const timezoneOffset = newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
-  const localDate = newDate; //new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+  const localDate: any = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
   let year = localDate.getFullYear();
   let month = localDate.getMonth() + 1;
   let day = localDate.getDate();
 
-  return `${year}${separator}${`00${month}`.slice(-2)}${separator}${`00${day}`.slice(-2)}`;
+  const formattedDateTime = `${year}.${`00${month}`.slice(-2)}.${`00${day}`.slice(-2)}`;
+  return formattedDateTime;
 };
 
 const getToday = (separator = '') => {
   let newDate = new Date();
-  const timezoneOffset = newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
-  const localDate = newDate; //new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+  const localDate = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
   let year = localDate.getFullYear();
   let month = localDate.getMonth() + 1;
@@ -52,9 +53,9 @@ const getToday = (separator = '') => {
 
 const toDateTimeformat = (date: string, separator = '') => {
   let newDate = new Date(date);
-  const timezoneOffset = newDate.getTimezoneOffset();
+  const timezoneOffset = 0; //540; //newDate.getTimezoneOffset();
 
-  const localDate = newDate; //new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
+  const localDate = new Date(newDate.getTime() - timezoneOffset * 60 * 1000);
 
   let year = localDate.getFullYear();
   let month = localDate.getMonth() + 1;

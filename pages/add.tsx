@@ -6,6 +6,8 @@ import { koKR } from '../lang/ko-KR';
 import { useRouter } from 'next/router';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Language } from '../typings';
+import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
+import Image from 'next/image';
 
 type Languages = Array<Language>;
 
@@ -28,7 +30,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       label: locale === 'ko' ? obj.ko : obj.en,
     };
   });
-
   const [input, setInput] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
@@ -42,14 +43,49 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
   const [resultState, setResultState] = useState<string | null>(null);
 
   async function handleSubmit() {
-    input === '' ? setErrorInput(t['please-username']) : setErrorInput(null);
+
+    input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
     selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
 
-    let text = '';
+    if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
+      let text = extractUsername(input);
+      if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
+
+        const data = {
+          title: text.trim(),
+          country: selectedCountry,
+          language: selectedLanguage,
+          category: selectedCategory,
+        };
+        const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result === 'OK') {
+          setResultState(`${text} ${t['channel-add']}`);
+          setInput('');
+          setSelectedCountry('');
+          setSelectedLanguage('');
+          setSelectedCategory('');
+        } else {
+          setResultState(`"${text}" ${t['channel-add-error']}`);
+        }
+      }
+    }
+
+  }
+  const extractUsername = (input: any) => {
     let arr = [];
-    if (input.includes('@')) {
+    let text = '';
+
+    if (input.includes('+')) {
+      arr = input.split('+');
+      text = arr.reverse()[0];
+    } else if (input.includes('@')) {
       arr = input.split('@');
       text = arr.reverse()[0];
     } else if (input.includes('/')) {
@@ -58,29 +94,23 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     } else {
       text = input;
     }
-    if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
-      const data = {
-        title: text.trim(),
-        country: selectedCountry,
-        language: selectedLanguage,
-        category: selectedCategory,
-      };
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (result === 'OK') {
-        setResultState(`${text} ${t['channel-add']}`);
-        setInput('');
-        setSelectedCountry('');
-        setSelectedLanguage('');
-        setSelectedCategory('');
-      } else {
-        setResultState(`"${text}" ${t['channel-add-error']}`);
+    return text;
+  }
+
+  const checkUsername = async (e: any) => {
+    if (e.target.value !== "") {
+      const username = extractUsername(e.target.value);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
+      const data = await res.data;
+      if (data.existed) {
+        setErrorInput(t["username-existed"]);
       }
     }
+  }
+
+  const onChangeInput = (e: any) => {
+    setInput(e.target.value);
+    setErrorInput(null);
   }
 
   return (
@@ -97,15 +127,19 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           ) : (
             ''
           )}
-          <label>{t['link-to']}</label>
+          <label>
+            {t['link-to']}
+          </label>
           <input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={onChangeInput}
+            onMouseLeave={(e) => checkUsername(e)}
             type='text'
-            placeholder='@username, t.me/ASRJIfjdk...'
-            className='border border-gray-200 rounded-md p-2 outline-none'
+            placeholder='@username, t.me/ASRJIfjdk..., t.me/+ABCD12345'
+            className='border border-gray-200 rounded-md p-2 outline-non'
           />
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
+
           <label>{t['country']}</label>
           <select
             value={selectedCountry}
@@ -156,6 +190,9 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             })}
           </select>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
+
+
+
           <button
             onClick={() => handleSubmit()}
             className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
@@ -168,6 +205,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     </div>
   );
 };
+
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);

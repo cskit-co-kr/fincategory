@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { colorStyles } from '../../constants';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useMediaQuery } from '@mui/material';
+import ChannelAvatar from '../../components/channel/ChannelAvatar';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -70,10 +71,10 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   });
 
   // Data
-  const doSearch = async () => {
+  const doSearch = async (field: any, order: any) => {
     const sorting = {
-      field: 'extra_02',
-      order: 'desc',
+      field: field,
+      order: order,
       type: 'integer',
     };
     const searchData = {
@@ -109,31 +110,14 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     setData(result);
   };
 
-  // const getSubsHistory = async (getId: any) => {
-  //   const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/subs30`, { username: getId });
-  //   const sub = await responseSub.data;
-  //   const growthData = sub.slice(1).map((val: any, idx: any) => ({
-  //     date: val.name.substring(0, 10),
-  //     count: val.sub,
-  //     diff: val.sub - sub[idx].sub,
-  //   }));
-  //   const oneDay = growthData.slice(growthData.length - 1);
-  //   const sevenDay = growthData.slice(growthData.length - 7).reduce((a: any, b: any) => {
-  //     return a + b.diff;
-  //   }, 0);
-  //   const thirtyDay = growthData.slice(growthData.length - 30).reduce((a: any, b: any) => {
-  //     return a + b.diff;
-  //   }, 0);
-  //   return { inc24h: oneDay[0].diff, inc7d: sevenDay, inc30d: thirtyDay };
-  // };
-
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
     return category ? category.label : '';
   };
 
   // Table
-  const [sortColumn, setSortColumn] = useState('increase24h');
+  const column = router.query.column ? (router.query.column as string) : 'increase24h';
+  const [sortColumn, setSortColumn] = useState(column);
   const [sortType, setSortType] = useState<SortType>('desc');
   const [loading, setLoading] = useState(false);
 
@@ -160,6 +144,16 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
 
   const handleSortColumn = (sortColumn: any, sortType: any) => {
     setLoading(true);
+    setData([]);
+    if (sortColumn === 'increase7d') {
+      doSearch('extra_03', sortType);
+    } else if (sortColumn === 'increase30d') {
+      doSearch('extra_04', sortType);
+    } else if (sortColumn === 'increase24h') {
+      doSearch('extra_02', sortType);
+    } else if (sortColumn === 'subscription') {
+      doSearch('subscription', sortType);
+    }
     setTimeout(() => {
       setLoading(false);
       setSortColumn(sortColumn);
@@ -168,7 +162,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   useEffect(() => {
-    doSearch();
+    doSearch('extra_02', 'desc');
     setOptions(cats);
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
@@ -268,25 +262,15 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
                     <div className='flex gap-2 md:gap-4 items-center'>
                       <div className='relative w-10 min-w-10 max-w-10'>
+                        <ChannelAvatar id={rowData.channel_id} title={rowData.title} size={40} shape='rounded-full min-w-[20px]' />
                         {/* <Image
-                          src={
-                            error
-                              ? '/telegram-icon-96.png'
-                              : `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`
-                          }
-                          alt={'avatar of ' + rowData.title}
-                          width={40}
-                          height={40}
-                          className='object-contain rounded-full z-0'
-                          onError={() => setError(true)}
-                        /> */}
-                        <Image
                           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`}
+                          onError={() => '/telegram-icon-96.png'}
                           alt={rowData.title}
                           width={40}
                           height={40}
                           className='object-contain rounded-full z-0 min-w-[20px]'
-                        />
+                        /> */}
                       </div>
                       <div className='flex flex-col'>
                         <span>{rowData.title}</span>

@@ -43,8 +43,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       body: JSON.stringify({
         mode: 'full',
         sort: {
-          field: null,
-          order: null,
+          field: 'id',
+          order: 'asc',
         },
       }),
     });
@@ -213,7 +213,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         status: req.body.status,
         user: req.body.user,
         extra_01: haveImage === 1 ? 1 : 0,
-        extra_02: haveImage === 1 ? 'https://fincategory.com' + haveImageUrl : '',
+        extra_02: haveImage === 1 ? `${process.env.NEXT_PUBLIC_AVATAR_URL}` + haveImageUrl : '',
       }),
     });
 
@@ -243,7 +243,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         board: req.body.board,
         status: req.body.status,
         category: req.body.category === 0 ? null : req.body.category,
-        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : 0,
+        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : null,
         extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,
       }),
     });
@@ -377,8 +377,8 @@ const processContent = async (htmlContent: string) => {
       const binaryData = base64ToBinary(base64Data);
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
-      $(element).replaceWith(`<img src="https://fincategory.com${changedPath}" alt="Image" class='post-image' />`);
-    } else if (src && src.startsWith('https://fincategory.com')) {
+      $(element).replaceWith(`<img src="${process.env.NEXT_PUBLIC_AVATAR_URL}${changedPath}" alt="Image" class='post-image' />`);
+    } else if (src && src.startsWith(`${process.env.NEXT_PUBLIC_AVATAR_URL}`)) {
       $(element).replaceWith(`<img src="${src}" alt="Image" class='post-image' />`);
     }
   }

@@ -1,7 +1,6 @@
-require('dotenv').config()
 /** @type {import('next').NextConfig} */
 
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 module.exports = {
   reactStrictMode: false,
@@ -10,9 +9,6 @@ module.exports = {
       test: /.svg$/,
       use: ['@svgr/webpack'],
     });
-    config.plugins.push(
-      new webpack.EnvironmentPlugin(process.env)
-    )
     return config;
   },
   i18n: {
@@ -35,7 +31,6 @@ module.exports = {
     ],
   },
   env: {
-    API_GET_CATEGORY: process.env.API_GET_CATEGORY,
     PUBLIC_URL: '/',
   },
   async redirects() {
@@ -47,6 +42,7 @@ module.exports = {
       },
     ];
   },
+  poweredByHeader: false,
   // async headers() {
   //   return [
   //     {
