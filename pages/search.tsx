@@ -708,8 +708,6 @@ const Search = () => {
                 {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
               </div>
             </div>
-            <Ads />
-            <FincoinPurchase />
             <div
               className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
