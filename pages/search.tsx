@@ -297,7 +297,7 @@ const Search = () => {
   useEffect(() => {
     setLoadMoreText(t['load-more']);
     setSearchResultText(t['empty-search-text']);
-  }, [locale]); 
+  }, [locale]);
 
   const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);

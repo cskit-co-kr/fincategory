@@ -16,6 +16,8 @@ const Section1 = ({ channels24h, extra }: any) => {
               bordered={false}
               tag={false}
               background='bg-gray-50'
+              showType
+              typeStyle='-mt-1 absolute z-10 left-1.5'
             />
           );
         })}
