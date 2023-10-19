@@ -17,9 +17,10 @@ type Props = {
   extra?: number;
   background?: string;
   showType?: boolean;
+  typeStyle?: string;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background, showType }) => {
+const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background, showType, typeStyle }) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -43,6 +44,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
           title={channels.title}
           type={channels.type}
           showType={showType}
+          typeStyle={typeStyle}
           size='50'
           shape='rounded-full'
         />

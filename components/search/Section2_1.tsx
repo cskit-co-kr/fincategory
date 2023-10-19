@@ -4,9 +4,13 @@ import Link from 'next/link';
 import ChannelAvatar from '../channel/ChannelAvatar';
 import { Skeleton } from '@mui/material';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { enUS } from '../../lang/en-US';
+import { koKR } from '../../lang/ko-KR';
 
 const Section2_1 = ({ channels }: any) => {
+  const router = useRouter();
+  const { locale } = router;
+  const t = locale === 'ko' ? koKR : enUS;
   return (
     <div>
       {channels?.map((channel: Channel, index: number) => {
@@ -22,6 +26,13 @@ const Section2_1 = ({ channels }: any) => {
               <div className='flex items-center gap-2'>
                 <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
                 <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                <div
+                  className={`text-[11px] px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
+                    channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                  }`}
+                >
+                  {channel.type === 'channel' ? t['channel'] : t['Group']}
+                </div>
               </div>
               <div className='text-gray-500 text-[12px] font-bold min-w-[100px]'>
                 오늘{channel.today && channel.today}/누적{channel.total && channel.total}
@@ -36,7 +47,7 @@ const Section2_1 = ({ channels }: any) => {
 
 const Section2_1Skeleton = () => {
   return (
-    <div >
+    <div>
       {Array(5)
         .fill(1)
         .map((val, index) => {
