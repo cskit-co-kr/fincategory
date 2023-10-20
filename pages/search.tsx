@@ -625,7 +625,7 @@ const Search = () => {
 
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <Section3 />
-            <div className='bg-white rounded-xl border border-gray-200 m-4 md:m-0 min-h-[263px]'>
+            <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
               <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승 채널</div>
               <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
                 <div className='font-bold flex gap-1 lg:gap-3'>
@@ -650,7 +650,7 @@ const Search = () => {
             </div>
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
-              <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
                 <div className='flex flex-row justify-between items-center t-5 pb-1 px-5'>
                   <div className='flex'>
                     <div
@@ -688,7 +688,7 @@ const Search = () => {
                 {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
               </div>
 
-              <div className='bg-white border border-gray-200 rounded-xl mx-4 md:mx-0'>
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
                   <div className='font-bold'>최근 추가 채널</div>
                   <button
