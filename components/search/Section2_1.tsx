@@ -34,7 +34,7 @@ const Section2_1 = ({ channels }: any) => {
                   {channel.type === 'channel' ? t['channel'] : t['Group']}
                 </div>
               </div>
-              <div className='text-gray-500 text-[12px] font-bold min-w-[100px]'>
+              <div className='text-gray-500 text-[12px] font-bold min-w-[110px] text-right'>
                 오늘{channel.today && channel.today}/누적{channel.total && channel.total}
               </div>
             </div>

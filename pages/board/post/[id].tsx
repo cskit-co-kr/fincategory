@@ -330,7 +330,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               dangerouslySetInnerHTML={{
                 __html: post.content as string,
               }}
-              className='break-all md:break-words text-base leading-[16px]'
+              className='break-all md:break-words text-base leading-[23px] board-content'
             />
             <LinkPreview url={getHrefValue(post.content as string)} />
             <div className='flex items-center mt-14 mb-[30px]'>

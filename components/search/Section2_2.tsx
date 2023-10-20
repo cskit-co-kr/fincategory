@@ -35,7 +35,7 @@ const Section2_2 = ({ channelsNew }: any) => {
                   {channel.type === 'channel' ? t['channel'] : t['Group']}
                 </div>
               </div>
-              <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center min-w-[100px]'>
+              <div className='text-[12px] text-gray-500 font-bold flex gap-0.5 items-center min-w-[110px] justify-end'>
                 <LiaUserSolid size={16} />
                 {t['subscribers']} {channel.subscription?.toLocaleString()}
               </div>
