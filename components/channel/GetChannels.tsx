@@ -112,6 +112,7 @@ GetChannels.defaultProps = {
   bordered: true,
   background: 'bg-white',
   showType: false,
+  typeStyle: 'mt-3',
 };
 
 export { GetChannels, GetChannelsSkeleton };

@@ -23,7 +23,7 @@ const ChannelAvatar = ({ id, title, size, shape, type, showType, typeStyle }: an
       />
       {showType && (
         <div
-          className={`mt-3 text-[11px] mx-auto px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${typeStyle} ${
+          className={`text-[11px] mx-auto px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${typeStyle} ${
             showType === true ? (type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]') : ''
           }`}
         >
