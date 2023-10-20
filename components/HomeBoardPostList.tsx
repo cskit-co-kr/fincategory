@@ -8,15 +8,15 @@ import { PiChatCircleTextLight } from 'react-icons/pi';
 
 const HomeBoardPostList = ({ postList }: any) => {
   return (
-    <ul className='space-y-2'>
+    <ul className='space-y-2 w-full'>
       {postList?.posts?.map((post: PostType) => (
-        <li className='flex gap-2' key={post.id}>
-          <span className='text-gray-400 shrink-0'>
+        <li className='flex gap-2 border-b md:border-b-0 border-gray-200 pb-2 md:pb-0' key={post.id}>
+          <span className='text-gray-400 shrink-0 text-base md:text-[13px]'>
             &#9642; {formatDate(post.created_at).length < 6 ? formatDate(post.created_at) : formatDate(post.created_at).slice(-5)}
           </span>
           <div className='flex items-center'>
             <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-1'>
-              <h1 className='text-[13px]'>{post.title}</h1>
+              <h1 className='text-base md:text-[13px]'>{post.title}</h1>
             </Link>
             {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} />}
             {post?.comment > 0 && (

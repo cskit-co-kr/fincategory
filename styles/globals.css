@@ -57,6 +57,9 @@
   .profile-card {
     @apply white-box relative justify-center grid pt-4 px-4 text-center;
   }
+  .board-content p {
+    @apply leading-[25.6px];
+  }
 }
 
 .rs-picker-select-menu-item {

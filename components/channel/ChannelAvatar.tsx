@@ -4,7 +4,7 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
 
-const ChannelAvatar = ({ id, title, size, shape, type, showType }: any) => {
+const ChannelAvatar = ({ id, title, size, shape, type, showType, typeStyle }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -23,7 +23,7 @@ const ChannelAvatar = ({ id, title, size, shape, type, showType }: any) => {
       />
       {showType && (
         <div
-          className={`mt-3 text-[11px] mx-auto px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
+          className={`text-[11px] mx-auto px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${typeStyle} ${
             showType === true ? (type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]') : ''
           }`}
         >
