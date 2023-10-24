@@ -43,7 +43,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
   const [resultState, setResultState] = useState<string | null>(null);
 
   async function handleSubmit() {
-
     input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
     selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
     selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
@@ -52,7 +51,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
     if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
       let text = extractUsername(input);
       if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
-
         const data = {
           title: text.trim(),
           country: selectedCountry,
@@ -76,7 +74,6 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
         }
       }
     }
-
   }
   const extractUsername = (input: any) => {
     let arr = [];
@@ -95,23 +92,23 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
       text = input;
     }
     return text;
-  }
+  };
 
   const checkUsername = async (e: any) => {
-    if (e.target.value !== "") {
+    if (e.target.value !== '') {
       const username = extractUsername(e.target.value);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
       const data = await res.data;
       if (data.existed) {
-        setErrorInput(t["username-existed"]);
+        setErrorInput(t['username-existed']);
       }
     }
-  }
+  };
 
   const onChangeInput = (e: any) => {
     setInput(e.target.value);
     setErrorInput(null);
-  }
+  };
 
   return (
     <div className='flex flex-col pt-7 bg-gray-50 min-h-screen'>
@@ -127,9 +124,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           ) : (
             ''
           )}
-          <label>
-            {t['link-to']}
-          </label>
+          <label>{t['link-to']}</label>
           <input
             value={input}
             onChange={onChangeInput}
@@ -156,7 +151,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             })}
           </select>
           {errorCountry !== null ? <div className='text-red-500 -mt-3 italic'>{errorCountry}</div> : ''}
-          <label>{t['channel-language']}</label>
+          <label>{t['contents-language']}</label>
           <select
             value={selectedLanguage}
             onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -173,7 +168,7 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             })}
           </select>
           {errorLanguage !== null ? <div className='text-red-500 -mt-3 italic'>{errorLanguage}</div> : ''}
-          <label>{t['channel-category']}</label>
+          <label>{t['category']}</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -191,21 +186,18 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
           </select>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
 
-
-
           <button
             onClick={() => handleSubmit()}
             className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
           >
-            {t['add-channel']}
+            {t['register']}
           </button>
         </div>
-        <div className='mx-auto mt-8 text-[#3687E2] font-[500]'>* 채널을 추가하면 24시간~48시간 이내 관리자의 승인 후 채널이 등록됩니다.</div>
+        <div className='mx-auto mt-8 text-[#3687E2] font-[500]'>* 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.</div>
       </div>
     </div>
   );
 };
-
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);

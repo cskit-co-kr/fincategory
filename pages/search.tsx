@@ -510,7 +510,7 @@ const Search = () => {
                         />
                       </label>
                       <label className='flex flex-col gap-2'>
-                        {t['channel-language']}
+                        {t['contents-language']}
                         <Select
                           value={{ value: 'ko', label: t['Korean'] }}
                           instanceId={'language'}
@@ -581,7 +581,7 @@ const Search = () => {
                     </div>
                     <div className='flex flex-col gap-3 mt-4 border border-gray-200 rounded-xl pt-3 pb-5 px-3 bg-white'>
                       <label className='flex flex-col gap-2'>
-                        {t['subscribers']}
+                        {t['subscribers/members']}
                         <div className='flex gap-2'>
                           <input
                             name='subscribersFrom'
@@ -614,7 +614,7 @@ const Search = () => {
                         }}
                         className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
                       >
-                        {t['search']}
+                        {t['search0']}
                       </button>
                     </div>
                   </div>
@@ -626,7 +626,7 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
-              <div className='pt-5 px-5 font-bold text-lg lg:text-base'>구독자 상승 채널</div>
+              <div className='pt-5 px-5 font-bold text-base'>유저 상승 상위</div>
               <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
                 <div className='font-bold flex gap-1 lg:gap-3'>
                   <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
@@ -652,18 +652,18 @@ const Search = () => {
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
                 <div className='flex flex-row justify-between items-center t-5 pb-1 px-5'>
-                  <div className='flex'>
+                  <div className='font-bold text-base flex'>
                     <div
-                      className={`font-bold pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`}
+                      className={`pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`}
                       onClick={() => {
                         switchTodayTotalSortType(1);
                       }}
                     >
                       (오늘)조회수
                     </div>
-                    <div className='font-bold pt-5 pb-1 '>{'|'}</div>
+                    <div className='pt-5 pb-1 '>{'|'}</div>
                     <div
-                      className={`font-bold pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`}
+                      className={`pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`}
                       onClick={() => {
                         switchTodayTotalSortType(2);
                       }}
@@ -690,7 +690,7 @@ const Search = () => {
 
               <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
                 <div className='flex justify-between items-center pt-5 pb-1 px-5'>
-                  <div className='font-bold'>최근 추가 채널</div>
+                  <div className='font-bold text-base'>{t['recently-added']}</div>
                   <button
                     className='flex gap-1 text-primary items-center'
                     onClick={() => {
