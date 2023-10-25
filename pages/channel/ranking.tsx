@@ -356,11 +356,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                 }
               </Cell>
             </Column>
-
-            <Column align='center'>
-              <HeaderCell>{t['category']}</HeaderCell>
-              <Cell dataKey='category' />
-            </Column>
           </Table>
         </div>
       </div>
