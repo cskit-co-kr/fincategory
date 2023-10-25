@@ -59,7 +59,7 @@ export const koKR = {
     "channel/group": "채널/그룹",
     "public-group": "공개 그룹",
     "private-group": "비공개 그룹",
-    "channels-age-from-months": "채널 생성 (월)",
+    "channels-age-from-months": "생성 (월)",
     "engagement-rate-erp": "참여율 (ERP)",
     "subscribers": "구독자",
     "subscribers/members": "구독자/참여자",
@@ -192,4 +192,7 @@ export const koKR = {
     "increase-30d": "상승(30d)",
     /* Group */
     "Group": "그룹",
+    "All": "전체",
+    "Public Group": "공개 그룹",
+    "Private Group": "비공개 그룹",
 }

@@ -41,8 +41,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       </Head>
       <DefaultSeo
         title='핀카'
-        titleTemplate='%s | FinCa - 텔레그램 채널정보, 핀카'
-        description='가장 큰 한국 텔레그램 채널정보는 핀카 | finca'
+        titleTemplate='%s | FinCa - 텔레그램 채널/그룹 정보, 핀카'
+        description='가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca'
         additionalMetaTags={[
           {
             name: 'author',
@@ -71,11 +71,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             property: 'og:title',
-            content: 'FinCa | 텔레그램 채널정보, 핀카',
+            content: 'FinCa | 텔레그램 채널/그룹 정보, 핀카',
           },
           {
             property: 'og:description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
+            content: '가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca',
           },
           {
             property: 'og:keywords',
@@ -104,11 +104,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             name: 'twitter:title',
-            content: 'FinCa | 텔레그램 채널정보, 핀카',
+            content: 'FinCa | 텔레그램 채널/그룹 정보, 핀카',
           },
           {
             name: 'twitter:description',
-            content: '가장 큰 한국 텔레그램 채널정보는 핀카 | finca',
+            content: '가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca',
           },
           {
             name: 'twitter:keywords',

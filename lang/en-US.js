@@ -60,7 +60,7 @@ export const enUS = {
     "group": "Group",
     "public-group": "Public Group",
     "private-group": "Private Group",
-    "channels-age-from-months": "Channel's age from (months)",
+    "channels-age-from-months": "Age from (months)",
     "engagement-rate-erp": "Engagement Rate (ERP)",
     "subscribers": "Subscribers",
     "subscribers/members": "Subscribers/Members",
@@ -195,4 +195,7 @@ export const enUS = {
     "increase-30d": "Increase (30d)",
     /* Group */
     "Group": "Group",
+    "All": "All",
+    "Public Group": "Public Group",
+    "Private Group": "Private Group",
 }

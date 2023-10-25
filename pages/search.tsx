@@ -105,6 +105,10 @@ const Search = () => {
 
   const optionsChannelTypes = [
     {
+      value: 'all',
+      label: t['All'],
+    },
+    {
       value: 'channel',
       label: t['channel'],
     },
@@ -123,7 +127,7 @@ const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<any | null>([{ value: 113, label: 'Korea, Republic of' }]);
   const [selectedLanguage, setSelectedLanguage] = useState<any | null>([{ value: 'ko', label: 'Korean' }]);
-  const [channelType, setChannelType] = useState<any | null>(null);
+  const [channelType, setChannelType] = useState<any | null>([{ value: 'all', label: t['All'] }]);
   const [channelsAge, setChannelsAge] = useState<number>(0);
   const [channelsERP, setChannelsERP] = useState<number>(0);
   const [subscribersFrom, setSubscribersFrom] = useState<any | null>('');
@@ -166,7 +170,7 @@ const Search = () => {
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
       language: selectedLanguage === null ? [] : selectedLanguage,
-      channel_type: channelType === null ? [] : channelType,
+      channel_type: channelType[0].value === 'all' ? [] : channelType,
       channel_age: channelsAge,
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
@@ -178,6 +182,7 @@ const Search = () => {
       // Get recently added channels
       data['sort'] = { field: 'created_at', order: 'desc' };
       data['paginate'] = { limit: 5, offset: 0 };
+      data['channel_type'] = null;
       const channelsNew = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
@@ -188,6 +193,7 @@ const Search = () => {
       // Get most viewed channels today
       data['paginate'] = { limit: 5, offset: 0 };
       data['sort'] = { field: 'today', order: 'desc' };
+      data['channel_type'] = null;
       const channelsToday = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
@@ -200,6 +206,7 @@ const Search = () => {
       // Get most increased subscriptions in 24h
       data['paginate'] = { limit: 6, offset: 0 };
       data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
+      data['channel_type'] = null;
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
         .then((response) => response.data.channel);
@@ -309,7 +316,7 @@ const Search = () => {
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
       language: selectedLanguage === null ? [] : selectedLanguage,
-      channel_type: channelType === null ? [] : channelType,
+      channel_type: channelType[0].value === 'all' ? [] : channelType,
       channel_age: channelsAge,
       erp: channelsERP,
       subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
@@ -528,6 +535,7 @@ const Search = () => {
                         <Select
                           instanceId={'type'}
                           defaultValue={channelType}
+                          value={channelType}
                           onChange={setChannelType}
                           name='type'
                           styles={colorStyles}
@@ -753,6 +761,10 @@ const Search = () => {
                 setSelectedSorting={setSelectedSorting}
                 selectedSorting={selectedSorting}
                 loadBar={loadBar}
+                channelType={channelType}
+                setChannelType={setChannelType}
+                handleClick={handleClick}
+                doSearch={doSearch}
               />
             ) : (
               <Skeleton
