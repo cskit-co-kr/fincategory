@@ -62,7 +62,6 @@ const SearchFilterBar = ({
     setChannelType((state: any) => {
       return state;
     });
-    handleClick();
   };
   useEffect(() => {
     doSearch((router.query.q as string) || '');
@@ -73,7 +72,7 @@ const SearchFilterBar = ({
       <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
         <div className='flex gap-2 items-center'>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-4 py-2 gap-1 ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'all', label: t['All'] }])}
@@ -81,7 +80,7 @@ const SearchFilterBar = ({
             {t['All']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-4 py-2 gap-1 ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'channel', label: t['channel'] }])}
@@ -90,7 +89,7 @@ const SearchFilterBar = ({
             {t['channel']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-4 py-2 gap-1 ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'public_group', label: t['public-group'] }])}
@@ -99,7 +98,7 @@ const SearchFilterBar = ({
             {t['Public Group']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-4 py-2 gap-1 ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === 'private_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'private_group', label: t['private-group'] }])}
@@ -108,7 +107,7 @@ const SearchFilterBar = ({
             {t['Private Group']}
           </button>
         </div>
-        <div className='ml-auto flex items-center'>
+        <div className='ml-auto hidden md:flex items-center'>
           <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
           <SelectPicker
             value={selectedSorting}
@@ -120,30 +119,28 @@ const SearchFilterBar = ({
             size='sm'
             placement='bottomEnd'
           />
-          {/* <select
-          onChange={(e) => {
-            setSelectedSorting(e.target.value);
-            doFilter(e.target.value);
-          }}
-          value={selectedSorting}
-          className='border rounded-md pl-2 pr-4 py-1'
-          name='select'
-        >
-          <option value='subscription_desc'>{t['subscribers-desc']} &darr;</option>
-          <option value='subscription_asc'>{t['subscribers-asc']} &uarr;</option>
-          <option value='today_desc'>오늘 조회수 순 &darr;</option>
-          <option value='today_asc'>오늘 조회수 순 &uarr;</option>
-          <option value='total_desc'>누적 조회수 순 &darr;</option>
-          <option value='total_asc'>누적 조회수 순 &uarr;</option>
-          <option value='created_desc'>최근 추가</option>
-        </select> */}
         </div>
       </div>
-      <span className='text-sm'>
-        {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
-        {loadBar ? <Loader /> : <b>{totalChannels}</b>}
-        {t['total-search-results2']}
-      </span>
+      <div className='flex items-center p-4 md:p-0'>
+        <span className='text-sm'>
+          {`${t['total-search-results1']} ${router.query.q ? '"' + router.query.q + '"' : ''}: `}
+          {loadBar ? <Loader /> : <b>{totalChannels}</b>}
+          {t['total-search-results2']}
+        </span>
+        <div className='ml-auto flex md:hidden items-center'>
+          <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
+          <SelectPicker
+            value={selectedSorting}
+            onChange={handleChange}
+            name='sorting'
+            data={data}
+            cleanable={false}
+            searchable={false}
+            size='sm'
+            placement='bottomEnd'
+          />
+        </div>
+      </div>
     </>
   );
 };
