@@ -57,6 +57,7 @@ const QuillEditor = ({ value, onChange }: any) => {
           onChange={onChange}
           modules={modules}
           formats={formats}
+          children={<div></div>}
         />
       )}
     </>
