@@ -378,7 +378,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
             <div className='ml-auto mt-2'>
-              <button className='bg-primary text-white py-2 px-5 md:m-0 mr-1 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
+              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
                 {t['write']}
               </button>
             </div>
