@@ -5,7 +5,7 @@ import { Skeleton } from '@mui/material';
 const Section1 = ({ channels24h, extra }: any) => {
   return (
     <div>
-      <div className='grid md:grid-cols-3 gap-4 px-4 pb-4'>
+      <div className='grid md:grid-cols-3 gap-2 md:gap-4 px-0 md:px-4 pb-4'>
         {channels24h?.map((channel: any) => {
           return (
             <GetChannels
@@ -15,7 +15,9 @@ const Section1 = ({ channels24h, extra }: any) => {
               key={channel.id}
               bordered={false}
               tag={false}
-              background='bg-gray-50'
+              background='bg-gray-50 px-4 py-1'
+              showType
+              typeStyle='-mt-1 absolute z-10 left-1.5'
             />
           );
         })}
