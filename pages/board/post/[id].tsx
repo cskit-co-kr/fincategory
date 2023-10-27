@@ -27,6 +27,7 @@ import 'react-quill/dist/quill.snow.css';
 import LinkPreview from '../../../components/board/LinkPreview';
 import BoardComment from '../../../components/board/comment';
 
+export type HTMLElementCustom  = HTMLElement & {showModal: () => {}}
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
@@ -59,12 +60,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
+  const { data: session } = useSession();
+
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
   const toaster = useToaster();
-
-  const { data: session } = useSession();
 
   const commentListRef = useRef<HTMLDivElement | null>(null);
   const commentWriteRef = useRef<HTMLDivElement | null>(null);
@@ -230,6 +231,16 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     setPostList(postList);
     setIsLoading(false);
   };
+
+  const onChangeComment = (e: any) => {
+    if (session?.user) {
+      setComment(e.currentTarget.value);
+    } else {
+      const element: HTMLElementCustom | null =  document.getElementById('my_modal_1') as HTMLElementCustom;
+      element?.showModal();
+    }
+
+  }
 
   useEffect(() => {
     setClickCheck((prev) => !prev);
@@ -426,9 +437,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                       </li>
                     ))}
                     <li
-                      className={`${
-                        commentLoading ? 'flex' : 'hidden'
-                      } bg-white opacity-80 absolute left-0 top-0 right-0 bottom-0 justify-center items-center`}
+                      className={`${commentLoading ? 'flex' : 'hidden'
+                        } bg-white opacity-80 absolute left-0 top-0 right-0 bottom-0 justify-center items-center`}
                     >
                       <SpinnerIcon pulse style={{ fontSize: '2em' }} />
                     </li>
@@ -454,7 +464,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 <div className='comment-write text-center' ref={commentWriteRef}>
                   <textarea
                     className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-[5px] focus:outline-none'
-                    onChange={(e) => setComment(e.currentTarget.value)}
+                    onChange={onChangeComment}
                     value={comment}
                     name='textarea'
                   />
@@ -568,6 +578,22 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             </div>
           </div>
         </div>
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box rounded-md " >
+            {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
+            <p className="">{t['go-to-login-1']}</p>
+            <p className="">{t['go-to-login-2']}</p>
+            <div className="modal-action">
+              <form method="dialog" >
+                <Link
+                  className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-2'
+                  href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+                >{t["ok"]}</Link>
+                <button >{t["close"]}</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
     </>
   );

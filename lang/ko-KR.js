@@ -32,6 +32,8 @@ export const koKR = {
     "congratulations": "축하드립니다 !",
     "account-created": "계정이 성공적으로 생성되었습니다!",
     "go-to-login-page": "로그인 페이지로 가기",
+    "go-to-login-1" : "로그인 후 글 작성 가능합니다.",
+    "go-to-login-2" : "로그인 하시겠습니까?",
     "temp-password-sent": "메일로 인증 정보를 담은 메일이 발송되었습니다. 메일이 보이지 않으면 스팸보관함을 열어보시길 바랍니다.",
     "find-password": "비번 찾기",
     "updated-successfully": "변경 등록 되었습니다.",
@@ -195,4 +197,7 @@ export const koKR = {
     "All": "전체",
     "Public Group": "공개 그룹",
     "Private Group": "비공개 그룹",
+    "warning-text": "경고",
+    "ok": '확인',
+    "close": "취소"
 }

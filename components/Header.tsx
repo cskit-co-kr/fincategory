@@ -145,7 +145,7 @@ const Header = () => {
             </div>
 
             {/* Mobile */}
-            <div className='md:hidden drawer w-fit z-20'>
+            <div className='md:hidden drawer w-fit z-50'>
               <input id='my-drawer-4' type='checkbox' className='drawer-toggle' />
               <div className='drawer-content ml-auto pr-4'>
                 {/* Page content here */}
@@ -153,7 +153,7 @@ const Header = () => {
                   <Bars3Icon className='h-7' />
                 </label>
               </div>
-              <div className='drawer-side'>
+              <div className='drawer-side '>
                 <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
                 <div className='menu p-2 w-80 bg-gray-100'>
                   <div className='grid'>

@@ -32,6 +32,8 @@ export const enUS = {
     "congratulations": "Congratulations!",
     "account-created": "Your account is successfully created!",
     "go-to-login-page": "Go to Login Page",
+    "go-to-login-1" : "You can write a post after logging in.",
+    "go-to-login-2" : "Would you like to log in?",
     "temp-password-sent": "Temporary password sent successfully!",
     "find-password": "Find Password",
     "updated-successfully": "Updated successfully!",
@@ -198,4 +200,9 @@ export const enUS = {
     "All": "All",
     "Public Group": "Public Group",
     "Private Group": "Private Group",
+    "warning-text": "Warning",
+    "ok": 'Ok',
+    "close": "Close"
+
+    
 }
