@@ -12,6 +12,7 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { PostType } from '../../typings';
 import { formatDate } from '../../lib/utils';
+import { HTMLElementCustom } from './post/[id]';
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -68,6 +69,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [inputRef, setInputFocus] = useFocus();
   const [searchTerm, setSearchTerm] = useState(initSearchTerm);
   const [searchTermText, setSearchTermText] = useState(initSearchTermText);
+
 
   // useEffect(() => {
   //   // if (hasCookie('page')) {
@@ -218,6 +220,15 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
       e.target.blur();
     }
   };
+  const handleWrite = () => {
+    if (!session?.user) {
+      const element: HTMLElementCustom | null = document.getElementById('my_modal_1') as HTMLElementCustom;
+      element?.showModal();
+    } else {
+      router.push(`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`);
+    }
+
+  }
 
   return (
     <>
@@ -226,7 +237,20 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
-          <div className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</div>
+          <div className='flex flex-row items-center justify-items-between'>
+            <p className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</p>
+            <div className='ml-auto mt-2 p-4 md:p-0'>
+              {/* <Link
+                className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
+                href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+              >
+                
+              </Link> */}
+              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
+                {t['write']}
+              </button>
+            </div>
+          </div>
           <div className='hidden md:flex justify-between items-center text-xs mt-4 pb-2.5'>
             <div className='text-[13px]'>{postsList.total} 개의 글</div>
             <div className='flex items-center gap-3 relative'>
@@ -345,7 +369,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </div>
             )}
           </div>
-          <div className='hidden md:flex items-center'>
+          <div className=' flex items-center justify-items-end'>
             {session?.user && memberInfo?.member?.type === 2 && (
               <div>
                 <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
@@ -353,13 +377,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 </button>
               </div>
             )}
-            <div className='hidden md:flex ml-auto mt-2'>
-              <Link
-                className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
-                href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
-              >
+            <div className='ml-auto mt-2'>
+              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
                 {t['write']}
-              </Link>
+              </button>
             </div>
           </div>
           <div className='bg-[#F9F9F9] rounded-lg mt-2.5 '>
@@ -509,6 +530,22 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </button>
             </div>
           </div>
+          <dialog id="my_modal_1" className="modal">
+            <div className="modal-box rounded-md " >
+              {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
+              <p className="">{t['go-to-login-1']}</p>
+              <p className="">{t['go-to-login-2']}</p>
+              <div className="modal-action">
+                <form method="dialog">
+                  <Link
+                    className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-4'
+                    href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+                  >{t["ok"]}</Link>
+                  <button >{t["close"]}</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </div>
       </div>
     </>

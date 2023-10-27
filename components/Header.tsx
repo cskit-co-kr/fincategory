@@ -141,11 +141,11 @@ const Header = () => {
                 <span className='font-bold text-primary'>Fin</span>
                 <span className=''>Ca</span>
               </Link>
-              <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
+              <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널/그룹 정보 핀카</div>
             </div>
 
             {/* Mobile */}
-            <div className='md:hidden drawer w-fit z-20'>
+            <div className='md:hidden drawer w-fit z-50'>
               <input id='my-drawer-4' type='checkbox' className='drawer-toggle' />
               <div className='drawer-content ml-auto pr-4'>
                 {/* Page content here */}
@@ -153,7 +153,7 @@ const Header = () => {
                   <Bars3Icon className='h-7' />
                 </label>
               </div>
-              <div className='drawer-side'>
+              <div className='drawer-side '>
                 <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
                 <div className='menu p-2 w-80 bg-gray-100'>
                   <div className='grid'>
@@ -223,11 +223,11 @@ const Header = () => {
                       <div className='grid gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
                         <Link className='font-semibold flex gap-2 items-center' href='/search' onClick={handleClick}>
                           <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
-                          {t['search']}
+                          {t['search0']}
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/channel/ranking' onClick={handleClick}>
                           <ChartBarIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
-                          {t['channel-rankings']}
+                          {t['rank']}
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/add' onClick={handleClick}>
                           <PlusIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
@@ -296,7 +296,7 @@ const Header = () => {
                 className='text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center'
                 onClick={() => setSearchSectionMenu((prev) => !prev)}
               >
-                {searchSection === 1 ? t['channel'] : t['board']}
+                {searchSection === 1 ? t['channel/group'] : t['board']}
                 <FaCaretDown size={14} />
               </button>
               {searchSectionMenu && (
@@ -311,7 +311,7 @@ const Header = () => {
                     }}
                     className='px-3 py-2 hover:bg-gray-50 rounded-xl'
                   >
-                    {t['channel']}
+                    {t['channel/group']}
                   </button>
                   <button
                     onClick={() => {
@@ -386,7 +386,7 @@ const Header = () => {
               </li>
               <li>
                 <button className={getPath === '/search' ? activePath : normalPath} onClick={() => router.push('/search')}>
-                  {t['search']}
+                  {t['search0']}
                 </button>
               </li>
               <li>
@@ -394,7 +394,7 @@ const Header = () => {
                   className={getPath === '/channel/ranking' ? activePath : normalPath}
                   onClick={() => router.push('/channel/ranking')}
                 >
-                  {t['channel-rankings']}
+                  {t['rank']}
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-30 flex' appearance='subtle'>

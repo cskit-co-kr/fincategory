@@ -41,6 +41,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
+  const [channelType, setChannelType] = useState<any | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<any | null>([{ value: 113, label: 'Korea, Republic of' }]);
   const [selectedLanguage, setSelectedLanguage] = useState<any | null>([{ value: 'ko', label: 'Korean' }]);
 
@@ -51,6 +52,21 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       label: locale === 'ko' ? obj.ko : obj.en,
     };
   });
+
+  const optionsChannelTypes = [
+    {
+      value: 'channel',
+      label: t['channel'],
+    },
+    {
+      value: 'public_group',
+      label: t['public-group'],
+    },
+    {
+      value: 'private_group',
+      label: t['private-group'],
+    },
+  ];
 
   const countries = props.countries?.map((item: any) => {
     const disable = item.nicename === 'Korea, Republic of' ? false : true;
@@ -83,7 +99,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
       language: selectedLanguage === null ? [] : selectedLanguage,
-      channel_type: null,
+      channel_type: channelType === null ? [] : channelType,
       channel_age: 0,
       erp: 0,
       subscribers_from: null,
@@ -170,7 +186,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
     setIsLoading(false);
     setIsLoadingCountries(false);
     setIsLoadingLanguages(false);
-  }, [locale, props, selectedCategory]);
+  }, [locale, props, channelType]);
 
   const [filterShow, setFilterShow] = useState(false);
   const isMedium = useMediaQuery('(min-width:768px)');
@@ -178,7 +194,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   return (
     <div className='md:pt-7 bg-gray-50'>
       <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px]'>
-        <div className='mb-4 md:mb-7 font-semibold text-lg leading-none'>{t['telegram-channels-rating']}</div>
+        <div className='mb-4 md:mb-7 font-semibold text-lg leading-none'>{t['rank']}</div>
         <div className='flex justify-end'>
           <button
             onClick={() => setFilterShow((prev) => !prev)}
@@ -191,15 +207,15 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
         {(isMedium === true || filterShow === true) && (
           <div className='md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0'>
             <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-              {t['channel-topic']}
+              {t['channel-type']}
               <Select
-                instanceId='category'
-                onChange={setSelectedCategory}
-                name='category'
-                isLoading={isLoading}
+                instanceId={'type'}
+                defaultValue={channelType}
+                onChange={setChannelType}
+                name='type'
                 styles={colorStyles}
-                options={options}
-                placeholder={t['select-topic']}
+                options={optionsChannelTypes}
+                placeholder={t['select-type']}
                 isMulti
                 className='w-full mb-2 md:mb-0'
               />
@@ -220,7 +236,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               />
             </label>
             <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-              {t['channel-language']}
+              {t['contents-language']}
               <Select
                 value={{ value: 'ko', label: t['Korean'] }}
                 instanceId={'language'}
@@ -282,6 +298,21 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
+            <Column align='center'>
+              <HeaderCell>{t['channel-type']}</HeaderCell>
+              <Cell dataKey='type'>
+                {(rowData) => (
+                  <div
+                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
+                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                    }`}
+                  >
+                    {rowData.type === 'channel' ? t['channel'] : t['Group']}
+                  </div>
+                )}
+              </Cell>
+            </Column>
+
             <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'subscription' ? 'font-bold text-primary' : ''}>{t['subscribers']}</HeaderCell>
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
@@ -324,11 +355,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   )
                 }
               </Cell>
-            </Column>
-
-            <Column align='center'>
-              <HeaderCell>{t['category']}</HeaderCell>
-              <Cell dataKey='category' />
             </Column>
           </Table>
         </div>
