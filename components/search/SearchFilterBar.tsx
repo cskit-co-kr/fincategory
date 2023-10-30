@@ -65,7 +65,9 @@ const SearchFilterBar = ({
     });
   };
   useEffect(() => {
-    doSearch('', true);
+    const tag = selectedTag ? `#${selectedTag}` : ""
+
+    doSearch(tag !== "" ? tag  : (router.query.q as string) || '');
   }, [channelType]);
 
   return (
@@ -74,7 +76,7 @@ const SearchFilterBar = ({
         <div className='flex gap-2 items-center'>
           <button
             className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0]?.value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'all', label: t['All'] }])}
           >
@@ -82,7 +84,7 @@ const SearchFilterBar = ({
           </button>
           <button
             className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0]?.value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'channel', label: t['channel'] }])}
           >
@@ -91,7 +93,7 @@ const SearchFilterBar = ({
           </button>
           <button
             className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0]?.value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
             }`}
             onClick={() => updateChannelType([{ value: 'public_group', label: t['public-group'] }])}
           >
@@ -124,7 +126,7 @@ const SearchFilterBar = ({
       </div>
       <div className='flex items-center p-4 md:p-0'>
         <span className='text-sm'>
-          {`${t['total-search-results1']} ${selectedTag ? '"' + selectedTag + '"' :router.query.q ? '"' + router.query.q + '"' : ''}: `}
+          {`${t['total-search-results1']} ${selectedTag ? selectedTag : router.query.q ? '"' + router.query.q + '"' : ''}: `}
           {loadBar ? <Loader /> : <b>{totalChannels}</b>}
           {t['total-search-results2']}
         </span>

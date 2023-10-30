@@ -76,6 +76,25 @@ const Search = () => {
     ],
   };
   const isFirstLoad = useRef(true); // Create a ref to track the first load
+  useEffect(() => {
+    // Skip the push on first load
+    // if (isFirstLoad.current) {
+    //   isFirstLoad.current = false;
+    //   return;
+    // }
+    // setLoadBar(true);
+    // const tag = selectedTag ? `#${selectedTag}` : undefined;
+    // router.push(
+    //   {
+    //     pathname: 'search',
+    //     query: tag ? { q: tag } : {},
+    //   },
+    //   undefined,
+    //   { shallow: true }
+    // );
+    const tag = selectedTag ? `#${selectedTag}` : ""
+    doSearch(tag)
+  }, [selectedTag]);
 
   const [options, setOptions] = useState<Options[]>([]);
   const [isLoadingCategory, setIsLoadingCategory] = useState(true);
@@ -145,15 +164,6 @@ const Search = () => {
   const [loadBar, setLoadBar] = useState(false);
 
   const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    if (selectedTag !== "") {
-      setSearchText(selectedTag)
-      doSearch('', true);
-    }
-
-    console.log("useEffect: ", selectedTag);
-  }, [selectedTag]);
 
   useEffect(() => {
     const data: any = {
@@ -298,15 +308,14 @@ const Search = () => {
     setSearchResultText(t['empty-search-text']);
   }, [locale]);
 
-  const doSearch = async (q: string, itstag?: boolean) => {
+  const doSearch = async (q: string) => {
     q.length > 0 && setSearchText(q);
-    let data;
+    setSearchResultText(<Loader content={t['loading-text']} />);
 
-    if (itstag) {
-      const tag = selectedTag ? `#${selectedTag}` : "";
-      setSearchText(tag);
+    let data;
+    if (selectedTag !== "") {
       data = {
-        query: tag, //searchText === '' ? null : searchText,
+        query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
         category: [],
         country: [],
@@ -318,7 +327,7 @@ const Search = () => {
         subscribers_to: '',
         paginate: { limit: 45, offset: 0 },
         sort: sorting,
-      }
+      };
     } else {
       data = {
         query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
@@ -335,7 +344,6 @@ const Search = () => {
         sort: sorting,
       };
     }
-    setSearchResultText(<Loader content={t['loading-text']} />);
 
     setSearchEvent(data);
 
@@ -349,6 +357,7 @@ const Search = () => {
 
     if (result) {
       setTotalChannels(resultData.total);
+      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
       setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     }
