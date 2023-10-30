@@ -15,7 +15,7 @@ const HomeBoardPostList = ({ postList }: any) => {
             &#9642; {formatDate(post.created_at).length < 6 ? formatDate(post.created_at) : formatDate(post.created_at).slice(-5)}
           </span>
           <div className='flex items-center'>
-            <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-1'>
+            <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-1' target='_parent'>
               <h1 className=''>{post.title}</h1>
             </Link>
             {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} />}
