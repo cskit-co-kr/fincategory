@@ -76,23 +76,6 @@ const Search = () => {
     ],
   };
   const isFirstLoad = useRef(true); // Create a ref to track the first load
-  useEffect(() => {
-    // Skip the push on first load
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false;
-      return;
-    }
-    setLoadBar(true);
-    const tag = selectedTag ? `#${selectedTag}` : undefined;
-    router.push(
-      {
-        pathname: 'search',
-        query: tag ? { q: tag } : {},
-      },
-      undefined,
-      { shallow: true }
-    );
-  }, [selectedTag]);
 
   const [options, setOptions] = useState<Options[]>([]);
   const [isLoadingCategory, setIsLoadingCategory] = useState(true);
@@ -162,6 +145,15 @@ const Search = () => {
   const [loadBar, setLoadBar] = useState(false);
 
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (selectedTag !== "") {
+      setSearchText(selectedTag)
+      doSearch('', true);
+    }
+
+    console.log("useEffect: ", selectedTag);
+  }, [selectedTag]);
 
   useEffect(() => {
     const data: any = {
@@ -306,24 +298,45 @@ const Search = () => {
     setSearchResultText(t['empty-search-text']);
   }, [locale]);
 
-  const doSearch = async (q: string) => {
+  const doSearch = async (q: string, itstag?: boolean) => {
     q.length > 0 && setSearchText(q);
+    let data;
+
+    if (itstag) {
+      const tag = selectedTag ? `#${selectedTag}` : "";
+      setSearchText(tag);
+      data = {
+        query: tag, //searchText === '' ? null : searchText,
+        withDesc: selectDesc,
+        category: [],
+        country: [],
+        language: [],
+        channel_type: channelType[0].value === 'all' ? [] : channelType,
+        channel_age: 0,
+        erp: 0,
+        subscribers_from: '',
+        subscribers_to: '',
+        paginate: { limit: 45, offset: 0 },
+        sort: sorting,
+      }
+    } else {
+      data = {
+        query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
+        withDesc: selectDesc,
+        category: selectedCategory === null ? [] : selectedCategory,
+        country: selectedCountry === null ? [] : selectedCountry,
+        language: selectedLanguage === null ? [] : selectedLanguage,
+        channel_type: channelType[0].value === 'all' ? [] : channelType,
+        channel_age: channelsAge,
+        erp: channelsERP,
+        subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
+        subscribers_to: subscribersTo === '' ? null : subscribersTo,
+        paginate: { limit: 45, offset: 0 },
+        sort: sorting,
+      };
+    }
     setSearchResultText(<Loader content={t['loading-text']} />);
 
-    const data = {
-      query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
-      withDesc: selectDesc,
-      category: selectedCategory === null ? [] : selectedCategory,
-      country: selectedCountry === null ? [] : selectedCountry,
-      language: selectedLanguage === null ? [] : selectedLanguage,
-      channel_type: channelType[0].value === 'all' ? [] : channelType,
-      channel_age: channelsAge,
-      erp: channelsERP,
-      subscribers_from: subscribersFrom === '' ? null : subscribersFrom,
-      subscribers_to: subscribersTo === '' ? null : subscribersTo,
-      paginate: { limit: 45, offset: 0 },
-      sort: sorting,
-    };
     setSearchEvent(data);
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
@@ -336,7 +349,6 @@ const Search = () => {
 
     if (result) {
       setTotalChannels(resultData.total);
-      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
       setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     }
@@ -727,9 +739,8 @@ const Search = () => {
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
                         <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
-                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                          }`}
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                            }`}
                           key={tag.tag}
                           onClick={() => {
                             selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -737,9 +748,8 @@ const Search = () => {
                         >
                           {tag.tag}
                           <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
-                              selectedTag === tag.tag ? 'text-black' : ''
-                            }`}
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
+                              }`}
                           >
                             {tag.total}
                           </span>
@@ -763,6 +773,7 @@ const Search = () => {
                 loadBar={loadBar}
                 channelType={channelType}
                 setChannelType={setChannelType}
+                selectedTag={selectedTag}
                 handleClick={handleClick}
                 doSearch={doSearch}
               />
