@@ -74,7 +74,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const commentListRef = useRef<HTMLDivElement | null>(null);
   const commentWriteRef = useRef<HTMLDivElement | null>(null);
-
+  const [memberInfo, setMemberInfo] = useState<any>();
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>
       {message}
@@ -86,6 +86,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   };
 
   useEffect(() => {
+    getUser();
     setCookie('postboardname', post.board.name);
     if (post.reaction === null) {
       setReaction(false);
@@ -246,7 +247,20 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     }
 
   }
+  const getUser = async () => {
+    const currentSession = await getSession();
+    // console.log('session id------------------->' + currentSession?.user.id);
 
+    if (currentSession?.user) {
+      const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${currentSession?.user.id}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      });
+      let u = await responseMember.json()
+      setMemberInfo(u);
+    }
+
+  };
   useEffect(() => {
     setClickCheck((prev) => !prev);
   }, [postPage]);
@@ -270,7 +284,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       </Modal>
       <div className='flex gap-[14px] md:pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar memberInfo={props.memberInfo} />
+        {/* <BoardSidebar memberInfo={props.memberInfo} /> */}
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
           <div className='hidden md:flex items-center justify-between mb-4'>
@@ -610,15 +625,15 @@ export const getServerSideProps = async (context: any) => {
   const perPage = (getCookie('perPage', { req }) as string) || '20';
 
   // Get Member Information
-  let memberInfo = '';
-  const session = await getSession(context);
-  if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    memberInfo = await responseMember.json();
-  }
+  // let memberInfo = '';
+  // const session = await getSession(context);
+  // if (session?.user) {
+  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   });
+  //   memberInfo = await responseMember.json();
+  // }
 
   // Get Post
   const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
@@ -680,7 +695,7 @@ export const getServerSideProps = async (context: any) => {
   // Return
   return {
     // props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
-    props: { post, reactionTotal, page, perPage, prevNext, memberInfo },
+    props: { post, reactionTotal, page, perPage, prevNext },
   };
 };
 
