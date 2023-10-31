@@ -126,7 +126,7 @@ const SearchFilterBar = ({
       </div>
       <div className='flex items-center p-4 md:p-0'>
         <span className='text-sm'>
-          {`${t['total-search-results1']} ${selectedTag ? selectedTag : router.query.q ? '"' + router.query.q + '"' : ''}: `}
+          {`${t['total-search-results1']} ${selectedTag ? '"' + `#${selectedTag}` + '" ' : router.query.q ? '"' + router.query.q + '" ' : ''}: `}
           {loadBar ? <Loader /> : <b>{totalChannels}</b>}
           {t['total-search-results2']}
         </span>
