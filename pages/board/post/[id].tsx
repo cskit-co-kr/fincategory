@@ -33,7 +33,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 ) => {
   const router = useRouter();
 
-  const [postList, setPostList] = useState(props.postList);
+  // const [postList, setPostList] = useState(props.postList);
+  const [postList, setPostList] = useState<any>([]);
 
   const post: PostType = props.post;
   const prevNext = props.prevNext;
@@ -42,9 +43,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
-  const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
-  const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
+  // const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
+  // const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
+  // const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
+
+  const [commentTotal, setCommenTotal] = useState<number>(0);
+  const [commentTopTotal, setCommentTopTotal] = useState<number>(0);
+  const [commentList, setCommentList] = useState<Array<CommentType>>([]);
 
   const [selectedComment, setSelectedComment] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
@@ -642,39 +647,40 @@ export const getServerSideProps = async (context: any) => {
   }
 
   // Get Comments
-  const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      id: context.query.id,
-      query: null,
-      paginate: {
-        offset: 0,
-        limit: 10,
-      },
-      sort: {
-        field: 'created_at',
-        value: 'ASC',
-      },
-    }),
-  });
-  const comments = await responseComment.json();
+  // const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
+  //   method: 'POST',
+  //   headers: { 'content-type': 'application/json' },
+  //   body: JSON.stringify({
+  //     id: context.query.id,
+  //     query: null,
+  //     paginate: {
+  //       offset: 0,
+  //       limit: 10,
+  //     },
+  //     sort: {
+  //       field: 'created_at',
+  //       value: 'ASC',
+  //     },
+  //   }),
+  // });
+  // const comments = await responseComment.json();
 
   // Get Posts List
-  const board = post.board.name;
-  const category = null;
-  const responsePost = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    }
-  );
-  const postList = await responsePost.json();
+  // const board = post.board.name;
+  // const category = null;
+  // const responsePost = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
+  //   {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   }
+  // );
+  // const postList = await responsePost.json();
 
   // Return
   return {
-    props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
+    // props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
+    props: { post, reactionTotal, page, perPage, prevNext, memberInfo },
   };
 };
 
