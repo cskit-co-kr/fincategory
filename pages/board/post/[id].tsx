@@ -33,7 +33,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 ) => {
   const router = useRouter();
 
-  const [postList, setPostList] = useState(props.postList);
+  // const [postList, setPostList] = useState(props.postList);
+  const [postList, setPostList] = useState<any>([]);
 
   const post: PostType = props.post;
   const prevNext = props.prevNext;
@@ -42,9 +43,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
-  const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
-  const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
+  // const [commentTotal, setCommenTotal] = useState<number>(props.comments.total);
+  // const [commentTopTotal, setCommentTopTotal] = useState<number>(props.comments.topTotal);
+  // const [commentList, setCommentList] = useState<Array<CommentType>>(props.comments.comments);
+
+  const [commentTotal, setCommenTotal] = useState<number>(0);
+  const [commentTopTotal, setCommentTopTotal] = useState<number>(0);
+  const [commentList, setCommentList] = useState<Array<CommentType>>([]);
 
   const [selectedComment, setSelectedComment] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
@@ -69,7 +74,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   const commentListRef = useRef<HTMLDivElement | null>(null);
   const commentWriteRef = useRef<HTMLDivElement | null>(null);
-
+  const [memberInfo, setMemberInfo] = useState<any>();
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>
       {message}
@@ -81,6 +86,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   };
 
   useEffect(() => {
+    getUser();
     setCookie('postboardname', post.board.name);
     if (post.reaction === null) {
       setReaction(false);
@@ -241,7 +247,20 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     }
 
   }
+  const getUser = async () => {
+    const currentSession = await getSession();
+    // console.log('session id------------------->' + currentSession?.user.id);
 
+    if (currentSession?.user) {
+      const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${currentSession?.user.id}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      });
+      let u = await responseMember.json()
+      setMemberInfo(u);
+    }
+
+  };
   useEffect(() => {
     setClickCheck((prev) => !prev);
   }, [postPage]);
@@ -265,7 +284,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       </Modal>
       <div className='flex gap-[14px] md:pt-7 bg-gray-50'>
         {/* Sidebar */}
-        <BoardSidebar memberInfo={props.memberInfo} />
+        {/* <BoardSidebar memberInfo={props.memberInfo} /> */}
+        <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='flex-1 flex flex-col'>
           <div className='hidden md:flex items-center justify-between mb-4'>
@@ -605,15 +625,15 @@ export const getServerSideProps = async (context: any) => {
   const perPage = (getCookie('perPage', { req }) as string) || '20';
 
   // Get Member Information
-  let memberInfo = '';
-  const session = await getSession(context);
-  if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
-    memberInfo = await responseMember.json();
-  }
+  // let memberInfo = '';
+  // const session = await getSession(context);
+  // if (session?.user) {
+  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   });
+  //   memberInfo = await responseMember.json();
+  // }
 
   // Get Post
   const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
@@ -642,39 +662,40 @@ export const getServerSideProps = async (context: any) => {
   }
 
   // Get Comments
-  const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      id: context.query.id,
-      query: null,
-      paginate: {
-        offset: 0,
-        limit: 10,
-      },
-      sort: {
-        field: 'created_at',
-        value: 'ASC',
-      },
-    }),
-  });
-  const comments = await responseComment.json();
+  // const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
+  //   method: 'POST',
+  //   headers: { 'content-type': 'application/json' },
+  //   body: JSON.stringify({
+  //     id: context.query.id,
+  //     query: null,
+  //     paginate: {
+  //       offset: 0,
+  //       limit: 10,
+  //     },
+  //     sort: {
+  //       field: 'created_at',
+  //       value: 'ASC',
+  //     },
+  //   }),
+  // });
+  // const comments = await responseComment.json();
 
   // Get Posts List
-  const board = post.board.name;
-  const category = null;
-  const responsePost = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    }
-  );
-  const postList = await responsePost.json();
+  // const board = post.board.name;
+  // const category = null;
+  // const responsePost = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
+  //   {
+  //     method: 'POST',
+  //     headers: { 'content-type': 'application/json' },
+  //   }
+  // );
+  // const postList = await responsePost.json();
 
   // Return
   return {
-    props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
+    // props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
+    props: { post, reactionTotal, page, perPage, prevNext },
   };
 };
 
