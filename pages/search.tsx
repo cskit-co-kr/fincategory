@@ -315,7 +315,7 @@ const Search = () => {
     let data;
     if (selectedTag !== "") {
       data = {
-        query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
+        query: selectedTag ? `#${selectedTag}` : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
         category: [],
         country: [],

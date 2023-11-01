@@ -9,6 +9,7 @@ import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
 const Media = dynamic(() => import('./ChannelMediaDB'), { ssr: false });
+var moment = require('moment-timezone');
 
 const PostDB = ({ channel, post }: any) => {
   const router = useRouter();
@@ -20,7 +21,9 @@ const PostDB = ({ channel, post }: any) => {
   const postMedia = post.media && JSON.parse(post.media);
   const [postDate, setPostDate] = useState('');
   useEffect(() => {
-    const d = new Date(toDateTimeformat(post.date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
+
+    const date = moment.utc(post.date).tz("Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
+    const d = new Date(toDateTimeformat(date, '-')).toLocaleTimeString(locale === 'ko' ? 'ko-KR' : 'en-US', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',

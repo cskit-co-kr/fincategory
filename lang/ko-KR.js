@@ -85,6 +85,11 @@ export const koKR = {
     "sort-by": "정렬 기준",
     "subscribers-desc": "구독자순 ",
     "subscribers-asc": "구독자순 ",
+    "today-desc": "오늘 조회수 순 ↓",
+    "today-asc": "오늘 조회수 순 ↑",
+    "total-desc": "누적 조회수 순 ↓",
+    "total-asc": "누적 조회수 순 ↑",
+    "created-desc": "최근 추가 ↓",
     "tags": "해시태그",
     "recently-added": "최근 추가",
     /* add a channel */
