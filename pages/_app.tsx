@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import Layout from '../components/layout';
 import { DataProvider } from '../context/context';
 import { useRouter } from 'next/router';
+import NextNProgress from 'nextjs-progressbar';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
@@ -133,6 +134,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <SessionProvider session={session}>
         <DataProvider>
           <Layout>
+            <NextNProgress color='#3886E2' height={2} />
             <Component key={router.asPath} {...pageProps} />
           </Layout>
         </DataProvider>
