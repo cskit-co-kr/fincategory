@@ -70,7 +70,6 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   const [searchTerm, setSearchTerm] = useState(initSearchTerm);
   const [searchTermText, setSearchTermText] = useState(initSearchTermText);
 
-
   // useEffect(() => {
   //   // if (hasCookie('page')) {
   //   //   const page: any = getCookie('page');
@@ -227,8 +226,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
     } else {
       router.push(`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`);
     }
-
-  }
+  };
 
   return (
     <>
@@ -236,7 +234,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
         {/* Sidebar */}
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
-        <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-md md:p-[30px]'>
+        <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-lg md:p-[30px]'>
           <div className='flex flex-row items-center justify-items-between'>
             <p className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</p>
             <div className='ml-auto mt-2 p-4 md:p-0'>
@@ -246,7 +244,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               >
                 
               </Link> */}
-              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
+              <button
+                className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline rounded-md'
+                onClick={() => handleWrite()}
+              >
                 {t['write']}
               </button>
             </div>
@@ -377,8 +378,11 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 </button>
               </div>
             )}
-            <div className='ml-auto mt-2'>
-              <button className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white' onClick={() => handleWrite()}>
+            <div className='ml-auto mt-2 mr-4 md:mr-0'>
+              <button
+                className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline rounded-md'
+                onClick={() => handleWrite()}
+              >
                 {t['write']}
               </button>
             </div>
@@ -518,7 +522,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 onKeyDown={handleKeyDown}
               />
               <button
-                className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'
+                className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline rounded-md'
                 onClick={() => {
                   setSearchTermPopup(false);
                   setSearchDatePopup(false);
@@ -530,18 +534,20 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               </button>
             </div>
           </div>
-          <dialog id="my_modal_1" className="modal">
-            <div className="modal-box rounded-md " >
+          <dialog id='my_modal_1' className='modal'>
+            <div className='modal-box rounded-md '>
               {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
-              <p className="">{t['go-to-login-1']}</p>
-              <p className="">{t['go-to-login-2']}</p>
-              <div className="modal-action">
-                <form method="dialog">
+              <p className=''>{t['go-to-login-1']}</p>
+              <p className=''>{t['go-to-login-2']}</p>
+              <div className='modal-action'>
+                <form method='dialog'>
                   <Link
                     className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-4'
                     href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
-                  >{t["ok"]}</Link>
-                  <button >{t["close"]}</button>
+                  >
+                    {t['ok']}
+                  </Link>
+                  <button>{t['close']}</button>
                 </form>
               </div>
             </div>

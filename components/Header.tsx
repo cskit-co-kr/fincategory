@@ -209,7 +209,7 @@ const Header = () => {
                           <span className='font-semibold'>ID {t['sign-in']}</span>
                         </div>
                         <button
-                          className='bg-primary font-semibold text-white py-2 px-5 text-base'
+                          className='bg-primary font-semibold text-white py-2 px-5 text-base rounded-md'
                           onClick={() => {
                             signIn();
                             handleClick();

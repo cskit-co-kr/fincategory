@@ -41,7 +41,7 @@ const BoardSidebar = ({ memberInfo }: any) => {
     <>
       <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
-          <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
+          <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white'>
             {session?.user ? (
               <>
                 <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
@@ -77,7 +77,7 @@ const BoardSidebar = ({ memberInfo }: any) => {
                     <div className='ml-auto'>{memberInfo?.comment}</div>
                   </div>
                 </div>
-                <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white' href='/board/write'>
+                <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md' href='/board/write'>
                   글쓰기
                 </Link>
               </>

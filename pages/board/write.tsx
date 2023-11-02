@@ -10,6 +10,7 @@ import { BoardType, PostType } from '../../typings';
 import * as cheerio from 'cheerio';
 import { Loader } from 'rsuite';
 import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { SelectPicker } from 'rsuite';
 
 import 'react-quill/dist/quill.snow.css';
 import { formatDate } from '../../lib/utils';
@@ -218,13 +219,25 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
     }
   };
 
+  const data = allBoards.boards
+    .map((item: any) =>
+      item.write_level !== 2 || memberInfo?.member?.type === 2
+        ? {
+            label: item.title,
+            value: item.id,
+            board: item.group.name,
+          }
+        : null
+    )
+    .filter((item: any) => item !== null);
+
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
-        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-md p-4 md:p-[30px] shadow-sm pb-20'>
+        <div className='w-full xl:w-[974px] mx-auto border border-gray-200 bg-white rounded-lg p-4 md:p-[30px] shadow-sm pb-20'>
           <div className='border-b border-gray-400 mb-4 pb-2 flex items-center'>
             <div className='text-xl font-bold'>글쓰기</div>
             <div className='ml-auto text-xs flex items-center'>
@@ -279,7 +292,16 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
           <div className='mb-4'>
             <div>
               <div className='flex gap-2'>
-                <select
+                <SelectPicker
+                  data={data}
+                  groupBy='board'
+                  searchable={false}
+                  className='w-full'
+                  value={selectedBoard}
+                  onChange={setSelectedBoard}
+                  placeholder='게시판을 선택해 주세요.'
+                />
+                {/* <select
                   className='border border-gray-200 p-2 w-full md:w-2/3'
                   onChange={(e: any) => setSelectedBoard(e.target.value)}
                   value={selectedBoard}
@@ -308,9 +330,9 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
                       )
                     )
                   )}
-                </select>
+                </select> */}
 
-                <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
+                {/* <select className='border border-gray-200 p-2 w-full md:w-1/3' onChange={(e: any) => setSelectedCategory(e.target.value)}>
                   <option value='0'>말머리 선택</option>
                   {allBoards?.boards
                     .find((board: BoardType) => board.id === Number(selectedBoard))
@@ -319,12 +341,12 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
                         {category.category}
                       </option>
                     ))}
-                </select>
+                </select> */}
               </div>
               <input
                 type='text'
                 placeholder='제목을 입력해 주세요.'
-                className='border border-gray-200 p-2 w-full mt-2'
+                className='border border-gray-200 p-2 w-full mt-2 rounded-md'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
