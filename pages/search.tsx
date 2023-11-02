@@ -825,7 +825,7 @@ const Search = () => {
     </>
   );
 };
-
+// test
 // export const getServerSideProps = async () => {
 //   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
 //   const categories = await result.data;
