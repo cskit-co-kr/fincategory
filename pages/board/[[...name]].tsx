@@ -235,9 +235,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-lg md:p-[30px]'>
-          <div className='flex flex-row items-center justify-items-between'>
+          <div className='flex items-center justify-between'>
             <p className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</p>
-            <div className='ml-auto mt-2 p-4 md:p-0'>
+            <div className='p-4 md:p-0'>
               {/* <Link
                 className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
                 href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
