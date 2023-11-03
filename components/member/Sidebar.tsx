@@ -20,24 +20,24 @@ const Sidebar = () => {
   const { data: session } = useSession();
 
   const menus = [
-    {
-      id: 1,
-      title: '내정보',
-      icon: <UserIcon className='h-5' />,
-      link: '/member/profile',
-    },
+    // {
+    //   id: 1,
+    //   title: '내정보',
+    //   icon: <UserIcon className='h-5' />,
+    //   link: '/member/profile',
+    // },
     // {
     //   id: 2,
     //   title: '핀코인',
     //   icon: <StopCircleIcon className='h-5' />,
     //   link: '/member/wallet',
     // },
-    // {
-    //   id: 3,
-    //   title: '상품구매내역',
-    //   icon: <DocumentTextIcon className='h-5' />,
-    //   link: '/member/ads-history',
-    // },
+    {
+      id: 3,
+      title: '상품구매내역',
+      icon: <DocumentTextIcon className='h-5' />,
+      link: '/member/ads-history',
+    },
     {
       id: 4,
       title: '내가 쓴 글',

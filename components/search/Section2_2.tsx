@@ -26,7 +26,7 @@ const Section2_2 = ({ channelsNew }: any) => {
             <div className='flex items-center w-full justify-between'>
               <div className='flex items-center gap-2'>
                 <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
-                <div className='line-clamp-1 text-ellipsis overflow-hidden'>{channel.title}</div>
+                <div className='line-clamp-1 max-w-[65%]'>{channel.title}</div>
                 <div
                   className={`text-[11px] px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
                     channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
