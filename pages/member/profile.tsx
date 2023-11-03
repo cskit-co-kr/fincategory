@@ -34,7 +34,7 @@ const Profile = ({ memberInfo }: any) => {
     //   iconBg: 'bg-[#EAFFE7]',
     //   link: '/member/wallet',
     //   tooltip: '',
-    //   content: 500000,
+    //   content: 0,
     // },
     {
       title: '상품구매내역',

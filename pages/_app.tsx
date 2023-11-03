@@ -134,7 +134,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <SessionProvider session={session}>
         <DataProvider>
           <Layout>
-            <NextNProgress color='#3886E2' height={2} />
+            <NextNProgress color='#3886E2' height={2} options={{ showSpinner: false }} />
             <Component key={router.asPath} {...pageProps} />
           </Layout>
         </DataProvider>
