@@ -17,6 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       language: req.body.language,
       category: req.body.category,
       type: req.body.type,
+      src: "user",
       approved: false,
     });
     const data = await resp.data;
