@@ -8,7 +8,7 @@ import LinkPreview from './LinkPreview';
 import RenderPost from './RenderPost';
 import dynamic from 'next/dynamic';
 import { toDateTimeformat } from '../../lib/utils';
-const Media = dynamic(() => import('./ChannelMediaDB'), { ssr: false });
+import Media from './ChannelMediaDB';
 var moment = require('moment-timezone');
 
 const PostDB = ({ channel, post }: any) => {

@@ -193,16 +193,18 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
 
   return (
     <div className='md:pt-7 bg-gray-50'>
-      <div className='border border-gray-200 bg-white rounded-md p-4 md:p-[30px]'>
-        <div className='mb-4 md:mb-7 font-semibold text-lg leading-none'>{t['rank']}</div>
-        <div className='flex justify-end'>
-          <button
-            onClick={() => setFilterShow((prev) => !prev)}
-            className='rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap mb-2 flex md:hidden gap-1 justify-center items-center'
-          >
-            <AdjustmentsHorizontalIcon className='h-4' />
-            {t['channel-filter']}
-          </button>
+      <div className={`border border-gray-200 bg-white rounded-md p-4 md:p-[30px]`}>
+        <div className={`${!isMedium && 'flex justify-between items-center'}`}>
+          <div className='md:mb-7 font-semibold text-lg leading-none'>{t['rank']}</div>
+          <div className='flex justify-end'>
+            <button
+              onClick={() => setFilterShow((prev) => !prev)}
+              className='md:hidden flex gap-1 justify-center items-center rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap'
+            >
+              <AdjustmentsHorizontalIcon className='h-4' />
+              {t['channel-filter']}
+            </button>
+          </div>
         </div>
         {(isMedium === true || filterShow === true) && (
           <div className='md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0'>

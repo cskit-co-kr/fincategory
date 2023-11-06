@@ -23,7 +23,7 @@ const MemberSignIn = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [forgotResultText, setForgotResultText] = useState('');
-  // const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -67,6 +67,13 @@ const MemberSignIn = () => {
     }
   };
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      onSubmit(e);
+      e.target.blur();
+    }
+  };
+
   // useEffect(() => {
   //   if (localStorage.getItem('_ssa') && localStorage.getItem('_ssb')) {
   //     setUsernameInput(decryptData(localStorage.getItem('_ssa'), secretKey) || '');
@@ -103,6 +110,7 @@ const MemberSignIn = () => {
                     placeholder={t['password']}
                     className='w-full p-1'
                     value={passwordInput}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />
                 </div>

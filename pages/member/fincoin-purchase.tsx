@@ -7,7 +7,8 @@ import GuideImage from '../../public/fincoin-purchase-guide.png';
 import Image from 'next/image';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Table } from 'rsuite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import ModalFincoinPurchaseConfirm from '../../components/member/ModalFincoinPurchaseConfirm';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -67,10 +68,43 @@ const FincoinPurchaseGuide = () => {
       router.push('/member/signin');
     },
   });
+  const [purchaseInfo, setPurchaseInfo] = useState({
+    name: '',
+    phone: '',
+    email: '',
+  });
+  useEffect(() => {
+    session && setPurchaseInfo({ ...purchaseInfo, email: session.user.email });
+  }, [session]);
+
+  const [errors, setErrors] = useState<{
+    name: string | null;
+    phone: string | null;
+    email: string | null;
+  }>({
+    name: null,
+    phone: null,
+    email: null,
+  });
 
   const [selectedOption, setSelectedOption] = useState(0);
   const rowClickHandle = (rowData: any) => {
     setSelectedOption(rowData.id);
+  };
+
+  const showConfirm = () => {
+    const updatedErrors = {
+      name: purchaseInfo.name === '' ? 'Please input name' : null,
+      phone: purchaseInfo.phone === '' ? 'Please input phone' : null,
+      email: purchaseInfo.email === '' ? 'Please input email' : null,
+    };
+
+    setErrors(updatedErrors);
+
+    if (!updatedErrors.name && !updatedErrors.phone && !updatedErrors.email) {
+      const modal = document.getElementById('my_modal_1') as any;
+      modal?.showModal();
+    }
   };
 
   return (
@@ -143,29 +177,64 @@ const FincoinPurchaseGuide = () => {
                 <div>신한은행 110 390 632138 조승기</div>
               </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
-                <div className='font-semibold'>입금자 명:</div>
+                <div className='font-semibold'>
+                  입금자 명<span className='text-red-500'>*</span>:
+                </div>
                 <div>
-                  <input type='text' className='border border-gray-200 w-full rounded-lg px-2.5 py-1' />
+                  <input
+                    type='text'
+                    className='border border-gray-200 w-full rounded-lg px-2.5 py-1'
+                    name='name'
+                    value={purchaseInfo.name}
+                    onChange={(e) => setPurchaseInfo({ ...purchaseInfo, name: e.target.value })}
+                  />
+                  {errors.name ? <div className='text-red-500 italic text-end'>{errors.name}</div> : ''}
                 </div>
               </div>
               <div className='px-5 py-2.5 border-b border-gray-100 font-semibold'>입금 오류 발생시 연락할 연락처 또는 이메일 주소</div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
-                <div className='font-semibold'>연락처:</div>
+                <div className='font-semibold'>
+                  연락처<span className='text-red-500'>*</span>:
+                </div>
                 <div>
-                  <input type='text' className='border border-gray-200 w-full rounded-lg px-2.5 py-1' />
+                  <input
+                    type='text'
+                    className='border border-gray-200 w-full rounded-lg px-2.5 py-1'
+                    name='phone'
+                    value={purchaseInfo.phone}
+                    onChange={(e) => setPurchaseInfo({ ...purchaseInfo, phone: e.target.value })}
+                  />
+                  {errors.phone ? <div className='text-red-500 italic text-end'>{errors.phone}</div> : ''}
                 </div>
               </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
-                <div className='font-semibold'>이메일 주소:</div>
+                <div className='font-semibold'>
+                  이메일 주소<span className='text-red-500'>*</span>:
+                </div>
                 <div>
-                  <input type='text' className='border border-gray-200 w-full rounded-lg px-2.5 py-1' defaultValue={session?.user.email} />
+                  <input
+                    type='text'
+                    className='border border-gray-200 w-full rounded-lg px-2.5 py-1'
+                    name='email'
+                    value={purchaseInfo.email}
+                    onChange={(e) => setPurchaseInfo({ ...purchaseInfo, email: e.target.value })}
+                  />
+                  {errors.email ? <div className='text-red-500 italic text-end'>{errors.email}</div> : ''}
                 </div>
               </div>
-              <button className='blue-button m-2.5 justify-self-center'>구매하기</button>
+              <button className='blue-button m-2.5 justify-self-center' onClick={showConfirm}>
+                구매하기
+              </button>
             </div>
           </div>
         </div>
       </div>
+      <ModalFincoinPurchaseConfirm
+        purchaseInfo={purchaseInfo}
+        data={data[selectedOption]}
+        username={session?.user.username}
+        nickname={session?.user.nickname}
+      />
     </>
   );
 };
