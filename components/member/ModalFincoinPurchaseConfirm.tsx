@@ -2,11 +2,16 @@ import React from 'react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
+import apiService from '../../lib/apiService';
+import { Notification, useToaster } from 'rsuite';
+import Image from 'next/image';
 
-const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname }: any) => {
+const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname, userid }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
+
+  const toaster = useToaster();
 
   const d = new Date();
   let year = d.getFullYear();
@@ -16,8 +21,31 @@ const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname }:
   let minute = d.getMinutes();
   const date = `${year}-${`00${month}`.slice(-2)}-${`00${day}`.slice(-2)} ${`00${hour}`.slice(-2)}:${`00${minute}`.slice(-2)}`;
 
-  const submitPurchase = () => {
-    console.log('Submit purchase');
+  const submitPurchase = async () => {
+    const d = {
+      sender_name: purchaseInfo.name,
+      sender_email: purchaseInfo.email,
+      sender_phone: purchaseInfo.phone,
+      coin: data.col1,
+      coin_transit: data.col4,
+      user_id: userid,
+    };
+    const result = await apiService.savePurchaseTransaction(d);
+    if (result.code === 201) {
+      const modal = document.getElementById('my_modal_1') as any;
+      modal?.close();
+
+      const message = (
+        <Notification type='info' closable>
+          <div className='flex items-center gap-2'>
+            <Image src='/party.svg' width={24} height={24} alt='Success' />
+            Successfully created your purchase request.
+          </div>
+        </Notification>
+      );
+
+      toaster.push(message, { placement: 'topCenter' });
+    }
   };
 
   return (
@@ -37,11 +65,11 @@ const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname }:
           </div>
           <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
             <div className='font-semibold'>구입 할 핀코인:</div>
-            <div>{data.col1}</div>
+            <div>{data.col1.toLocaleString()} FinCoin</div>
           </div>
           <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
             <div className='font-semibold'>입금액:</div>
-            <div>{data.col4} (부가세 포함)</div>
+            <div>{data.col4.toLocaleString()}원 (부가세 포함)</div>
           </div>
           <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
             <div className='font-semibold'>입금 계좌번호:</div>

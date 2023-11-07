@@ -416,11 +416,11 @@ const Header = () => {
                   )
                 )}
               </Nav>
-              {/* <li>
+              <li>
                 <button className={getPath === '/member/ads' ? activePath : normalPath} onClick={() => router.push('/member/ads')}>
                   광고 상품
                 </button>
-              </li> */}
+              </li>
             </ul>
             <button
               className={`${getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}`}
