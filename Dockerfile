@@ -20,7 +20,6 @@ FROM node:18-alpine
 # ENV NEXT_PUBLIC_AVATAR_URL=https://test-fincat.fincategory.com
 # ENV NEXT_PUBLIC_API_URL=https://test-api.fincategory.com
 # ENV NEXT_PUBLIC_BACKEND_URL=https://test-backend.fincategory.com
-# # ENV NEXT_PUBLIC_GA_MEASUREMENT_ID="G-EF5J5GY669"
 # ENV NEXT_PUBLIC_GA_MEASUREMENT_ID="G-3XWE84KEQ0"
 # ENV JWT_SECRET_KEY=9FZID6AKGFVV4J99T3HJ
 # ENV NEXTAUTH_URL=https://test-fincat.fincategory.com
