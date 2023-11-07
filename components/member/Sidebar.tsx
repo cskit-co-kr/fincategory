@@ -20,18 +20,18 @@ const Sidebar = () => {
   const { data: session } = useSession();
 
   const menus = [
-    // {
-    //   id: 1,
-    //   title: '내정보',
-    //   icon: <UserIcon className='h-5' />,
-    //   link: '/member/profile',
-    // },
-    // {
-    //   id: 2,
-    //   title: '핀코인',
-    //   icon: <StopCircleIcon className='h-5' />,
-    //   link: '/member/wallet',
-    // },
+    {
+      id: 1,
+      title: '내정보',
+      icon: <UserIcon className='h-5' />,
+      link: '/member/profile',
+    },
+    {
+      id: 2,
+      title: '핀코인',
+      icon: <StopCircleIcon className='h-5' />,
+      link: '/member/wallet',
+    },
     {
       id: 3,
       title: '상품구매내역',
@@ -52,8 +52,8 @@ const Sidebar = () => {
     },
   ];
 
-  menus[1].link = `/board?member=${session?.user.nickname}&show=posts`;
-  menus[2].link = `/board?member=${session?.user.nickname}&show=comments`;
+  // menus[1].link = `/board?member=${session?.user.nickname}&show=posts`;
+  // menus[2].link = `/board?member=${session?.user.nickname}&show=comments`;
 
   return (
     <>
