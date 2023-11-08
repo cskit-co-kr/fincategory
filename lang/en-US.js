@@ -11,6 +11,7 @@ export const enUS = {
     "German": "Deutsch",
     "Mongolian": "Монгол",
     "Russian": "Русский",
+    "Unknown": "Unknown",
     "CN": "中国, CN",
     "CA": "Canada, CA",
     "IN": "भारत, IN",
