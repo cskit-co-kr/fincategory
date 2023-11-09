@@ -49,10 +49,10 @@
     @apply w-full border border-gray-200 bg-white rounded-lg p-[30px] shadow-sm;
   }
   .blue-button {
-    @apply bg-primary font-semibold text-white py-2 px-5 text-sm w-fit rounded-md items-center gap-2 flex justify-center;
+    @apply bg-primary font-semibold text-white py-2 px-5 text-sm w-fit rounded-md items-center gap-2 flex justify-center whitespace-nowrap hover:underline;
   }
   .gray-button {
-    @apply blue-button bg-gray-400;
+    @apply blue-button bg-gray-400 hover:underline;
   }
   .gradient-button {
     @apply bg-gradient-to-r from-blue-500 to-pink-500 rounded-full px-4 py-2 font-semibold;
@@ -62,6 +62,12 @@
   }
   .board-content p {
     @apply leading-[25.6px];
+  }
+  .wallet-table .rs-table-row-header .rs-table-cell {
+    @apply !bg-[#f5f5f5] font-semibold text-black;
+  }
+  .rs-checkbox label {
+    @apply !flex !items-center;
   }
 }
 

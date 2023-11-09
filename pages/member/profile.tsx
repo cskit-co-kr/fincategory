@@ -15,7 +15,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-const Profile = ({ memberInfo }: any) => {
+const Profile = ({ memberInfo, wallet }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -27,15 +27,17 @@ const Profile = ({ memberInfo }: any) => {
     },
   });
 
+  const balance = wallet ? wallet.balance.toLocaleString() : 0;
+
   const cards = [
-    // {
-    //   title: '핀코인',
-    //   icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
-    //   iconBg: 'bg-[#EAFFE7]',
-    //   link: '/member/wallet',
-    //   tooltip: '',
-    //   content: 0,
-    // },
+    {
+      title: '핀코인',
+      icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
+      iconBg: 'bg-[#EAFFE7]',
+      link: '/member/wallet',
+      tooltip: '',
+      content: balance,
+    },
     {
       title: '상품구매내역',
       icon: <DocumentTextIcon className='h-6 text-[#B61CEC]' />,
@@ -101,7 +103,7 @@ const Profile = ({ memberInfo }: any) => {
                   </button>
                 </div>
                 <div className={`${card.iconBg} rounded-full p-3 w-fit justify-self-center`}>{card.icon}</div>
-                <div className='font-rubik font-semibold text-3xl md:text-4xl mt-2.5'>{card.content}</div>
+                <div className='font-rubik font-semibold text-3xl md:text-4xl mt-2.5'>{card.content.toLocaleString()}</div>
                 <div className='text-gray-400 mt-4'>{card.title}</div>
               </Link>
             ))}
@@ -134,9 +136,13 @@ export const getServerSideProps = async (context: any) => {
     memberInfo = await responseMember.json();
   }
 
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
+  const result = await response.json();
+  const wallet = result.wallet;
+
   // Return
   return {
-    props: { memberInfo },
+    props: { memberInfo, wallet },
   };
 };
 

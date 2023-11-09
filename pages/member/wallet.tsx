@@ -1,10 +1,15 @@
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Sidebar from '../../components/member/Sidebar';
+import { Table, Pagination } from 'rsuite';
+import { useState, useEffect } from 'react';
+import apiService from '../../lib/apiService';
 
-const Wallet = () => {
+const { Column, HeaderCell, Cell } = Table;
+
+const Wallet = ({ memberInfo, wallet }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -15,6 +20,26 @@ const Wallet = () => {
       router.push('/member/signin');
     },
   });
+
+  const balance = wallet ? wallet.balance.toLocaleString() : 0;
+
+  const [limit, setLimit] = useState(15);
+  const [page, setPage] = useState(1);
+
+  const handleChangeLimit = (dataKey: any) => {
+    setPage(1);
+    setLimit(dataKey);
+  };
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const result = await apiService.transactionListUser(session?.user.id);
+      setData(result.data);
+    })();
+  }, []);
+
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
@@ -23,7 +48,7 @@ const Wallet = () => {
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='p-[30px] text-white bg-[#2B2B2B] rounded-lg bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
             <div className='font-rubik grid'>
-              My Balance<span className='text-4xl font-semibold mt-2.5'>500 000</span>
+              My Balance<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
             <div className='ml-auto mt-auto'>
               <button className='gradient-button' onClick={() => router.push('/member/fincoin-purchase')}>
@@ -31,9 +56,47 @@ const Wallet = () => {
               </button>
             </div>
           </div>
-          <div className='white-box mt-4 p-0'>
-            <div className='text-xl font-bold p-[30px] pb-5'>거래 내역</div>
-            <table className='w-full border-t border-gray-200 whitespace-nowrap'>
+          <div className='white-box mt-4 p-[30px]'>
+            <div className='text-xl font-bold pb-5'>거래 내역</div>
+
+            <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
+              <Column width={160}>
+                <HeaderCell>일시</HeaderCell>
+                <Cell>{(rowData) => rowData.transaction_at.substr(0, 19).replace('T', ' ')}</Cell>
+              </Column>
+
+              <Column minWidth={300} flexGrow={1}>
+                <HeaderCell>내용</HeaderCell>
+                <Cell dataKey='transaction_type.transaction_name' />
+              </Column>
+
+              <Column width={100} align='center'>
+                <HeaderCell>지급코인</HeaderCell>
+                <Cell>{(rowData) => rowData.income && rowData.income !== 0 && rowData.income.toLocaleString()}</Cell>
+              </Column>
+
+              <Column width={100} align='center'>
+                <HeaderCell>사용코인</HeaderCell>
+                <Cell>{(rowData) => rowData.outcome && rowData.outcome.toLocaleString()}</Cell>
+              </Column>
+            </Table>
+            <div className='p-5'>
+              <Pagination
+                className='justify-center'
+                prev
+                next
+                first
+                last
+                ellipsis
+                maxButtons={5}
+                total={data.length}
+                activePage={page}
+                onChangePage={setPage}
+                onChangeLimit={handleChangeLimit}
+              />
+            </div>
+
+            {/* <table className='w-full border-t border-gray-200 whitespace-nowrap'>
               <thead className='bg-[#F5F5F5]'>
                 <tr>
                   <th className='py-2.5 text-left pl-[30px] w-[180px]'>일시</th>
@@ -57,12 +120,34 @@ const Wallet = () => {
                 </tr>
               </tbody>
             </table>
-            <div className='my-[30px] grid justify-center'>Pagination</div>
+            <div className='my-[30px] grid justify-center'>Pagination</div> */}
           </div>
         </div>
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
+  const result = await response.json();
+  const wallet = result.wallet;
+
+  // Return
+  return {
+    props: { memberInfo, wallet },
+  };
 };
 
 export default Wallet;
