@@ -30,7 +30,7 @@ const ads2 = [
   },
 ];
 
-const Ads = ({ wallet, section1, activeProducts }: any) => {
+const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -53,7 +53,7 @@ const Ads = ({ wallet, section1, activeProducts }: any) => {
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50 text-base'>
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='white-box'>
             <div className='text-2xl'>최상단 배너</div>

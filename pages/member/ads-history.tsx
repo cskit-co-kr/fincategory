@@ -23,9 +23,10 @@ type PurchaseHistory = {
 
 type AdsHistoryProps = {
   purchaseHistory: PurchaseHistory[];
+  memberInfo: any;
 };
 
-const AdsHistory = ({ purchaseHistory }: AdsHistoryProps) => {
+const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -51,8 +52,7 @@ const AdsHistory = ({ purchaseHistory }: AdsHistoryProps) => {
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
-        {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='white-box p-[30px]'>
             <div className='text-xl font-bold pb-5'>상품구매내역</div>
