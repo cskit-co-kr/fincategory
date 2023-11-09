@@ -23,36 +23,32 @@ const Wallet = ({ memberInfo, wallet }: any) => {
 
   const balance = wallet ? wallet.balance.toLocaleString() : 0;
 
-  const [limit, setLimit] = useState(15);
-  const [page, setPage] = useState(1);
-
-  const handleChangeLimit = (dataKey: any) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+  const [page, setPage] = useState<number>(1);
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const result = await apiService.transactionListUser(session?.user.id);
-      setData(result.data);
+      if (session) {
+        const result = await apiService.transactionListUser(session?.user.id, page);
+        setData(result.data);
+      }
     })();
-  }, []);
+  }, [session, page]);
 
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='p-[30px] text-white bg-[#2B2B2B] rounded-lg bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
             <div className='font-rubik grid'>
-              My Balance<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
+              내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
             <div className='ml-auto mt-auto'>
               <button className='gradient-button' onClick={() => router.push('/member/fincoin-purchase')}>
-                Buy Fincoin
+                핀코인 구매
               </button>
             </div>
           </div>
@@ -92,7 +88,6 @@ const Wallet = ({ memberInfo, wallet }: any) => {
                 total={data.length}
                 activePage={page}
                 onChangePage={setPage}
-                onChangeLimit={handleChangeLimit}
               />
             </div>
 

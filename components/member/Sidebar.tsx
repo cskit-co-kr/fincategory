@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 
-const Sidebar = () => {
+const Sidebar = ({ memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -51,9 +51,6 @@ const Sidebar = () => {
       link: `/board?member=${session?.user.nickname}&show=comments`,
     },
   ];
-
-  // menus[1].link = `/board?member=${session?.user.nickname}&show=posts`;
-  // menus[2].link = `/board?member=${session?.user.nickname}&show=comments`;
 
   return (
     <>
@@ -97,6 +94,8 @@ const Sidebar = () => {
                 >
                   {menu.icon}
                   {menu.title}
+                  {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
+                  {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
                 </Link>
               ))}
             </div>
