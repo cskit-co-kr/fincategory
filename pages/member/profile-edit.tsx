@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
@@ -10,7 +10,7 @@ import { Loader } from 'rsuite';
 import Sidebar from '../../components/member/Sidebar';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
-const Profile = () => {
+const Profile = ({ memberInfo }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -149,8 +149,7 @@ const Profile = () => {
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
-        {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <button
             onClick={() => router.back()}
@@ -212,6 +211,24 @@ const Profile = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
+  // Return
+  return {
+    props: { memberInfo },
+  };
 };
 
 export default Profile;

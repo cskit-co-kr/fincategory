@@ -68,7 +68,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='white-box p-0 relative'>
             <div className='h-[100px] bg-gradient-to-r from-blue-200 to-pink-200 rounded-t-lg'></div>
