@@ -48,11 +48,11 @@ const Wallet = ({ memberInfo, wallet }: any) => {
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
           <div className='p-[30px] text-white bg-[#2B2B2B] rounded-lg bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
             <div className='font-rubik grid'>
-              My Balance<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
+              내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
             <div className='ml-auto mt-auto'>
               <button className='gradient-button' onClick={() => router.push('/member/fincoin-purchase')}>
-                Buy Fincoin
+                핀코인 구매
               </button>
             </div>
           </div>

@@ -63,13 +63,12 @@ const Ads = ({ wallet, section1, activeProducts }: any) => {
                 <br />
                 단 9분께 선착순 판매합니다.
                 <br />
-                지금 미리 구매하셔서 자리를 선점하세요. 늦으면 매진될 수 있습니다.1
+                지금 미리 구매하셔서 자리를 선점하세요. 늦으면 매진될 수 있습니다.
               </div>
               <Image src={Ads1} alt='Ads1' className='mt-7' />
               <div className='bg-[#fafafa] border border-[#b4b4b4] px-4 py-3 flex gap-10 mt-6'>
                 <div className='font-semibold'>나의 FinCoin</div>
                 <div>보유 : {balance} FinCoin </div>
-                <div className='text-[#f12323]'>[핀코인 모으기]</div>
                 <div className='text-[#f12323]'>
                   <Link href='/member/fincoin-purchase'>[핀코인 구매하기]</Link>
                 </div>
@@ -125,7 +124,6 @@ const Ads = ({ wallet, section1, activeProducts }: any) => {
               <div className='bg-[#fafafa] border border-[#b4b4b4] px-4 py-3 flex gap-10 mt-6'>
                 <div className='font-semibold'>나의 FinCoin</div>
                 <div>보유 : {balance} FinCoin </div>
-                <div className='text-[#f12323]'>[핀코인 모으기]</div>
                 <div className='text-[#f12323]'>
                   <Link href='/member/fincoin-purchase'>[핀코인 구매하기]</Link>
                 </div>

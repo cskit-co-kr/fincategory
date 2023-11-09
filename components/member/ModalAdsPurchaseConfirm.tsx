@@ -47,7 +47,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
         setCheckUser('Channel existed in our database!');
         setCheckChannel(data);
       } else {
-        setCheckUser('Channel not existed in our database!');
+        setCheckUser('입력하신 채널/그룹은 핀카에 없습니다. ');
       }
       setCheckUsernameLoading(false);
     }
@@ -108,7 +108,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             </div>
           </div>
           <div className='space-y-2'>
-            <div className='font-semibold'>구입 할 핀코인:</div>
+            <div className='font-semibold'>제품 가격</div>
             <div>
               <input
                 className='border border-[#d9d9d9] rounded-md px-3 py-2 w-full'
@@ -118,11 +118,11 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             </div>
           </div>
           <div className='space-y-2'>
-            <div className='font-semibold'>텔레그램 채널 ID:</div>
+            <div className='font-semibold'>텔레그램 채널/그룹 ID</div>
             <div className='flex gap-2 relative'>
               <input
                 className={`border rounded-md px-3 py-2 w-full ${channelError ? 'border-red-500' : 'border-[#d9d9d9]'}`}
-                placeholder='Input your channel id'
+                placeholder='광고할 채널/그룹 ID를 입력하세요.'
                 value={channel}
                 onChange={(e: any) => setChannel(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -133,7 +133,16 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
               </button>
             </div>
             {!checkChannel?.existed ? (
-              <div className='text-xs'>{checkUser}</div>
+              <div className='text-xs'>
+                {checkUser && (
+                  <>
+                    {checkUser}
+                    <Link href='/add' target='_blank' className='text-red-500 font-semibold ml-2'>
+                      [등록하기]
+                    </Link>
+                  </>
+                )}
+              </div>
             ) : (
               checkChannel && (
                 <div className='flex items-center gap-2'>
@@ -171,7 +180,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
               <button className='gray-button'>취소</button>
             </form>
             <button className='blue-button' onClick={submitPurchase}>
-              입금완료
+              구매
             </button>
           </div>
         </div>
