@@ -93,8 +93,11 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
   };
 
   return (
-    <dialog id={`${adsGroup}_modal_${modalId}`} className='modal max-w-[475px] mx-auto'>
-      <div className='modal-box p-10'>
+    <dialog id={`${adsGroup}_modal_${modalId}`} className='modal'>
+      <div className='modal-box p-10 max-w-[475px]'>
+        <form method='dialog'>
+          <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</button>
+        </form>
         <div className='text-2xl font-medium text-center'>광고상품 구매</div>
         <div className='mt-5 mx-auto grid space-y-6'>
           <div className='space-y-2'>
@@ -102,7 +105,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             <div>
               <input
                 className='border border-[#d9d9d9] rounded-md px-3 py-2 w-full'
-                value={`${data.duration} ${data.coin.toLocaleString()} FinCoin`}
+                value={`${adsGroup === 'ads1' ? '최상단 배너' : '첫 페이지 노출'} ${data.duration}`}
                 disabled
               />
             </div>
@@ -185,6 +188,9 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
           </div>
         </div>
       </div>
+      <form method='dialog' className='modal-backdrop'>
+        <button>close</button>
+      </form>
     </dialog>
   );
 };

@@ -13,8 +13,8 @@ export class ApiService {
     return result;
   }
 
-  async transactionListUser(userid: number | undefined) {
-    const response = await axios.post(`/api/transaction-list`, { userId: userid });
+  async transactionListUser(userid: number | undefined, page: number) {
+    const response = await axios.post(`/api/transaction-list`, { userId: userid, page: page });
     const result = await response.data;
     return result;
   }
