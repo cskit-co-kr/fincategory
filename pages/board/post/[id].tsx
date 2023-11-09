@@ -229,8 +229,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     setIsLoading(true);
     const board = post.board.name;
     const category = 'null';
+    const currentSession = await getSession();
     const responsePost = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}`,
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}&user=${currentSession?.user.id}&boardid=${post.board.id}`,
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
