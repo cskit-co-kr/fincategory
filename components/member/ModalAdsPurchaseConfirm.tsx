@@ -69,7 +69,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
 
     if (result.code === 400) {
       alert('Sold Out');
-    } else if (result.code === 200) {
+    } else if (result.code === 201) {
       const modal = document.getElementById(`${adsGroup}_modal_${modalId}`) as any;
       modal?.close();
 
