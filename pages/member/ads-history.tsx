@@ -157,8 +157,8 @@ export const getServerSideProps = async (context: any) => {
     memberInfo = await responseMember.json();
   }
 
-  const response2 = await fetch(`http://192.168.102:8080/v1/product/getProductUser/2`);
-  // const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUser/${session?.user.id}`);
+  // const response2 = await fetch(`http://192.168.102:8080/v1/product/getProductUser/2`);
+  const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUser/${session?.user.id}`);
   const result2 = await response2.json();
   const purchaseHistory = result2.rows;
 
