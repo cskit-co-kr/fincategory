@@ -55,7 +55,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
 
   const submitPurchase = async () => {
     if (balance < data.coin) {
-      return setLowBalance('Low Balance');
+      return setLowBalance('잔액이 부족합니다.');
     }
     if (!checkChannel) {
       return setChannelError('Input valid Channel');

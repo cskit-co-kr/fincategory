@@ -71,17 +71,15 @@ const Section3 = () => {
   return (
     <div className='grid md:grid-cols-3 gap-4 px-0 mt-5 lg:mt-0'>
       {items.map((item, index) => (
-        <div className='md:space-y-2.5 bg-white md:bg-transparent py-4 md:py-0' key={index}>
-          <div className='flex items-center'>
-            <span className='font-bold text-base px-5 md:px-0'>{item.title}</span>
-            <Link href={item.link} className='ml-auto flex gap-1 items-center text-primary mr-5 md:mr-0'>
+        <div className='md:space-y-2.5 bg-white p-4 md:border md:border-gray-200 md:rounded-xl' key={index}>
+          <div className='flex items-center mb-4'>
+            <span className='font-semibold text-sm'>{item.title}</span>
+            <Link href={item.link} className='ml-auto flex gap-1 items-center text-primary'>
               {t['see-more']}
               <ChevronRightIcon className='h-3' />
             </Link>
           </div>
-          <div className='flex md:border md:border-gray-200 md:rounded-xl bg-white p-4'>
-            <HomeBoardPostList postList={item.list} />
-          </div>
+          <HomeBoardPostList postList={item.list} />
         </div>
       ))}
     </div>
