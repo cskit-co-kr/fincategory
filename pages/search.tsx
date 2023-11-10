@@ -92,8 +92,8 @@ const Search = () => {
     //   undefined,
     //   { shallow: true }
     // );
-    const tag = selectedTag ? `#${selectedTag}` : ""
-    doSearch(tag)
+    const tag = selectedTag ? `#${selectedTag}` : '';
+    doSearch(tag);
   }, [selectedTag]);
 
   const [options, setOptions] = useState<Options[]>([]);
@@ -313,7 +313,7 @@ const Search = () => {
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     let data;
-    if (selectedTag !== "") {
+    if (selectedTag !== '') {
       data = {
         query: selectedTag ? `#${selectedTag}` : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
@@ -655,22 +655,33 @@ const Search = () => {
           <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
-              <div className='pt-5 px-5 font-bold text-base'>유저 상승 상위</div>
-              <div className='flex justify-between items-center px-5 pt-2.5 pb-5'>
-                <div className='font-bold flex gap-1 lg:gap-3'>
-                  <button onClick={() => change24_7_30(24)} className={`${text24730 === 1 && 'text-primary'}`}>
-                    {t['increase-24h']}
+              <div className='flex items-center px-5 pt-5 pb-6'>
+                <div className='font-semibold text-sm'>유저 상승 상위</div>
+                <div className='font-semibold flex gap-2 ml-6'>
+                  <button
+                    onClick={() => change24_7_30(24)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 1 && 'bg-primary text-white'}`}
+                  >
+                    24H
                   </button>
-                  |
-                  <button onClick={() => change24_7_30(7)} className={`${text24730 === 2 && 'text-primary'}`}>
-                    {t['increase-7d']}
+                  <button
+                    onClick={() => change24_7_30(7)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 2 && 'bg-primary text-white'}`}
+                  >
+                    7D
                   </button>
-                  |
-                  <button onClick={() => change24_7_30(30)} className={`${text24730 === 3 && 'text-primary'}`}>
-                    {t['increase-30d']}
+                  <button
+                    onClick={() => change24_7_30(30)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 3 && 'bg-primary text-white'}`}
+                  >
+                    30D
                   </button>
                 </div>
-                <Link className='flex gap-1 text-primary items-center' href={`/channel/ranking${channelRankingUrl}`} target='_blank'>
+                <Link
+                  className='flex gap-1 text-primary items-center ml-auto'
+                  href={`/channel/ranking${channelRankingUrl}`}
+                  target='_blank'
+                >
                   {t['see-more']}
                   <ChevronRightIcon className='h-3' />
                 </Link>
@@ -680,28 +691,28 @@ const Search = () => {
 
             <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
               <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
-                <div className='flex flex-row justify-between items-center t-5 pb-1 px-5'>
-                  <div className='font-bold text-base flex'>
-                    <div
-                      className={`pt-5 pb-1 pr-3 cursor-pointer hover:text-primary ${sortType === 1 && 'text-primary'}`}
+                <div className='flex flex-row justify-between items-center pt-5 pb-2 px-5'>
+                  <div className='font-semibold text-sm flex gap-2 items-center'>
+                    <div>조회수</div>
+                    <button
+                      className={`ml-6 rounded-full bg-gray-100 px-2 py-0.5 text-xs ${sortType === 1 && 'bg-primary text-white'}`}
                       onClick={() => {
                         switchTodayTotalSortType(1);
                       }}
                     >
-                      (오늘)조회수
-                    </div>
-                    <div className='pt-5 pb-1 '>{'|'}</div>
-                    <div
-                      className={`pt-5 pb-1 px-4 cursor-pointer hover:text-primary ${sortType === 2 && 'text-primary'}`}
+                      오늘
+                    </button>
+                    <button
+                      className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${sortType === 2 && 'bg-primary text-white'}`}
                       onClick={() => {
                         switchTodayTotalSortType(2);
                       }}
                     >
-                      (누적)조회수
-                    </div>
+                      누적
+                    </button>
                   </div>
                   <button
-                    className='flex gap-1 text-primary items-center pt-5 pb-1'
+                    className='flex gap-1 text-primary items-center'
                     onClick={() => {
                       sortType === 1 ? setSelectedSorting('today_desc') : setSelectedSorting('total_desc');
                       sortType === 1 ? doFilter('today_desc') : doFilter('total_desc');
@@ -718,8 +729,8 @@ const Search = () => {
               </div>
 
               <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
-                <div className='flex justify-between items-center pt-5 pb-1 px-5'>
-                  <div className='font-bold text-base'>{t['recently-added']}</div>
+                <div className='flex justify-between items-center pt-5 pb-2 px-5'>
+                  <div className='font-semibold text-sm'>{t['recently-added']}</div>
                   <button
                     className='flex gap-1 text-primary items-center'
                     onClick={() => {
@@ -748,8 +759,9 @@ const Search = () => {
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
                         <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                            }`}
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
                           key={tag.tag}
                           onClick={() => {
                             selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
@@ -757,8 +769,9 @@ const Search = () => {
                         >
                           {tag.tag}
                           <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${selectedTag === tag.tag ? 'text-black' : ''
-                              }`}
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
                           >
                             {tag.total}
                           </span>

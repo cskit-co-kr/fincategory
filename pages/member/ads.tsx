@@ -187,7 +187,7 @@ export const getServerSideProps = async (context: any) => {
 
   const response3 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductActive`);
   const result3 = await response3.json();
-  const activeProducts = result2.rows.length;
+  const activeProducts = result3.rows.length;
 
   // Return
   return {
