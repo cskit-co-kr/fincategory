@@ -39,7 +39,7 @@ const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname, u
         <Notification type='info' closable>
           <div className='flex items-center gap-2'>
             <Image src='/party.svg' width={24} height={24} alt='Success' />
-            Successfully created your purchase request.
+            핀코인 구매 완료하였습니다.
           </div>
         </Notification>
       );
