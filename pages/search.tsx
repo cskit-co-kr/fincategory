@@ -466,10 +466,9 @@ const Search = () => {
       <div className='flex flex-1 flex-col md:pt-7'>
         <div className='grid md:flex'>
           {/* Sidebar */}
-          <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-20'>
+          {/* <div className='lg:drawer-open mt-2 md:mt-0 ml-2 md:ml-0 z-20'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
             <div className='w-fit ml-auto mr-4 mt-2 md:mt-0'>
-              {/* Page content here */}
               <label
                 htmlFor='my-drawer-2'
                 className='border border-gray-200 rounded-lg bg-white px-2 py-1 whitespace-nowrap lg:hidden flex items-center gap-1'
@@ -481,10 +480,8 @@ const Search = () => {
             <div className='drawer-side'>
               <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
               <div className='menu p-4 md:p-0 w-80 md:min-w-[314px] bg-base-200 md:bg-inherit'>
-                {/* Sidebar content here */}
                 <div className='flex flex-col md:min-w-[314px]'>
                   <div>
-                    {/* <div className='lg:sticky lg:top-4'> */}
                     <div className='flex flex-col gap-3 border border-gray-200 rounded-xl pt-3 pb-5 px-4 bg-white'>
                       <label className='flex flex-col gap-2 relative'>
                         {t['by-keyword']}
@@ -650,9 +647,9 @@ const Search = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className='flex flex-col gap-0 md:gap-4 md:ml-4 justify-items-stretch content-start w-full'>
+          <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
               <div className='flex items-center px-5 pt-5 pb-6'>
@@ -660,19 +657,19 @@ const Search = () => {
                 <div className='font-semibold flex gap-2 ml-6'>
                   <button
                     onClick={() => change24_7_30(24)}
-                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 1 && 'bg-primary text-white'}`}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${text24730 === 1 && 'bg-primary text-white'}`}
                   >
                     24H
                   </button>
                   <button
                     onClick={() => change24_7_30(7)}
-                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 2 && 'bg-primary text-white'}`}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${text24730 === 2 && 'bg-primary text-white'}`}
                   >
                     7D
                   </button>
                   <button
                     onClick={() => change24_7_30(30)}
-                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${text24730 === 3 && 'bg-primary text-white'}`}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${text24730 === 3 && 'bg-primary text-white'}`}
                   >
                     30D
                   </button>
@@ -753,8 +750,8 @@ const Search = () => {
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
-              <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[900px] mx-auto'>
-                <div className='hidden md:block'>
+              <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[1200px]'>
+                {/* <div className='hidden md:block'>
                   <ReactSlickSlider {...settings}>
                     {tags?.map((tag: any) => (
                       <div key={tag.tag} className='mr-1'>
@@ -779,8 +776,8 @@ const Search = () => {
                       </div>
                     ))}
                   </ReactSlickSlider>
-                </div>
-                <div className='md:hidden'>
+                </div> */}
+                <div className=''>
                   <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
                 </div>
               </div>
