@@ -6,6 +6,8 @@ import Sidebar from '../../components/member/Sidebar';
 import { Table, Pagination, Nav } from 'rsuite';
 import { useState, useEffect } from 'react';
 import apiService from '../../lib/apiService';
+import TransactionHistory from '../../components/wallet/TransactionHistory';
+import PurchaseHistory from '../../components/wallet/PurchaseHistory';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -36,7 +38,7 @@ const Wallet = ({ memberInfo, wallet }: any) => {
     })();
   }, [session, page]);
 
-  const [active, setActive] = useState('home');
+  const [activeTab, setActiveTab] = useState(1);
 
   return (
     <>
@@ -55,48 +57,17 @@ const Wallet = ({ memberInfo, wallet }: any) => {
             </div>
           </div>
           <div className='white-box mt-4 p-[30px]'>
-            <div className=''>
-              <Nav appearance='tabs' activeKey={active} onSelect={setActive}>
-                <Nav.Item eventKey='home'>거래 내역</Nav.Item>
-                <Nav.Item eventKey='news'>구매내역</Nav.Item>
-              </Nav>
+            <div className='flex gap-2 mb-4'>
+              <button className={`${activeTab === 1 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(1)}>
+                핀코인
+              </button>
+              <button className={`${activeTab === 2 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(2)}>
+                구매내역
+              </button>
             </div>
 
-            <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
-              <Column width={160}>
-                <HeaderCell>일시</HeaderCell>
-                <Cell>{(rowData) => rowData.transaction_at.substr(0, 19).replace('T', ' ')}</Cell>
-              </Column>
-
-              <Column minWidth={300} flexGrow={1}>
-                <HeaderCell>내용</HeaderCell>
-                <Cell dataKey='transaction_type.transaction_name' />
-              </Column>
-
-              <Column width={100} align='center'>
-                <HeaderCell>지급코인</HeaderCell>
-                <Cell>{(rowData) => rowData.income && rowData.income !== 0 && rowData.income.toLocaleString()}</Cell>
-              </Column>
-
-              <Column width={100} align='center'>
-                <HeaderCell>사용코인</HeaderCell>
-                <Cell>{(rowData) => rowData.outcome && rowData.outcome.toLocaleString()}</Cell>
-              </Column>
-            </Table>
-            <div className='p-5'>
-              <Pagination
-                className='justify-center'
-                prev
-                next
-                first
-                last
-                ellipsis
-                maxButtons={5}
-                total={data.length}
-                activePage={page}
-                onChangePage={setPage}
-              />
-            </div>
+            {activeTab === 1 && <TransactionHistory />}
+            {activeTab === 2 && <PurchaseHistory />}
 
             {/* <table className='w-full border-t border-gray-200 whitespace-nowrap'>
               <thead className='bg-[#F5F5F5]'>

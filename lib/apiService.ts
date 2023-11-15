@@ -19,6 +19,12 @@ export class ApiService {
     return result;
   }
 
+  async transactionListPurchase(userid: number | undefined, page: number) {
+    const response = await axios.post(`/api/transaction-list-purchase`, { userId: userid, page: page });
+    const result = await response.data;
+    return result;
+  }
+
   async saveAdsPurchase(body: any) {
     const response = await axios.post(`/api/save-ads-purchase`, body);
     const result = await response.data;
