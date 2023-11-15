@@ -3,7 +3,7 @@ import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
 import { getSession, useSession } from 'next-auth/react';
 import Sidebar from '../../components/member/Sidebar';
-import { Table, Pagination } from 'rsuite';
+import { Table, Pagination, Nav } from 'rsuite';
 import { useState, useEffect } from 'react';
 import apiService from '../../lib/apiService';
 
@@ -36,6 +36,8 @@ const Wallet = ({ memberInfo, wallet }: any) => {
     })();
   }, [session, page]);
 
+  const [active, setActive] = useState('home');
+
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
@@ -53,7 +55,12 @@ const Wallet = ({ memberInfo, wallet }: any) => {
             </div>
           </div>
           <div className='white-box mt-4 p-[30px]'>
-            <div className='text-xl font-bold pb-5'>거래 내역</div>
+            <div className=''>
+              <Nav appearance='tabs' activeKey={active} onSelect={setActive}>
+                <Nav.Item eventKey='home'>거래 내역</Nav.Item>
+                <Nav.Item eventKey='news'>구매내역</Nav.Item>
+              </Nav>
+            </div>
 
             <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
               <Column width={160}>
