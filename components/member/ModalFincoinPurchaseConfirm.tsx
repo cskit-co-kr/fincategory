@@ -51,7 +51,7 @@ const ModalFincoinPurchaseConfirm = ({ purchaseInfo, data, username, nickname, u
   return (
     <dialog id='my_modal_1' className='modal'>
       <div className='modal-box'>
-        <div className='text-xl font-bold text-center'>Purchase Confirmation</div>
+        <div className='text-xl font-bold text-center'>구매내용 확인</div>
         <div className='mt-5 max-w-[690px] border border-gray-100 rounded-lg mx-auto grid'>
           <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
             <div className='font-semibold'>구매일시:</div>
