@@ -78,12 +78,12 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
                 <Cell>
                   {(rowData) =>
                     checkStatus(rowData.started_at, rowData.ended_at) === 'active' ? (
-                      <div className='rounded-full border border-green-400 text-green-400 text-xs pb-[1px]'>Active</div>
+                      <div className='rounded-full border border-green-400 text-green-400 text-xs pb-[1px] px-1'>Active</div>
                     ) : checkStatus(rowData.started_at, rowData.ended_at) === 'ended' ? (
-                      <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px]'>Ended</div>
+                      <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1'>Ended</div>
                     ) : (
                       checkStatus(rowData.started_at, rowData.ended_at) === 'scheduled' && (
-                        <div className='rounded-full border border-blue-400 text-blue-400 text-xs pb-[1px]'>Scheduled</div>
+                        <div className='rounded-full border border-blue-400 text-blue-400 text-xs pb-[1px] px-1'>Scheduled</div>
                       )
                     )
                   }
@@ -157,7 +157,7 @@ export const getServerSideProps = async (context: any) => {
     memberInfo = await responseMember.json();
   }
 
-  // const response2 = await fetch(`http://192.168.102:8080/v1/product/getProductUser/2`);
+  // const response2 = await fetch(`https://test-backend.fincategory.com/v1/product/getProductUser/11`);
   const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUser/${session?.user.id}`);
   const result2 = await response2.json();
   const purchaseHistory = result2.rows;

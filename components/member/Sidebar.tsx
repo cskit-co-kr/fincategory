@@ -17,7 +17,7 @@ const Sidebar = ({ memberInfo }: any) => {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const menus = [
     {
@@ -57,7 +57,7 @@ const Sidebar = ({ memberInfo }: any) => {
       <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white'>
-            {session?.user ? (
+            {status === 'authenticated' ? (
               <>
                 <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                   <UserCircleIcon className='h-6 text-black' />
@@ -71,6 +71,22 @@ const Sidebar = ({ memberInfo }: any) => {
                     {t['sign-out']}
                   </button>
                 </div>
+                <div className='space-y-5 mt-2.5'>
+                  {menus.map((menu, index) => (
+                    <Link
+                      key={index}
+                      className={`flex items-center gap-2.5 font-semibold text-sm ${
+                        menu.link === router.asPath ? 'text-black' : 'text-gray-500'
+                      }`}
+                      href={menu.link}
+                    >
+                      {menu.icon}
+                      {menu.title}
+                      {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
+                      {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
+                    </Link>
+                  ))}
+                </div>
               </>
             ) : (
               <>
@@ -78,27 +94,11 @@ const Sidebar = ({ memberInfo }: any) => {
                   <UserCircleIcon className='h-6 text-black' />
                   <span className='font-semibold'>ID {t['sign-in']}</span>
                 </div>
-                <button className='bg-primary font-semibold text-white py-2 px-5' onClick={() => signIn()}>
+                <button className='bg-primary font-semibold text-white py-2 px-5 rounded-md' onClick={() => signIn()}>
                   {t['sign-in']}
                 </button>
               </>
             )}
-            <div className='space-y-5 mt-2.5'>
-              {menus.map((menu, index) => (
-                <Link
-                  key={index}
-                  className={`flex items-center gap-2.5 font-semibold text-sm ${
-                    menu.link === router.asPath ? 'text-black' : 'text-gray-500'
-                  }`}
-                  href={menu.link}
-                >
-                  {menu.icon}
-                  {menu.title}
-                  {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
-                  {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </div>

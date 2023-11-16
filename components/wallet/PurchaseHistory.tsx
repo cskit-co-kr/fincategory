@@ -54,29 +54,41 @@ const PurchaseHistory = () => {
         </Column>
 
         <Column width={120} align='center'>
-          <HeaderCell>구입한 핀코인</HeaderCell>
+          <HeaderCell>입금 금액</HeaderCell>
           <Cell>{(rowData) => <>{rowData.coin_transit.toLocaleString()}원</>}</Cell>
         </Column>
 
-        <Column minWidth={200} flexGrow={1}>
+        <Column minWidth={170} flexGrow={1}>
           <HeaderCell>입력한 연락처/이메일</HeaderCell>
           <Cell>
             {(rowData) => (
               <>
-                {rowData.sender_name} / {rowData.sender_email}
+                {rowData.sender_phone} / {rowData.sender_email}
               </>
             )}
           </Cell>
         </Column>
 
-        <Column width={140} align='center'>
-          <HeaderCell>입력한 연락처/이메일</HeaderCell>
-          <Cell>{(rowData) => rowData.purchase_user.username}</Cell>
+        <Column width={170} align='center'>
+          <HeaderCell>입금자 명</HeaderCell>
+          <Cell>{(rowData) => rowData.sender_name}</Cell>
         </Column>
 
         <Column width={100} align='center'>
           <HeaderCell>상태</HeaderCell>
-          <Cell>{(rowData) => rowData.state}</Cell>
+          <Cell>
+            {(rowData) => {
+              if (rowData.state === 'waiting') {
+                return <div className='text-yellow-500 font-semibold'>대기</div>;
+              } else if (rowData.state === 'success') {
+                return <div className='text-green-500 font-semibold'>입금완료</div>;
+              } else if (rowData.state === 'noincome') {
+                return <div className='text-orange-500 font-semibold'>미입금</div>;
+              } else if (rowData.state === 'return') {
+                return <div className='text-red-500 font-semibold'>환불</div>;
+              }
+            }}
+          </Cell>
         </Column>
       </Table>
       <div className='p-5'>

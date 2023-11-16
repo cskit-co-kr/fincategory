@@ -77,7 +77,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
         <Notification type='info' closable>
           <div className='flex items-center gap-2'>
             <Image src='/party.svg' width={24} height={24} alt='Success' />
-            핀코인 구매 완료하였습니다.
+            광고상품 구매 완료하였습니다.
           </div>
         </Notification>
       );

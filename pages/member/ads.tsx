@@ -35,12 +35,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const { data: session, update } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push('/member/signin');
-    },
-  });
+  const { data: session, status } = useSession();
 
   const balance = wallet ? wallet.balance.toLocaleString() : 0;
 
@@ -80,7 +75,9 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
-                      {activeProducts < 3 ? (
+                      {status === 'unauthenticated' ? (
+                        <Link href='/member/signin'>[{t['sign-in']}]</Link>
+                      ) : activeProducts < 3 ? (
                         <button
                           onClick={() => {
                             const modalId = `ads1_modal_${index}`;
@@ -167,7 +164,8 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = null;
+  let wallet = null;
   const session = await getSession(context);
   if (session?.user) {
     const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
@@ -175,11 +173,11 @@ export const getServerSideProps = async (context: any) => {
       headers: { 'content-type': 'application/json' },
     });
     memberInfo = await responseMember.json();
-  }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
-  const result = await response.json();
-  const wallet = result.wallet;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
+    const result = await response.json();
+    wallet = result.wallet;
+  }
 
   const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductSection1`);
   const result2 = await response2.json();

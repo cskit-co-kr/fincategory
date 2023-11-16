@@ -62,7 +62,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const { data: session, update } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push('/member/signin');
