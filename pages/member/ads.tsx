@@ -106,7 +106,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
             </div>
           </div>
 
-          <div className='white-box mt-10'>
+          {/* <div className='white-box mt-10'>
             <div className='text-2xl'>첫 페이지 노출</div>
             <div className='mt-5'>
               <div className=''>
@@ -155,7 +155,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                 </ol>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

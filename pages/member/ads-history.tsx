@@ -58,19 +58,29 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
             <div className='text-xl font-bold pb-5'>상품구매내역</div>
 
             <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
-              <Column minWidth={300} flexGrow={1}>
+              <Column minWidth={250} flexGrow={1}>
                 <HeaderCell>상품명</HeaderCell>
-                <Cell dataKey='transaction_type.transaction_name' />
+                <Cell>
+                  {(rowData) => {
+                    if (rowData.term === 30) {
+                      return '최상단 배너 (1 개월)';
+                    } else if (rowData.term === 90) {
+                      return '최상단 배너 (3 개월)';
+                    } else if (rowData.term === 180) {
+                      return '최상단 배너 (6 개월)';
+                    }
+                  }}
+                </Cell>
               </Column>
 
-              <Column minWidth={120}>
+              <Column width={150}>
                 <HeaderCell>채널 ID</HeaderCell>
-                <Cell>@comaps</Cell>
+                <Cell dataKey='channel_name' />
               </Column>
 
-              <Column width={70} align='right'>
+              <Column width={110} align='right'>
                 <HeaderCell>구매가격</HeaderCell>
-                <Cell>{(rowData) => rowData.income && rowData.income !== 0 && rowData.income.toLocaleString()}</Cell>
+                <Cell>{(rowData) => `${rowData.fincoin.toLocaleString()} FinCoin`}</Cell>
               </Column>
 
               <Column width={100} align='center'>
@@ -158,9 +168,9 @@ export const getServerSideProps = async (context: any) => {
   }
 
   // const response2 = await fetch(`https://test-backend.fincategory.com/v1/product/getProductUser/11`);
-  const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUser/${session?.user.id}`);
+  const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUserId/${session?.user.id}`);
   const result2 = await response2.json();
-  const purchaseHistory = result2.rows;
+  const purchaseHistory = result2.data;
 
   // Return
   return {
