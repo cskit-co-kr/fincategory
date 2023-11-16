@@ -73,7 +73,7 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
                 <Cell>{(rowData) => rowData.income && rowData.income !== 0 && rowData.income.toLocaleString()}</Cell>
               </Column>
 
-              <Column width={70} align='center'>
+              <Column width={100} align='center'>
                 <HeaderCell>상태</HeaderCell>
                 <Cell>
                   {(rowData) =>
