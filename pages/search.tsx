@@ -26,6 +26,7 @@ import Section3 from '../components/search/Section3';
 import SearchFilterBar from '../components/search/SearchFilterBar';
 import Ads from './member/ads';
 import FincoinPurchase from './member/ads-purchase';
+import Ads1 from '../components/search/Ads1';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -650,6 +651,7 @@ const Search = () => {
           </div> */}
 
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
+            <Ads1 />
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
               <div className='flex items-center px-5 pt-5 pb-6'>

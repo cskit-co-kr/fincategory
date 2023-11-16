@@ -13,7 +13,7 @@ const TransactionHistory = () => {
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const { data: session, update } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push('/member/signin');
@@ -50,7 +50,30 @@ const TransactionHistory = () => {
 
         <Column minWidth={300} flexGrow={1}>
           <HeaderCell>내용</HeaderCell>
-          <Cell dataKey='transaction_type.transaction_name' />
+          <Cell>
+            {(rowData) => {
+              switch (rowData.transaction_type.transaction_name) {
+                case 'Purchase product':
+                  return '광고상픔 구매';
+                case 'Write post':
+                  return '게시판 글쓰기';
+                case 'Write comment':
+                  return '게시판 댓글쓰기';
+                case 'Read post':
+                  return '게시판 글 읽기';
+                case 'New channel registration':
+                  return '신규채널등록';
+                case 'Signup':
+                  return '회원가입';
+                case 'Withdraw':
+                  return '회수';
+                case 'Deposit':
+                  return '지급';
+                default:
+                  return '핀코인 구매';
+              }
+            }}
+          </Cell>
         </Column>
 
         <Column width={100} align='center'>
