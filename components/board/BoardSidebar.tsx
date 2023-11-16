@@ -44,21 +44,6 @@ const BoardSidebar = ({ memberInfo }: any) => {
         <div className='lg:sticky lg:top-4'>
           <Sidebar memberInfo={memberInfo} />
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white mt-4'>
-            {session?.user ? (
-              <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md mb-4' href='/board/write'>
-                글쓰기
-              </Link>
-            ) : (
-              <>
-                <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-                  <UserCircleIcon className='h-6 text-black' />
-                  <span className='font-semibold'>ID {t['sign-in']}</span>
-                </div>
-                <button className='bg-primary font-semibold text-white py-2 px-5 rounded-md' onClick={() => signIn()}>
-                  {t['sign-in']}
-                </button>
-              </>
-            )}
             <div className='border-y border-gray-200 py-3 font-semibold'>
               <Link href='/board' className={`${router.asPath === '/board' && 'text-primary'}`}>
                 {t['view-all-articles']}
