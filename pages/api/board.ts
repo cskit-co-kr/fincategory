@@ -272,6 +272,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           field: req.body.sort.field,
           order: req.body.sort.value,
         },
+        user: req.body.user,
+        boardid: req.body.boardid,
       }),
     });
 

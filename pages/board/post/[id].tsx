@@ -114,6 +114,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   // Load Comments
   const loadComments = async () => {
     setCommentLoading(true);
+    const currentSession = await getSession();
     const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -128,6 +129,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           field: 'created_at',
           value: 'ASC',
         },
+        user: currentSession?.user.id,
+        boardid: post.board.id,
       }),
     });
     const data = await responseComment.json();
