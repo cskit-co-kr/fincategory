@@ -20,13 +20,13 @@ const Ads1 = () => {
     (async () => {
       const result = await apiService.getAds1();
       let rows = result.rows;
-      if (result.rows.length === 2) {
+      if (result.rows.length === 2 || result.rows.length === 5 || result.rows.length === 8) {
         rows.push({
           title: '핀카 최상단 배너',
           description:
             '메인 화면 최상단에 노출되는 배너입니다. 단 9분께 선착순 판매합니다. 지금 미리 구매하셔서 자리를 선점하세요. 늦으면 매진될 수 있습니다.',
         });
-      } else if (result.rows.length === 1) {
+      } else if (result.rows.length === 1 || result.rows.length === 4 || result.rows.length === 7) {
         rows.push({
           title: '핀카 최상단 배너',
           description:
