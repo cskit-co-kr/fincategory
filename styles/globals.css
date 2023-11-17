@@ -46,7 +46,7 @@
     @apply lg:static !important;
   }
   .white-box {
-    @apply w-full border border-gray-200 bg-white rounded-lg p-[30px] shadow-sm;
+    @apply w-full border border-gray-100 bg-white rounded-xl p-[30px] shadow-sm;
   }
   .blue-button {
     @apply bg-primary font-semibold text-white py-2 px-5 text-sm w-fit rounded-md items-center gap-2 flex justify-center whitespace-nowrap hover:underline;
@@ -64,13 +64,13 @@
     @apply leading-[25.6px];
   }
   .wallet-table .rs-table-row-header .rs-table-cell {
-    @apply !bg-[#f5f5f5] font-semibold text-black;
+    @apply !bg-[#f8f8f9] font-semibold text-[#78787F];
   }
   .rs-checkbox label {
     @apply !flex !items-center;
   }
   .button-tab {
-    @apply font-semibold rounded-lg px-3 py-1 hover:bg-gray-50;
+    @apply font-semibold rounded-lg px-4 py-1 hover:bg-gray-50;
   }
   .button-tab-active {
     @apply button-tab bg-primary/10 text-primary hover:bg-primary/10;

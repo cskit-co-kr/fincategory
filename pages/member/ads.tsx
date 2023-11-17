@@ -88,7 +88,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                           [구매하기]
                         </button>
                       ) : (
-                        <div className='text-red-500'>[Sold Out]</div>
+                        <div className='text-red-500'>[매진]</div>
                       )}
                       <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads1' userId={session?.user.id} />
                     </div>
