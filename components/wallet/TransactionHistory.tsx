@@ -41,8 +41,8 @@ const TransactionHistory = () => {
         bordered
         className='wallet-table rounded-xl'
         autoHeight
-        renderLoading={() => <div className='text-center py-10'>Loading</div>}
-        renderEmpty={() => <div className='text-center py-10'>Empty</div>}
+        renderLoading={() => <div className='text-center py-10'></div>}
+        renderEmpty={() => <div className='text-center py-10'></div>}
       >
         <Column width={160}>
           <HeaderCell>일시</HeaderCell>

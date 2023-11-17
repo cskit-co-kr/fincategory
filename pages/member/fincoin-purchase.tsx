@@ -117,7 +117,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
             className='hidden md:flex gap-1 items-center border border-gray-200 rounded-full px-4 py-2 mb-4 text-xs'
           >
             <ArrowLeftIcon className='h-4' />
-            Back
+            뒤로
           </button>
           <div className='white-box'>
             <div className='text-xl font-bold'>핀코인 구매 안내</div>
