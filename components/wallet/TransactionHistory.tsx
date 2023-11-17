@@ -38,7 +38,7 @@ const TransactionHistory = () => {
       <Table
         data={data}
         bordered
-        className='wallet-table rounded-lg'
+        className='wallet-table rounded-xl'
         autoHeight
         renderLoading={() => <div className='text-center py-10'>Loading</div>}
         renderEmpty={() => <div className='text-center py-10'>Empty</div>}

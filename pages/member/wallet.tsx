@@ -46,7 +46,7 @@ const Wallet = ({ memberInfo, wallet }: any) => {
         {/* Sidebar */}
         <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
-          <div className='p-[30px] text-white bg-[#2B2B2B] rounded-lg bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
+          <div className='p-[30px] text-white bg-[#2B2B2B] rounded-xl bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
             <div className='font-rubik grid'>
               내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
@@ -57,7 +57,7 @@ const Wallet = ({ memberInfo, wallet }: any) => {
             </div>
           </div>
           <div className='white-box mt-4 p-[30px]'>
-            <div className='flex gap-2 mb-4'>
+            <div className='flex gap-1 mb-4'>
               <button className={`${activeTab === 1 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(1)}>
                 핀코인
               </button>
