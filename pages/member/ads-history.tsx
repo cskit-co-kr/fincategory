@@ -6,6 +6,7 @@ import Sidebar from '../../components/member/Sidebar';
 import { Table, Pagination } from 'rsuite';
 import { useState, useEffect } from 'react';
 import apiService from '../../lib/apiService';
+import { toDateTimeformat } from '../../lib/utils';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -101,11 +102,11 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
               </Column>
               <Column width={150} align='center'>
                 <HeaderCell>구매 날짜</HeaderCell>
-                <Cell>{(rowData) => rowData.started_at.substr(0, 19).replace('T', ' ')}</Cell>
+                <Cell>{(rowData) => toDateTimeformat(rowData.started_at, '-')}</Cell>
               </Column>
               <Column width={150} align='center'>
                 <HeaderCell>만료 날짜</HeaderCell>
-                <Cell>{(rowData) => rowData.ended_at.substr(0, 19).replace('T', ' ')}</Cell>
+                <Cell>{(rowData) => toDateTimeformat(rowData.ended_at, '-')}</Cell>
               </Column>
             </Table>
             <div className='p-5'>

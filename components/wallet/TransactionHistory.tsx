@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Table, Pagination } from 'rsuite';
 import apiService from '../../lib/apiService';
 import { useSession } from 'next-auth/react';
+import { toDateTimeformat } from '../../lib/utils';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -45,7 +46,7 @@ const TransactionHistory = () => {
       >
         <Column width={160}>
           <HeaderCell>일시</HeaderCell>
-          <Cell>{(rowData) => rowData.transaction_at.substr(0, 19).replace('T', ' ')}</Cell>
+          <Cell>{(rowData) => toDateTimeformat(rowData.transaction_at, '-')}</Cell>
         </Column>
 
         <Column minWidth={300} flexGrow={1}>
