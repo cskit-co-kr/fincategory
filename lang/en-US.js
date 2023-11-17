@@ -86,6 +86,11 @@ export const enUS = {
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
+    "today-desc": "Today ↓",
+    "today-asc": "Today ↑",
+    "total-desc": "Total ↓",
+    "total-asc": "Total ↑",
+    "created-desc": "Created at ↓",
     "tags": "Hashtags",
     "recently-added": "Recently added",
     /* add a channel */

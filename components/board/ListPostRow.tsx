@@ -42,7 +42,11 @@ const ListPostRow = ({ post, boardName, checkedItems, handleCheckboxChange, user
       <div className='pt-4 px-4 md:px-2 md:py-2.5 flex flex-grow'>
         <div className='mr-4 md:mr-0'>
           <div className='flex items-start md:items-center md:gap-1'>
-            <Link href={`/board/post/${post.id}`} className='break-all md:break-words line-clamp-3 md:line-clamp-1' target='_parent'>
+            <Link
+              href={`/board/post/${post.id}`}
+              className='break-all md:break-words line-clamp-3 md:line-clamp-1 hover:underline'
+              target='_parent'
+            >
               {post.title}
             </Link>
             {formatDate(post.created_at).length < 6 && <Image src='/n.svg' alt='New' width={14} height={14} className='pt-1 md:pt-0' />}

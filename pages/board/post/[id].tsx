@@ -27,7 +27,7 @@ import 'react-quill/dist/quill.snow.css';
 import LinkPreview from '../../../components/board/LinkPreview';
 import BoardComment from '../../../components/board/comment';
 
-export type HTMLElementCustom  = HTMLElement & {showModal: () => {}}
+export type HTMLElementCustom = HTMLElement & { showModal: () => {} };
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
@@ -114,6 +114,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   // Load Comments
   const loadComments = async () => {
     setCommentLoading(true);
+    const currentSession = await getSession();
     const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -128,6 +129,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           field: 'created_at',
           value: 'ASC',
         },
+        user: currentSession?.user.id,
+        boardid: post.board.id,
       }),
     });
     const data = await responseComment.json();
@@ -205,17 +208,20 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   };
 
   const deletePost = async () => {
-    if (session?.user.id !== post.user.id) return alert('error');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        post: [post.id],
-      }),
-    });
-    const result = await response.json();
-    if (result.success === true) {
-      router.push('/board');
+    if (session?.user.id === post.user.id || memberInfo?.member?.type === 2) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          post: [post.id],
+        }),
+      });
+      const result = await response.json();
+      if (result.success === true) {
+        router.push('/board');
+      }
+    } else {
+      return alert('permission error');
     }
   };
 
@@ -226,8 +232,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     setIsLoading(true);
     const board = post.board.name;
     const category = 'null';
+    const currentSession = await getSession();
     const responsePost = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}`,
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}&user=${currentSession?.user.id}&boardid=${post.board.id}`,
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -242,24 +249,25 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     if (session?.user) {
       setComment(e.currentTarget.value);
     } else {
-      const element: HTMLElementCustom | null =  document.getElementById('my_modal_1') as HTMLElementCustom;
+      const element: HTMLElementCustom | null = document.getElementById('my_modal_1') as HTMLElementCustom;
       element?.showModal();
     }
-
-  }
+  };
   const getUser = async () => {
     const currentSession = await getSession();
     // console.log('session id------------------->' + currentSession?.user.id);
 
     if (currentSession?.user) {
-      const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${currentSession?.user.id}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-      });
-      let u = await responseMember.json()
+      const responseMember = await fetch(
+        `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${currentSession?.user.id}`,
+        {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+        }
+      );
+      let u = await responseMember.json();
       setMemberInfo(u);
     }
-
   };
   useEffect(() => {
     setClickCheck((prev) => !prev);
@@ -457,8 +465,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                       </li>
                     ))}
                     <li
-                      className={`${commentLoading ? 'flex' : 'hidden'
-                        } bg-white opacity-80 absolute left-0 top-0 right-0 bottom-0 justify-center items-center`}
+                      className={`${
+                        commentLoading ? 'flex' : 'hidden'
+                      } bg-white opacity-80 absolute left-0 top-0 right-0 bottom-0 justify-center items-center`}
                     >
                       <SpinnerIcon pulse style={{ fontSize: '2em' }} />
                     </li>
@@ -598,18 +607,20 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             </div>
           </div>
         </div>
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box rounded-md " >
+        <dialog id='my_modal_1' className='modal'>
+          <div className='modal-box rounded-md '>
             {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
-            <p className="">{t['go-to-login-1']}</p>
-            <p className="">{t['go-to-login-2']}</p>
-            <div className="modal-action">
-              <form method="dialog" >
+            <p className=''>{t['go-to-login-1']}</p>
+            <p className=''>{t['go-to-login-2']}</p>
+            <div className='modal-action'>
+              <form method='dialog'>
                 <Link
                   className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-2'
                   href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
-                >{t["ok"]}</Link>
-                <button >{t["close"]}</button>
+                >
+                  {t['ok']}
+                </Link>
+                <button>{t['close']}</button>
               </form>
             </div>
           </div>

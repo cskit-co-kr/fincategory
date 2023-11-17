@@ -87,13 +87,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const filter =
       req.body.hasImage === 'grid'
         ? {
-            field: 'extra_01',
-            value: '1',
-          }
+          field: 'extra_01',
+          value: '1',
+        }
         : {
-            field: req.query.category === 'null' ? null : 'category_id',
-            value: req.query.category === 'null' ? null : req.query.category,
-          };
+          field: req.query.category === 'null' ? null : 'category_id',
+          value: req.query.category === 'null' ? null : req.query.category,
+        };
     let data: any = {
       board: req.query.board === 'null' ? null : req.query.board,
       paginate: {
@@ -105,6 +105,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         order: 'DESC',
       },
       filter: filter,
+      user: req.query.user,
+      boardid: req.query.boardid
     };
     if (req.body.search) {
       data['search'] = req.body.search;
@@ -270,6 +272,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           field: req.body.sort.field,
           order: req.body.sort.value,
         },
+        user: req.body.user,
+        boardid: req.body.boardid,
       }),
     });
 

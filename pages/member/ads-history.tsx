@@ -1,10 +1,33 @@
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Sidebar from '../../components/member/Sidebar';
+import { Table, Pagination } from 'rsuite';
+import { useState, useEffect } from 'react';
+import apiService from '../../lib/apiService';
+import { toDateTimeformat } from '../../lib/utils';
 
-const AdsHistory = () => {
+const { Column, HeaderCell, Cell } = Table;
+
+type PurchaseHistory = {
+  id: string;
+  product_info_id: string;
+  channel_id: string;
+  user_id: number;
+  started_at: string;
+  ended_at: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null | string;
+};
+
+type AdsHistoryProps = {
+  purchaseHistory: PurchaseHistory[];
+  memberInfo: any;
+};
+
+const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -15,15 +38,93 @@ const AdsHistory = () => {
       router.push('/member/signin');
     },
   });
+
+  const [page, setPage] = useState(1);
+
+  const [data, setData] = useState(purchaseHistory);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await apiService.transactionListUser(session?.user.id);
+  //     setData(result.data);
+  //   })();
+  // }, []);
+
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
-        {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
-          <div className='white-box p-0'>
-            <div className='text-xl font-bold p-[30px] pb-5'>상품구매내역</div>
-            <table className='w-full border-t border-gray-200 whitespace-nowrap'>
+          <div className='white-box p-[30px]'>
+            <div className='text-xl font-bold pb-5'>상품구매내역</div>
+
+            <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
+              <Column minWidth={250} flexGrow={1}>
+                <HeaderCell>상품명</HeaderCell>
+                <Cell>
+                  {(rowData) => {
+                    if (rowData.term === 30) {
+                      return '최상단 배너 (1 개월)';
+                    } else if (rowData.term === 90) {
+                      return '최상단 배너 (3 개월)';
+                    } else if (rowData.term === 180) {
+                      return '최상단 배너 (6 개월)';
+                    }
+                  }}
+                </Cell>
+              </Column>
+
+              <Column width={150}>
+                <HeaderCell>채널 ID</HeaderCell>
+                <Cell dataKey='channel_name' />
+              </Column>
+
+              <Column width={110} align='right'>
+                <HeaderCell>구매가격</HeaderCell>
+                <Cell>{(rowData) => `${rowData.fincoin.toLocaleString()} FinCoin`}</Cell>
+              </Column>
+
+              <Column width={100} align='center'>
+                <HeaderCell>상태</HeaderCell>
+                <Cell>
+                  {(rowData) =>
+                    checkStatus(rowData.started_at, rowData.ended_at) === 'active' ? (
+                      <div className='rounded-full border border-green-400 text-green-400 text-xs pb-[1px] px-1'>Active</div>
+                    ) : checkStatus(rowData.started_at, rowData.ended_at) === 'ended' ? (
+                      <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1'>Ended</div>
+                    ) : (
+                      checkStatus(rowData.started_at, rowData.ended_at) === 'scheduled' && (
+                        <div className='rounded-full border border-blue-400 text-blue-400 text-xs pb-[1px] px-1'>Scheduled</div>
+                      )
+                    )
+                  }
+                </Cell>
+              </Column>
+              <Column width={150} align='center'>
+                <HeaderCell>구매 날짜</HeaderCell>
+                <Cell>{(rowData) => toDateTimeformat(rowData.started_at, '-')}</Cell>
+              </Column>
+              <Column width={150} align='center'>
+                <HeaderCell>만료 날짜</HeaderCell>
+                <Cell>{(rowData) => toDateTimeformat(rowData.ended_at, '-')}</Cell>
+              </Column>
+            </Table>
+            <div className='p-5'>
+              <Pagination
+                className='justify-center'
+                prev
+                next
+                first
+                last
+                ellipsis
+                maxButtons={5}
+                total={data?.length}
+                activePage={page}
+                onChangePage={setPage}
+              />
+            </div>
+
+            {/* <table className='w-full border-t border-gray-200 whitespace-nowrap'>
               <thead className='bg-[#F5F5F5]'>
                 <tr>
                   <th className='py-2.5 pl-[30px] text-left'>상품명</th>
@@ -47,12 +148,50 @@ const AdsHistory = () => {
                 </tr>
               </tbody>
             </table>
-            <div className='my-[30px] grid justify-center'>Pagination</div>
+            <div className='my-[30px] grid justify-center'>Pagination</div> */}
           </div>
         </div>
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
+  // const response2 = await fetch(`https://test-backend.fincategory.com/v1/product/getProductUser/11`);
+  const response2 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUserId/${session?.user.id}`);
+  const result2 = await response2.json();
+  const purchaseHistory = result2.data;
+
+  // Return
+  return {
+    props: { memberInfo, purchaseHistory },
+  };
+};
+
+const checkStatus = (start: any, end: any) => {
+  const now = Date.now();
+  let status;
+  const s = Date.parse(start);
+  const e = Date.parse(end);
+  if (e - now < 0) {
+    status = 'ended';
+  } else if (s - now < 0 && now - e < 0) {
+    status = 'active';
+  } else if (now - s < 0) {
+    status = 'scheduled';
+  }
+  return status;
 };
 
 export default AdsHistory;

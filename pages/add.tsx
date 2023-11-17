@@ -8,32 +8,50 @@ import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Language } from '../typings';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import Image from 'next/image';
+import { colorStyles } from '../constants';
+import { Channel, MultiValueOptions } from '../typings';
+import { SelectPicker } from 'rsuite';
 
 type Languages = Array<Language>;
 
 type AddComponentProps = {
-  categories: any;
-  countries: any;
-  languages: Languages;
+  _categories: any;
+  _countries: any;
+  _languages: Languages;
 };
 
-const add = ({ categories, countries, languages }: AddComponentProps) => {
+const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
   const router = useRouter();
 
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const cats = categories?.map((item: any) => {
+  const cats = _categories?.map((item: any) => {
     const obj = JSON.parse(item.name);
     return {
-      value: item.id,
       label: locale === 'ko' ? obj.ko : obj.en,
+      value: item.id,
     };
   });
+
+  const countries = _countries?.map((item: any) => {
+    return {
+      label: t[item.iso as keyof typeof t],
+      value: item.id,
+    };
+  });
+
+  const languages = _languages?.map((item: any) => {
+    return {
+      label: t[item.value as keyof typeof t],
+      value: item.id,
+    };
+  });
+
   const [input, setInput] = useState<string>('');
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<any>('');
+  const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [selectedLanguage, setSelectedLanguage] = useState<any>('');
 
   const [errorInput, setErrorInput] = useState<string | null>(null);
   const [errorCountry, setErrorCountry] = useState<string | null>(null);
@@ -113,18 +131,20 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
   return (
     <div className='flex flex-col pt-7 bg-gray-50 min-h-screen'>
       <Head>
-        <title>FinCa - {t['add-channel']}</title>
-        <link rel='icon' href='/favicon.ico' />
+        <title>{`FinCa - ${t['add-channel']}`}</title>
       </Head>
       <div className='md:flex md:flex-col w-full xl:w-[1280px] mx-auto'>
         <div className='text-xl font-bold text-center'>{t['add-channel']}</div>
-        <div className='p-5 gap-3 border flex flex-col border-gray-200 rounded-md bg-white md:w-2/4 mx-auto mt-4'>
+        <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
           {resultState !== null ? (
             <div className='flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center'>{resultState}</div>
           ) : (
             ''
           )}
-          <label>{t['link-to']}</label>
+          <div className='font-semibold'>
+            {t['link-to']}
+            <span className='text-red-500'>*</span>
+          </div>
           <input
             value={input}
             onChange={onChangeInput}
@@ -134,66 +154,63 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
             className='border border-gray-200 rounded-md p-2 outline-non'
           />
           {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ''}
-
-          <label>{t['country']}</label>
-          <select
-            value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
-            className='border border-gray-200 rounded-md p-2 outline-none'
-          >
-            <option value=''>{t['choose-country']}</option>
-            {countries.map((country: any, index: number) => {
-              return (
-                <option value={country.id} key={index}>
-                  {t[country.iso as keyof typeof t]}
-                </option>
-              );
-            })}
-          </select>
-          {errorCountry !== null ? <div className='text-red-500 -mt-3 italic'>{errorCountry}</div> : ''}
-          <label>{t['contents-language']}</label>
-          <select
-            value={selectedLanguage}
-            onChange={(e) => setSelectedLanguage(e.target.value)}
-            className='border border-gray-200 rounded-md p-2 outline-none'
-            name='language'
-          >
-            <option value=''>{t['choose-language']}</option>
-            {languages.map((language: Language) => {
-              return (
-                <option value={language.id} key={language.id}>
-                  {t[language.value as keyof typeof t]}
-                </option>
-              );
-            })}
-          </select>
-          {errorLanguage !== null ? <div className='text-red-500 -mt-3 italic'>{errorLanguage}</div> : ''}
-          <label>{t['category']}</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className='border border-gray-200 rounded-md p-2 outline-none'
-            name='category'
-          >
-            <option value=''>{t['choose-category']}</option>
-            {cats.map((cat: any, index: number) => {
-              return (
-                <option value={cat.value} key={index}>
-                  {cat.label}
-                </option>
-              );
-            })}
-          </select>
-          {errorCategory !== null ? <div className='text-red-500 -mt-3 italic'>{errorCategory}</div> : ''}
-
+        </div>
+        <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
+          <div className='flex items-center'>
+            <div className='font-semibold min-w-[140px]'>
+              {t['country']}
+              <span className='text-red-500'>*</span>
+            </div>
+            <SelectPicker
+              className='w-full'
+              onChange={setSelectedCountry}
+              name='country'
+              data={countries}
+              placeholder={t['choose-country']}
+              searchable={false}
+            />
+          </div>
+          {errorCountry !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCountry}</div> : ''}
+          <div className='flex items-center'>
+            <div className='font-semibold min-w-[140px]'>
+              {t['contents-language']}
+              <span className='text-red-500'>*</span>
+            </div>
+            <SelectPicker
+              className='w-full'
+              onChange={setSelectedLanguage}
+              name='language'
+              data={languages}
+              placeholder={t['choose-language']}
+              searchable={false}
+            />
+          </div>
+          {errorLanguage !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorLanguage}</div> : ''}
+          <div className='flex items-center'>
+            <div className='font-semibold min-w-[140px]'>
+              {t['category']}
+              <span className='text-red-500'>*</span>
+            </div>
+            <SelectPicker
+              className='w-full'
+              onChange={setSelectedCategory}
+              name='category'
+              data={cats}
+              placeholder={t['select-topic']}
+              searchable={false}
+            />
+          </div>
+          {errorCategory !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCategory}</div> : ''}
           <button
             onClick={() => handleSubmit()}
-            className='bg-primary px-10 rounded-full text-sm py-2 w-fit self-center text-white active:bg-[#143A66]'
+            className='mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]'
           >
             {t['register']}
           </button>
         </div>
-        <div className='mx-auto mt-8 text-[#3687E2] font-[500]'>* 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.</div>
+        <div className='mx-auto mt-8 px-5 text-center text-[#3687E2] font-medium'>
+          * 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.
+        </div>
       </div>
     </div>
   );
@@ -201,16 +218,16 @@ const add = ({ categories, countries, languages }: AddComponentProps) => {
 
 export const getServerSideProps = async () => {
   const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
-  const categories = await result.data;
+  const _categories = await result.data;
 
   const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
-  const countries = await resCountry.data;
+  const _countries = await resCountry.data;
 
   const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
-  const languages = await resLanguage.data;
+  const _languages = await resLanguage.data;
 
   return {
-    props: { categories, countries, languages },
+    props: { _categories, _countries, _languages },
   };
 };
 

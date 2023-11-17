@@ -6,6 +6,11 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   UserCircleIcon,
+  ChatBubbleBottomCenterTextIcon,
+  DocumentTextIcon,
+  PencilSquareIcon,
+  StopCircleIcon,
+  UserIcon,
 } from '@heroicons/react/24/outline';
 import { ChartBarIcon, EnvelopeIcon } from '@heroicons/react/24/solid';
 import { FaCaretDown, FaTelegramPlane } from 'react-icons/fa';
@@ -18,6 +23,7 @@ import Link from 'next/link';
 import { useSession, signOut, signIn } from 'next-auth/react';
 import { Nav } from 'rsuite';
 import useData from '../hooks/useData';
+import { PiCurrencyKrwBold } from 'react-icons/pi';
 
 const Header = () => {
   const router = useRouter();
@@ -131,6 +137,39 @@ const Header = () => {
     }
   }
 
+  const menus = [
+    {
+      id: 1,
+      title: '내정보',
+      icon: <UserIcon className='h-5' />,
+      link: '/member/profile',
+    },
+    {
+      id: 2,
+      title: '핀코인',
+      icon: <StopCircleIcon className='h-5' />,
+      link: '/member/wallet',
+    },
+    {
+      id: 3,
+      title: '상품구매내역',
+      icon: <DocumentTextIcon className='h-5' />,
+      link: '/member/ads-history',
+    },
+    {
+      id: 4,
+      title: '내가 쓴 글',
+      icon: <PencilSquareIcon className='h-5' />,
+      link: `/board?member=${session?.user.nickname}&show=posts`,
+    },
+    {
+      id: 5,
+      title: '내가 쓴 댓글',
+      icon: <ChatBubbleBottomCenterTextIcon className='h-5' />,
+      link: `/board?member=${session?.user.nickname}&show=comments`,
+    },
+  ];
+
   return (
     <>
       <header className='bg-white z-20'>
@@ -177,30 +216,23 @@ const Header = () => {
                             {t['sign-out']}
                           </button>
                         </div>
-                        <div className='gap-1.5 grid'>
-                          <div className='flex'>
-                            가입<div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
-                          </div>
-                          <div className='flex'>
-                            <Link href={`/board?member=${session?.user.nickname}&show=posts`} onClick={handleClick}>
-                              내가 쓴 글 보기
+
+                        <div className='space-y-5 mt-2.5'>
+                          {menus.map((menu, index) => (
+                            <Link
+                              key={index}
+                              className={`flex items-center gap-2.5 font-semibold text-sm ${
+                                menu.link === router.asPath ? 'text-black' : 'text-gray-500'
+                              }`}
+                              href={menu.link}
+                            >
+                              {menu.icon}
+                              {menu.title}
+                              {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
+                              {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
                             </Link>
-                            <div className='ml-auto'>{memberInfo?.post}</div>
-                          </div>
-                          <div className='flex'>
-                            <Link href={`/board?member=${session?.user.nickname}&show=comments`} onClick={handleClick}>
-                              내가 쓴 댓글 보기
-                            </Link>
-                            <div className='ml-auto'>{memberInfo?.comment}</div>
-                          </div>
+                          ))}
                         </div>
-                        <Link
-                          className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                          href='/board/write'
-                          onClick={handleClick}
-                        >
-                          글쓰기
-                        </Link>
                       </div>
                     ) : (
                       <div className='flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4'>
@@ -209,7 +241,7 @@ const Header = () => {
                           <span className='font-semibold'>ID {t['sign-in']}</span>
                         </div>
                         <button
-                          className='bg-primary font-semibold text-white py-2 px-5 text-base'
+                          className='bg-primary font-semibold text-white py-2 px-5 text-base rounded-md'
                           onClick={() => {
                             signIn();
                             handleClick();
@@ -229,12 +261,23 @@ const Header = () => {
                           <ChartBarIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['rank']}
                         </Link>
+                        <Link className='font-semibold flex gap-2 items-center' href='/member/ads' onClick={handleClick}>
+                          <PiCurrencyKrwBold className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
+                          광고 상품
+                        </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/add' onClick={handleClick}>
                           <PlusIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
                           {t['new-channel-registration']}
                         </Link>
                       </div>
                       <div className='bg-white p-4 rounded-xl shadow-sm'>
+                        <Link
+                          className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md w-full mb-4 block'
+                          href='/board/write'
+                          onClick={handleClick}
+                        >
+                          글쓰기
+                        </Link>
                         <div className='border-b border-gray-200 pb-2 font-semibold'>
                           <Link href='/board' onClick={handleClick} className='flex gap-1 items-center'>
                             {t['view-all-articles']}
@@ -416,11 +459,11 @@ const Header = () => {
                   )
                 )}
               </Nav>
-              {/* <li>
+              <li>
                 <button className={getPath === '/member/ads' ? activePath : normalPath} onClick={() => router.push('/member/ads')}>
                   광고 상품
                 </button>
-              </li> */}
+              </li>
             </ul>
             <button
               className={`${getPath === '/new-channel' ? activePath + ' ml-auto' : normalPath + ' ml-auto'}`}

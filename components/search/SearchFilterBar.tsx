@@ -32,23 +32,23 @@ const SearchFilterBar = ({
       value: 'subscription_asc',
     },
     {
-      label: '오늘 조회수 순 ↓',
+      label: `${t["today-desc"]}`,
       value: 'today_desc',
     },
     {
-      label: '오늘 조회수 순 ↑',
+      label: `${t["today-asc"]}`,
       value: 'today_asc',
     },
     {
-      label: '누적 조회수 순 ↓',
+      label: `${t["total-desc"]}`,
       value: 'total_desc',
     },
     {
-      label: '누적 조회수 순 ↑',
+      label: `${t["total-asc"]}`,
       value: 'total_asc',
     },
     {
-      label: '최근 추가',
+      label: `${t["created-desc"]}`,
       value: 'created_desc',
     },
   ];
@@ -65,9 +65,7 @@ const SearchFilterBar = ({
     });
   };
   useEffect(() => {
-    const tag = selectedTag ? `#${selectedTag}` : ""
-
-    doSearch(tag !== "" ? tag  : (router.query.q as string) || '');
+    doSearch((router.query.q as string) || '');
   }, [channelType]);
 
   return (
@@ -75,35 +73,31 @@ const SearchFilterBar = ({
       <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
         <div className='flex gap-2 items-center'>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-            }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              }`}
             onClick={() => updateChannelType([{ value: 'all', label: t['All'] }])}
           >
             {t['All']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-            }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              }`}
             onClick={() => updateChannelType([{ value: 'channel', label: t['channel'] }])}
           >
             <HiOutlineMegaphone size={16} className={`${channelType[0].value === 'channel' ? 'text-white' : 'text-[#3886E2]'}`} />
             {t['channel']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-            }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              }`}
             onClick={() => updateChannelType([{ value: 'public_group', label: t['public-group'] }])}
           >
             <HiOutlineUsers size={16} className={`${channelType[0].value === 'public_group' ? 'text-white' : 'text-[#FF7171]'}`} />
             {t['Public Group']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
-              channelType[0].value === 'private_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-            }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'private_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+              }`}
             onClick={() => updateChannelType([{ value: 'private_group', label: t['private-group'] }])}
           >
             <HiOutlineLockClosed size={16} className={`${channelType[0].value === 'private_group' ? 'text-white' : 'text-[#FF7171]'}`} />

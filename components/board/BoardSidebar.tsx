@@ -14,6 +14,7 @@ import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
+import Sidebar from '../member/Sidebar';
 
 const BoardSidebar = ({ memberInfo }: any) => {
   const router = useRouter();
@@ -41,58 +42,9 @@ const BoardSidebar = ({ memberInfo }: any) => {
     <>
       <div className='hidden lg:block lg:min-w-[310px] text-sm'>
         <div className='lg:sticky lg:top-4'>
-          <div className='flex flex-col gap-2.5 border border-gray-200 rounded-md p-[30px] bg-white'>
-            {session?.user ? (
-              <>
-                <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-                  <UserCircleIcon className='h-6 text-black' />
-                  <span className='font-semibold'>
-                    <Link href='/member/profile'>{session?.user.nickname}</Link>
-                  </span>
-                  <button
-                    onClick={() => signOut({ callbackUrl: '/search' })}
-                    className='bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto'
-                  >
-                    {t['sign-out']}
-                  </button>
-                </div>
-                <div className='space-y-2.5'>
-                  <div className='flex'>
-                    <div className='flex items-center gap-2.5 text-sm'>
-                      <UserIcon className='h-5' />
-                      가입
-                    </div>
-                    <div className='ml-auto'>{memberInfo?.member?.created_at.substring(0, 10).replaceAll('-', '.')}</div>
-                  </div>
-                  <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=posts`} className='flex items-center gap-2.5 text-sm'>
-                      <PencilSquareIcon className='h-5' /> 내가 쓴 글 보기
-                    </Link>
-                    <div className='ml-auto'>{memberInfo?.post}</div>
-                  </div>
-                  <div className='flex'>
-                    <Link href={`/board?member=${session?.user.nickname}&show=comments`} className='flex items-center gap-2.5 text-sm'>
-                      <ChatBubbleBottomCenterTextIcon className='h-5' /> 내가 쓴 댓글 보기
-                    </Link>
-                    <div className='ml-auto'>{memberInfo?.comment}</div>
-                  </div>
-                </div>
-                <Link className='bg-primary text-white py-2 px-5 text-center hover:text-white' href='/board/write'>
-                  글쓰기
-                </Link>
-              </>
-            ) : (
-              <>
-                <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-                  <UserCircleIcon className='h-6 text-black' />
-                  <span className='font-semibold'>ID {t['sign-in']}</span>
-                </div>
-                <button className='bg-primary font-semibold text-white py-2 px-5' onClick={() => signIn()}>
-                  {t['sign-in']}
-                </button>
-              </>
-            )}
-            <div className='border-y border-gray-200 py-2 font-semibold'>
+          <Sidebar memberInfo={memberInfo} />
+          <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white mt-4'>
+            <div className='border-y border-gray-200 py-3 font-semibold'>
               <Link href='/board' className={`${router.asPath === '/board' && 'text-primary'}`}>
                 {t['view-all-articles']}
               </Link>

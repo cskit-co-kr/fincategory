@@ -1,10 +1,17 @@
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Sidebar from '../../components/member/Sidebar';
+import { Table, Pagination, Nav } from 'rsuite';
+import { useState, useEffect } from 'react';
+import apiService from '../../lib/apiService';
+import TransactionHistory from '../../components/wallet/TransactionHistory';
+import PurchaseHistory from '../../components/wallet/PurchaseHistory';
 
-const Wallet = () => {
+const { Column, HeaderCell, Cell } = Table;
+
+const Wallet = ({ memberInfo, wallet }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -15,25 +22,54 @@ const Wallet = () => {
       router.push('/member/signin');
     },
   });
+
+  const balance = wallet ? wallet.balance.toLocaleString() : 0;
+
+  const [page, setPage] = useState<number>(1);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      if (session) {
+        const result = await apiService.transactionListUser(session?.user.id, page);
+        setData(result.data);
+      }
+    })();
+  }, [session, page]);
+
+  const [activeTab, setActiveTab] = useState(1);
+
   return (
     <>
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
-        <Sidebar />
+        <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>
-          <div className='p-[30px] text-white bg-[#2B2B2B] rounded-lg bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
+          <div className='p-[30px] text-white bg-[#2B2B2B] rounded-xl bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
             <div className='font-rubik grid'>
-              My Balance<span className='text-4xl font-semibold mt-2.5'>500 000</span>
+              내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
             <div className='ml-auto mt-auto'>
               <button className='gradient-button' onClick={() => router.push('/member/fincoin-purchase')}>
-                Buy Fincoin
+                핀코인 구매
               </button>
             </div>
           </div>
-          <div className='white-box mt-4 p-0'>
-            <div className='text-xl font-bold p-[30px] pb-5'>거래 내역</div>
-            <table className='w-full border-t border-gray-200 whitespace-nowrap'>
+          <div className='white-box mt-4 p-[30px]'>
+            <div className='flex gap-1 mb-4'>
+              <button className={`${activeTab === 1 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(1)}>
+                핀코인
+              </button>
+              <button className={`${activeTab === 2 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(2)}>
+                구매내역
+              </button>
+            </div>
+
+            {activeTab === 1 && <TransactionHistory />}
+            {activeTab === 2 && <PurchaseHistory />}
+
+            {/* <table className='w-full border-t border-gray-200 whitespace-nowrap'>
               <thead className='bg-[#F5F5F5]'>
                 <tr>
                   <th className='py-2.5 text-left pl-[30px] w-[180px]'>일시</th>
@@ -57,12 +93,34 @@ const Wallet = () => {
                 </tr>
               </tbody>
             </table>
-            <div className='my-[30px] grid justify-center'>Pagination</div>
+            <div className='my-[30px] grid justify-center'>Pagination</div> */}
           </div>
         </div>
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  // Get Member Information
+  let memberInfo = '';
+  const session = await getSession(context);
+  if (session?.user) {
+    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    memberInfo = await responseMember.json();
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
+  const result = await response.json();
+  const wallet = result.wallet;
+
+  // Return
+  return {
+    props: { memberInfo, wallet },
+  };
 };
 
 export default Wallet;
