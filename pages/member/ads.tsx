@@ -56,7 +56,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
               <div className=''>
                 핀카 메인 화면 최상단에 노출되는 배너입니다.
                 <br />
-                단 9분께 선착순 판매합니다.
+                단 3분께 선착순 판매합니다.
                 <br />
                 지금 미리 구매하셔서 자리를 선점하세요. 늦으면 매진될 수 있습니다.
               </div>
@@ -76,7 +76,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
                       {status === 'unauthenticated' ? (
-                        <Link href='/member/signin'>[{t['sign-in']}]</Link>
+                        <Link href='/member/signin'>[구매하기]</Link>
                       ) : activeProducts < 3 ? (
                         <button
                           onClick={() => {
@@ -98,8 +98,8 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
               <div className='mt-12'>
                 <div className='font-semibold'>유의사항</div>
                 <ol className='list-disc list-inside mt-5'>
-                  <li>최상단 배너는 9개의 광고가 랜덤으로 노출됩니다.</li>
-                  <li>선착순 9분께 판매됩니다.</li>
+                  <li>최상단 배너는 3개의 광고가 랜덤으로 노출됩니다.</li>
+                  <li>선착순 3분께 판매됩니다.</li>
                   <li>광고 연장은 기존 광고주께 우선 부여됩니다.</li>
                 </ol>
               </div>
