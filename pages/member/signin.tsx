@@ -32,7 +32,7 @@ const MemberSignIn = () => {
       username: usernameInput,
       password: passwordInput,
       redirect: false,
-      callbackUrl: router.query.callbackUrl ? (router.query.callbackUrl as string) : '/',
+      callbackUrl: router.query.callbackUrl ? (router.query.callbackUrl as string) : '/search',
     });
     if (result?.error === 'CredentialsSignin') {
       setErrorMessage('Invalid email or password');

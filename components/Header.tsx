@@ -388,22 +388,34 @@ const Header = () => {
                     </button>
                     {userMenu && (
                       <div
-                        className='absolute top-7 right-0 border shadow-md bg-white flex flex-col rounded-xl min-w-[100px] text-xs'
+                        className='absolute top-7 right-0 border shadow-lg bg-white flex flex-col rounded-xl min-w-[200px] text-xs z-10 py-2.5'
                         ref={browseRef}
                       >
                         <Link
                           href='/member/profile'
                           onClick={() => setUserMenu(false)}
-                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                          className='flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
                         >
-                          <UserCircleIcon className='h-4' />내 정보
+                          <UserCircleIcon className='h-5' />내 정보
                         </Link>
+
+                        <div className=''>
+                          {menus.map((menu, index) => (
+                            <Link key={index} className={`flex items-center gap-2 hover:bg-gray-50 rounded-xl px-3 py-2`} href={menu.link}>
+                              {menu.icon}
+                              {menu.title}
+                              {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
+                              {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
+                            </Link>
+                          ))}
+                        </div>
+
                         <Link
                           href='#'
                           onClick={() => signOut({ callbackUrl: '/search' })}
-                          className='flex gap-1 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
+                          className='flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
                         >
-                          <ArrowRightOnRectangleIcon className='h-4' />
+                          <ArrowRightOnRectangleIcon className='h-5' />
                           {t['sign-out']}
                         </Link>
                       </div>
