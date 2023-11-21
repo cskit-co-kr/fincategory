@@ -1,16 +1,11 @@
 import axios from 'axios';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { SelectPicker } from 'rsuite';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Language } from '../typings';
-import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
-import Image from 'next/image';
-import { colorStyles } from '../constants';
-import { Channel, MultiValueOptions } from '../typings';
-import { SelectPicker } from 'rsuite';
 
 type Languages = Array<Language>;
 
@@ -40,13 +35,15 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
       value: item.id,
     };
   });
-
+  console.log('--------------------------------------------->>>>>');
+  console.log(_languages);
   const languages = _languages?.map((item: any) => {
     return {
       label: t[item.value as keyof typeof t],
       value: item.id,
     };
   });
+  console.log(languages);
 
   const [input, setInput] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<any>('');
