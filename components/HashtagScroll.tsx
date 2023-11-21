@@ -1,8 +1,16 @@
 const HashtagScroll = ({ tags, selectedTag, setSelectedTag }: any) => {
+  const tagsSorted = () => {
+    return tags.sort(function (a: any, b: any) {
+      var x = Number(a['total']);
+      var y = Number(b['total']);
+      return x > y ? -1 : x < y ? 1 : 0;
+    });
+  };
+  const t = tagsSorted();
   return (
-    <div className='flex scrollable-container select-none'>
-      {tags?.map((tag: any, index: any) => (
-        <div key={index} className='mr-1'>
+    <div className='flex scrollable-container select-none md:flex-wrap'>
+      {t?.map((tag: any, index: any) => (
+        <div key={index} className='mr-1 md:mb-1.5'>
           <button
             className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
               selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'

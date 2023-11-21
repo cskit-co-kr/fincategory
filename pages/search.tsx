@@ -62,8 +62,8 @@ const Search = () => {
     dots: false,
     infinite: false,
     speed: 1000,
-    slidesToShow: 8,
-    slidesToScroll: 8,
+    slidesToShow: 10,
+    slidesToScroll: 10,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
@@ -752,7 +752,7 @@ const Search = () => {
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
-              <div className='relative block w-[91%] md:w-[93%] max-w-[340px] lg:max-w-[1200px]'>
+              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
                 {/* <div className='hidden md:block'>
                   <ReactSlickSlider {...settings}>
                     {tags?.map((tag: any) => (
@@ -779,7 +779,7 @@ const Search = () => {
                     ))}
                   </ReactSlickSlider>
                 </div> */}
-                <div className=''>
+                <div className='ml-2'>
                   <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
                 </div>
               </div>
