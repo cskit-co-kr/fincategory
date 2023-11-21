@@ -12,7 +12,7 @@ type Languages = Array<Language>;
 type AddComponentProps = {
   _categories: any;
   _countries: any;
-  _languages: Languages;
+  _languages: any;
 };
 
 const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
