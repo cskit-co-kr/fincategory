@@ -752,7 +752,7 @@ const Search = () => {
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
-              <div className='relative block w-[91%] md:w-[98%] max-w-[340px] lg:max-w-[1300px]'>
+              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
                 {/* <div className='hidden md:block'>
                   <ReactSlickSlider {...settings}>
                     {tags?.map((tag: any) => (
@@ -779,7 +779,7 @@ const Search = () => {
                     ))}
                   </ReactSlickSlider>
                 </div> */}
-                <div className='ml-4'>
+                <div className='ml-2'>
                   <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
                 </div>
               </div>
