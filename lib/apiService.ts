@@ -36,6 +36,12 @@ export class ApiService {
     const result = await response.data;
     return result;
   }
+
+  async getAds2() {
+    const response = await axios.get(`/api/get-ads2`);
+    const result = await response.data;
+    return result;
+  }
 }
 
 const apiService = new ApiService();
