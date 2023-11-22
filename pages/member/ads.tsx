@@ -140,8 +140,8 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) =>
               <div className='mt-12'>
                 <div className='font-semibold'>유의사항</div>
                 <ol className='list-disc list-inside mt-5'>
-                  <li>최상단 배너는 9개의 광고가 랜덤으로 노출됩니다.</li>
-                  <li>선착순 9분께 판매됩니다.</li>
+                  <li>첫 페이지 광고의 노출 순서는 랜덤입니다..</li>
+                  <li>구매 가능한 상품 개수는 45개 입니다.</li>
                   <li>광고 연장은 기존 광고주께 우선 부여됩니다.</li>
                 </ol>
               </div>

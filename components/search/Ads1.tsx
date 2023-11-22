@@ -13,20 +13,29 @@ const Ads1 = () => {
   const t = locale === 'ko' ? koKR : enUS;
 
   const { data: session } = useSession();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [emptyAd, setEmptyAd] = useState(false);
+
+  const shuffleArray = (array: any) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
   useEffect(() => {
     (async () => {
       const result = await apiService.getAds1();
-      let rows = result.rows;
-      if (result.rows.length === 2 || result.rows.length === 5 || result.rows.length === 8) {
+      let rows = shuffleArray(result.rows).slice(0, 3);
+      if (result.rows.length === 2) {
         rows.push({
           title: '핀카 최상단 배너',
           description:
             '메인 화면 최상단에 노출되는 배너입니다. 단 9분께 선착순 판매합니다. 지금 미리 구매하셔서 자리를 선점하세요. 늦으면 매진될 수 있습니다.',
         });
-      } else if (result.rows.length === 1 || result.rows.length === 4 || result.rows.length === 7) {
+      } else if (result.rows.length === 1) {
         rows.push({
           title: '핀카 최상단 배너',
           description:
@@ -40,6 +49,7 @@ const Ads1 = () => {
       } else if (result.rows.length === 0) {
         setEmptyAd(true);
       }
+      // const shuffledData = shuffleArray(rows).slice(0, 3);
       setData(rows);
     })();
   }, []);
