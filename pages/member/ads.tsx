@@ -15,7 +15,7 @@ type ads = {
   coin: number;
 };
 
-const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) => {
+const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activeProducts2 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -123,15 +123,21 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) =>
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
-                      <button
-                        onClick={() => {
-                          const modalId = `ads2_modal_${index}`;
-                          const modal = document.getElementById(modalId) as any;
-                          modal?.showModal();
-                        }}
-                      >
-                        [구매하기]
-                      </button>
+                      {status === 'unauthenticated' ? (
+                        <Link href='/member/signin'>[구매하기]</Link>
+                      ) : activeProducts2 < 45 ? (
+                        <button
+                          onClick={() => {
+                            const modalId = `ads2_modal_${index}`;
+                            const modal = document.getElementById(modalId) as any;
+                            modal?.showModal();
+                          }}
+                        >
+                          [구매하기]
+                        </button>
+                      ) : (
+                        <div className='text-red-500'>[매진]</div>
+                      )}
                       <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads2' userId={session?.user.id} />
                     </div>
                   </div>
@@ -182,9 +188,13 @@ export const getServerSideProps = async (context: any) => {
   const result3 = await response3.json();
   const activeProducts = result3.rows.length;
 
+  const response5 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductActiveSection2`);
+  const result5 = await response5.json();
+  const activeProducts2 = result5.rows.length;
+
   // Return
   return {
-    props: { memberInfo, wallet, section1, section2, activeProducts },
+    props: { memberInfo, wallet, section1, section2, activeProducts, activeProducts2 },
   };
 };
 

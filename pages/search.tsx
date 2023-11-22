@@ -382,7 +382,13 @@ const Search = () => {
     const resultData = await response.data;
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
-    setSearchResult(result);
+
+    // add ad section 2 channels --------------------------------------
+    const ads2Added = await addAds2(result);
+    // ----------------------------------------------------------------
+
+    setSearchResult(ads2Added);
+    // setSearchResult(result);
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
   };
