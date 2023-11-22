@@ -92,6 +92,7 @@ export const koKR = {
     "created-desc": "최근 추가 ↓",
     "tags": "해시태그",
     "recently-added": "최근 추가",
+    
     /* add a channel */
     "add-channel": "채널 및 그룹 추가",
     "link-to": "채널 또는 그룹에 대한 링크",
@@ -108,7 +109,7 @@ export const koKR = {
     "send": "보내다",
     "register": "등록",
     "check-username": "확인하다",
-    "please-username": "* 사용자 이름을 입력하세요",
+    "please-username": "채널/그룹의 링크를 입력하세요.",
     "please-country": "* 국가를 선택하세요.",
     "please-language": "* 언어를 선택하세요",
     "please-category": "* 카테고리를 선택해주세요",

@@ -31,7 +31,7 @@ const Header = () => {
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const normalPath = 'px-5 py-3 font-bold text-[14px] hover:text-primary flex items-center gap-1';
   // const activePath = normalPath + ' border-b-2 border-primary';
@@ -271,13 +271,15 @@ const Header = () => {
                         </Link>
                       </div>
                       <div className='bg-white p-4 rounded-xl shadow-sm'>
-                        <Link
-                          className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md w-full mb-4 block'
-                          href='/board/write'
-                          onClick={handleClick}
-                        >
-                          글쓰기
-                        </Link>
+                        {status === 'authenticated' && (
+                          <Link
+                            className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md w-full mb-4 block'
+                            href='/board/write'
+                            onClick={handleClick}
+                          >
+                            글쓰기
+                          </Link>
+                        )}
                         <div className='border-b border-gray-200 pb-2 font-semibold'>
                           <Link href='/board' onClick={handleClick} className='flex gap-1 items-center'>
                             {t['view-all-articles']}
@@ -388,7 +390,7 @@ const Header = () => {
                     </button>
                     {userMenu && (
                       <div
-                        className='absolute top-7 right-0 border shadow-lg bg-white flex flex-col rounded-xl min-w-[200px] text-xs z-10 py-2.5'
+                        className='absolute top-7 right-0 border shadow-lg bg-white flex flex-col rounded-xl min-w-[120px] text-xs z-10'
                         ref={browseRef}
                       >
                         <Link
@@ -396,26 +398,15 @@ const Header = () => {
                           onClick={() => setUserMenu(false)}
                           className='flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
                         >
-                          <UserCircleIcon className='h-5' />내 정보
+                          <UserCircleIcon className='h-4' />내 정보
                         </Link>
-
-                        <div className=''>
-                          {menus.map((menu, index) => (
-                            <Link key={index} className={`flex items-center gap-2 hover:bg-gray-50 rounded-xl px-3 py-2`} href={menu.link}>
-                              {menu.icon}
-                              {menu.title}
-                              {menu.id === 4 && <div className='ml-auto'>{memberInfo?.post}</div>}
-                              {menu.id === 5 && <div className='ml-auto'>{memberInfo?.comment}</div>}
-                            </Link>
-                          ))}
-                        </div>
 
                         <Link
                           href='#'
                           onClick={() => signOut({ callbackUrl: '/search' })}
                           className='flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
                         >
-                          <ArrowRightOnRectangleIcon className='h-5' />
+                          <ArrowRightOnRectangleIcon className='h-4' />
                           {t['sign-out']}
                         </Link>
                       </div>

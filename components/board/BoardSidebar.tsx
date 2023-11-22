@@ -23,7 +23,7 @@ const BoardSidebar = ({ memberInfo }: any) => {
 
   const name = router.query.name && router.query.name[0];
   const postBoardName = getCookie('postboardname');
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
@@ -44,6 +44,14 @@ const BoardSidebar = ({ memberInfo }: any) => {
         <div className='lg:sticky lg:top-4'>
           <Sidebar memberInfo={memberInfo} />
           <div className='flex flex-col gap-2.5 border border-gray-200 rounded-lg p-[30px] bg-white mt-4'>
+            {status === 'authenticated' && (
+              <Link
+                className='bg-primary text-white py-2 px-5 text-center hover:text-white rounded-md w-full mb-2 block'
+                href='/board/write'
+              >
+                글쓰기
+              </Link>
+            )}
             <div className='border-y border-gray-200 py-3 font-semibold'>
               <Link href='/board' className={`${router.asPath === '/board' && 'text-primary'}`}>
                 {t['view-all-articles']}
