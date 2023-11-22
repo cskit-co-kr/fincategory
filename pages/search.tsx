@@ -27,6 +27,8 @@ import SearchFilterBar from '../components/search/SearchFilterBar';
 import Ads from './member/ads';
 import FincoinPurchase from './member/ads-purchase';
 import Ads1 from '../components/search/Ads1';
+import addAds2 from '../lib/ads2';
+import AdChannel from '../components/search/AdChannel';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -358,8 +360,13 @@ const Search = () => {
 
     if (result) {
       setTotalChannels(resultData.total);
-      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-      setSearchResult(result);
+
+      // add ad section 2 channels --------------------------------------
+      const ads2Added = await addAds2(result);
+      // ----------------------------------------------------------------
+
+      setSearchResult(ads2Added);
+      // setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     }
 
@@ -808,8 +815,12 @@ const Search = () => {
             )}
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-                {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />;
+                {searchResult?.map((channel: any) => {
+                  return channel.prod_section ? (
+                    <AdChannel channel={channel} key={channel.id} showType={channel.type ? true : false} />
+                  ) : (
+                    <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />
+                  );
                 })}
               </div>
             ) : (

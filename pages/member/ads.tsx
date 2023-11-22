@@ -15,22 +15,7 @@ type ads = {
   coin: number;
 };
 
-const ads2 = [
-  {
-    duration: '1 개월',
-    coin: 200000,
-  },
-  {
-    duration: '3 개월',
-    coin: 400000,
-  },
-  {
-    duration: '6 개월',
-    coin: 600000,
-  },
-];
-
-const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
+const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -40,6 +25,12 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
   const balance = wallet ? wallet.balance.toLocaleString() : 0;
 
   const ads1 = section1.map((ad: any) => ({
+    id: ad.id,
+    duration: `${ad.term / 30} 개월`,
+    coin: ad.fincoin,
+  }));
+
+  const ads2 = section2.map((ad: any) => ({
     id: ad.id,
     duration: `${ad.term / 30} 개월`,
     coin: ad.fincoin,
@@ -106,7 +97,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
             </div>
           </div>
 
-          {/* <div className='white-box mt-10'>
+          <div className='white-box mt-10'>
             <div className='text-2xl'>첫 페이지 노출</div>
             <div className='mt-5'>
               <div className=''>
@@ -127,7 +118,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
               </div>
               <div className='mt-6'>
                 <div className='font-semibold mb-3'>가격</div>
-                {ads2.map((ad, index) => (
+                {ads2.map((ad: ads, index: number) => (
                   <div className='flex mt-2' key={index}>
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
@@ -141,7 +132,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                       >
                         [구매하기]
                       </button>
-                      <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads2' />
+                      <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads2' userId={session?.user.id} />
                     </div>
                   </div>
                 ))}
@@ -155,7 +146,7 @@ const Ads = ({ memberInfo, wallet, section1, activeProducts }: any) => {
                 </ol>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
@@ -183,13 +174,17 @@ export const getServerSideProps = async (context: any) => {
   const result2 = await response2.json();
   const section1 = result2.rows;
 
+  const response4 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductSection2`);
+  const result4 = await response4.json();
+  const section2 = result4.rows;
+
   const response3 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductActive`);
   const result3 = await response3.json();
   const activeProducts = result3.rows.length;
 
   // Return
   return {
-    props: { memberInfo, wallet, section1, activeProducts },
+    props: { memberInfo, wallet, section1, section2, activeProducts },
   };
 };
 
