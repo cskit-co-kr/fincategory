@@ -29,6 +29,7 @@ import FincoinPurchase from './member/ads-purchase';
 import Ads1 from '../components/search/Ads1';
 import addAds2 from '../lib/ads2';
 import AdChannel from '../components/search/AdChannel';
+import AdChannel2 from '../components/search/AdChannel2';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -381,7 +382,13 @@ const Search = () => {
     const resultData = await response.data;
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
-    setSearchResult(result);
+
+    // add ad section 2 channels --------------------------------------
+    const ads2Added = await addAds2(result);
+    // ----------------------------------------------------------------
+
+    setSearchResult(ads2Added);
+    // setSearchResult(result);
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
   };
@@ -734,7 +741,7 @@ const Search = () => {
                 {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
               </div>
 
-              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl' id='search'>
                 <div className='flex justify-between items-center pt-5 pb-2 px-5'>
                   <div className='font-semibold text-sm'>{t['recently-added']}</div>
                   <button
@@ -817,7 +824,7 @@ const Search = () => {
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: any) => {
                   return channel.prod_section ? (
-                    <AdChannel channel={channel} key={channel.id} showType={channel.type ? true : false} />
+                    <AdChannel2 channel={channel} key={channel.id} showType={channel.type ? true : false} />
                   ) : (
                     <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />
                   );

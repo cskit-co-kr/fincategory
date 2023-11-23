@@ -48,6 +48,7 @@ const Header = () => {
         router.push({
           pathname: '/search',
           query: { q: searchField },
+          hash: 'search',
         });
       } else if (searchSection === 2) {
         router.push(`/board?q=${searchField}`);
@@ -57,6 +58,7 @@ const Header = () => {
 
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
+      setMobileSearch(false);
       handleSubmit();
       e.target.blur();
     }
@@ -170,6 +172,9 @@ const Header = () => {
     },
   ];
 
+  const [mobileSearch, setMobileSearch] = useState(false);
+  const [searchSectionMenuMobile, setSearchSectionMenuMobile] = useState(false);
+
   return (
     <>
       <header className='bg-white z-20'>
@@ -184,7 +189,73 @@ const Header = () => {
             </div>
 
             {/* Mobile */}
+
+            {mobileSearch && (
+              <div className='fixed top-0 left-0 w-full bg-white md:hidden z-[999999] h-full'>
+                <div className='flex items-center px-4 py-4 shadow-md'>
+                  <MagnifyingGlassIcon className='h-6 text-gray-500 mr-1' />
+                  <input
+                    type='text'
+                    name='search'
+                    value={searchField}
+                    onChange={(e) => setSearchField(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className='outline-none text-sm px-2 py-1 w-full'
+                    aria-label='Search'
+                    placeholder='What are you looking for?'
+                  />
+                  <button
+                    className='text-xs py-2 flex gap-1 items-center rounded-full min-w-[100px] justify-center'
+                    onClick={() => setSearchSectionMenuMobile((prev) => !prev)}
+                  >
+                    {searchSection === 1 ? t['channel/group'] : t['board']}
+                    <FaCaretDown size={14} />
+                  </button>
+                  {searchSectionMenuMobile && (
+                    <div className='absolute top-12 right-8 border shadow-md bg-white flex flex-col rounded-xl min-w-[50px] text-xs'>
+                      <button
+                        onClick={() => {
+                          setSearchSection(1);
+                          setSearchSectionMenuMobile((prev) => !prev);
+                        }}
+                        className='px-3 py-2 whitespace-nowrap'
+                      >
+                        {t['channel/group']}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSearchSection(2);
+                          setSearchSectionMenuMobile((prev) => !prev);
+                        }}
+                        className='px-3 py-2 whitespace-nowrap'
+                      >
+                        {t['board']}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div className='justify-center text-sm flex gap-4 items-center font-semibold mt-6'>
+                  <button
+                    onClick={() => {
+                      setMobileSearch(false);
+                      handleSubmit();
+                    }}
+                    name='search'
+                    className='bg-primary text-white px-5 py-2 rounded-lg'
+                  >
+                    Search
+                  </button>
+                  <button onClick={() => setMobileSearch(false)} className='bg-gray-100 px-5 py-2 rounded-lg'>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className='md:hidden drawer w-fit z-50'>
+              <button onClick={() => setMobileSearch(true)}>
+                <MagnifyingGlassIcon className='h-5 mr-4' />
+              </button>
               <input id='my-drawer-4' type='checkbox' className='drawer-toggle' />
               <div className='drawer-content ml-auto pr-4'>
                 {/* Page content here */}
