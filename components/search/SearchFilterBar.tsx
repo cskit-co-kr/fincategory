@@ -133,9 +133,9 @@ const SearchFilterBar = ({
         {router.query.q && (
           <button
             onClick={() => router.push('/search')}
-            className='flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 text-primary'
+            className='hidden md:flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 text-primary w-fit'
           >
-            검색 결과 지우기
+            검색 취소
             <RiCloseCircleFill className='text-gray-400' />
           </button>
         )}
@@ -153,6 +153,15 @@ const SearchFilterBar = ({
           />
         </div>
       </div>
+      {router.query.q && (
+        <button
+          onClick={() => router.push('/search')}
+          className='md:hidden flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 mb-4 ml-4 text-primary w-fit'
+        >
+          검색 취소
+          <RiCloseCircleFill className='text-gray-400' />
+        </button>
+      )}
     </>
   );
 };

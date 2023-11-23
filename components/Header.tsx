@@ -202,7 +202,7 @@ const Header = () => {
                     onKeyDown={handleKeyDown}
                     className='outline-none text-sm px-2 py-1 w-full'
                     aria-label='Search'
-                    placeholder='What are you looking for?'
+                    placeholder='검색어를 입력해 주세요.'
                   />
                   <button
                     className='text-xs py-2 flex gap-1 items-center rounded-full min-w-[100px] justify-center'
@@ -243,10 +243,10 @@ const Header = () => {
                     name='search'
                     className='bg-primary text-white px-5 py-2 rounded-lg'
                   >
-                    Search
+                    검색
                   </button>
                   <button onClick={() => setMobileSearch(false)} className='bg-gray-100 px-5 py-2 rounded-lg'>
-                    Cancel
+                    취소
                   </button>
                 </div>
               </div>
