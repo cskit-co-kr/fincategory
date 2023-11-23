@@ -35,15 +35,12 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
       value: item.id,
     };
   });
-  console.log('--------------------------------------------->>>>>');
-  console.log(_languages);
   const languages = _languages?.map((item: any) => {
     return {
       label: t[item.value as keyof typeof t],
       value: item.id,
     };
   });
-  console.log(languages);
 
   const [input, setInput] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<any>('');
