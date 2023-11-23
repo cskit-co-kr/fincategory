@@ -305,7 +305,8 @@ const Search = () => {
     } else {
       doSearch('');
     }
-  }, [router, sorting]);
+    console.log('useefffect counter');
+  }, [router.query.q, sorting]);
 
   useEffect(() => {
     setLoadMoreText(t['load-more']);
@@ -365,7 +366,7 @@ const Search = () => {
       // add ad section 2 channels --------------------------------------
       const ads2Added = await addAds2(result);
       // ----------------------------------------------------------------
-
+      console.log('load counter');
       setSearchResult(ads2Added);
       // setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
