@@ -6,7 +6,7 @@ import { ArrowSmallDownIcon } from '@heroicons/react/24/outline';
 import { HiOutlineMegaphone, HiOutlineUsers, HiOutlineLockClosed } from 'react-icons/hi2';
 import { RiCloseCircleFill } from 'react-icons/ri';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const SearchFilterBar = ({
   totalChannels,
@@ -66,8 +66,10 @@ const SearchFilterBar = ({
       return state;
     });
   };
+  const [firstCall, setFirstCall] = useState(true);
   useEffect(() => {
-    doSearch((router.query.q as string) || '');
+    !firstCall && doSearch((router.query.q as string) || '');
+    setFirstCall(false);
   }, [channelType]);
 
   return (

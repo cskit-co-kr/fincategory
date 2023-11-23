@@ -6,7 +6,7 @@ import Sidebar from '../../components/member/Sidebar';
 import { Table, Pagination } from 'rsuite';
 import { useState, useEffect } from 'react';
 import apiService from '../../lib/apiService';
-import { toDateTimeformat } from '../../lib/utils';
+import { getDuration, toDateTimeformat } from '../../lib/utils';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -74,12 +74,17 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
                 <Cell>{(rowData) => `${rowData.fincoin.toLocaleString()} FinCoin`}</Cell>
               </Column>
 
-              <Column width={100} align='center'>
+              <Column width={110} align='center'>
                 <HeaderCell>상태</HeaderCell>
                 <Cell>
                   {(rowData) =>
                     checkStatus(rowData.started_at, rowData.ended_at) === 'active' ? (
-                      <div className='rounded-full border border-green-400 text-green-400 text-xs pb-[1px] px-1'>Active</div>
+                      <>
+                        <div className='rounded-full border border-green-400 text-green-400 text-[12px] pb-[1px] px-1'>Active</div>
+                        <div className='ml-1 rounded-full border border-red-400 text-red-400 text-[12px] pb-[1px] px-1'>
+                          D-{getDuration(new Date(), rowData.ended_at)}
+                        </div>
+                      </>
                     ) : checkStatus(rowData.started_at, rowData.ended_at) === 'ended' ? (
                       <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1'>Ended</div>
                     ) : (

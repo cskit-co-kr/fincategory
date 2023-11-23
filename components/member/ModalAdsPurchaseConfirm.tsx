@@ -56,33 +56,33 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
   const submitPurchase = async () => {
     if (balance < data.coin) {
       return setLowBalance('잔액이 부족합니다.');
-    }
-    if (!checkChannel) {
+    } else if (!checkChannel) {
       return setChannelError('Input valid Channel');
-    }
-    const d = {
-      product_info_id: data.id,
-      channel_id: checkChannel.channel.id,
-      user_id: userId,
-    };
-    const result = await apiService.saveAdsPurchase(d);
+    } else {
+      const d = {
+        product_info_id: data.id,
+        channel_id: checkChannel.channel.id,
+        user_id: userId,
+      };
+      const result = await apiService.saveAdsPurchase(d);
 
-    if (result.code === 400) {
-      alert('Sold Out');
-    } else if (result.code === 201) {
-      const modal = document.getElementById(`${adsGroup}_modal_${modalId}`) as any;
-      modal?.close();
+      if (result.code === 400) {
+        alert('Sold Out');
+      } else if (result.code === 201) {
+        const modal = document.getElementById(`${adsGroup}_modal_${modalId}`) as any;
+        modal?.close();
 
-      const message = (
-        <Notification type='info' closable>
-          <div className='flex items-center gap-2'>
-            <Image src='/party.svg' width={24} height={24} alt='Success' />
-            광고상품 구매 완료하였습니다.
-          </div>
-        </Notification>
-      );
+        const message = (
+          <Notification type='info' closable>
+            <div className='flex items-center gap-2'>
+              <Image src='/party.svg' width={24} height={24} alt='Success' />
+              광고상품 구매 완료하였습니다.
+            </div>
+          </Notification>
+        );
 
-      toaster.push(message, { placement: 'topCenter' });
+        toaster.push(message, { placement: 'topCenter' });
+      }
     }
   };
 
