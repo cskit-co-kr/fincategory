@@ -665,6 +665,43 @@ const Search = () => {
           </div> */}
 
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
+            <div
+              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-0 px-4 md:px-0 border-b border-gray-200 md:border-none'
+              ref={ref}
+            >
+              <div className='font-bold text-xl'>#</div>
+              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
+                {/* <div className='hidden md:block'>
+                  <ReactSlickSlider {...settings}>
+                    {tags?.map((tag: any) => (
+                      <div key={tag.tag} className='mr-1'>
+                        <button
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
+                          key={tag.tag}
+                          onClick={() => {
+                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
+                          }}
+                        >
+                          {tag.tag}
+                          <span
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
+                          >
+                            {tag.total}
+                          </span>
+                        </button>
+                      </div>
+                    ))}
+                  </ReactSlickSlider>
+                </div> */}
+                <div className='ml-2'>
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+                </div>
+              </div>
+            </div>
             <Ads1 />
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
@@ -759,43 +796,6 @@ const Search = () => {
                   </button>
                 </div>
                 {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
-              </div>
-            </div>
-            <div
-              className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
-              ref={ref}
-            >
-              <div className='font-bold text-xl'>#</div>
-              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
-                {/* <div className='hidden md:block'>
-                  <ReactSlickSlider {...settings}>
-                    {tags?.map((tag: any) => (
-                      <div key={tag.tag} className='mr-1'>
-                        <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
-                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                          }`}
-                          key={tag.tag}
-                          onClick={() => {
-                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
-                          }}
-                        >
-                          {tag.tag}
-                          <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
-                              selectedTag === tag.tag ? 'text-black' : ''
-                            }`}
-                          >
-                            {tag.total}
-                          </span>
-                        </button>
-                      </div>
-                    ))}
-                  </ReactSlickSlider>
-                </div> */}
-                <div className='ml-2'>
-                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
-                </div>
               </div>
             </div>
 
