@@ -20,8 +20,8 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType }) => {
   const style = 'p-4 border border-primary hover:shadow-sm transition ease-in-out duration-300';
 
   return (
-    <div className={`${style} relative flex rounded-xl gap-2.5 text-black bg-white mx-4 md:mx-0`}>
-      <div className='absolute bottom-0 right-0 bg-primary rounded-tl-lg rounded-br-lg text-white text-[10px] px-2.5 py-[1px]'>ad</div>
+    <div className={`${style} relative flex md:rounded-xl gap-2.5 text-black bg-white min-h-[131px]`}>
+      <div className='absolute bottom-0 right-0 bg-primary rounded-tl-lg md:rounded-br-lg text-white text-[10px] px-2.5 py-[1px]'>ad</div>
       <Link href={channel.channel_id ? `/channel/${channel.username}` : '/member/ads'} target='_blank'>
         {channel.channel_id ? (
           <ChannelAvatar
