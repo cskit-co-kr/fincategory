@@ -79,25 +79,13 @@ const Search = () => {
       },
     ],
   };
-  const isFirstLoad = useRef(true); // Create a ref to track the first load
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   useEffect(() => {
-    // Skip the push on first load
-    // if (isFirstLoad.current) {
-    //   isFirstLoad.current = false;
-    //   return;
-    // }
-    // setLoadBar(true);
-    // const tag = selectedTag ? `#${selectedTag}` : undefined;
-    // router.push(
-    //   {
-    //     pathname: 'search',
-    //     query: tag ? { q: tag } : {},
-    //   },
-    //   undefined,
-    //   { shallow: true }
-    // );
-    const tag = selectedTag ? `#${selectedTag}` : '';
-    doSearch(tag);
+    if (!isFirstLoad) {
+      const tag = selectedTag ? `#${selectedTag}` : '';
+      doSearch(tag);
+    }
+    setIsFirstLoad(false);
   }, [selectedTag]);
 
   const [options, setOptions] = useState<Options[]>([]);
@@ -305,7 +293,6 @@ const Search = () => {
     } else {
       doSearch('');
     }
-    console.log('useefffect counter');
   }, [router.query.q, sorting]);
 
   useEffect(() => {
@@ -366,7 +353,7 @@ const Search = () => {
       // add ad section 2 channels --------------------------------------
       const ads2Added = await addAds2(result);
       // ----------------------------------------------------------------
-      console.log('load counter');
+
       setSearchResult(ads2Added);
       // setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
