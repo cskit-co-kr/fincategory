@@ -27,6 +27,9 @@ import SearchFilterBar from '../components/search/SearchFilterBar';
 import Ads from './member/ads';
 import FincoinPurchase from './member/ads-purchase';
 import Ads1 from '../components/search/Ads1';
+import addAds2 from '../lib/ads2';
+import AdChannel from '../components/search/AdChannel';
+import AdChannel2 from '../components/search/AdChannel2';
 
 type Options = {
   options: Array<MultiValueOptions>;
@@ -358,8 +361,13 @@ const Search = () => {
 
     if (result) {
       setTotalChannels(resultData.total);
-      // result.length === 0 ? setSearchResultText(t['no-search-results']) : setSearchResult(result);
-      setSearchResult(result);
+
+      // add ad section 2 channels --------------------------------------
+      const ads2Added = await addAds2(result);
+      // ----------------------------------------------------------------
+
+      setSearchResult(ads2Added);
+      // setSearchResult(result);
       result.length < 45 ? setLoadMore(false) : setLoadMore(true);
     }
 
@@ -374,7 +382,13 @@ const Search = () => {
     const resultData = await response.data;
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
-    setSearchResult(result);
+
+    // add ad section 2 channels --------------------------------------
+    const ads2Added = await addAds2(result);
+    // ----------------------------------------------------------------
+
+    setSearchResult(ads2Added);
+    // setSearchResult(result);
     setIsLoading(false);
     setLoadMoreText(t['load-more']);
   };
@@ -443,6 +457,7 @@ const Search = () => {
   }, [loadMore, searchEvent]);
 
   const ref = useRef(null);
+  const searchListRef = useRef(null);
 
   const [channelRankingUrl, setChannelRankingUrl] = useState('?column=increase24h');
   const [text24730, setText24730] = useState(1);
@@ -651,6 +666,43 @@ const Search = () => {
           </div> */}
 
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
+            <div
+              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
+              ref={ref}
+            >
+              <div className='font-bold text-xl'>#</div>
+              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
+                {/* <div className='hidden md:block'>
+                  <ReactSlickSlider {...settings}>
+                    {tags?.map((tag: any) => (
+                      <div key={tag.tag} className='mr-1'>
+                        <button
+                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
+                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
+                          }`}
+                          key={tag.tag}
+                          onClick={() => {
+                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
+                          }}
+                        >
+                          {tag.tag}
+                          <span
+                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
+                              selectedTag === tag.tag ? 'text-black' : ''
+                            }`}
+                          >
+                            {tag.total}
+                          </span>
+                        </button>
+                      </div>
+                    ))}
+                  </ReactSlickSlider>
+                </div> */}
+                <div className='ml-2'>
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+                </div>
+              </div>
+            </div>
             <Ads1 />
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
@@ -745,46 +797,10 @@ const Search = () => {
                   </button>
                 </div>
                 {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
+                <div id='search'></div>
               </div>
             </div>
-            <div
-              className='flex items-center gap-2 sticky top-0 z-10 bg-gray-50 py-4 px-4 md:px-0 border-b border-gray-200 md:border-none'
-              ref={ref}
-            >
-              <div className='font-bold text-xl'>#</div>
-              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
-                {/* <div className='hidden md:block'>
-                  <ReactSlickSlider {...settings}>
-                    {tags?.map((tag: any) => (
-                      <div key={tag.tag} className='mr-1'>
-                        <button
-                          className={`group flex gap-1 px-2 md:px-3 py-2 md:py-2 whitespace-nowrap border border-gray-200 rounded-3xl md:hover:bg-primary md:hover:text-white ${
-                            selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                          }`}
-                          key={tag.tag}
-                          onClick={() => {
-                            selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
-                          }}
-                        >
-                          {tag.tag}
-                          <span
-                            className={`text-[10px] md:text-xs block bg-gray-200 rounded-full px-1.5 py-0.5 md:group-hover:text-black ${
-                              selectedTag === tag.tag ? 'text-black' : ''
-                            }`}
-                          >
-                            {tag.total}
-                          </span>
-                        </button>
-                      </div>
-                    ))}
-                  </ReactSlickSlider>
-                </div> */}
-                <div className='ml-2'>
-                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
-                </div>
-              </div>
-            </div>
-
+            <div ref={searchListRef}></div>
             {searchResult ? (
               <SearchFilterBar
                 totalChannels={totalChannels}
@@ -808,8 +824,12 @@ const Search = () => {
             )}
             {searchResult ? (
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-                {searchResult?.map((channel: Channel) => {
-                  return <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />;
+                {searchResult?.map((channel: any) => {
+                  return channel.prod_section ? (
+                    <AdChannel2 channel={channel} key={channel.id} showType={channel.type ? true : false} />
+                  ) : (
+                    <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />
+                  );
                 })}
               </div>
             ) : (

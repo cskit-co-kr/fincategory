@@ -61,17 +61,7 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
             <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
               <Column minWidth={250} flexGrow={1}>
                 <HeaderCell>상품명</HeaderCell>
-                <Cell>
-                  {(rowData) => {
-                    if (rowData.term === 30) {
-                      return '최상단 배너 (1 개월)';
-                    } else if (rowData.term === 90) {
-                      return '최상단 배너 (3 개월)';
-                    } else if (rowData.term === 180) {
-                      return '최상단 배너 (6 개월)';
-                    }
-                  }}
-                </Cell>
+                <Cell dataKey='product_name' />
               </Column>
 
               <Column width={150}>

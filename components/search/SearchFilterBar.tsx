@@ -4,6 +4,8 @@ import { enUS } from '../../lang/en-US';
 import { Loader, SelectPicker } from 'rsuite';
 import { ArrowSmallDownIcon } from '@heroicons/react/24/outline';
 import { HiOutlineMegaphone, HiOutlineUsers, HiOutlineLockClosed } from 'react-icons/hi2';
+import { RiCloseCircleFill } from 'react-icons/ri';
+
 import { useEffect } from 'react';
 
 const SearchFilterBar = ({
@@ -32,23 +34,23 @@ const SearchFilterBar = ({
       value: 'subscription_asc',
     },
     {
-      label: `${t["today-desc"]}`,
+      label: `${t['today-desc']}`,
       value: 'today_desc',
     },
     {
-      label: `${t["today-asc"]}`,
+      label: `${t['today-asc']}`,
       value: 'today_asc',
     },
     {
-      label: `${t["total-desc"]}`,
+      label: `${t['total-desc']}`,
       value: 'total_desc',
     },
     {
-      label: `${t["total-asc"]}`,
+      label: `${t['total-asc']}`,
       value: 'total_asc',
     },
     {
-      label: `${t["created-desc"]}`,
+      label: `${t['created-desc']}`,
       value: 'created_desc',
     },
   ];
@@ -73,31 +75,35 @@ const SearchFilterBar = ({
       <div className='sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200'>
         <div className='flex gap-2 items-center'>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-              }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+              channelType[0].value === 'all' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+            }`}
             onClick={() => updateChannelType([{ value: 'all', label: t['All'] }])}
           >
             {t['All']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-              }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+              channelType[0].value === 'channel' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+            }`}
             onClick={() => updateChannelType([{ value: 'channel', label: t['channel'] }])}
           >
             <HiOutlineMegaphone size={16} className={`${channelType[0].value === 'channel' ? 'text-white' : 'text-[#3886E2]'}`} />
             {t['channel']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-              }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+              channelType[0].value === 'public_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+            }`}
             onClick={() => updateChannelType([{ value: 'public_group', label: t['public-group'] }])}
           >
             <HiOutlineUsers size={16} className={`${channelType[0].value === 'public_group' ? 'text-white' : 'text-[#FF7171]'}`} />
             {t['Public Group']}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${channelType[0].value === 'private_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
-              }`}
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+              channelType[0].value === 'private_group' ? 'bg-primary border-primary text-white' : 'border-gray-200'
+            }`}
             onClick={() => updateChannelType([{ value: 'private_group', label: t['private-group'] }])}
           >
             <HiOutlineLockClosed size={16} className={`${channelType[0].value === 'private_group' ? 'text-white' : 'text-[#FF7171]'}`} />
@@ -118,12 +124,21 @@ const SearchFilterBar = ({
           />
         </div>
       </div>
-      <div className='flex items-center p-4 md:p-0'>
-        <span className='text-sm'>
-          {`${t['total-search-results1']} ${selectedTag ? '"' + `#${selectedTag}` + '" ' : router.query.q ? '"' + router.query.q + '" ' : ''}: `}
+      <div className='flex items-center p-4 md:p-0 gap-4'>
+        <div className='text-sm'>
+          {`${t['total-search-results1']} ${selectedTag ? '"' + `#${selectedTag}` + '" ' : router.query.q ? router.query.q : ''}: `}
           {loadBar ? <Loader /> : <b>{totalChannels}</b>}
           {t['total-search-results2']}
-        </span>
+        </div>
+        {router.query.q && (
+          <button
+            onClick={() => router.push('/search')}
+            className='hidden md:flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 text-primary w-fit'
+          >
+            검색 취소
+            <RiCloseCircleFill className='text-gray-400' />
+          </button>
+        )}
         <div className='ml-auto flex md:hidden items-center'>
           <span className='hidden md:inline-flex mr-2'>{t['sort-by']}</span>
           <SelectPicker
@@ -138,6 +153,15 @@ const SearchFilterBar = ({
           />
         </div>
       </div>
+      {router.query.q && (
+        <button
+          onClick={() => router.push('/search')}
+          className='md:hidden flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 mb-4 ml-4 text-primary w-fit'
+        >
+          검색 취소
+          <RiCloseCircleFill className='text-gray-400' />
+        </button>
+      )}
     </>
   );
 };

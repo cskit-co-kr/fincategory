@@ -1,23 +1,18 @@
 import axios from 'axios';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { SelectPicker } from 'rsuite';
 import { enUS } from '../lang/en-US';
 import { koKR } from '../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { Language } from '../typings';
-import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
-import Image from 'next/image';
-import { colorStyles } from '../constants';
-import { Channel, MultiValueOptions } from '../typings';
-import { SelectPicker } from 'rsuite';
 
-type Languages = Array<Language>;
+// type Languages = Array<Language>;
 
 type AddComponentProps = {
   _categories: any;
   _countries: any;
-  _languages: Languages;
+  _languages: any;
 };
 
 const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
@@ -40,7 +35,6 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
       value: item.id,
     };
   });
-
   const languages = _languages?.map((item: any) => {
     return {
       label: t[item.value as keyof typeof t],
@@ -60,39 +54,39 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
 
   const [resultState, setResultState] = useState<string | null>(null);
 
-  async function handleSubmit() {
-    input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
-    selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
-    selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
-    selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
+  // async function handleSubmit() {
+  //   input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
+  //   selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
+  //   selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
+  //   selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
 
-    if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
-      let text = extractUsername(input);
-      if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
-        const data = {
-          title: text.trim(),
-          country: selectedCountry,
-          language: selectedLanguage,
-          category: selectedCategory,
-        };
-        const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        if (result === 'OK') {
-          setResultState(`${text} ${t['channel-add']}`);
-          setInput('');
-          setSelectedCountry('');
-          setSelectedLanguage('');
-          setSelectedCategory('');
-        } else {
-          setResultState(`"${text}" ${t['channel-add-error']}`);
-        }
-      }
-    }
-  }
+  //   if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
+  //     let text = extractUsername(input);
+  //     if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
+  //       const data = {
+  //         title: text.trim(),
+  //         country: selectedCountry,
+  //         language: selectedLanguage,
+  //         category: selectedCategory,
+  //       };
+  //       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
+  //         method: 'POST',
+  //         headers: { 'content-type': 'application/json' },
+  //         body: JSON.stringify(data),
+  //       });
+  //       const result = await response.json();
+  //       if (result === 'OK') {
+  //         setResultState(`${text} ${t['channel-add']}`);
+  //         setInput('');
+  //         setSelectedCountry('');
+  //         setSelectedLanguage('');
+  //         setSelectedCategory('');
+  //       } else {
+  //         setResultState(`"${text}" ${t['channel-add-error']}`);
+  //       }
+  //     }
+  //   }
+  // }
   const extractUsername = (input: any) => {
     let arr = [];
     let text = '';
@@ -201,12 +195,12 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
             />
           </div>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCategory}</div> : ''}
-          <button
+          {/* <button
             onClick={() => handleSubmit()}
             className='mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]'
           >
             {t['register']}
-          </button>
+          </button> */}
         </div>
         <div className='mx-auto mt-8 px-5 text-center text-[#3687E2] font-medium'>
           * 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.
@@ -225,6 +219,8 @@ export const getServerSideProps = async () => {
 
   const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
   const _languages = await resLanguage.data;
+  console.log('--------------------------------------->');
+  console.log(_languages);
 
   return {
     props: { _categories, _countries, _languages },
