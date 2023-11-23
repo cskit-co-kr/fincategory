@@ -79,12 +79,12 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
                 <Cell>
                   {(rowData) =>
                     checkStatus(rowData.started_at, rowData.ended_at) === 'active' ? (
-                      <>
+                      <div className='flex'>
                         <div className='rounded-full border border-green-400 text-green-400 text-[12px] pb-[1px] px-1'>Active</div>
-                        <div className='ml-1 rounded-full border border-red-400 text-red-400 text-[12px] pb-[1px] px-1'>
+                        <div className='ml-0.5 rounded-full border border-red-400 text-red-400 text-[12px] pb-[1px] px-1'>
                           D-{getDuration(new Date(), rowData.ended_at)}
                         </div>
-                      </>
+                      </div>
                     ) : checkStatus(rowData.started_at, rowData.ended_at) === 'ended' ? (
                       <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1'>Ended</div>
                     ) : (
