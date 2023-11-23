@@ -1,4 +1,4 @@
-const HashtagScroll = ({ tags, selectedTag, setSelectedTag }: any) => {
+const HashtagScroll = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
   const tagsSorted = () => {
     return tags.sort(function (a: any, b: any) {
       var x = Number(a['total']);
@@ -7,6 +7,11 @@ const HashtagScroll = ({ tags, selectedTag, setSelectedTag }: any) => {
     });
   };
   const t = tagsSorted();
+
+  const handleSelectTag = (tag: any) => {
+    setSelectedTag(tag);
+    searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
   return (
     <div className='flex scrollable-container select-none md:flex-wrap'>
       {t?.map((tag: any, index: any) => (
@@ -16,7 +21,7 @@ const HashtagScroll = ({ tags, selectedTag, setSelectedTag }: any) => {
               selectedTag === tag.tag ? 'bg-primary text-white font-bold' : 'text-black bg-white'
             }`}
             onClick={() => {
-              selectedTag === tag.tag ? setSelectedTag('') : setSelectedTag(tag.tag);
+              selectedTag === tag.tag ? handleSelectTag('') : handleSelectTag(tag.tag);
             }}
           >
             {tag.tag}

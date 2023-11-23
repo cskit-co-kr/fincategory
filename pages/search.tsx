@@ -457,6 +457,7 @@ const Search = () => {
   }, [loadMore, searchEvent]);
 
   const ref = useRef(null);
+  const searchListRef = useRef(null);
 
   const [channelRankingUrl, setChannelRankingUrl] = useState('?column=increase24h');
   const [text24730, setText24730] = useState(1);
@@ -666,7 +667,7 @@ const Search = () => {
 
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
             <div
-              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-0 px-4 md:px-0 border-b border-gray-200 md:border-none'
+              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
               <div className='font-bold text-xl'>#</div>
@@ -698,7 +699,7 @@ const Search = () => {
                   </ReactSlickSlider>
                 </div> */}
                 <div className='ml-2'>
-                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} />
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
                 </div>
               </div>
             </div>
@@ -778,7 +779,7 @@ const Search = () => {
                 {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
               </div>
 
-              <div className='bg-white md:border md:border-gray-200 md:rounded-xl' id='search'>
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
                 <div className='flex justify-between items-center pt-5 pb-2 px-5'>
                   <div className='font-semibold text-sm'>{t['recently-added']}</div>
                   <button
@@ -796,9 +797,10 @@ const Search = () => {
                   </button>
                 </div>
                 {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
+                <div id='search'></div>
               </div>
             </div>
-
+            <div ref={searchListRef}></div>
             {searchResult ? (
               <SearchFilterBar
                 totalChannels={totalChannels}
