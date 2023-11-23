@@ -15,7 +15,7 @@ type ads = {
   coin: number;
 };
 
-const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) => {
+const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activeProducts2 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -123,15 +123,21 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) =>
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
-                      <button
-                        onClick={() => {
-                          const modalId = `ads2_modal_${index}`;
-                          const modal = document.getElementById(modalId) as any;
-                          modal?.showModal();
-                        }}
-                      >
-                        [구매하기]
-                      </button>
+                      {status === 'unauthenticated' ? (
+                        <Link href='/member/signin'>[구매하기]</Link>
+                      ) : activeProducts2 < 45 ? (
+                        <button
+                          onClick={() => {
+                            const modalId = `ads2_modal_${index}`;
+                            const modal = document.getElementById(modalId) as any;
+                            modal?.showModal();
+                          }}
+                        >
+                          [구매하기]
+                        </button>
+                      ) : (
+                        <div className='text-red-500'>[매진]</div>
+                      )}
                       <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads2' userId={session?.user.id} />
                     </div>
                   </div>
@@ -140,8 +146,8 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts }: any) =>
               <div className='mt-12'>
                 <div className='font-semibold'>유의사항</div>
                 <ol className='list-disc list-inside mt-5'>
-                  <li>최상단 배너는 9개의 광고가 랜덤으로 노출됩니다.</li>
-                  <li>선착순 9분께 판매됩니다.</li>
+                  <li>첫 페이지 광고의 노출 순서는 랜덤입니다.</li>
+                  <li>구매 가능한 상품 개수는 45개 입니다.</li>
                   <li>광고 연장은 기존 광고주께 우선 부여됩니다.</li>
                 </ol>
               </div>
@@ -182,9 +188,13 @@ export const getServerSideProps = async (context: any) => {
   const result3 = await response3.json();
   const activeProducts = result3.rows.length;
 
+  const response5 = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductActiveSection2`);
+  const result5 = await response5.json();
+  const activeProducts2 = result5.rows.length;
+
   // Return
   return {
-    props: { memberInfo, wallet, section1, section2, activeProducts },
+    props: { memberInfo, wallet, section1, section2, activeProducts, activeProducts2 },
   };
 };
 
