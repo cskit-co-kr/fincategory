@@ -85,4 +85,15 @@ const formatKoreanNumber = (value: number): string => {
   return value.toLocaleString().toString();
 };
 
-export { formatDate, toDateTimeformat, toDateformat, getHrefValue, formatKoreanNumber, getToday };
+const getDuration = (start: any, end: any) => {
+  const a: any = new Date(start);
+  const b: any = new Date(end);
+
+  const differenceInMilliseconds = b - a;
+
+  const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+
+  return Math.trunc(differenceInDays);
+};
+
+export { formatDate, toDateTimeformat, toDateformat, getHrefValue, formatKoreanNumber, getToday, getDuration };
