@@ -181,7 +181,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   const updateCategoryData = () => {
-    // setCategoryData(categoryLoadData);
+    setCategoryData(categoryLoadData);
   };
 
   const [channelCategory, setChannelCategory] = useState<any>(channel.category ? JSON.parse(channel.category.name)[locale] : null);
