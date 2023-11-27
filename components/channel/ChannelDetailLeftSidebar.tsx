@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { SelectPicker } from 'rsuite';
 
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
@@ -13,6 +14,7 @@ import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisp
 import { TypeAttributes } from 'rsuite/esm/@types/common';
 import { formatDate } from '../../lib/utils';
 import { Skeleton } from '@mui/material';
+import apiService from '../../lib/apiService';
 
 interface DataTags {
   tag: string;
@@ -47,6 +49,26 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     </Message>
   );
 
+  const [categoryData, setCategoryData] = useState([]);
+  const [categoryLoadData, setCategoryLoadData] = useState([]);
+  const [value, setValue] = useState<any>(null);
+
+  const loadCategory = async () => {
+    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+    const _categories = await result.data;
+    const cats = _categories?.map((item: any) => {
+      if (channel.category?.id === item.id) {
+        setValue(item.id);
+      }
+      const obj = JSON.parse(item.name);
+      return {
+        value: item.id,
+        label: locale === 'ko' ? obj.ko : obj.en,
+      };
+    });
+    setCategoryLoadData(cats);
+    setCategoryData(cats);
+  };
   const loadTags = async () => {
     const tags: any = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
 
@@ -59,6 +81,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   useEffect(() => {
+    loadCategory();
     const tags = channel.tags.reduce((acc: Array<string>, e: { id: number; channel_id: number; tag: string }) => {
       acc.push(e.tag);
       return acc;
@@ -159,6 +182,20 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     loadTags();
   };
 
+  const updateCategoryData = () => {
+    setCategoryData(categoryLoadData);
+  };
+
+  const [channelCategory, setChannelCategory] = useState<any>(channel.category ? JSON.parse(channel.category.name)[locale] : null);
+  const setCategory = async (e: any) => {
+    setValue(e);
+    const result = await apiService.updateCategory(channel.id, e);
+    if (result === 'Success') {
+      const c: any = categoryData.filter((c: any) => c.value === e);
+      setChannelCategory(c[0].label);
+    }
+  };
+
   return (
     <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4'>
       <div className='sticky inset-y-4 min-h-[289px]'>
@@ -193,12 +230,28 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           </div>
           <div className='w-full'>
             <div className='text-gray-400'>{t['category']}</div>
-            <div className='text-primary'>{channel.category && JSON.parse(channel.category.name)[locale]}</div>
+            <div className='text-primary'>{channelCategory}</div>
+            {session?.user.type === 2 && (
+              <div className='bg-primary/10 rounded-lg p-2 mt-2 text-xs flex items-center gap-2'>
+                <div>Select category</div>
+                <SelectPicker
+                  data={categoryData}
+                  name='category'
+                  placeholder={t['select-topic']}
+                  searchable={false}
+                  cleanable={false}
+                  value={value}
+                  onChange={setCategory}
+                  onOpen={updateCategoryData}
+                  className='min-w-[130px]'
+                />
+              </div>
+            )}
           </div>
           <div className='w-full'>
             <span className='text-gray-400'>{t['channel-region-and-language']}</span>
             <div className='flex gap-5'>
-              <span>{t[channel.country.iso as keyof typeof t]}</span>
+              <span>{t[channel.country?.iso as keyof typeof t]}</span>
               <span>{channel.language && t[channel.language.value as keyof typeof t]}</span>
             </div>
           </div>
@@ -216,7 +269,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                       return (
                         <Input
                           ref={editInputRef}
-                          key={tag}
+                          key={index}
                           size='xs'
                           style={tagInputStyle}
                           value={editInputValue}
@@ -229,8 +282,8 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                     }
                     const isLongTag = tag.length > 20;
                     const tagElem = (
-                      <Whisper key={tag} trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
-                        <Tag key={tag} closable={true} style={{ userSelect: 'none', marginBottom: 4 }} onClose={() => handleClose(tag)}>
+                      <Whisper key={index} trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
+                        <Tag key={index} closable={true} style={{ userSelect: 'none', marginBottom: 4 }} onClose={() => handleClose(tag)}>
                           <span
                             onDoubleClick={(e) => {
                               setEditInputIndex(index);
@@ -244,7 +297,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                       </Whisper>
                     );
                     return isLongTag ? (
-                      <Tooltip title={tag} key={tag}>
+                      <Tooltip title={tag} key={index}>
                         {tagElem}
                       </Tooltip>
                     ) : (
@@ -281,12 +334,12 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               </div>
             ) : (
               <div className='hashtags flex gap-1'>
-                {channel.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
+                {channel.tags.map((tag: { id: number; channel_id: number; tag: string }, index: number) => {
                   return (
                     <Link
                       href={`/search?q=#${tag.tag}`}
                       className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
-                      key={tag.id}
+                      key={index}
                     >
                       #{tag.tag}
                     </Link>
