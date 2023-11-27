@@ -53,11 +53,11 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const [categoryLoadData, setCategoryLoadData] = useState([]);
   const [value, setValue] = useState<any>(null);
 
-  const loadTags = async () => {
+  const loadCategory = async () => {
     const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
     const _categories = await result.data;
     const cats = _categories?.map((item: any) => {
-      if (channel.category.id === item.id) {
+      if (channel.category?.id === item.id) {
         setValue(item.id);
       }
       const obj = JSON.parse(item.name);
@@ -68,7 +68,8 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     });
     setCategoryLoadData(cats);
     setCategoryData(cats);
-
+  };
+  const loadTags = async () => {
     const tags: any = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
 
     const tagsList = tags.data.reduce((acc: Array<string>, e: DataTags) => {
@@ -80,6 +81,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   useEffect(() => {
+    loadCategory();
     const tags = channel.tags.reduce((acc: Array<string>, e: { id: number; channel_id: number; tag: string }) => {
       acc.push(e.tag);
       return acc;
