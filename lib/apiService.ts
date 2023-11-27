@@ -42,6 +42,12 @@ export class ApiService {
     const result = await response.data;
     return result;
   }
+
+  async updateCategory(channel_id: string, category_id: string) {
+    const response = await axios.post(`/api/update-category`, { channel_id: channel_id, category_id: category_id });
+    const result = await response.data;
+    return result;
+  }
 }
 
 const apiService = new ApiService();
