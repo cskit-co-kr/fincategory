@@ -19,7 +19,7 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType, typeIcon, sho
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const style = 'p-4 border border-primary hover:shadow-sm transition ease-in-out duration-300';
+  const style = 'p-4 px-8 md:px-4 border border-primary hover:shadow-sm transition ease-in-out duration-300';
 
   return (
     <div className={`${style} relative flex md:rounded-xl gap-2.5 text-black bg-white min-h-[131px]`}>

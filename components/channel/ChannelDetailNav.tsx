@@ -1,14 +1,8 @@
-import {
-  EyeIcon,
-  HandThumbUpIcon,
-  RectangleGroupIcon,
-  UsersIcon,
-  ChatBubbleLeftRightIcon 
-} from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
-import { enUS } from "../../lang/en-US";
-import { koKR } from "../../lang/ko-KR";
-import { Skeleton } from "@mui/material";
+import { EyeIcon, HandThumbUpIcon, RectangleGroupIcon, UsersIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
+import { enUS } from '../../lang/en-US';
+import { koKR } from '../../lang/ko-KR';
+import { Skeleton } from '@mui/material';
 
 const ChannelDetailNav = ({ channel }: any) => {
   const router = useRouter();
@@ -39,23 +33,10 @@ const ChannelDetailNav = ({ channel }: any) => {
             {t['Posts-reach']}
           </a>
         </li>
-        <li className={`rounded-lg ${router.pathname == '/channel/[id]/top-posts' ? liSelected : liNormal}`}>
-          <a href={`${menuPath}channel/${channel.username}/top-posts`} className={aNormal}>
-            <HandThumbUpIcon className='h-3 hidden md:inline' />
-            {t['Top-posts']}
-          </a>
-        </li>
-        <li
-          className={`rounded-lg ${
-            router.pathname == "/channel/[id]/comments" ? liSelected : liNormal
-          }`}
-        >
-          <a
-            href={`${menuPath}channel/${channel.username}/comments`}
-            className={aNormal}
-          >
-            <ChatBubbleLeftRightIcon className="h-3 hidden md:inline" />
-            {t["Comments"]} ({channel.comment})
+        <li className={`rounded-lg ${router.pathname == '/channel/[id]/comments' ? liSelected : liNormal}`}>
+          <a href={`${menuPath}channel/${channel.username}/comments`} className={aNormal}>
+            <ChatBubbleLeftRightIcon className='h-3 hidden md:inline' />
+            {t['Comments']} ({channel.comment})
           </a>
         </li>
       </ul>
@@ -64,8 +45,6 @@ const ChannelDetailNav = ({ channel }: any) => {
 };
 
 const ChannelDetailNavSkeleton = () => {
-  return (
-    <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation="wave" width="100%" height={54} className='h-min-[54px]' />
-  )
-}
-export {ChannelDetailNavSkeleton, ChannelDetailNav};
+  return <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation='wave' width='100%' height={54} className='h-min-[54px]' />;
+};
+export { ChannelDetailNavSkeleton, ChannelDetailNav };
