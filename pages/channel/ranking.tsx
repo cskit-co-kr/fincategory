@@ -305,7 +305,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='type'>
                 {(rowData) => (
                   <div
-                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
+                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
                       rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
                     }`}
                   >

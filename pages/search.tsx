@@ -483,9 +483,24 @@ const Search = () => {
               <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
                 {searchResult?.map((channel: any) => {
                   return channel.prod_section ? (
-                    <AdChannel2 channel={channel} key={channel.id} showType={channel.type ? true : false} />
+                    <AdChannel2
+                      channel={channel}
+                      key={channel.id}
+                      showType={channel.type ? true : false}
+                      typeIcon={true}
+                      showCategory={false}
+                    />
                   ) : (
-                    <GetChannels channels={channel} desc={true} key={channel.id} showType background='px-8 md:px-4 bg-white' />
+                    <GetChannels
+                      channels={channel}
+                      desc={true}
+                      key={channel.id}
+                      showType
+                      background='px-8 md:px-4 bg-white'
+                      typeIcon={false}
+                      typeStyle='px-1 mt-3 border-0'
+                      showCategory={true}
+                    />
                   );
                 })}
               </div>
