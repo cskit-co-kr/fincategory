@@ -24,15 +24,17 @@ const Section2_1 = ({ channels }: any) => {
             <div className='font-semibold'>{++index}</div>
             <div className='flex items-center w-full justify-between'>
               <div className='flex items-center gap-2'>
-                <ChannelAvatar id={channel.channel_id} title={channel.title} size='30' shape='rounded-full' />
+                <ChannelAvatar
+                  id={channel.channel_id}
+                  title={channel.title}
+                  size='30'
+                  shape='rounded-full'
+                  showType
+                  typeStyle='-bottom-1 absolute z-10 -right-1'
+                  type={channel.type}
+                  typeIcon={true}
+                />
                 <div className='line-clamp-1 max-w-[85%]'>{channel.title}</div>
-                <div
-                  className={`text-[11px] px-2 py-0.1 rounded-full w-fit whitespace-nowrap text-white ${
-                    channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
-                  }`}
-                >
-                  {channel.type === 'channel' ? t['channel'] : t['Group']}
-                </div>
               </div>
               <div className='text-gray-500 text-[12px] font-bold min-w-[110px] text-right'>
                 오늘{channel.today && channel.today}/누적{channel.total && channel.total}

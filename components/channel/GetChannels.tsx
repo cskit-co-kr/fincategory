@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Channel } from '../../typings';
 import { enUS } from '../../lang/en-US';
 import { koKR } from '../../lang/ko-KR';
@@ -7,6 +7,7 @@ import Link from 'next/link';
 import ChannelAvatar from './ChannelAvatar';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Skeleton } from '@mui/material';
+import axios from 'axios';
 
 type Props = {
   channels: Channel;
@@ -18,11 +19,25 @@ type Props = {
   background?: string;
   showType?: boolean;
   typeStyle?: string;
+  typeIcon?: boolean;
+  showCategory?: boolean;
 };
 
-const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bordered, extra, background, showType, typeStyle }) => {
+const GetChannels: FunctionComponent<Props> = ({
+  channels,
+  desc,
+  tag,
+  views,
+  bordered,
+  extra,
+  background,
+  showType,
+  typeStyle,
+  typeIcon,
+  showCategory,
+}) => {
   const router = useRouter();
-  const { locale } = router;
+  const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
   const style =
@@ -44,6 +59,7 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
           typeStyle={typeStyle}
           size='50'
           shape='rounded-full'
+          typeIcon={typeIcon}
         />
       </Link>
       <div className='space-y-3 w-full'>
@@ -70,25 +86,32 @@ const GetChannels: FunctionComponent<Props> = ({ channels, desc, tag, views, bor
             </span>
           )}
         </div>
-        <div className='tags flex flex-wrap'>
-          {channels.tags &&
-            tag === true &&
-            channels.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
-              return (
-                <button
-                  onClick={() => {
-                    router.push({
-                      pathname: 'search',
-                      query: { q: '#' + tag.tag },
-                    });
-                  }}
-                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
-                  key={tag.id}
-                >
-                  #{tag.tag}
-                </button>
-              );
-            })}
+        <div className='flex gap-1'>
+          {channels.category_id && showCategory && (
+            <div className='bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit'>
+              {JSON.parse(channels.category.name)[locale]}
+            </div>
+          )}
+          <div className='tags flex flex-wrap'>
+            {channels.tags &&
+              tag === true &&
+              channels.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
+                return (
+                  <button
+                    onClick={() => {
+                      router.push({
+                        pathname: 'search',
+                        query: { q: '#' + tag.tag },
+                      });
+                    }}
+                    className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
+                    key={tag.id}
+                  >
+                    #{tag.tag}
+                  </button>
+                );
+              })}
+          </div>
         </div>
       </div>
     </div>
@@ -114,6 +137,8 @@ GetChannels.defaultProps = {
   background: 'bg-white',
   showType: false,
   typeStyle: 'mt-3',
+  typeIcon: true,
+  showCategory: false,
 };
 
 export { GetChannels, GetChannelsSkeleton };

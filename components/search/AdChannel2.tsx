@@ -10,14 +10,16 @@ import Image from 'next/image';
 type Props = {
   channel: any;
   showType: boolean;
+  typeIcon?: boolean;
+  showCategory?: boolean;
 };
 
-const AdChannel2: FunctionComponent<Props> = ({ channel, showType }) => {
+const AdChannel2: FunctionComponent<Props> = ({ channel, showType, typeIcon, showCategory }) => {
   const router = useRouter();
-  const { locale } = router;
+  const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const style = 'p-4 border border-primary hover:shadow-sm transition ease-in-out duration-300';
+  const style = 'p-4 px-8 md:px-4 border border-primary hover:shadow-sm transition ease-in-out duration-300';
 
   return (
     <div className={`${style} relative flex md:rounded-xl gap-2.5 text-black bg-white min-h-[131px]`}>
@@ -29,9 +31,10 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType }) => {
             title={channel.title}
             type={channel.type}
             showType={showType}
-            typeStyle=''
+            typeStyle='-bottom-1 absolute z-10 -right-1'
             size='50'
             shape='rounded-full'
+            typeIcon={typeIcon}
           />
         ) : (
           <div className='border border-primary rounded-full'>
@@ -58,24 +61,31 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType }) => {
             </span>
           </div>
         )}
-        <div className='tags flex flex-wrap'>
-          {channel.tags &&
-            channel.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
-              return (
-                <button
-                  onClick={() => {
-                    router.push({
-                      pathname: 'search',
-                      query: { q: '#' + tag.tag },
-                    });
-                  }}
-                  className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
-                  key={tag.id}
-                >
-                  #{tag.tag}
-                </button>
-              );
-            })}
+        <div className='flex items-center gap-1'>
+          {channel.category_id && showCategory && (
+            <div className='bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF]'>
+              {JSON.parse(channel.category.name)[locale]}
+            </div>
+          )}
+          <div className='tags flex flex-wrap'>
+            {channel.tags &&
+              channel.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
+                return (
+                  <button
+                    onClick={() => {
+                      router.push({
+                        pathname: 'search',
+                        query: { q: '#' + tag.tag },
+                      });
+                    }}
+                    className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
+                    key={tag.id}
+                  >
+                    #{tag.tag}
+                  </button>
+                );
+              })}
+          </div>
         </div>
       </div>
     </div>

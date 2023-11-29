@@ -29,9 +29,10 @@ const AdChannel: FunctionComponent<Props> = ({ channel, showType }) => {
             title={channel.title}
             type={channel.type}
             showType={showType}
-            typeStyle=''
+            typeStyle='-bottom-1 absolute z-10 -right-1'
             size='50'
             shape='rounded-full'
+            typeIcon={true}
           />
         ) : (
           <div className='border border-primary rounded-full'>

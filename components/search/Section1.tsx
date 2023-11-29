@@ -17,7 +17,7 @@ const Section1 = ({ channels24h, extra }: any) => {
               tag={false}
               background='bg-gray-50 px-4 py-1'
               showType
-              typeStyle='-mt-1 absolute z-10 left-1.5'
+              typeStyle='-bottom-1 absolute z-10 -right-1'
             />
           );
         })}
