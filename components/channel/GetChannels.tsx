@@ -87,7 +87,7 @@ const GetChannels: FunctionComponent<Props> = ({
           )}
         </div>
         <div className='flex gap-1'>
-          {channels.category_id && channels.category.name && showCategory && (
+          {channels.category_id && showCategory && (
             <div className='bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit'>
               {channels.category.name !== undefined && JSON.parse(channels.category.name)[locale]}
             </div>
