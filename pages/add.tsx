@@ -128,7 +128,7 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
         <title>{`FinCa - ${t['add-channel']}`}</title>
       </Head>
       <div className='md:flex md:flex-col w-full xl:w-[1280px] mx-auto'>
-        <div className='text-xl font-bold text-center'>{t['add-channel']}adadadsa</div>
+        <div className='text-xl font-bold text-center'>{t['add-channel']}</div>
         <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
           {resultState !== null ? (
             <div className='flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center'>{resultState}</div>
