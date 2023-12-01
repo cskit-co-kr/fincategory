@@ -127,7 +127,7 @@ export const koKR = {
     "Subscribers": "구독자",
     "Citation-index": "인용 색인",
     "Citation": "소환",
-    "Posts-reach": "게시물 도달",
+    "Posts-reach": "포스트 조회수 통계",
     "Views-analysis": "뷰 분석",
     "Advertising-efficiency": "광고 효율성",
     "Attracting-subscribers": "구독자 유치",

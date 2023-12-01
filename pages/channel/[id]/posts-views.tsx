@@ -1,5 +1,8 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { IoMdInformationCircleOutline } from 'react-icons/io';
+
 import axios from 'axios';
+import { Tooltip as TT, Whisper } from 'rsuite';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Area, AreaChart, Brush, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -55,9 +58,8 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
     const date = new Date(payload.value);
     return (
       <g transform={`translate(${x},${y})`}>
-        <text dy={16} textAnchor='middle' fill='#a3a3a3' className='text-xs'>
-          {date.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-            year: '2-digit',
+        <text dy={12} textAnchor='middle' fill='#333333' className='text-[10px]'>
+          {date.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
           })}
@@ -69,7 +71,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
   const CustomizedYAxisTick = ({ x, y, payload, which }: any) => {
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} textAnchor='end' fill='#a3a3a3' className='text-xs'>
+        <text x={0} y={0} textAnchor='end' fill='#333333' className='text-[10px]'>
           {payload.value.toLocaleString()}
           {which === '3' && '%'}
         </text>
@@ -167,7 +169,17 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-              <div className='text-xl mx-auto font-semibold my-4'>{t['Average-post-reach']}</div>
+              <div className='text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2'>
+                {t['Average-post-reach']}
+                <Whisper
+                  placement='bottom'
+                  controlId='control-id-hover'
+                  trigger='hover'
+                  speaker={<TT arrow={false}>일 전체 포스트 조회수 합 / 일 전체 포스트 수</TT>}
+                >
+                  <IoMdInformationCircleOutline size={20} />
+                </Whisper>
+              </div>
               {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
                 onClick={() => setAveragesCountRange('week')}
@@ -207,7 +219,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   <defs>
                     <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
                       <stop offset='5%' stopColor='#3886E2' stopOpacity={0.3} />
-                      <stop offset='95%' stopColor='#3886E2' stopOpacity={0.2} />
+                      <stop offset='95%' stopColor='#3886E2' stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <Tooltip content={<CustomTooltip which='1' />} />
@@ -216,12 +228,12 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     type='number'
                     domain={[0, 'dataMax + 100']}
                     axisLine={false}
-                    tickCount={5}
+                    tickCount={7}
                     tickLine={false}
-                    fontSize={12}
+                    fontSize={10}
                     tick={<CustomizedYAxisTick />}
                   />
-                  <CartesianGrid vertical={false} />
+                  <CartesianGrid vertical={false} strokeDasharray='6 2' strokeWidth={1} strokeOpacity={0.5} />
                   <Brush
                     dataKey='date'
                     stroke='#3886E2'
@@ -254,7 +266,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     type='monotone'
                     dataKey='average'
                     stroke='#3886E2'
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fillOpacity={1}
                     fill='url(#color)'
                     baseValue='dataMin'
