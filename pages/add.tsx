@@ -54,39 +54,39 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
 
   const [resultState, setResultState] = useState<string | null>(null);
 
-  // async function handleSubmit() {
-  //   input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
-  //   selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
-  //   selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
-  //   selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
+  async function handleSubmit() {
+    input === '' ? setErrorInput(t['please-username']) : errorInput === '' ? setErrorInput(null) : null;
+    selectedCountry === '' ? setErrorCountry(t['please-country']) : setErrorCountry(null);
+    selectedLanguage === '' ? setErrorLanguage(t['please-language']) : setErrorLanguage(null);
+    selectedCategory === '' ? setErrorCategory(t['please-category']) : setErrorCategory(null);
 
-  //   if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
-  //     let text = extractUsername(input);
-  //     if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
-  //       const data = {
-  //         title: text.trim(),
-  //         country: selectedCountry,
-  //         language: selectedLanguage,
-  //         category: selectedCategory,
-  //       };
-  //       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
-  //         method: 'POST',
-  //         headers: { 'content-type': 'application/json' },
-  //         body: JSON.stringify(data),
-  //       });
-  //       const result = await response.json();
-  //       if (result === 'OK') {
-  //         setResultState(`${text} ${t['channel-add']}`);
-  //         setInput('');
-  //         setSelectedCountry('');
-  //         setSelectedLanguage('');
-  //         setSelectedCategory('');
-  //       } else {
-  //         setResultState(`"${text}" ${t['channel-add-error']}`);
-  //       }
-  //     }
-  //   }
-  // }
+    if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
+      let text = extractUsername(input);
+      if (input !== '' && selectedCountry !== '' && selectedLanguage !== '' && selectedCategory !== '') {
+        const data = {
+          title: text.trim(),
+          country: selectedCountry,
+          language: selectedLanguage,
+          category: selectedCategory,
+        };
+        const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result === 'OK') {
+          setResultState(`${text} ${t['channel-add']}`);
+          setInput('');
+          setSelectedCountry('');
+          setSelectedLanguage('');
+          setSelectedCategory('');
+        } else {
+          setResultState(`"${text}" ${t['channel-add-error']}`);
+        }
+      }
+    }
+  }
   const extractUsername = (input: any) => {
     let arr = [];
     let text = '';
@@ -128,7 +128,7 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
         <title>{`FinCa - ${t['add-channel']}`}</title>
       </Head>
       <div className='md:flex md:flex-col w-full xl:w-[1280px] mx-auto'>
-        <div className='text-xl font-bold text-center'>{t['add-channel']}</div>
+        <div className='text-xl font-bold text-center'>{t['add-channel']}adadadsa</div>
         <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
           {resultState !== null ? (
             <div className='flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center'>{resultState}</div>
@@ -195,12 +195,12 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
             />
           </div>
           {errorCategory !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCategory}</div> : ''}
-          {/* <button
+          <button
             onClick={() => handleSubmit()}
             className='mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]'
           >
             {t['register']}
-          </button> */}
+          </button>
         </div>
         <div className='mx-auto mt-8 px-5 text-center text-[#3687E2] font-medium'>
           * 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.
