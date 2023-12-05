@@ -16,7 +16,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Pagination } from 'rsuite';
 import GridPostRow from '../components/board/GridPostRow';
 import Link from 'next/link';
-import Tradingview from '../components/Tradingview';
 import Section3 from '../components/search/Section3';
 
 const Home: NextPage = ({
