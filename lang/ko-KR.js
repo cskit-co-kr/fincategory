@@ -65,7 +65,7 @@ export const koKR = {
     "engagement-rate-erp": "참여율 (ERP)",
     "subscribers": "구독자",
     "subscribers/members": "구독자/참여자",
-    "members": "참가자",
+    "members": "구독자",
     "average-post-reach": "포스트 평균 도달",
     "average-post-reach-24hours": "포스트 평균도달 (24 hours)",
     "citation-index": "인용 색인 (CI)",
@@ -157,7 +157,7 @@ export const koKR = {
     "Views-of-the": "일별 총 게시물 조회수",
     "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
     "Views": "조회 수",
-    "ERR-engagement-by-views": "ERR — 조회수 참여",
+    "ERR-engagement-by-views": "일 포스트 조회율",
     "Percentage-of-subscribers": "채널 게시물을 읽는 구독자 비율",
     /* detail - attraction */
     "attraction-text-1": "Table below shows how \"%{channel.title}\" channel attracts traffic from other Telegram channels: the number of mentions of the channel, the total monthly reach of these mentions, and the increase of new subscribers for the specified month.",

@@ -273,6 +273,21 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='rank' />
             </Column>
 
+            <Column align='center'>
+              <HeaderCell>{t['channel-type']}</HeaderCell>
+              <Cell dataKey='type'>
+                {(rowData) => (
+                  <div
+                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
+                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                    }`}
+                  >
+                    {rowData.type === 'channel' ? t['channel'] : t['Group']}
+                  </div>
+                )}
+              </Cell>
+            </Column>
+
             <Column flexGrow={2} minWidth={170} fixed>
               <HeaderCell>{t['channel']}</HeaderCell>
               <Cell>
@@ -296,21 +311,6 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                       </div>
                     </div>
                   </Link>
-                )}
-              </Cell>
-            </Column>
-
-            <Column align='center'>
-              <HeaderCell>{t['channel-type']}</HeaderCell>
-              <Cell dataKey='type'>
-                {(rowData) => (
-                  <div
-                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
-                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
-                    }`}
-                  >
-                    {rowData.type === 'channel' ? t['channel'] : t['Group']}
-                  </div>
                 )}
               </Cell>
             </Column>
