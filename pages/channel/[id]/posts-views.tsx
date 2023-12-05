@@ -1,6 +1,6 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { IoMdInformationCircleOutline } from 'react-icons/io';
-
+import { PiInfoLight } from 'react-icons/pi';
+import { Tooltip as AntTooltip } from 'antd';
 import axios from 'axios';
 import { Tooltip as TT, Whisper } from 'rsuite';
 import { useRouter } from 'next/router';
@@ -45,7 +45,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
           </span>
           <span className='p-1.5 flex gap-1'>
             <UserCircleIcon className='h-4 text-primary' />
-            <b>{tooltipName}:</b> {payload[0].value.toLocaleString()}
+            <b>{tooltipName}:</b> {Math.round(payload[0].value).toLocaleString()}
             {which === '3' && '%'}
           </span>
         </div>
@@ -72,7 +72,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
     return (
       <g transform={`translate(${x},${y})`}>
         <text x={0} y={0} textAnchor='end' fill='#333333' className='text-[10px]'>
-          {payload.value.toLocaleString()}
+          {Math.round(payload.value).toLocaleString()}
           {which === '3' && '%'}
         </text>
       </g>
@@ -171,14 +171,25 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
               <div className='text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2'>
                 {t['Average-post-reach']}
-                <Whisper
+
+                <AntTooltip
+                  title='일 전체 포스트 조회수 합 / 일 전체 포스트 수'
+                  arrow={false}
                   placement='bottom'
-                  controlId='control-id-hover'
-                  trigger='hover'
-                  speaker={<TT arrow={false}>일 전체 포스트 조회수 합 / 일 전체 포스트 수</TT>}
+                  color='#fafafa'
+                  overlayClassName='rounded-lg'
+                  overlayInnerStyle={{
+                    color: '#435066',
+                    fontSize: '12px',
+                    whiteSpace: 'nowrap',
+                    padding: '10px',
+                    width: 'fit-content',
+                    boxShadow: 'none',
+                    border: '1px solid #e8e8e8',
+                  }}
                 >
-                  <IoMdInformationCircleOutline size={20} />
-                </Whisper>
+                  <PiInfoLight size={20} />
+                </AntTooltip>
               </div>
               {/* <div className='flex gap-0.5 text-xs my-4 h-fit'>
               <button
@@ -214,7 +225,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                 {t['All-time']}
               </button>
             </div> */}
-              <ResponsiveContainer width='100%' height={420}>
+              <ResponsiveContainer width='95%' style={{ margin: 'auto' }} height={420}>
                 <AreaChart width={270} height={420} data={averageViews}>
                   <defs>
                     <linearGradient id='color' x1='0' y1='0' x2='0' y2='1'>
@@ -226,7 +237,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   <XAxis dataKey='date' tick={<CustomizedAxisTick />} />
                   <YAxis
                     type='number'
-                    domain={[0, 'dataMax + 100']}
+                    domain={[0, 'dataMax + 10']}
                     axisLine={false}
                     tickCount={7}
                     tickLine={false}
@@ -237,7 +248,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   <Brush
                     dataKey='date'
                     stroke='#3886E2'
-                    startIndex={averagesCount}
+                    startIndex={0}
                     endIndex={averageViews.length - 1}
                     height={35}
                     travellerWidth={15}
@@ -277,8 +288,8 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
             </div>
 
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-              <div className='text-xl mx-auto font-semibold my-4'>{t['Views-of-the']}</div>
-              <ResponsiveContainer width='100%' height={420}>
+              <div className='text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2'>{t['Views-of-the']}</div>
+              <ResponsiveContainer width='95%' style={{ margin: 'auto' }} height={420}>
                 <AreaChart width={270} height={420} data={totalViews}>
                   <defs>
                     <linearGradient id='color2' x1='0' y1='0' x2='0' y2='1'>
@@ -292,16 +303,16 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     type='number'
                     domain={[0, 'dataMax + 100']}
                     axisLine={false}
-                    tickCount={5}
+                    tickCount={7}
                     tickLine={false}
                     fontSize={12}
                     tick={<CustomizedYAxisTick />}
                   />
-                  <CartesianGrid vertical={false} />
+                  <CartesianGrid vertical={false} strokeDasharray='6 2' strokeWidth={1} strokeOpacity={0.5} />
                   <Brush
                     dataKey='date'
                     stroke='#55A348'
-                    startIndex={totalCount}
+                    startIndex={0}
                     endIndex={totalViews.length - 1}
                     height={35}
                     travellerWidth={15}
@@ -330,7 +341,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     type='monotone'
                     dataKey='total'
                     stroke='#55A348'
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fillOpacity={1}
                     fill='url(#color2)'
                     baseValue='dataMin'
@@ -341,8 +352,29 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
             </div>
 
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
-              <div className='text-xl mx-auto font-semibold my-4'>{t['ERR-engagement-by-views']}</div>
-              <ResponsiveContainer width='100%' height={420}>
+              <div className='text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2'>
+                {t['ERR-engagement-by-views']}
+
+                <AntTooltip
+                  title='일 평균 포스트 조회수 / 일 평균 구독자 수'
+                  arrow={false}
+                  placement='bottom'
+                  color='#fafafa'
+                  overlayClassName='rounded-lg'
+                  overlayInnerStyle={{
+                    color: '#435066',
+                    fontSize: '12px',
+                    whiteSpace: 'nowrap',
+                    padding: '10px',
+                    width: 'fit-content',
+                    boxShadow: 'none',
+                    border: '1px solid #e8e8e8',
+                  }}
+                >
+                  <PiInfoLight size={20} />
+                </AntTooltip>
+              </div>
+              <ResponsiveContainer width='95%' style={{ margin: 'auto' }} height={420}>
                 <AreaChart width={270} height={420} data={errPercent}>
                   <defs>
                     <linearGradient id='color3' x1='0' y1='0' x2='0' y2='1'>
@@ -361,11 +393,11 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     fontSize={12}
                     tick={<CustomizedYAxisTick which='3' />}
                   />
-                  <CartesianGrid vertical={false} />
+                  <CartesianGrid vertical={false} strokeDasharray='6 2' strokeWidth={1} strokeOpacity={0.5} />
                   <Brush
                     dataKey='date'
                     stroke='#CD5066'
-                    startIndex={errPercentCount}
+                    startIndex={0}
                     endIndex={errPercent.length - 1}
                     height={35}
                     travellerWidth={15}
@@ -394,7 +426,7 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                     type='monotone'
                     dataKey='views'
                     stroke='#CD5066'
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fillOpacity={1}
                     fill='url(#color3)'
                     baseValue='dataMin'
