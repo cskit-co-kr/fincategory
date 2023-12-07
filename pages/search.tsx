@@ -17,19 +17,20 @@ import SearchFilterBar from '../components/search/SearchFilterBar';
 import Ads1 from '../components/search/Ads1';
 import addAds2 from '../lib/ads2';
 import AdChannel2 from '../components/search/AdChannel2';
+import Hashtag from '../components/Hashtag';
 
 const Search = () => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
-  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   useEffect(() => {
     if (!isFirstLoad) {
-      const tag = selectedTag ? `#${selectedTag}` : '';
+      const tag = selectedTag.tag ? `#${selectedTag.tag}` : '';
       doSearch(tag);
     }
     setIsFirstLoad(false);
@@ -68,7 +69,7 @@ const Search = () => {
   const [channels30d, setChannels30d] = useState<any>(null);
   const [channels24_7_30, setChannels24_7_30] = useState();
 
-  const [tags, setTags] = useState<any[]>(Array(10).fill({ tag: '................' }));
+  const [tags, setTags] = useState<any>();
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -186,7 +187,7 @@ const Search = () => {
     let data;
     if (selectedTag !== '') {
       data = {
-        query: selectedTag ? `#${selectedTag}` : null, //searchText === '' ? null : searchText,
+        query: selectedTag ? `#${selectedTag.tag}` : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
         category: [],
         country: [],
@@ -349,7 +350,7 @@ const Search = () => {
       <div className='flex flex-1 flex-col md:pt-7'>
         <div className='grid md:flex'>
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
-            <div
+            {/* <div
               className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
             >
@@ -359,7 +360,8 @@ const Search = () => {
                   <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
                 </div>
               </div>
-            </div>
+            </div> */}
+            {tags && <Hashtag tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />}
             <Ads1 />
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
@@ -467,7 +469,7 @@ const Search = () => {
                 loadBar={loadBar}
                 channelType={channelType}
                 setChannelType={setChannelType}
-                selectedTag={selectedTag}
+                selectedTag={selectedTag?.tag}
                 handleClick={handleClick}
                 doSearch={doSearch}
               />

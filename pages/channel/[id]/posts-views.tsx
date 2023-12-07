@@ -284,7 +284,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-              <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['The-average-number']}</div>
             </div>
 
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
@@ -348,7 +347,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-              <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Total-number-of']}</div>
             </div>
 
             <div className='w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white'>
@@ -433,7 +431,6 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-              <div className='p-4 ml-4 mt-4 bg-gray-50 border border-gray-200 rounded-md'>{t['Percentage-of-subscribers']}</div>
             </div>
           </div>
         </div>
