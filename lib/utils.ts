@@ -96,4 +96,36 @@ const getDuration = (start: any, end: any) => {
   return Math.trunc(differenceInDays);
 };
 
-export { formatDate, toDateTimeformat, toDateformat, getHrefValue, formatKoreanNumber, getToday, getDuration };
+const hashtagReduce = (tags: any) => {
+  const reduceTags = tags.reduce((result: any, currentItem: any) => {
+    const existingGroup = result.find((group: any) => group.id === currentItem.id);
+
+    if (existingGroup) {
+      existingGroup.tags.push({
+        tag: currentItem.tag,
+        order_id: currentItem.order_id,
+        total: currentItem.total,
+      });
+      existingGroup.tags.sort((a: any, b: any) => b.total - a.total);
+      existingGroup.total = existingGroup.tags.reduce((sum: any, tag: any) => sum + Number(tag.total), 0);
+    } else {
+      result.push({
+        name: currentItem.name,
+        id: currentItem.id,
+        total: Number(currentItem.total),
+        tags: [
+          {
+            tag: currentItem.tag,
+            order_id: currentItem.order_id,
+            total: currentItem.total,
+          },
+        ],
+      });
+    }
+    result.sort((a: any, b: any) => b.total - a.total);
+    return result;
+  }, []);
+  return reduceTags;
+};
+
+export { formatDate, toDateTimeformat, toDateformat, getHrefValue, formatKoreanNumber, getToday, getDuration, hashtagReduce };

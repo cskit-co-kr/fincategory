@@ -18,12 +18,14 @@ import Ads1 from '../components/search/Ads1';
 import addAds2 from '../lib/ads2';
 import AdChannel2 from '../components/search/AdChannel2';
 import Hashtag from '../components/Hashtag';
+import HashtagMobile from '../components/HashtagMobile';
 
 const Search = () => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === 'ko' ? koKR : enUS;
 
+  const [windowWidth, setWindowWidth] = useState(0);
   const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
@@ -165,6 +167,11 @@ const Search = () => {
     _channels24();
 
     exec();
+
+    if (typeof window !== 'undefined') {
+      const windowWidth = window.innerWidth;
+      setWindowWidth(windowWidth);
+    }
   }, [router]);
 
   useEffect(() => {
@@ -361,7 +368,12 @@ const Search = () => {
                 </div>
               </div>
             </div> */}
-            {tags && <Hashtag tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />}
+            {tags &&
+              (windowWidth < 1000 ? (
+                <HashtagMobile tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+              ) : (
+                <Hashtag tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+              ))}
             <Ads1 />
             <Section3 />
             <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
