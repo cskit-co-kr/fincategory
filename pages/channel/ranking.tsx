@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import { MultiValueOptions } from '../../typings';
 import { Table } from 'rsuite';
-import { formatKoreanNumber } from '../../lib/utils';
+import { getAverages, formatKoreanNumber } from '../../lib/utils';
 import { SortType } from 'rsuite/esm/Table';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -120,9 +120,13 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       obj.rank = i + 1;
       obj.category = getCategoryName(obj.category_id);
       const splitExtra = obj.extra_01 === null ? [0, 0, 0] : obj.extra_01.split(':');
-      obj.increase24h = splitExtra[0];
+      // obj.increase24h = splitExtra[0];
       obj.increase7d = splitExtra[1];
-      obj.increase30d = splitExtra[2];
+      // obj.increase30d = splitExtra[2];
+      const a: any = await getAverages(obj.channel_id, obj.subscription);
+      obj.averageViews = a?.averageViews;
+      obj.averagePosts = a?.averagePosts;
+      obj.averageErr = a?.averageErr;
     }
     setData(result);
   };
@@ -363,7 +367,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
             </Column>
 
-            <Column align='center' sortable>
+            {/* <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase24h' ? 'font-bold text-primary' : ''}>{t['increase-24h']}</HeaderCell>
               <Cell dataKey='increase24h'>
                 {(rowData) =>
@@ -374,7 +378,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   )
                 }
               </Cell>
-            </Column>
+            </Column> */}
 
             <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase7d' ? 'font-bold text-primary' : ''}>{t['increase-7d']}</HeaderCell>
@@ -389,7 +393,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column align='center' sortable>
+            {/* <Column align='center' sortable>
               <HeaderCell className={sortColumn === 'increase30d' ? 'font-bold text-primary' : ''}>{t['increase-30d']}</HeaderCell>
               <Cell dataKey='increase30d'>
                 {(rowData) =>
@@ -400,6 +404,11 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                   )
                 }
               </Cell>
+            </Column> */}
+
+            <Column align='center' width={120} sortable>
+              <HeaderCell className={sortColumn === 'averagePosts' ? 'font-bold text-primary' : ''}>일간 포스트 수</HeaderCell>
+              <Cell dataKey='averagePosts' />
             </Column>
           </Table>
         </div>
