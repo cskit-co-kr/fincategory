@@ -29,7 +29,7 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
           order_id: currentItem.order_id,
           total: currentItem.total,
         });
-        existingGroup.tags.sort((a: any, b: any) => a.order_id - b.order_id);
+        existingGroup.tags.sort((a: any, b: any) => b.total - a.total);
         existingGroup.total = existingGroup.tags.reduce((sum: any, tag: any) => sum + Number(tag.total), 0);
       } else {
         result.push({
@@ -45,7 +45,7 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
           ],
         });
       }
-
+      result.sort((a: any, b: any) => b.total - a.total);
       return result;
     }, []);
 
@@ -71,7 +71,7 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
   return (
     <div
       className={`sticky top-0 z-20 white-box py-5 transition-all transform duration-150  ${
-        pageYOffset === 0 ? 'h-[308px]' : `h-[63px] overflow-hidden shadow-2xl ${pageYOffset > 180 && 'rounded-t-none'}`
+        pageYOffset === 0 ? 'h-[340px]' : `h-[63px] overflow-hidden shadow-2xl ${pageYOffset > 180 && 'rounded-t-none'}`
       }`}
     >
       <div className='flex items-center justify-between border-b border-[#e5e5e5] mb-5 pb-4'>
@@ -91,8 +91,8 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
               <TbMathGreater size={12} />
               {selectedTag && JSON.parse(selectedCategory)[locale]}
               <TbMathGreater size={12} />
-              <div className='bg-primary border border-primary rounded-xl text-white pl-2 pr-3 py-[1px] flex items-center gap-2'>
-                <span className='bg-[#d9d9d9] rounded-lg text-black px-2 text-[10px]'>{selectedTag.total}</span>
+              <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
+                <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedTag.total}</span>
                 {selectedTag.tag}
               </div>
             </div>
@@ -109,7 +109,7 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
             });
           }}
         >
-          <RxPinTop /> Go to top
+          <RxPinTop /> 맨위로
         </button>
       </div>
 
@@ -120,16 +120,18 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
               {category.name ? JSON.parse(category.name)[locale] : 'Uncategorized'}
               <span className='ml-3 font-normal'>{category.total}</span>
             </div>
-            <div className={`space-y-2 ml-4 ${category.tags.length > 6 && 'grid grid-cols-2'}`}>
+            <div className={`space-y-2 ${category.tags.length > 6 && 'grid grid-rows-6 grid-flow-col'}`}>
               {category.tags.map((tag: any, index: number) => (
                 <button
                   key={index}
-                  className={`flex items-center gap-2 hover:underline ${selectedTag?.tag === tag.tag ? 'font-bold' : ''}`}
+                  className={`flex items-center gap-2 hover:underline ${
+                    selectedTag?.tag === tag.tag ? 'bg-primary rounded-xl text-white pl-1 pr-2 py-0.5 font-bold' : 'py-0.5'
+                  }`}
                   onClick={() => {
                     selectedTag?.tag === tag.tag ? handleSelectTag('', '') : handleSelectTag(tag, category);
                   }}
                 >
-                  <div className='bg-[#d9d9d9] rounded-xl px-2 py-0.5 text-[10px]'>{tag.total}</div>
+                  <div className='bg-[#d9d9d9] rounded-xl px-2 py-0.5 text-[10px] text-black min-w-[33px]'>{tag.total}</div>
                   {tag.tag}
                 </button>
               ))}
