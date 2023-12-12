@@ -120,11 +120,11 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
               {category.name ? JSON.parse(category.name)[locale] : 'Uncategorized'}
               <span className='ml-3 font-normal'>{category.total}</span>
             </div>
-            <div className={`space-y-2 ${category.tags.length > 6 && 'grid grid-rows-6 grid-flow-col'}`}>
+            <div className={`${category.tags.length > 6 && 'grid grid-rows-6 grid-flow-col'}`}>
               {category.tags.map((tag: any, index: number) => (
                 <button
                   key={index}
-                  className={`flex items-center gap-2 hover:underline ${
+                  className={`flex items-center gap-2 hover:underline mb-2 ${
                     selectedTag?.tag === tag.tag ? 'bg-primary rounded-xl text-white pl-1 pr-2 py-0.5 font-bold' : 'py-0.5'
                   }`}
                   onClick={() => {
