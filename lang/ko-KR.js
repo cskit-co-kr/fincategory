@@ -121,7 +121,7 @@ export const koKR = {
     /* detail */
     "date-registered": "Finca에 등록된 날짜",
     "views-per-post": "조회수 게시",
-    "posts-per-month": "월별 게시물",
+    "posts-per-month": "일간 포스트 수",
     "ERR": "ERR",
     "Summary": "요약",
     "Subscribers": "구독자",
@@ -152,9 +152,9 @@ export const koKR = {
     "All-time": "항상",
     "The-graph-above": "위 그래프는 \"%{channel.title}\" 채널 구독자 수의 일별 증가/감소를 보여줍니다.",
     /* detail - posts-views */
-    "Average-post-reach": "평균 게시물 도달",
+    "Average-post-reach": "일 평균 포스트 조회 수",
     "The-average-number": "채널 게시물의 평균 조회수입니다.",
-    "Views-of-the": "일별 총 게시물 조회수",
+    "Views-of-the": "일 전체 포스트 수",
     "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
     "Views": "조회 수",
     "ERR-engagement-by-views": "일 포스트 조회율",
