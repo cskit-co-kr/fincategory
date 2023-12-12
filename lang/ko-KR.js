@@ -120,9 +120,9 @@ export const koKR = {
     "channel-add-error": " channel is not added!",
     /* detail */
     "date-registered": "Finca에 등록된 날짜",
-    "views-per-post": "조회수 게시",
+    "views-per-post": "포스트 조회",
     "posts-per-month": "일간 포스트 수",
-    "ERR": "ERR",
+    "ERR": "포스트 조회율",
     "Summary": "요약",
     "Subscribers": "구독자",
     "Citation-index": "인용 색인",

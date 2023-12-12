@@ -32,7 +32,7 @@ const Search = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   useEffect(() => {
     if (!isFirstLoad) {
-      const tag = selectedTag.tag ? `#${selectedTag.tag}` : '';
+      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : '';
       doSearch(tag);
     }
     setIsFirstLoad(false);
@@ -192,7 +192,7 @@ const Search = () => {
     setSearchResultText(<Loader content={t['loading-text']} />);
 
     let data;
-    if (selectedTag !== '') {
+    if (selectedTag !== undefined) {
       data = {
         query: selectedTag ? `#${selectedTag.tag}` : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
