@@ -154,7 +154,7 @@ export const koKR = {
     /* detail - posts-views */
     "Average-post-reach": "일 평균 포스트 조회 수",
     "The-average-number": "채널 게시물의 평균 조회수입니다.",
-    "Views-of-the": "일 전체 포스트 수",
+    "Views-of-the": "일 전체 포스트 조회 수",
     "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
     "Views": "조회 수",
     "ERR-engagement-by-views": "일 포스트 조회율",
