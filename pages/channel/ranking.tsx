@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import { MultiValueOptions } from '../../typings';
 import { Table } from 'rsuite';
-import { formatKoreanNumber } from '../../lib/utils';
+import { getAverages, formatKoreanNumber } from '../../lib/utils';
 import { SortType } from 'rsuite/esm/Table';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,6 +15,7 @@ import { colorStyles } from '../../constants';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useMediaQuery } from '@mui/material';
 import ChannelAvatar from '../../components/channel/ChannelAvatar';
+import { FaUser, FaVolumeLow } from 'react-icons/fa6';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -122,6 +123,10 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       obj.increase24h = splitExtra[0];
       obj.increase7d = splitExtra[1];
       obj.increase30d = splitExtra[2];
+      // const a: any = await getAverages(obj.channel_id, obj.subscription);
+      // obj.averageViews = a?.averageViews;
+      // obj.averagePosts = a?.averagePosts;
+      // obj.averageErr = a?.averageErr;
     }
     setData(result);
   };
@@ -273,8 +278,33 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <Cell dataKey='rank' />
             </Column>
 
+            <Column width={70} align='center'>
+              <HeaderCell>구분</HeaderCell>
+              <Cell dataKey='type'>
+                {(rowData) => (
+                  <div
+                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
+                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                    }`}
+                  >
+                    {rowData.type === 'channel' ? (
+                      <div className='flex items-center gap-0.5'>
+                        <FaVolumeLow size={10} />
+                        {t['channel']}
+                      </div>
+                    ) : (
+                      <div className='flex items-center gap-0.5'>
+                        <FaUser size={10} />
+                        {t['Group']}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Cell>
+            </Column>
+
             <Column flexGrow={2} minWidth={170} fixed>
-              <HeaderCell>{t['channel']}</HeaderCell>
+              <HeaderCell>이름</HeaderCell>
               <Cell>
                 {(rowData) => (
                   <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
@@ -300,16 +330,33 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column align='center'>
-              <HeaderCell>{t['channel-type']}</HeaderCell>
-              <Cell dataKey='type'>
+            <Column width={80} align='center'>
+              <HeaderCell>{t['category']}</HeaderCell>
+              <Cell>
                 {(rowData) => (
-                  <div
-                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
-                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
-                    }`}
-                  >
-                    {rowData.type === 'channel' ? t['channel'] : t['Group']}
+                  <div className='bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit'>
+                    {rowData.category}
+                  </div>
+                )}
+              </Cell>
+            </Column>
+
+            <Column width={120} align='right'>
+              <HeaderCell>해시태그</HeaderCell>
+              <Cell>
+                {(rowData) => (
+                  <div className='flex flex-wrap gap-0.5 justify-end'>
+                    {rowData.tags &&
+                      rowData.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
+                        return (
+                          <div
+                            className='h-fit bg-gray-100 px-1.5 py-0.5 rounded-full text-sm md:text-xs font-semibold text-gray-700'
+                            key={tag.id}
+                          >
+                            #{tag.tag}
+                          </div>
+                        );
+                      })}
                   </div>
                 )}
               </Cell>
@@ -358,6 +405,11 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                 }
               </Cell>
             </Column>
+
+            {/* <Column align='center' width={120} sortable>
+              <HeaderCell className={sortColumn === 'averagePosts' ? 'font-bold text-primary' : ''}>일간 포스트 수</HeaderCell>
+              <Cell dataKey='averagePosts' />
+            </Column> */}
           </Table>
         </div>
       </div>

@@ -8,7 +8,7 @@ async function addAds2(channels: any) {
   let newArray = channels;
 
   // Remove items from the end of the main array based on the length of the additional array
-  if (channels.length > ads.length) {
+  if (channels.length > ads.length && channels.length + ads.length > 45) {
     newArray = channels.slice(0, channels.length - ads.length);
   }
 
