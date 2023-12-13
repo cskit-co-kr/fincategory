@@ -33,14 +33,22 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
 
   const [selectedCategory, setSelectedCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
+    handleClick();
     setSelectedTag(tag);
     setSelectedCategory(category.name);
     window.scrollTo({
-      top: 2250,
+      top: 2280,
       behavior: 'smooth',
     });
     //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  function handleClick() {
+    const element = document.getElementById('my-drawer');
+    if (element) {
+      element.click();
+    }
+  }
 
   return (
     <div className={`drawer sticky top-0 z-20 bg-gray-50 ${pageYOffset > 10 && 'shadow-xl'}`}>
@@ -55,7 +63,7 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
           <div className='flex items-center gap-3'>
             <button
               onClick={() => handleSelectTag('', '')}
-              className={`rounded-xl font-bold px-4 py-[1px] border hover:underline ${
+              className={`rounded-xl font-bold px-4 py-[1px] border hover:underline whitespace-nowrap ${
                 selectedTag ? 'bg-white text-black border-[#e5e5e5]' : 'bg-primary border-primary text-white'
               }`}
             >
@@ -73,7 +81,7 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
               </div>
             ) : (
               groupedTags.map((category: any, index: number) => (
-                <div key={index} className='font-bold'>
+                <div key={index} className='font-bold whitespace-nowrap'>
                   {category.name && JSON.parse(category.name)[locale]}
                 </div>
               ))
