@@ -93,7 +93,7 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, selectedCategory, setSelec
           <button
             onClick={() => handleSelectTag('', '')}
             className={`rounded-xl font-bold px-4 py-[1px] border hover:underline ${
-              selectedTag ? 'bg-white text-black border-[#e5e5e5]' : 'bg-primary border-primary text-white'
+              selectedTag || selectedCategory ? 'bg-white text-black border-[#e5e5e5]' : 'bg-primary border-primary text-white'
             }`}
           >
             전체
@@ -101,7 +101,10 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, selectedCategory, setSelec
           {selectedCategory && (
             <div className='flex items-center gap-2 font-bold'>
               <TbMathGreater size={12} />
-              {selectedCategory[0].label}
+              <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
+                <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedCategory[0].total}</span>
+                {selectedCategory[0].label}
+              </div>
             </div>
           )}
           {selectedTag && (
@@ -140,7 +143,11 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, selectedCategory, setSelec
               }`}
             >
               {category.name ? (
-                <button onClick={() => handleSelectCategory([{ value: category.id, label: JSON.parse(category.name)[locale] }])}>
+                <button
+                  onClick={() =>
+                    handleSelectCategory([{ value: category.id, label: JSON.parse(category.name)[locale], total: category.total }])
+                  }
+                >
                   {JSON.parse(category.name)[locale]}
                 </button>
               ) : (
