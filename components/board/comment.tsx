@@ -269,7 +269,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             disabled={content.trim().length > 0 ? false : true}
             onClick={showEdit ? editComment : saveComment}
           >
-            글쓰기
+            등록
           </Button>
           <button
             className='ml-1 rounded-md border border-gray-200 px-4 py-2'
@@ -278,7 +278,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
               setShowEdit(false);
             }}
           >
-            Cancel
+            취소
           </button>
         </div>
       </div>
