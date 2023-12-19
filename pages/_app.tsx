@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <DefaultSeo
         title='핀카'
         titleTemplate='%s | FinCa - 텔레그램 채널/그룹 정보, 핀카'
-        description='%s 가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca'
+        description='가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca'
         additionalMetaTags={[
           {
             name: 'author',
