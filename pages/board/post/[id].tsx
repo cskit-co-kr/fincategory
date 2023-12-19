@@ -6,6 +6,7 @@ import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { getCookie, setCookie } from 'cookies-next';
 import { InferGetServerSidePropsType, NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
+import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -279,6 +280,22 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   return (
     <>
+      <NextSeo
+        noindex={false}
+        nofollow={false}
+        title={post.title}
+        description={post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...'}
+        additionalMetaTags={[
+          { name: 'title', content: post.title },
+          { name: 'og:title', content: post.title },
+          { name: 'og:description', content: (post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...') as string },
+          { name: 'twitter:title', content: post.title },
+          {
+            name: 'twitter:description',
+            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...') as string,
+          },
+        ]}
+      />
       <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
         <Modal.Body>게시글을 삭제하시겠습니까?</Modal.Body>
         <Modal.Footer className='flex place-content-end gap-2'>

@@ -85,11 +85,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             property: 'og:url',
-            content: 'https://fincategory.com',
+            content: 'https://finca.co.kr',
           },
           {
             property: 'og:image',
-            content: 'https://fincategory.com/logo.png',
+            content: 'https://finca.co.kr/logo.png',
           },
           {
             property: 'og:image:type',
@@ -118,7 +118,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
           {
             name: 'twitter:image',
-            content: 'https://fincategory.com/logo.png',
+            content: 'https://finca.co.kr/logo.png',
           },
           {
             name: 'twitter:creator',
@@ -126,7 +126,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           },
         ]}
         twitter={{
-          site: 'fincategory.com',
+          site: 'finca.co.kr',
         }}
       />
 
