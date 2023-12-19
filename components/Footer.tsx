@@ -20,13 +20,12 @@ function Footer() {
               </Link>
               <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
             </div>
-            <h2 className='font-bold text-base'>{t['contact-us']}</h2>
+            <h2 className='font-bold text-base'>문의/고객센터</h2>
             <ul className='list-none mt-3 leading-7'>
               <li>
-                <Link href='/'>{t['customer-support']}</Link>
-              </li>
-              <li>
-                <Link href='mailto:jopaint@naver.com'>{t['email']}: jopaint@naver.com</Link>
+                <Link href='https://t.me/fincatele' target='_blank'>
+                  @fincatele
+                </Link>
               </li>
             </ul>
           </div>

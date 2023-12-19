@@ -12,7 +12,7 @@ const Layout = ({ children }: any) => {
       </Head>
       <div className='relative wrapper bg-gray-50'>
         <Link
-          href='https://t.me/+tII7nl-XenU0NjA1'
+          href='https://t.me/fincatele'
           target='_blank'
           className='hidden md:block fixed right-10 bottom-10 rounded-full shadow-lg bg-primary p-3 group z-[9999]'
         >
