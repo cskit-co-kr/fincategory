@@ -9,6 +9,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { Table } from 'rsuite';
 import { useEffect, useState } from 'react';
 import ModalFincoinPurchaseConfirm from '../../components/member/ModalFincoinPurchaseConfirm';
+import Link from 'next/link';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -181,7 +182,12 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
               </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
                 <div className='font-semibold'>입금 계좌번호:</div>
-                <div>신한은행 110 390 632138 조승기</div>
+                <div>
+                  <Link href='https://t.me/fincatele' target='_blank' className='font-bold underline'>
+                    @fincatele
+                  </Link>{' '}
+                  메시지로 입금방법 문의주세요
+                </div>
               </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
                 <div className='font-semibold'>
