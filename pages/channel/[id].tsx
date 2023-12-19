@@ -232,13 +232,13 @@ const ChannelDetail = ({}: any) => {
       <NextSeo
         noindex={false}
         nofollow={false}
-        title={channel?.title}
+        title={`Telegram channel - ${channel?.title} @${channel?.username} `}
         description={channel?.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel?.title} | FinCa ` },
-          { name: 'og:title', content: channel?.title },
+          { name: 'title', content: `Telegram channel - ${channel?.title} @${channel?.username} ` },
+          { name: 'og:title', content: `Telegram channel - ${channel?.title} @${channel?.username} ` },
           { name: 'og:description', content: channel?.description },
-          { name: 'twitter:title', content: channel?.title },
+          { name: 'twitter:title', content: `Telegram channel - ${channel?.title} @${channel?.username} ` },
           { name: 'twitter:description', content: channel?.description },
         ]}
       />
