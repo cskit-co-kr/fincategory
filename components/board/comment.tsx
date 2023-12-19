@@ -1,6 +1,6 @@
 import { Avatar, Button } from 'rsuite';
 import { toDateTimeformat } from '../../lib/utils';
-import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/outline';
+import { HandThumbDownIcon, HandThumbUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { CommentType } from '../../typings';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { TypeAttributes } from 'rsuite/esm/@types/common';
@@ -9,6 +9,7 @@ type TBoardComment = {
   comment: CommentType;
   selectedComment: number;
   userID: number;
+  postUserID: number;
   postID: number;
   boardID: number;
   postUserNickname: string;
@@ -22,6 +23,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
   comment,
   selectedComment,
   userID,
+  postUserID,
   postID,
   boardID,
   postUserNickname,
@@ -33,6 +35,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
   const [content, setContent] = useState<string>('');
   const [reaction, setReaction] = useState<string | null>(comment.reaction);
   const [showReply, setShowReply] = useState<boolean>(false);
+  const [showEdit, setShowEdit] = useState<boolean>(false);
 
   useEffect(() => {
     if (comment.id !== selectedComment) {
@@ -66,7 +69,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
         comment: commentID,
         action: action,
         type: type,
-      })
+      }),
     });
 
     const result = await response.json();
@@ -111,16 +114,63 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
     });
 
     const result = await response.json();
-
     if (response.status === 200) {
       if (result.code === 201 && result.message === 'Inserted') {
         setShowReply(false);
-        fncToast('info', 'Your comment has been successfully saved.');
+        fncToast('info', '댓글 등록 되었습니다.');
         setContent('');
         fncLoadComment();
       }
     } else {
-      fncToast('error', 'An error occurred while trying to save your comment.');
+      fncToast('error', '댓글 등록 실패하였습니다.');
+    }
+  };
+
+  // Edit Comment
+  const editComment = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board/edit-comment`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        comment: comment.id,
+        content: content,
+        user: userID,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.code === 201 && result.message === 'Updated') {
+      setShowEdit(false);
+      setShowReply(false);
+      fncToast('info', '댓글 수정되었습니다.');
+      setContent('');
+      fncLoadComment();
+    } else {
+      fncToast('error', '댓글 수정 실패하였습니다.');
+    }
+  };
+
+  // Delete Comment
+  const deleteComment = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board/delete-comment`, {
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        comment: comment.id,
+        user: userID,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.code === 201 && result.message === 'Deleted') {
+      setShowReply(false);
+      fncToast('info', '댓글 삭제되었습니다.');
+      setContent('');
+      fncLoadComment();
+    } else {
+      fncToast('error', '댓글 삭제 실패하였습니다.');
     }
   };
 
@@ -130,7 +180,28 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
         {comment.user.nickname.slice(0, 1)}
       </Avatar>
       <div className='flex flex-1 flex-col'>
-        <div className='comment-content'>
+        <div className='comment-content relative'>
+          {comment.user.id === userID && (
+            <div className='absolute right-0 top-0 flex gap-1 text-[10px]'>
+              <button
+                onClick={() => {
+                  setShowEdit((prev) => !prev);
+                  setContent(comment.comment);
+                }}
+                className='flex items-center gap-1 whitespace-nowrap border border-gray-200 rounded-md px-2 py-1 hover:underline'
+              >
+                <PencilIcon className='h-3' />
+                수정
+              </button>
+              <button
+                onClick={deleteComment}
+                className='flex items-center gap-1 whitespace-nowrap border border-gray-200 rounded-md px-2 py-1 hover:underline'
+              >
+                <TrashIcon className='h-3' />
+                삭제
+              </button>
+            </div>
+          )}
           <p className='p-0 m-0 mb-[5px]'>
             <b>{comment.user.nickname}</b>{' '}
             {postUserNickname === comment.user.nickname && (
@@ -185,7 +256,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             )}
           </p>
         </div>
-        <div className={`comment-reply mt-5 ${showReply ? 'block' : 'hidden'}`}>
+        <div className={`comment-reply mt-5 ${showReply || showEdit ? 'block' : 'hidden'}`}>
           <textarea
             className='border border-[#ccc] resize-none h-24 p-2 w-full mb-2 rounded-md focus:outline-none'
             onChange={(e) => setContent(e.currentTarget.value)}
@@ -196,10 +267,19 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             appearance='primary'
             className='bg-primary text-white py-2 px-5 text-center hover:text-white'
             disabled={content.trim().length > 0 ? false : true}
-            onClick={saveComment}
+            onClick={showEdit ? editComment : saveComment}
           >
-            글쓰기
+            등록
           </Button>
+          <button
+            className='ml-1 rounded-md border border-gray-200 px-4 py-2'
+            onClick={() => {
+              setContent('');
+              setShowEdit(false);
+            }}
+          >
+            취소
+          </button>
         </div>
       </div>
     </div>

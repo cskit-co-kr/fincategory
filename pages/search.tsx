@@ -30,13 +30,6 @@ const Search = () => {
   const [sortType, setSortType] = useState(1);
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  useEffect(() => {
-    if (!isFirstLoad) {
-      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : '';
-      doSearch(tag);
-    }
-    setIsFirstLoad(false);
-  }, [selectedTag]);
 
   const [searchText, setSearchText] = useState<any>('');
   const [selectDesc, setSelectDesc] = useState(false);
@@ -78,6 +71,14 @@ const Search = () => {
   const [loadBar, setLoadBar] = useState(false);
 
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!isFirstLoad) {
+      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : '';
+      doSearch(tag);
+    }
+    setIsFirstLoad(false);
+  }, [selectedTag, selectedCategory]);
 
   useEffect(() => {
     const data: any = {
@@ -196,7 +197,7 @@ const Search = () => {
       data = {
         query: selectedTag ? `#${selectedTag.tag}` : null, //searchText === '' ? null : searchText,
         withDesc: selectDesc,
-        category: [],
+        category: selectedCategory === null ? [] : selectedCategory,
         country: [],
         language: [],
         channel_type: channelType[0].value === 'all' ? [] : channelType,
@@ -370,9 +371,23 @@ const Search = () => {
             </div> */}
             {tags &&
               (windowWidth < 1000 ? (
-                <HashtagMobile tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+                <HashtagMobile
+                  tags={tags}
+                  selectedTag={selectedTag}
+                  setSelectedTag={setSelectedTag}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  searchListRef={searchListRef}
+                />
               ) : (
-                <Hashtag tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+                <Hashtag
+                  tags={tags}
+                  selectedTag={selectedTag}
+                  setSelectedTag={setSelectedTag}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  searchListRef={searchListRef}
+                />
               ))}
             <Ads1 />
             <Section3 />

@@ -6,7 +6,7 @@ import { LuSettings2 } from 'react-icons/lu';
 import { TbMathGreater } from 'react-icons/tb';
 import { RxPinTop } from 'react-icons/rx';
 
-const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
+const Hashtag = ({ tags, selectedTag, setSelectedTag, selectedCategory, setSelectedCategory, searchListRef }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -57,10 +57,22 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
     };
   }, []);
 
-  const [selectedCategory, setSelectedCategory] = useState<any>();
+  const [selectCategory, setSelectCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
     setSelectedTag(tag);
-    setSelectedCategory(category.name);
+    setSelectCategory(category.name);
+    setSelectedCategory(null);
+    window.scrollTo({
+      top: 1110,
+      behavior: 'smooth',
+    });
+    //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSelectCategory = (category: any) => {
+    setSelectedCategory(category);
+    setSelectedTag('');
+    setSelectCategory('');
     window.scrollTo({
       top: 1110,
       behavior: 'smooth',
@@ -81,15 +93,24 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
           <button
             onClick={() => handleSelectTag('', '')}
             className={`rounded-xl font-bold px-4 py-[1px] border hover:underline ${
-              selectedTag ? 'bg-white text-black border-[#e5e5e5]' : 'bg-primary border-primary text-white'
+              selectedTag || selectedCategory ? 'bg-white text-black border-[#e5e5e5]' : 'bg-primary border-primary text-white'
             }`}
           >
             전체
           </button>
+          {selectedCategory && (
+            <div className='flex items-center gap-2 font-bold'>
+              <TbMathGreater size={12} />
+              <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
+                <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedCategory[0].total}</span>
+                {selectedCategory[0].label}
+              </div>
+            </div>
+          )}
           {selectedTag && (
             <div className='flex items-center gap-2 font-bold'>
               <TbMathGreater size={12} />
-              {selectedTag && JSON.parse(selectedCategory)[locale]}
+              {selectedTag && JSON.parse(selectCategory)[locale]}
               <TbMathGreater size={12} />
               <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
                 <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedTag.total}</span>
@@ -116,8 +137,22 @@ const Hashtag = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
       <div className={`flex divide-x-[1px] divide-[#e5e5e5]`}>
         {groupedTags.map((category: any, index: number) => (
           <div key={index} className='flex-grow pl-4 first:pl-0'>
-            <div className='font-bold mb-4 border-b border-transparent hover:border-black w-fit'>
-              {category.name ? JSON.parse(category.name)[locale] : 'Uncategorized'}
+            <div
+              className={`font-bold mb-4 border-b border-transparent hover:border-black w-fit ${
+                selectedCategory && category.id === selectedCategory[0].value && 'bg-primary text-white rounded-full px-2'
+              }`}
+            >
+              {category.name ? (
+                <button
+                  onClick={() =>
+                    handleSelectCategory([{ value: category.id, label: JSON.parse(category.name)[locale], total: category.total }])
+                  }
+                >
+                  {JSON.parse(category.name)[locale]}
+                </button>
+              ) : (
+                'Uncategorized'
+              )}
               <span className='ml-3 font-normal'>{category.total}</span>
             </div>
             <div className={`${category.tags.length > 6 && 'grid grid-rows-6 grid-flow-col'}`}>

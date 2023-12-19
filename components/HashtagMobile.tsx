@@ -7,7 +7,7 @@ import { TbMenu2, TbMathGreater } from 'react-icons/tb';
 import { RxPinTop } from 'react-icons/rx';
 import { hashtagReduce } from '../lib/utils';
 
-const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any) => {
+const HashtagMobile = ({ tags, selectedTag, setSelectedTag, selectedCategory, setSelectedCategory, searchListRef }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === 'ko' ? koKR : enUS;
@@ -31,11 +31,12 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
     };
   }, []);
 
-  const [selectedCategory, setSelectedCategory] = useState<any>();
+  const [selectCategory, setSelectCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
+    setSelectedCategory(null);
     handleClick();
     setSelectedTag(tag);
-    setSelectedCategory(category.name);
+    setSelectCategory(category.name);
     window.scrollTo({
       top: 2280,
       behavior: 'smooth',
@@ -49,6 +50,18 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
       element.click();
     }
   }
+
+  const handleSelectCategory = (category: any) => {
+    setSelectedCategory(category);
+    handleClick();
+    setSelectedTag('');
+    setSelectCategory('');
+    window.scrollTo({
+      top: 2280,
+      behavior: 'smooth',
+    });
+    //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className={`drawer sticky top-0 z-20 bg-gray-50 ${pageYOffset > 10 && 'shadow-xl'}`}>
@@ -72,7 +85,7 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
             {selectedTag ? (
               <div className='flex items-center gap-2 font-bold'>
                 <TbMathGreater size={12} />
-                {selectedTag && JSON.parse(selectedCategory)[locale]}
+                {selectedTag && JSON.parse(selectCategory)[locale]}
                 <TbMathGreater size={12} />
                 <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
                   <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedTag.total}</span>
@@ -81,8 +94,19 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
               </div>
             ) : (
               groupedTags.map((category: any, index: number) => (
-                <div key={index} className='font-bold whitespace-nowrap'>
-                  {category.name && JSON.parse(category.name)[locale]}
+                <div
+                  key={index}
+                  className={`font-bold whitespace-nowrap ${
+                    selectedCategory && category.id === selectedCategory[0].value && 'bg-primary text-white rounded-full px-2'
+                  }`}
+                >
+                  {category.name ? (
+                    <button onClick={() => handleSelectCategory([{ value: category.id, label: JSON.parse(category.name)[locale] }])}>
+                      {JSON.parse(category.name)[locale]}
+                    </button>
+                  ) : (
+                    'Uncategorized'
+                  )}
                 </div>
               ))
             )}
@@ -109,7 +133,7 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
             {selectedTag && (
               <div className='flex items-center gap-2 font-bold'>
                 <TbMathGreater size={12} />
-                {selectedTag && JSON.parse(selectedCategory)[locale]}
+                {selectedTag && JSON.parse(selectCategory)[locale]}
                 <TbMathGreater size={12} />
                 <div className='bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2'>
                   <span className='bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]'>{selectedTag.total}</span>
@@ -122,8 +146,18 @@ const HashtagMobile = ({ tags, selectedTag, setSelectedTag, searchListRef }: any
           <div className={`divide-y-[1px] divide-[#e5e5e5]`}>
             {groupedTags.map((category: any, index: number) => (
               <div key={index} className='flex-grow pt-4 first:pl-0'>
-                <div className='font-bold mb-4 border-b border-transparent hover:border-black w-fit'>
-                  {category.name ? JSON.parse(category.name)[locale] : 'Uncategorized'}
+                <div
+                  className={`font-bold mb-4 border-b border-transparent hover:border-black w-fit ${
+                    selectedCategory && category.id === selectedCategory[0].value && 'bg-primary text-white rounded-full px-2'
+                  }`}
+                >
+                  {category.name ? (
+                    <button onClick={() => handleSelectCategory([{ value: category.id, label: JSON.parse(category.name)[locale] }])}>
+                      {JSON.parse(category.name)[locale]}
+                    </button>
+                  ) : (
+                    'Uncategorized'
+                  )}
                   <span className='ml-3 font-normal'>{category.total}</span>
                 </div>
                 <div className={`space-y-2 pb-4`}>
