@@ -14,14 +14,26 @@ import { DataProvider } from '../context/context';
 import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+interface CustomAppProps extends AppProps {
+  meta: any; // Replace 'any' with the actual type of your 'meta' property
+}
+
+function MyApp({ Component, pageProps, meta }: CustomAppProps) {
   const router = useRouter();
   const env = process.env.NODE_ENV;
 
-  const [additionalMeta, setAdditionalMeta] = useState([]);
-  const [title, setTitle] = useState('');
-  const [titleTemplate, setTitleTemplate] = useState('');
-  const [description, setDescription] = useState('');
+  const session = pageProps?.session;
+
+  // const [additionalMeta, setAdditionalMeta] = useState([]);
+  // const [title, setTitle] = useState('');
+  // const [titleTemplate, setTitleTemplate] = useState('');
+  // const [description, setDescription] = useState('');
+
+  const parsedMeta = meta.meta[0].meta.replace(/\n/g, '').replace(/'/g, '"');
+  const additionalMeta = JSON.parse(parsedMeta);
+  const title = meta.meta[0].title;
+  const titleTemplate = meta.meta[0].titleTemplate;
+  const description = meta.meta[0].description;
 
   useEffect(() => {
     const setVisit = async () => {
@@ -37,16 +49,16 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     if (!hasCookie('visit')) {
       setVisit();
     }
-    const getMeta = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
-      const result = await response.data;
-      const parsedMeta = result.meta[0].meta.replace(/\n/g, '').replace(/'/g, '"');
-      setAdditionalMeta(JSON.parse(parsedMeta));
-      setTitle(result.meta[0].title);
-      setTitleTemplate(result.meta[0].titleTemplate);
-      setDescription(result.meta[0].description);
-    };
-    getMeta();
+    // const getMeta = async () => {
+    //   const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
+    //   const result = await response.data;
+    //   const parsedMeta = result.meta[0].meta.replace(/\n/g, '').replace(/'/g, '"');
+    //   setAdditionalMeta(JSON.parse(parsedMeta));
+    //   setTitle(result.meta[0].title);
+    //   setTitleTemplate(result.meta[0].titleTemplate);
+    //   setDescription(result.meta[0].description);
+    // };
+    // getMeta();
   }, []);
 
   return (
@@ -77,5 +89,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     </>
   );
 }
+
+MyApp.getInitialProps = async () => {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
+  const meta = await res.data;
+  return { meta };
+};
 
 export default MyApp;
