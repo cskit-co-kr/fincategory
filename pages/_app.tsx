@@ -8,15 +8,32 @@ import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import { DataProvider } from '../context/context';
 import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+interface CustomAppProps extends AppProps {
+  meta: any; // Replace 'any' with the actual type of your 'meta' property
+}
+
+function MyApp({ Component, pageProps, meta }: CustomAppProps) {
   const router = useRouter();
   const env = process.env.NODE_ENV;
+
+  const session = pageProps?.session;
+
+  // const [additionalMeta, setAdditionalMeta] = useState([]);
+  // const [title, setTitle] = useState('');
+  // const [titleTemplate, setTitleTemplate] = useState('');
+  // const [description, setDescription] = useState('');
+
+  const parsedMeta = meta.meta[0].meta.replace(/\n/g, '').replace(/'/g, '"');
+  const additionalMeta = JSON.parse(parsedMeta);
+  const title = meta.meta[0].title;
+  const titleTemplate = meta.meta[0].titleTemplate;
+  const description = meta.meta[0].description;
 
   useEffect(() => {
     const setVisit = async () => {
@@ -32,6 +49,16 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     if (!hasCookie('visit')) {
       setVisit();
     }
+    // const getMeta = async () => {
+    //   const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
+    //   const result = await response.data;
+    //   const parsedMeta = result.meta[0].meta.replace(/\n/g, '').replace(/'/g, '"');
+    //   setAdditionalMeta(JSON.parse(parsedMeta));
+    //   setTitle(result.meta[0].title);
+    //   setTitleTemplate(result.meta[0].titleTemplate);
+    //   setDescription(result.meta[0].description);
+    // };
+    // getMeta();
   }, []);
 
   return (
@@ -41,90 +68,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <link rel='apple-touch-icon' href='/logo.png' />
       </Head>
       <DefaultSeo
-        title='핀카'
-        titleTemplate='%s | FinCa - 텔레그램 채널/그룹 정보, 핀카'
-        description='가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca'
-        additionalMetaTags={[
-          {
-            name: 'author',
-            content: 'FinCa',
-          },
-          {
-            name: 'keywords',
-            content:
-              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움, 테더',
-          },
-          {
-            property: 'og:locale',
-            content: 'ko_KR',
-          },
-          {
-            property: 'og:type',
-            content: 'website',
-          },
-          {
-            property: 'og:rich_attachment',
-            content: 'true',
-          },
-          {
-            property: 'og:site_name',
-            content: 'FinCa',
-          },
-          {
-            property: 'og:title',
-            content: 'FinCa | 텔레그램 채널/그룹 정보, 핀카',
-          },
-          {
-            property: 'og:description',
-            content: '가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca',
-          },
-          {
-            property: 'og:keywords',
-            content:
-              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더 ',
-          },
-          {
-            property: 'og:url',
-            content: 'https://finca.co.kr',
-          },
-          {
-            property: 'og:image',
-            content: 'https://finca.co.kr/logo.png',
-          },
-          {
-            property: 'og:image:type',
-            content: 'png',
-          },
-          {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-          },
-          {
-            name: 'twitter:site',
-            content: 'FinCa',
-          },
-          {
-            name: 'twitter:title',
-            content: 'FinCa | 텔레그램 채널/그룹 정보, 핀카',
-          },
-          {
-            name: 'twitter:description',
-            content: '가장 큰 한국 텔레그램 채널/그룹 정보는 핀카 | finca',
-          },
-          {
-            name: 'twitter:keywords',
-            content:
-              'telegram catalog, catalog, telegram, telegram channels, best channels, 텔레그램 카탈로그, 텔레그램 채널, 텔레그램, 한국 텔레그램 채널들, 텔레그램 그룹 카탈로그, 주식, 금융, 암호화폐, 해외선물, 경제, 부동산, 네오, 대시, 도지코인, 라이트코인, 루나, 루프링, 리플, 바이낸스코인, 베이직 어텐션 토큰, 비트코인 골드, 솔라나, 시바이누, 아비트럼,이더리움,  테더',
-          },
-          {
-            name: 'twitter:image',
-            content: 'https://finca.co.kr/logo.png',
-          },
-          {
-            name: 'twitter:creator',
-            content: 'FinCa',
-          },
-        ]}
+        title={title}
+        titleTemplate={titleTemplate}
+        description={description}
+        additionalMetaTags={additionalMeta}
         twitter={{
           site: 'finca.co.kr',
         }}
@@ -142,5 +89,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     </>
   );
 }
+
+MyApp.getInitialProps = async () => {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
+  const meta = await res.data;
+  return { meta };
+};
 
 export default MyApp;
