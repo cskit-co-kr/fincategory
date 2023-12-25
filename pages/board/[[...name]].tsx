@@ -607,29 +607,38 @@ export const getServerSideProps = async (context: any) => {
     });
     memberInfo = await responseMember.json();
   }
-  // Get Boards List
-  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-  });
-  const allBoards = await response.json();
-
-  // Get Posts List
-  const boardQuery = context.query.name;
-  const board = boardQuery === undefined ? 'null' : boardQuery[0];
-  const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
-  const responsePost = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=20`,
-    {
+  try {
+    // Get Boards List
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-    }
-  );
-  const postList = await responsePost.json();
-  // Return
-  return {
-    props: { allBoards, postList, memberInfo },
-  };
+    });
+    const allBoards = await response.json();
+
+    // Get Posts List
+    const boardQuery = context.query.name;
+    const board = boardQuery === undefined ? 'null' : boardQuery[0];
+    const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+    const responsePost = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=20`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      }
+    );
+    const postList = await responsePost.json();
+    // Return
+    return {
+      props: { allBoards, postList, memberInfo },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: '/search',
+        permanent: false,
+      },
+    };
+  }
 };
 
 export default Board;
