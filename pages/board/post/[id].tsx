@@ -667,67 +667,76 @@ export const getServerSideProps = async (context: any) => {
   // }
 
   // Get Post
-  const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      id: context.query.id,
-    }),
-  });
-  const data = await resPost.json();
-  const post = data.post;
-  const prevNext = data.prevNext[0];
+  try {
+    const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        id: context.query.id,
+      }),
+    });
+    const data = await resPost.json();
+    const post = data.post;
+    const prevNext = data.prevNext[0];
 
-  if (!post) {
+    if (!post) {
+      return {
+        redirect: {
+          destination: '/board',
+          permanent: false,
+        },
+      };
+    }
+
+    let reactionTotal: number = 0;
+    if (post.reaction !== null) {
+      reactionTotal = JSON.parse(post.reaction).length;
+    }
+
+    // Get Comments
+    // const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
+    //   method: 'POST',
+    //   headers: { 'content-type': 'application/json' },
+    //   body: JSON.stringify({
+    //     id: context.query.id,
+    //     query: null,
+    //     paginate: {
+    //       offset: 0,
+    //       limit: 10,
+    //     },
+    //     sort: {
+    //       field: 'created_at',
+    //       value: 'ASC',
+    //     },
+    //   }),
+    // });
+    // const comments = await responseComment.json();
+
+    // Get Posts List
+    // const board = post.board.name;
+    // const category = null;
+    // const responsePost = await fetch(
+    //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
+    //   {
+    //     method: 'POST',
+    //     headers: { 'content-type': 'application/json' },
+    //   }
+    // );
+    // const postList = await responsePost.json();
+
+    // Return
+    return {
+      // props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
+      props: { post, reactionTotal, page, perPage, prevNext },
+    };
+  } catch (error) {
     return {
       redirect: {
-        destination: '/board',
+        destination: '/search',
         permanent: false,
       },
     };
   }
-
-  let reactionTotal: number = 0;
-  if (post.reaction !== null) {
-    reactionTotal = JSON.parse(post.reaction).length;
-  }
-
-  // Get Comments
-  // const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
-  //   method: 'POST',
-  //   headers: { 'content-type': 'application/json' },
-  //   body: JSON.stringify({
-  //     id: context.query.id,
-  //     query: null,
-  //     paginate: {
-  //       offset: 0,
-  //       limit: 10,
-  //     },
-  //     sort: {
-  //       field: 'created_at',
-  //       value: 'ASC',
-  //     },
-  //   }),
-  // });
-  // const comments = await responseComment.json();
-
-  // Get Posts List
-  // const board = post.board.name;
-  // const category = null;
-  // const responsePost = await fetch(
-  //   `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${perPage}&offset=${page}`,
-  //   {
-  //     method: 'POST',
-  //     headers: { 'content-type': 'application/json' },
-  //   }
-  // );
-  // const postList = await responsePost.json();
-
-  // Return
-  return {
-    // props: { post, comments, postList, reactionTotal, page, perPage, prevNext, memberInfo },
-    props: { post, reactionTotal, page, perPage, prevNext },
-  };
 };
 
 export default Post;
