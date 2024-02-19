@@ -275,6 +275,7 @@ const ChannelDetail = ({ channel }: any) => {
         title={`Telegram channel - ${channel.title} @${channel.username} `}
         description={channel.description}
         additionalMetaTags={[
+
           {
             name: "title",
             content: `Telegram channel - ${channel.title} @${channel.username} `,
@@ -289,6 +290,7 @@ const ChannelDetail = ({ channel }: any) => {
             content: `Telegram channel - ${channel.title} @${channel.username} `,
           },
           { name: "twitter:description", content: channel.description },
+
         ]}
       />
       <div className="md:pt-7 bg-gray-50">
@@ -363,16 +365,20 @@ const ChannelDetail = ({ channel }: any) => {
 };
 
 export const getServerSideProps = async (context: any) => {
-  const getId = context.query["id"];
+
+  const getId = context.query['id'];
+
 
   //   let averageViews = 0;
   //   let averagePosts = 0;
   //   let averageErr = 0;
 
+
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
     { detail: getId }
   );
+
 
   const channel = response.data;
 
@@ -414,7 +420,9 @@ export const getServerSideProps = async (context: any) => {
   //       }, 0) / errPercent.length;
   //   }
 
+
   if (channel !== "") {
+
     return {
       props: { channel },
     };

@@ -1,3 +1,4 @@
+
 import { useRouter } from "next/router";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
@@ -18,6 +19,7 @@ import ChannelAvatar from "../../components/channel/ChannelAvatar";
 import { FaUser, FaVolumeLow } from "react-icons/fa6";
 import { TbLoader } from "react-icons/tb";
 import { Spin } from "antd";
+
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -327,6 +329,31 @@ const Ranking = (
               </Cell>
             </Column>
 
+            <Column width={70} align='center'>
+              <HeaderCell>구분</HeaderCell>
+              <Cell dataKey='type'>
+                {(rowData) => (
+                  <div
+                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
+                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                    }`}
+                  >
+                    {rowData.type === 'channel' ? (
+                      <div className='flex items-center gap-0.5'>
+                        <FaVolumeLow size={10} />
+                        {t['channel']}
+                      </div>
+                    ) : (
+                      <div className='flex items-center gap-0.5'>
+                        <FaUser size={10} />
+                        {t['Group']}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Cell>
+            </Column>
+
             <Column flexGrow={2} minWidth={170} fixed>
               <HeaderCell>이름</HeaderCell>
               <Cell>
@@ -365,12 +392,14 @@ const Ranking = (
               </Cell>
             </Column>
 
+
             <Column width={80} align="center">
               <HeaderCell>{t["category"]}</HeaderCell>
               <Cell>
                 {(rowData) => (
                   <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
                     {rowData.category}
+
                   </div>
                 )}
               </Cell>
@@ -493,6 +522,7 @@ const Ranking = (
                 }}
               </Cell>
             </Column>
+
 
             {/* <Column align='center' width={120} sortable>
               <HeaderCell className={sortColumn === 'averagePosts' ? 'font-bold text-primary' : ''}>일간 포스트 수</HeaderCell>

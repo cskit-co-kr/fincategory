@@ -6,6 +6,9 @@ import Link from 'next/link';
 const Layout = ({ children }: any) => {
   return (
     <>
+      <Head>
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <div className='relative wrapper bg-gray-50'>
         <Link
           href='https://t.me/fincatele'
