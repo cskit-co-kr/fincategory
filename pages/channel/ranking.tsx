@@ -41,7 +41,6 @@ const Ranking = (
 
   const [optionsCountries, setOptionsCountries] = useState<Options[]>([]);
   const [isLoadingCountries, setIsLoadingCountries] = useState(true);
-  const [statsList, setStatsList] = useState<any[]>([]);
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
@@ -62,8 +61,6 @@ const Ranking = (
       label: locale === "ko" ? obj.ko : obj.en,
     };
   });
-
-  console.log(statsList);
 
   const optionsChannelTypes = [
     {
@@ -97,59 +94,7 @@ const Ranking = (
       isDisabled: disable,
     };
   });
-  const average = async (channel: any) => {
-    let averageViews = channel?.extra_06 || 0;
-    let averagePosts = channel?.extra_07 || 0;
-    let averageErr = channel?.extra_08 || 0;
-    const find: any = statsList.find(
-      (a: any) => a.channel_id === channel.channel_id
-    );
-    if (!!find) {
-      averageViews = find.averageViews;
-      averagePosts = find.averagePosts;
-      averageErr = find.averageErr;
-    }
-    if (!find) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
-        {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ channel_id: channel.channel_id }),
-        }
-      );
-      const combinedReturn = await res.json();
-      if (combinedReturn[0].total.length > 0) {
-        averageViews = Math.round(
-          combinedReturn[0].average.reduce((a: any, b: any) => {
-            return a + b.average;
-          }, 0) / combinedReturn[0].average.length
-        );
 
-        averagePosts = Math.round(
-          combinedReturn[0].average.slice(-30).reduce((a: any, b: any) => {
-            return a + b.posts;
-          }, 0) / combinedReturn[0].average.slice(-30).length
-        );
-
-        const errPercent = combinedReturn[0].average.map((item: any) => ({
-          date: item.date,
-          views: Math.round((item.average * 100) / channel.subscription),
-        }));
-
-        averageErr =
-          errPercent.reduce((a: any, b: any) => {
-            return a + b.views;
-          }, 0) / errPercent.length;
-      }
-    }
-    return {
-      averageErr,
-      averagePosts,
-      averageViews,
-      channel_id: channel.channel_id,
-    };
-  };
   // Data
   const doSearch = async (field: any, order: any) => {
     const sorting = {
@@ -196,14 +141,6 @@ const Ranking = (
       // obj.averageErr = a?.averageErr;
     }
     setData(result);
-    var averageList = [];
-    for await (const data of result) {
-      if (!data.extra_06 && !data.extra_07 && !data.extra_08) {
-        const newAverage = await average(data);
-        averageList.push(newAverage);
-      }
-    }
-    setStatsList(averageList);
   };
 
   const getCategoryName = (catId: string): string => {
@@ -466,7 +403,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column align="center" sortable>
+            <Column width={locale === "ko" ? 80 : 110} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "subscription" ? "font-bold text-primary" : ""
@@ -477,7 +414,7 @@ const Ranking = (
               <Cell dataKey="subscription" renderCell={formatKoreanNumber} />
             </Column>
 
-            <Column align="center" sortable>
+            <Column width={locale === "ko" ? 90 : 110} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "increase7d" ? "font-bold text-primary" : ""
@@ -498,37 +435,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column align="center" sortable>
-              <HeaderCell
-                className={
-                  sortColumn === "extra_06" ? "font-bold text-primary" : ""
-                }
-              >
-                {t["views-per-post"]}
-              </HeaderCell>
-              <Cell dataKey="extra_06">
-                {(rowData) => {
-                  const average = statsList.find(
-                    (a: any) => a.channel_id === rowData.channel_id
-                  );
-                  return !!rowData.extra_06 ? (
-                    <span className="">{rowData.extra_06}</span>
-                  ) : (
-                    <span>
-                      {average ? (
-                        statsList.find(
-                          (a: any) => a.channel_id === rowData.channel_id
-                        )?.averageViews
-                      ) : (
-                        <Spin size="small" className="opacity-30" />
-                      )}
-                    </span>
-                  );
-                }}
-              </Cell>
-            </Column>
-
-            <Column align="center" sortable>
+            <Column width={locale === "ko" ? 120 : 128} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "extra_07" ? "font-bold text-primary" : ""
@@ -538,27 +445,35 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="extra_07">
                 {(rowData) => {
-                  const average = statsList.find(
-                    (a: any) => a.channel_id === rowData.channel_id
-                  );
                   return !!rowData.extra_06 ? (
                     <span className="">{rowData.extra_07}</span>
                   ) : (
-                    <span>
-                      {average ? (
-                        statsList.find(
-                          (a: any) => a.channel_id === rowData.channel_id
-                        )?.averagePosts
-                      ) : (
-                        <Spin size="small" className="opacity-30" />
-                      )}
-                    </span>
+                    <span>0</span>
                   );
                 }}
               </Cell>
             </Column>
 
-            <Column align="center" sortable>
+            <Column width={locale === "ko" ? 105 : 125} align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "extra_06" ? "font-bold text-primary" : ""
+                }
+              >
+                {t["views-per-post"]}
+              </HeaderCell>
+              <Cell dataKey="extra_06">
+                {(rowData) => {
+                  return !!rowData.extra_06 ? (
+                    <span className="">{rowData.extra_06}</span>
+                  ) : (
+                    <span>0</span>
+                  );
+                }}
+              </Cell>
+            </Column>
+
+            <Column width={locale === "ko" ? 120 : 80} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "extra_08" ? "font-bold text-primary" : ""
@@ -568,25 +483,12 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="extra_08">
                 {(rowData) => {
-                  const average = statsList.find(
-                    (a: any) => a.channel_id === rowData.channel_id
-                  );
                   return !!rowData.extra_08 ? (
                     <span className="">
                       {parseFloat(rowData.extra_08).toFixed(2)}%
                     </span>
                   ) : (
-                    <span>
-                      {average ? (
-                        parseFloat(
-                          statsList.find(
-                            (a: any) => a.channel_id === rowData.channel_id
-                          )?.averageErr
-                        ).toFixed(2) + "%"
-                      ) : (
-                        <Spin size="small" className="opacity-30" />
-                      )}
-                    </span>
+                    <span>0.00%</span>
                   );
                 }}
               </Cell>
