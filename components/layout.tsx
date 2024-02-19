@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Footer from './Footer';
 import Header from './Header';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
