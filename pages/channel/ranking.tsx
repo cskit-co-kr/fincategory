@@ -414,7 +414,7 @@ const Ranking = (
               <Cell dataKey="subscription" renderCell={formatKoreanNumber} />
             </Column>
 
-            <Column width={locale === "ko" ? 90 : 110} align="center" sortable>
+            <Column width={locale === "ko" ? 90 : 120} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "increase7d" ? "font-bold text-primary" : ""
@@ -435,7 +435,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={locale === "ko" ? 120 : 128} align="center" sortable>
+            <Column width={locale === "ko" ? 120 : 134} align="center" sortable>
               <HeaderCell
                 className={
                   sortColumn === "extra_07" ? "font-bold text-primary" : ""
