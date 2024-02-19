@@ -1,21 +1,23 @@
-import { useRouter } from 'next/router';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import axios from 'axios';
-import { InferGetServerSidePropsType } from 'next';
-import Select from 'react-select';
-import { useEffect, useState } from 'react';
-import { MultiValueOptions } from '../../typings';
-import { Table } from 'rsuite';
-import { getAverages, formatKoreanNumber } from '../../lib/utils';
-import { SortType } from 'rsuite/esm/Table';
-import Image from 'next/image';
-import Link from 'next/link';
-import { colorStyles } from '../../constants';
-import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
-import { useMediaQuery } from '@mui/material';
-import ChannelAvatar from '../../components/channel/ChannelAvatar';
-import { FaUser, FaVolumeLow } from 'react-icons/fa6';
+import { useRouter } from "next/router";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import axios from "axios";
+import { InferGetServerSidePropsType } from "next";
+import Select from "react-select";
+import { useEffect, useState } from "react";
+import { MultiValueOptions } from "../../typings";
+import { Table } from "rsuite";
+import { getAverages, formatKoreanNumber } from "../../lib/utils";
+import { SortType } from "rsuite/esm/Table";
+import Image from "next/image";
+import Link from "next/link";
+import { colorStyles } from "../../constants";
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+import { useMediaQuery } from "@mui/material";
+import ChannelAvatar from "../../components/channel/ChannelAvatar";
+import { FaUser, FaVolumeLow } from "react-icons/fa6";
+import { TbLoader } from "react-icons/tb";
+import { Spin } from "antd";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -23,10 +25,12 @@ type Options = {
   options: Array<MultiValueOptions>;
 };
 
-const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Ranking = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const [error, setError] = useState<boolean>(false);
 
@@ -37,40 +41,47 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
 
   const [optionsCountries, setOptionsCountries] = useState<Options[]>([]);
   const [isLoadingCountries, setIsLoadingCountries] = useState(true);
+  const [statsList, setStatsList] = useState<any[]>([]);
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [channelType, setChannelType] = useState<any | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState<any | null>([{ value: 113, label: 'Korea, Republic of' }]);
-  const [selectedLanguage, setSelectedLanguage] = useState<any | null>([{ value: 'ko', label: 'Korean' }]);
+  const [selectedCountry, setSelectedCountry] = useState<any | null>([
+    { value: 113, label: "Korea, Republic of" },
+  ]);
+  const [selectedLanguage, setSelectedLanguage] = useState<any | null>([
+    { value: "ko", label: "Korean" },
+  ]);
 
   const cats = props.categories?.map((item: any) => {
     const obj = JSON.parse(item.name);
     return {
       value: item.id,
-      label: locale === 'ko' ? obj.ko : obj.en,
+      label: locale === "ko" ? obj.ko : obj.en,
     };
   });
 
+  console.log(statsList);
+
   const optionsChannelTypes = [
     {
-      value: 'channel',
-      label: t['channel'],
+      value: "channel",
+      label: t["channel"],
     },
     {
-      value: 'public_group',
-      label: t['public-group'],
+      value: "public_group",
+      label: t["public-group"],
     },
     {
-      value: 'private_group',
-      label: t['private-group'],
+      value: "private_group",
+      label: t["private-group"],
     },
   ];
 
   const countries = props.countries?.map((item: any) => {
-    const disable = item.nicename === 'Korea, Republic of' ? false : true;
+    const disable = item.nicename === "Korea, Republic of" ? false : true;
     return {
       value: item.id,
       label: t[item.iso as keyof typeof t],
@@ -79,20 +90,72 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   });
 
   const languages = props.languages?.map((item: any) => {
-    const disable = item.value === 'Korean' ? false : true;
+    const disable = item.value === "Korean" ? false : true;
     return {
       value: item.id,
       label: t[item.value as keyof typeof t],
       isDisabled: disable,
     };
   });
+  const average = async (channel: any) => {
+    let averageViews = channel?.extra_06 || 0;
+    let averagePosts = channel?.extra_07 || 0;
+    let averageErr = channel?.extra_08 || 0;
+    const find: any = statsList.find(
+      (a: any) => a.channel_id === channel.channel_id
+    );
+    if (!!find) {
+      averageViews = find.averageViews;
+      averagePosts = find.averagePosts;
+      averageErr = find.averageErr;
+    }
+    if (!find) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ channel_id: channel.channel_id }),
+        }
+      );
+      const combinedReturn = await res.json();
+      if (combinedReturn[0].total.length > 0) {
+        averageViews = Math.round(
+          combinedReturn[0].average.reduce((a: any, b: any) => {
+            return a + b.average;
+          }, 0) / combinedReturn[0].average.length
+        );
 
+        averagePosts = Math.round(
+          combinedReturn[0].average.slice(-30).reduce((a: any, b: any) => {
+            return a + b.posts;
+          }, 0) / combinedReturn[0].average.slice(-30).length
+        );
+
+        const errPercent = combinedReturn[0].average.map((item: any) => ({
+          date: item.date,
+          views: Math.round((item.average * 100) / channel.subscription),
+        }));
+
+        averageErr =
+          errPercent.reduce((a: any, b: any) => {
+            return a + b.views;
+          }, 0) / errPercent.length;
+      }
+    }
+    return {
+      averageErr,
+      averagePosts,
+      averageViews,
+      channel_id: channel.channel_id,
+    };
+  };
   // Data
   const doSearch = async (field: any, order: any) => {
     const sorting = {
       field: field,
       order: order,
-      type: 'integer',
+      type: "float",
     };
     const searchData = {
       query: null,
@@ -108,18 +171,22 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       paginate: { limit: 100, offset: 0 },
       sort: sorting,
     };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(searchData),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(searchData),
+      }
+    );
     const resultData = await response.json();
     const result = resultData.channel;
     for (let i = 0; i < result.length; i++) {
       const obj = result[i];
       obj.rank = i + 1;
       obj.category = getCategoryName(obj.category_id);
-      const splitExtra = obj.extra_01 === null ? [0, 0, 0] : obj.extra_01.split(':');
+      const splitExtra =
+        obj.extra_01 === null ? [0, 0, 0] : obj.extra_01.split(":");
       obj.increase24h = splitExtra[0];
       obj.increase7d = splitExtra[1];
       obj.increase30d = splitExtra[2];
@@ -129,17 +196,27 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
       // obj.averageErr = a?.averageErr;
     }
     setData(result);
+    var averageList = [];
+    for await (const data of result) {
+      if (!data.extra_06 && !data.extra_07 && !data.extra_08) {
+        const newAverage = await average(data);
+        averageList.push(newAverage);
+      }
+    }
+    setStatsList(averageList);
   };
 
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
-    return category ? category.label : '';
+    return category ? category.label : "";
   };
 
   // Table
-  const column = router.query.column ? (router.query.column as string) : 'increase24h';
+  const column = router.query.column
+    ? (router.query.column as string)
+    : "increase24h";
   const [sortColumn, setSortColumn] = useState(column);
-  const [sortType, setSortType] = useState<SortType>('desc');
+  const [sortType, setSortType] = useState<SortType>("desc");
   const [loading, setLoading] = useState(false);
 
   const getData = () => {
@@ -153,7 +230,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
         // if (typeof y === 'string') {
         //   y = y.charCodeAt(0);
         // }
-        if (sortType === 'asc') {
+        if (sortType === "asc") {
           return x - y;
         } else {
           return y - x;
@@ -166,14 +243,14 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   const handleSortColumn = (sortColumn: any, sortType: any) => {
     setLoading(true);
     setData([]);
-    if (sortColumn === 'increase7d') {
-      doSearch('extra_03', sortType);
-    } else if (sortColumn === 'increase30d') {
-      doSearch('extra_04', sortType);
-    } else if (sortColumn === 'increase24h') {
-      doSearch('extra_02', sortType);
-    } else if (sortColumn === 'subscription') {
-      doSearch('subscription', sortType);
+    if (sortColumn === "increase7d") {
+      doSearch("extra_03", sortType);
+    } else if (sortColumn === "extra_06") {
+      doSearch("extra_06", sortType);
+    } else if (sortColumn === "extra_07") {
+      doSearch("extra_07", sortType);
+    } else if (sortColumn === "extra_08") {
+      doSearch("extra_08", sortType);
     }
     setTimeout(() => {
       setLoading(false);
@@ -183,7 +260,7 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   };
 
   useEffect(() => {
-    doSearch('extra_02', 'desc');
+    doSearch("extra_02", "desc");
     setOptions(cats);
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
@@ -194,72 +271,76 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
   }, [locale, props, channelType]);
 
   const [filterShow, setFilterShow] = useState(false);
-  const isMedium = useMediaQuery('(min-width:768px)');
+  const isMedium = useMediaQuery("(min-width:768px)");
 
   return (
-    <div className='md:pt-7 bg-gray-50'>
-      <div className={`border border-gray-200 bg-white rounded-md p-4 md:p-[30px]`}>
-        <div className={`${!isMedium && 'flex justify-between items-center'}`}>
-          <div className='md:mb-7 font-semibold text-lg leading-none'>{t['rank']}</div>
-          <div className='flex justify-end'>
+    <div className="md:pt-7 bg-gray-50">
+      <div
+        className={`border border-gray-200 bg-white rounded-md p-4 md:p-[30px]`}
+      >
+        <div className={`${!isMedium && "flex justify-between items-center"}`}>
+          <div className="md:mb-7 font-semibold text-lg leading-none">
+            {t["rank"]}
+          </div>
+          <div className="flex justify-end">
             <button
               onClick={() => setFilterShow((prev) => !prev)}
-              className='md:hidden flex gap-1 justify-center items-center rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap'
+              className="md:hidden flex gap-1 justify-center items-center rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap"
             >
-              <AdjustmentsHorizontalIcon className='h-4' />
-              {t['channel-filter']}
+              <AdjustmentsHorizontalIcon className="h-4" />
+              {t["channel-filter"]}
             </button>
           </div>
         </div>
         {(isMedium === true || filterShow === true) && (
-          <div className='md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0'>
-            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-              {t['channel-type']}
+          <div className="md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0">
+            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
+              {t["channel-type"]}
               <Select
-                instanceId={'type'}
+                instanceId={"type"}
                 defaultValue={channelType}
                 onChange={setChannelType}
-                name='type'
+                name="type"
                 styles={colorStyles}
                 options={optionsChannelTypes}
-                placeholder={t['select-type']}
+                placeholder={t["select-type"]}
                 isMulti
-                className='w-full mb-2 md:mb-0'
+                className="w-full mb-2 md:mb-0"
               />
             </label>
-            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-              {t['channel-country']}
+            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
+              {t["channel-country"]}
               <Select
-                value={{ value: 113, label: t['KR'] }}
-                instanceId='country'
+                value={{ value: 113, label: t["KR"] }}
+                instanceId="country"
                 onChange={setSelectedCountry}
-                name='country'
+                name="country"
                 isLoading={isLoadingCountries}
                 styles={colorStyles}
                 options={optionsCountries}
-                placeholder={t['select-country']}
+                placeholder={t["select-country"]}
                 isMulti
-                className='w-full mb-2 md:mb-0'
+                className="w-full mb-2 md:mb-0"
               />
             </label>
-            <label className='grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0'>
-              {t['contents-language']}
+            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
+              {t["contents-language"]}
               <Select
-                value={{ value: 'ko', label: t['Korean'] }}
-                instanceId={'language'}
+                value={{ value: "ko", label: t["Korean"] }}
+                instanceId={"language"}
                 onChange={setSelectedLanguage}
-                name='language'
+                name="language"
                 isLoading={isLoadingLanguages}
                 styles={colorStyles}
                 options={optionsLanguages}
-                placeholder={t['select-language']}
+                placeholder={t["select-language"]}
                 isMulti
-                className='w-full'
+                className="w-full"
               />
             </label>
           </div>
         )}
-        <div className='mt-4'>
+        <div className="mt-4">
           <Table
             autoHeight
             data={getData()}
@@ -269,33 +350,39 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
             loading={loading}
             rowHeight={68}
             bordered
-            className='z-0 rounded-lg'
-            renderEmpty={() => <div className='text-center py-10'>{t['loading-text']}</div>}
-            renderLoading={() => <div className='text-center py-10'>{t['loading-text']}</div>}
+            className="z-0 rounded-lg"
+            renderEmpty={() => (
+              <div className="text-center py-10">{t["loading-text"]}</div>
+            )}
+            renderLoading={() => (
+              <div className="text-center py-10">{t["loading-text"]}</div>
+            )}
           >
-            <Column width={50} align='center' fixed>
-              <HeaderCell>{t['rank']}</HeaderCell>
-              <Cell dataKey='rank' />
+            <Column width={50} align="center" fixed>
+              <HeaderCell>{t["rank"]}</HeaderCell>
+              <Cell dataKey="rank" />
             </Column>
 
-            <Column width={70} align='center'>
+            <Column width={70} align="center">
               <HeaderCell>구분</HeaderCell>
-              <Cell dataKey='type'>
+              <Cell dataKey="type">
                 {(rowData) => (
                   <div
                     className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
-                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                      rowData.type === "channel"
+                        ? "bg-[#71B2FF]"
+                        : "bg-[#FF7171]"
                     }`}
                   >
-                    {rowData.type === 'channel' ? (
-                      <div className='flex items-center gap-0.5'>
+                    {rowData.type === "channel" ? (
+                      <div className="flex items-center gap-0.5">
                         <FaVolumeLow size={10} />
-                        {t['channel']}
+                        {t["channel"]}
                       </div>
                     ) : (
-                      <div className='flex items-center gap-0.5'>
+                      <div className="flex items-center gap-0.5">
                         <FaUser size={10} />
-                        {t['Group']}
+                        {t["Group"]}
                       </div>
                     )}
                   </div>
@@ -307,10 +394,19 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               <HeaderCell>이름</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <Link href={`/channel/${rowData.username}`} target='_blank' className='hover:no-underline'>
-                    <div className='flex gap-2 md:gap-4 items-center'>
-                      <div className='relative w-10 min-w-10 max-w-10'>
-                        <ChannelAvatar id={rowData.channel_id} title={rowData.title} size={40} shape='rounded-full min-w-[20px]' />
+                  <Link
+                    href={`/channel/${rowData.username}`}
+                    target="_blank"
+                    className="hover:no-underline"
+                  >
+                    <div className="flex gap-2 md:gap-4 items-center">
+                      <div className="relative w-10 min-w-10 max-w-10">
+                        <ChannelAvatar
+                          id={rowData.channel_id}
+                          title={rowData.title}
+                          size={40}
+                          shape="rounded-full min-w-[20px]"
+                        />
                         {/* <Image
                           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`}
                           onError={() => '/telegram-icon-96.png'}
@@ -320,9 +416,11 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
                           className='object-contain rounded-full z-0 min-w-[20px]'
                         /> */}
                       </div>
-                      <div className='flex flex-col'>
+                      <div className="flex flex-col">
                         <span>{rowData.title}</span>
-                        <span className='text-xs text-gray-400'>@{rowData.username}</span>
+                        <span className="text-xs text-gray-400">
+                          @{rowData.username}
+                        </span>
                       </div>
                     </div>
                   </Link>
@@ -330,79 +428,167 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
               </Cell>
             </Column>
 
-            <Column width={80} align='center'>
-              <HeaderCell>{t['category']}</HeaderCell>
+            <Column width={80} align="center">
+              <HeaderCell>{t["category"]}</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className='bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit'>
+                  <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
                     {rowData.category}
                   </div>
                 )}
               </Cell>
             </Column>
 
-            <Column width={120} align='right'>
+            <Column width={120} align="right">
               <HeaderCell>해시태그</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className='flex flex-wrap gap-0.5 justify-end'>
+                  <div className="flex flex-wrap gap-0.5 justify-end">
                     {rowData.tags &&
-                      rowData.tags.map((tag: { id: number; channel_id: number; tag: string }) => {
-                        return (
-                          <div
-                            className='h-fit bg-gray-100 px-1.5 py-0.5 rounded-full text-sm md:text-xs font-semibold text-gray-700'
-                            key={tag.id}
-                          >
-                            #{tag.tag}
-                          </div>
-                        );
-                      })}
+                      rowData.tags.map(
+                        (tag: {
+                          id: number;
+                          channel_id: number;
+                          tag: string;
+                        }) => {
+                          return (
+                            <div
+                              className="h-fit bg-gray-100 px-1.5 py-0.5 rounded-full text-sm md:text-xs font-semibold text-gray-700"
+                              key={tag.id}
+                            >
+                              #{tag.tag}
+                            </div>
+                          );
+                        }
+                      )}
                   </div>
                 )}
               </Cell>
             </Column>
 
-            <Column align='center' sortable>
-              <HeaderCell className={sortColumn === 'subscription' ? 'font-bold text-primary' : ''}>{t['subscribers']}</HeaderCell>
-              <Cell dataKey='subscription' renderCell={formatKoreanNumber} />
-            </Column>
-
-            <Column align='center' sortable>
-              <HeaderCell className={sortColumn === 'increase24h' ? 'font-bold text-primary' : ''}>{t['increase-24h']}</HeaderCell>
-              <Cell dataKey='increase24h'>
-                {(rowData) =>
-                  rowData.increase24h > 0 ? (
-                    <span className='text-green-500'>+{rowData.increase24h}</span>
-                  ) : (
-                    <span className='text-red-500'>{rowData.increase24h}</span>
-                  )
+            <Column align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "subscription" ? "font-bold text-primary" : ""
                 }
-              </Cell>
+              >
+                {t["subscribers"]}
+              </HeaderCell>
+              <Cell dataKey="subscription" renderCell={formatKoreanNumber} />
             </Column>
 
-            <Column align='center' sortable>
-              <HeaderCell className={sortColumn === 'increase7d' ? 'font-bold text-primary' : ''}>{t['increase-7d']}</HeaderCell>
-              <Cell dataKey='increase7d'>
+            <Column align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "increase7d" ? "font-bold text-primary" : ""
+                }
+              >
+                {t["increase-7d"]}
+              </HeaderCell>
+              <Cell dataKey="increase7d">
                 {(rowData) =>
                   rowData.increase7d > 0 ? (
-                    <span className='text-green-500'>+{rowData.increase7d}</span>
+                    <span className="text-green-500">
+                      +{rowData.increase7d}
+                    </span>
                   ) : (
-                    <span className='text-red-500'>{rowData.increase7d}</span>
+                    <span className="text-red-500">{rowData.increase7d}</span>
                   )
                 }
               </Cell>
             </Column>
 
-            <Column align='center' sortable>
-              <HeaderCell className={sortColumn === 'increase30d' ? 'font-bold text-primary' : ''}>{t['increase-30d']}</HeaderCell>
-              <Cell dataKey='increase30d'>
-                {(rowData) =>
-                  rowData.increase30d > 0 ? (
-                    <span className='text-green-500'>+{rowData.increase30d}</span>
-                  ) : (
-                    <span className='text-red-500'>{rowData.increase30d}</span>
-                  )
+            <Column align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "extra_06" ? "font-bold text-primary" : ""
                 }
+              >
+                {t["views-per-post"]}
+              </HeaderCell>
+              <Cell dataKey="extra_06">
+                {(rowData) => {
+                  const average = statsList.find(
+                    (a: any) => a.channel_id === rowData.channel_id
+                  );
+                  return !!rowData.extra_06 ? (
+                    <span className="">{rowData.extra_06}</span>
+                  ) : (
+                    <span>
+                      {average ? (
+                        statsList.find(
+                          (a: any) => a.channel_id === rowData.channel_id
+                        )?.averageViews
+                      ) : (
+                        <Spin size="small" className="opacity-30" />
+                      )}
+                    </span>
+                  );
+                }}
+              </Cell>
+            </Column>
+
+            <Column align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "extra_07" ? "font-bold text-primary" : ""
+                }
+              >
+                {t["posts-per-month"]}
+              </HeaderCell>
+              <Cell dataKey="extra_07">
+                {(rowData) => {
+                  const average = statsList.find(
+                    (a: any) => a.channel_id === rowData.channel_id
+                  );
+                  return !!rowData.extra_06 ? (
+                    <span className="">{rowData.extra_07}</span>
+                  ) : (
+                    <span>
+                      {average ? (
+                        statsList.find(
+                          (a: any) => a.channel_id === rowData.channel_id
+                        )?.averagePosts
+                      ) : (
+                        <Spin size="small" className="opacity-30" />
+                      )}
+                    </span>
+                  );
+                }}
+              </Cell>
+            </Column>
+
+            <Column align="center" sortable>
+              <HeaderCell
+                className={
+                  sortColumn === "extra_08" ? "font-bold text-primary" : ""
+                }
+              >
+                {t["ERR"]}
+              </HeaderCell>
+              <Cell dataKey="extra_08">
+                {(rowData) => {
+                  const average = statsList.find(
+                    (a: any) => a.channel_id === rowData.channel_id
+                  );
+                  return !!rowData.extra_08 ? (
+                    <span className="">
+                      {parseFloat(rowData.extra_08).toFixed(2)}%
+                    </span>
+                  ) : (
+                    <span>
+                      {average ? (
+                        parseFloat(
+                          statsList.find(
+                            (a: any) => a.channel_id === rowData.channel_id
+                          )?.averageErr
+                        ).toFixed(2) + "%"
+                      ) : (
+                        <Spin size="small" className="opacity-30" />
+                      )}
+                    </span>
+                  );
+                }}
               </Cell>
             </Column>
 
@@ -418,13 +604,19 @@ const Ranking = (props: InferGetServerSidePropsType<typeof getServerSideProps>) 
 };
 
 export const getServerSideProps = async () => {
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+  const result = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`
+  );
   const categories = await result.data;
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+  const resCountry = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`
+  );
   const countries = await resCountry.data;
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+  const resLanguage = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`
+  );
   const languages = await resLanguage.data;
 
   return {
