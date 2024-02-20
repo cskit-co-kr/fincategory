@@ -103,7 +103,12 @@ const Ranking = (
   });
 
   // Data
-  const doSearch = async (field: any, order: any, tagQuery: any) => {
+  const doSearch = async (
+    field: any,
+    order: any,
+    tagQuery: any,
+    categories: any
+  ) => {
     const sorting = {
       field: field,
       order: order,
@@ -116,7 +121,12 @@ const Ranking = (
         ? `#${selectedTag.tag}`
         : null,
       withDesc: false,
-      category: selectedCategory === null ? [] : selectedCategory,
+      category:
+        categories?.length > 0
+          ? categories
+          : selectedCategory === null
+          ? []
+          : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
       language: selectedLanguage === null ? [] : selectedLanguage,
       channel_type: channelType === null ? [] : channelType,
@@ -124,6 +134,7 @@ const Ranking = (
       erp: 0,
       subscribers_from: 100,
       post_per_day_from: 5,
+      err_to: 50,
       subscribers_to: null,
       paginate: { limit: 100, offset: 0 },
       sort: sorting,
@@ -152,7 +163,6 @@ const Ranking = (
     }
     setData(result);
   };
-  console.log(Result);
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
     return category ? category.label : "";
@@ -170,15 +180,15 @@ const Ranking = (
     setLoading(true);
     setData([]);
     if (sortColumn === "increase7d") {
-      doSearch("extra_03", sortType, undefined);
+      doSearch("extra_03", sortType, undefined, undefined);
     } else if (sortColumn === "extra_06") {
-      doSearch("extra_06", sortType, undefined);
+      doSearch("extra_06", sortType, undefined, undefined);
     } else if (sortColumn === "extra_07") {
-      doSearch("extra_07", sortType, undefined);
+      doSearch("extra_07", sortType, undefined, undefined);
     } else if (sortColumn === "extra_08") {
-      doSearch("extra_08", sortType, undefined);
+      doSearch("extra_08", sortType, undefined, undefined);
     } else if (sortColumn === "subscription") {
-      doSearch("subscription", sortType, undefined);
+      doSearch("subscription", sortType, undefined, undefined);
     }
     setTimeout(() => {
       setLoading(false);
@@ -188,10 +198,10 @@ const Ranking = (
   };
 
   useEffect(() => {
-    if (!!selectedTag) {
-      doSearch(sortColumn, sortType, selectedTag);
+    if (!!selectedTag || selectedCategory) {
+      doSearch(sortColumn, sortType, selectedTag, selectedCategory);
     }
-  }, [selectedTag]);
+  }, [selectedTag, selectedCategory]);
 
   useEffect(() => {
     const exec = async () => {
@@ -203,7 +213,7 @@ const Ranking = (
         setTags(tags);
       });
     };
-    doSearch("extra_08", "desc", undefined);
+    doSearch("extra_08", "desc", undefined, undefined);
     setOptions(cats);
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
@@ -219,10 +229,10 @@ const Ranking = (
 
   const [filterShow, setFilterShow] = useState(false);
   const isMedium = useMediaQuery("(min-width:768px)");
-
+  console.log(selectedCategory);
   return (
     <div className="md:pt-7 bg-gray-50">
-      {/* {tags &&
+      {tags &&
         (windowWidth < 1000 ? (
           <HashtagMobile
             tags={tags}
@@ -242,9 +252,9 @@ const Ranking = (
             setSelectedCategory={setSelectedCategory}
             searchListRef={searchListRef}
           />
-        ))} */}
+        ))}
       <div
-        className={`border border-gray-200 bg-white rounded-md p-4 md:p-[30px]`}
+        className={`border mt-5 border-gray-200 min-h-[60vh] bg-white rounded-md p-4 md:p-[30px]`}
       >
         <div className={`${!isMedium && "flex justify-between items-center"}`}>
           <div className="md:mb-7 font-semibold text-lg leading-none">
@@ -328,31 +338,39 @@ const Ranking = (
           >
             <Column width={50} align="center" fixed>
               <HeaderCell>{t["rank"]}</HeaderCell>
-              <Cell dataKey="rank" />
+              <Cell dataKey="rank">
+                {(rowdata) => (
+                  <div className="flex w-full h-full justify-center items-center">
+                    {rowdata.rank}
+                  </div>
+                )}
+              </Cell>
             </Column>
 
             <Column width={70} align="center">
               <HeaderCell>구분</HeaderCell>
               <Cell dataKey="type">
                 {(rowData) => (
-                  <div
-                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
-                      rowData.type === "channel"
-                        ? "bg-[#71B2FF]"
-                        : "bg-[#FF7171]"
-                    }`}
-                  >
-                    {rowData.type === "channel" ? (
-                      <div className="flex items-center gap-0.5">
-                        <FaVolumeLow size={10} />
-                        {t["channel"]}
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-0.5">
-                        <FaUser size={10} />
-                        {t["Group"]}
-                      </div>
-                    )}
+                  <div className="flex w-full h-full justify-center items-center">
+                    <div
+                      className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
+                        rowData.type === "channel"
+                          ? "bg-[#71B2FF]"
+                          : "bg-[#FF7171]"
+                      }`}
+                    >
+                      {rowData.type === "channel" ? (
+                        <div className="flex items-center gap-0.5">
+                          <FaVolumeLow size={10} />
+                          {t["channel"]}
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-0.5">
+                          <FaUser size={10} />
+                          {t["Group"]}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </Cell>
@@ -400,8 +418,10 @@ const Ranking = (
               <HeaderCell>{t["category"]}</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
-                    {rowData.category}
+                  <div className="flex w-full h-full justify-center items-center">
+                    <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
+                      {rowData.category}
+                    </div>
                   </div>
                 )}
               </Cell>
@@ -411,7 +431,7 @@ const Ranking = (
               <HeaderCell>해시태그</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className="flex flex-wrap gap-0.5 justify-end">
+                  <div className="flex flex-wrap gap-0.5 justify-end items-center">
                     {rowData.tags &&
                       rowData.tags.map(
                         (tag: {
@@ -442,7 +462,14 @@ const Ranking = (
               >
                 {t["subscribers"]}
               </HeaderCell>
-              <Cell dataKey="subscription" renderCell={formatKoreanNumber} />
+              <Cell
+                dataKey="subscription"
+                renderCell={(a) => (
+                  <div className="flex w-full h-full justify-center items-center">
+                    {formatKoreanNumber(a)}
+                  </div>
+                )}
+              />
             </Column>
 
             <Column width={locale === "ko" ? 90 : 120} align="center" sortable>
@@ -454,15 +481,17 @@ const Ranking = (
                 {t["increase-7d"]}
               </HeaderCell>
               <Cell dataKey="increase7d">
-                {(rowData) =>
-                  rowData.increase7d > 0 ? (
-                    <span className="text-green-500">
-                      +{rowData.increase7d}
-                    </span>
-                  ) : (
-                    <span className="text-red-500">{rowData.increase7d}</span>
-                  )
-                }
+                {(rowData) => (
+                  <div className="flex w-full h-full justify-center items-center">
+                    {rowData.increase7d > 0 ? (
+                      <span className="text-green-500">
+                        +{rowData.increase7d}
+                      </span>
+                    ) : (
+                      <span className="text-red-500">{rowData.increase7d}</span>
+                    )}
+                  </div>
+                )}
               </Cell>
             </Column>
 
@@ -476,10 +505,14 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="extra_07">
                 {(rowData) => {
-                  return !!rowData.extra_06 ? (
-                    <span className="">{rowData.extra_07}</span>
-                  ) : (
-                    <span>0</span>
+                  return (
+                    <div className="flex w-full h-full justify-center items-center">
+                      {!!rowData.extra_06 ? (
+                        <span className="">{rowData.extra_07}</span>
+                      ) : (
+                        <span>0</span>
+                      )}
+                    </div>
                   );
                 }}
               </Cell>
@@ -495,10 +528,14 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="extra_06">
                 {(rowData) => {
-                  return !!rowData.extra_06 ? (
-                    <span className="">{rowData.extra_06}</span>
-                  ) : (
-                    <span>0</span>
+                  return (
+                    <div className="flex w-full h-full justify-center items-center">
+                      {!!rowData.extra_06 ? (
+                        <span className="">{rowData.extra_06}</span>
+                      ) : (
+                        <span>0</span>
+                      )}
+                    </div>
                   );
                 }}
               </Cell>
@@ -514,12 +551,16 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="extra_08">
                 {(rowData) => {
-                  return !!rowData.extra_08 ? (
-                    <span className="">
-                      {parseFloat(rowData.extra_08).toFixed(2)}%
-                    </span>
-                  ) : (
-                    <span>0.00%</span>
+                  return (
+                    <div className="flex w-full h-full justify-center items-center">
+                      {!!rowData.extra_08 ? (
+                        <span className="">
+                          {parseFloat(rowData.extra_08).toFixed(2)}%
+                        </span>
+                      ) : (
+                        <span>0.00%</span>
+                      )}
+                    </div>
                   );
                 }}
               </Cell>
