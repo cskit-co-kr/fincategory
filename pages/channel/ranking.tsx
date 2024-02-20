@@ -1,11 +1,10 @@
-
 import { useRouter } from "next/router";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 import axios from "axios";
 import { InferGetServerSidePropsType } from "next";
 import Select from "react-select";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { MultiValueOptions } from "../../typings";
 import { Table } from "rsuite";
 import { getAverages, formatKoreanNumber } from "../../lib/utils";
@@ -19,7 +18,8 @@ import ChannelAvatar from "../../components/channel/ChannelAvatar";
 import { FaUser, FaVolumeLow } from "react-icons/fa6";
 import { TbLoader } from "react-icons/tb";
 import { Spin } from "antd";
-
+import Hashtag from "../../components/Hashtag";
+import HashtagMobile from "../../components/HashtagMobile";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -35,6 +35,7 @@ const Ranking = (
   const t = locale === "ko" ? koKR : enUS;
 
   const [error, setError] = useState<boolean>(false);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   const [data, setData] = useState([]);
 
@@ -46,6 +47,10 @@ const Ranking = (
 
   const [optionsLanguages, setOptionsLanguages] = useState<Options[]>([]);
   const [isLoadingLanguages, setIsLoadingLanguages] = useState(true);
+  const searchListRef = useRef(null);
+
+  const [selectedTag, setSelectedTag] = useState<any>();
+  const [tags, setTags] = useState<any>();
 
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [channelType, setChannelType] = useState<any | null>(null);
@@ -98,14 +103,18 @@ const Ranking = (
   });
 
   // Data
-  const doSearch = async (field: any, order: any) => {
+  const doSearch = async (field: any, order: any, tagQuery: any) => {
     const sorting = {
       field: field,
       order: order,
       type: "float",
     };
     const searchData = {
-      query: null,
+      query: tagQuery
+        ? `#${tagQuery.tag}`
+        : selectedTag
+        ? `#${selectedTag.tag}`
+        : null,
       withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
       country: selectedCountry === null ? [] : selectedCountry,
@@ -134,9 +143,7 @@ const Ranking = (
       obj.category = getCategoryName(obj.category_id);
       const splitExtra =
         obj.extra_01 === null ? [0, 0, 0] : obj.extra_01.split(":");
-      obj.increase24h = splitExtra[0];
       obj.increase7d = splitExtra[1];
-      obj.increase30d = splitExtra[2];
       // const a: any = await getAverages(obj.channel_id, obj.subscription);
       // obj.averageViews = a?.averageViews;
       // obj.averagePosts = a?.averagePosts;
@@ -153,7 +160,7 @@ const Ranking = (
   // Table
   const column = router.query.column
     ? (router.query.column as string)
-    : "increase24h";
+    : "extra_08";
   const [sortColumn, setSortColumn] = useState(column);
   const [sortType, setSortType] = useState<SortType>("desc");
   const [loading, setLoading] = useState(false);
@@ -183,13 +190,15 @@ const Ranking = (
     setLoading(true);
     setData([]);
     if (sortColumn === "increase7d") {
-      doSearch("extra_03", sortType);
+      doSearch("extra_03", sortType, undefined);
     } else if (sortColumn === "extra_06") {
-      doSearch("extra_06", sortType);
+      doSearch("extra_06", sortType, undefined);
     } else if (sortColumn === "extra_07") {
-      doSearch("extra_07", sortType);
+      doSearch("extra_07", sortType, undefined);
     } else if (sortColumn === "extra_08") {
-      doSearch("extra_08", sortType);
+      doSearch("extra_08", sortType, undefined);
+    } else if (sortColumn === "subscription") {
+      doSearch("subscription", sortType, undefined);
     }
     setTimeout(() => {
       setLoading(false);
@@ -199,14 +208,33 @@ const Ranking = (
   };
 
   useEffect(() => {
-    doSearch("extra_02", "desc");
+    if (!!selectedTag) {
+      doSearch(sortColumn, sortType, selectedTag);
+    }
+  }, [selectedTag]);
+
+  useEffect(() => {
+    const exec = async () => {
+      const tags = await axios
+        .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
+        .then((response) => response.data);
+
+      startTransition(() => {
+        setTags(tags);
+      });
+    };
+    doSearch("extra_02", "desc", undefined);
     setOptions(cats);
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
-
+    exec();
     setIsLoading(false);
     setIsLoadingCountries(false);
     setIsLoadingLanguages(false);
+    if (typeof window !== "undefined") {
+      const windowWidth = window.innerWidth;
+      setWindowWidth(windowWidth);
+    }
   }, [locale, props, channelType]);
 
   const [filterShow, setFilterShow] = useState(false);
@@ -214,6 +242,27 @@ const Ranking = (
 
   return (
     <div className="md:pt-7 bg-gray-50">
+      {/* {tags &&
+        (windowWidth < 1000 ? (
+          <HashtagMobile
+            tags={tags}
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            searchListRef={searchListRef}
+          />
+        ) : (
+          <Hashtag
+            isRank={true}
+            tags={tags}
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            searchListRef={searchListRef}
+          />
+        ))} */}
       <div
         className={`border border-gray-200 bg-white rounded-md p-4 md:p-[30px]`}
       >
@@ -329,31 +378,6 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={70} align='center'>
-              <HeaderCell>구분</HeaderCell>
-              <Cell dataKey='type'>
-                {(rowData) => (
-                  <div
-                    className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
-                      rowData.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
-                    }`}
-                  >
-                    {rowData.type === 'channel' ? (
-                      <div className='flex items-center gap-0.5'>
-                        <FaVolumeLow size={10} />
-                        {t['channel']}
-                      </div>
-                    ) : (
-                      <div className='flex items-center gap-0.5'>
-                        <FaUser size={10} />
-                        {t['Group']}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </Cell>
-            </Column>
-
             <Column flexGrow={2} minWidth={170} fixed>
               <HeaderCell>이름</HeaderCell>
               <Cell>
@@ -392,14 +416,12 @@ const Ranking = (
               </Cell>
             </Column>
 
-
             <Column width={80} align="center">
               <HeaderCell>{t["category"]}</HeaderCell>
               <Cell>
                 {(rowData) => (
                   <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
                     {rowData.category}
-
                   </div>
                 )}
               </Cell>
@@ -522,7 +544,6 @@ const Ranking = (
                 }}
               </Cell>
             </Column>
-
 
             {/* <Column align='center' width={120} sortable>
               <HeaderCell className={sortColumn === 'averagePosts' ? 'font-bold text-primary' : ''}>일간 포스트 수</HeaderCell>
