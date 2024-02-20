@@ -17,7 +17,7 @@ import { useMediaQuery } from "@mui/material";
 import ChannelAvatar from "../../components/channel/ChannelAvatar";
 import { FaUser, FaVolumeLow } from "react-icons/fa6";
 import { TbLoader } from "react-icons/tb";
-import { Spin } from "antd";
+import { Result, Spin } from "antd";
 import Hashtag from "../../components/Hashtag";
 import HashtagMobile from "../../components/HashtagMobile";
 
@@ -151,7 +151,7 @@ const Ranking = (
     }
     setData(result);
   };
-
+  console.log(Result);
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
     return category ? category.label : "";
@@ -164,27 +164,6 @@ const Ranking = (
   const [sortColumn, setSortColumn] = useState(column);
   const [sortType, setSortType] = useState<SortType>("desc");
   const [loading, setLoading] = useState(false);
-
-  const getData = () => {
-    if (sortColumn && sortType) {
-      return data.sort((a: any, b: any) => {
-        let x = a[sortColumn];
-        let y = b[sortColumn];
-        // if (typeof x === 'string') {
-        //   x = x.charCodeAt(0);
-        // }
-        // if (typeof y === 'string') {
-        //   y = y.charCodeAt(0);
-        // }
-        if (sortType === "asc") {
-          return x - y;
-        } else {
-          return y - x;
-        }
-      });
-    }
-    return data;
-  };
 
   const handleSortColumn = (sortColumn: any, sortType: any) => {
     setLoading(true);
@@ -223,7 +202,7 @@ const Ranking = (
         setTags(tags);
       });
     };
-    doSearch("extra_02", "desc", undefined);
+    doSearch("extra_08", "desc", undefined);
     setOptions(cats);
     setOptionsCountries(countries);
     setOptionsLanguages(languages);
@@ -331,7 +310,7 @@ const Ranking = (
         <div className="mt-4">
           <Table
             autoHeight
-            data={getData()}
+            data={data}
             sortColumn={sortColumn}
             sortType={sortType}
             onSortColumn={handleSortColumn}
