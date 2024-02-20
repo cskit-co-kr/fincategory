@@ -123,7 +123,7 @@ export const enUS = {
     /* detail */
     "date-registered": "Registered date on Finca",
     "views-per-post": "Views per post",
-    "posts-per-month": "Posts per month",
+    "posts-per-month": "Posts per day",
     "ERR": "ERR",
     "Summary": "Summary",
     "Subscribers": "Subscribers",
