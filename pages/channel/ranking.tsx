@@ -493,7 +493,7 @@ const Ranking = (
               <HeaderCell>해시태그</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className="flex flex-wrap gap-0.5 justify-end items-center">
+                  <div className="flex gap-0.5 h-full w-full justify-end items-center">
                     {rowData.tags &&
                       rowData.tags.map(
                         (tag: {
