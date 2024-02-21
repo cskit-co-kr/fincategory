@@ -390,7 +390,7 @@ const Ranking = (
             loading={loading}
             rowHeight={68}
             bordered
-            className="z-0 rounded-lg border-none"
+            className="z-0 rounded-lg border-none "
             renderEmpty={() => (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
