@@ -243,3 +243,7 @@ a:hover .emoji > b {
   background-size: cover;
   padding: 0 !important;
 }
+
+.defualtNumberInput .ant-input-number-handler-wrap { 
+  visibility: hidden;
+}

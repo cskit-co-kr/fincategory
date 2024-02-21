@@ -82,12 +82,10 @@ const Hashtag = ({
     setSelectCategory(category.name);
     setSelectedCategory(null);
     if (isRank) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 300,
-          behavior: "smooth",
-        });
-      }, 500);
+      window.scrollTo({
+        top: 100,
+        behavior: "smooth",
+      });
     } else {
       window.scrollTo({
         top: 1110,
@@ -102,12 +100,10 @@ const Hashtag = ({
     setSelectedTag("");
     setSelectCategory("");
     if (isRank) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 300,
-          behavior: "smooth",
-        });
-      }, 500);
+      window.scrollTo({
+        top: 100,
+        behavior: "smooth",
+      });
     } else {
       window.scrollTo({
         top: 1110,

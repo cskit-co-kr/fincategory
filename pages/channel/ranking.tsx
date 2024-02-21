@@ -7,19 +7,18 @@ import Select from "react-select";
 import { startTransition, useEffect, useRef, useState } from "react";
 import { MultiValueOptions } from "../../typings";
 import { Table } from "rsuite";
-import { getAverages, formatKoreanNumber } from "../../lib/utils";
+import { formatKoreanNumber } from "../../lib/utils";
 import { SortType } from "rsuite/esm/Table";
-import Image from "next/image";
 import Link from "next/link";
-import { colorStyles } from "../../constants";
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 import { useMediaQuery } from "@mui/material";
 import ChannelAvatar from "../../components/channel/ChannelAvatar";
 import { FaUser, FaVolumeLow } from "react-icons/fa6";
-import { TbLoader } from "react-icons/tb";
-import { Result, Spin } from "antd";
 import Hashtag from "../../components/Hashtag";
 import HashtagMobile from "../../components/HashtagMobile";
+import { useSession } from "next-auth/react";
+import { InputNumber } from "antd";
+import { BiEdit } from "react-icons/bi";
+import { RiCheckLine, RiCloseLine } from "react-icons/ri";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -33,11 +32,26 @@ const Ranking = (
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
-
-  const [error, setError] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const [total, setTotal] = useState(0);
+  const [totalAll, setTotalAll] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
+  const [edit, setEdit] = useState(false);
 
   const [data, setData] = useState([]);
+  const [subscribersFrom, setSubscribersFrom] = useState({
+    value: 99,
+    error: false,
+  });
+  const [viewPDFrom, setviewPDFrom] = useState({
+    value: 4,
+    error: false,
+  });
+
+  const [eRRTo, setERRTo] = useState({
+    value: 50,
+    error: false,
+  });
 
   const [options, setOptions] = useState<Options[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,12 +68,6 @@ const Ranking = (
 
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [channelType, setChannelType] = useState<any | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState<any | null>([
-    { value: 113, label: "Korea, Republic of" },
-  ]);
-  const [selectedLanguage, setSelectedLanguage] = useState<any | null>([
-    { value: "ko", label: "Korean" },
-  ]);
 
   const cats = props.categories?.map((item: any) => {
     const obj = JSON.parse(item.name);
@@ -68,21 +76,6 @@ const Ranking = (
       label: locale === "ko" ? obj.ko : obj.en,
     };
   });
-
-  const optionsChannelTypes = [
-    {
-      value: "channel",
-      label: t["channel"],
-    },
-    {
-      value: "public_group",
-      label: t["public-group"],
-    },
-    {
-      value: "private_group",
-      label: t["private-group"],
-    },
-  ];
 
   const countries = props.countries?.map((item: any) => {
     const disable = item.nicename === "Korea, Republic of" ? false : true;
@@ -114,7 +107,7 @@ const Ranking = (
       order: order,
       type: "float",
     };
-    const searchData = {
+    const searchData: any = {
       query: tagQuery
         ? `#${tagQuery.tag}`
         : selectedTag
@@ -127,8 +120,8 @@ const Ranking = (
           : selectedCategory === null
           ? []
           : selectedCategory,
-      country: selectedCountry === null ? [] : selectedCountry,
-      language: selectedLanguage === null ? [] : selectedLanguage,
+      country: [],
+      language: [],
       channel_type: channelType === null ? [] : channelType,
       channel_age: 0,
       erp: 0,
@@ -161,7 +154,30 @@ const Ranking = (
       // obj.averagePosts = a?.averagePosts;
       // obj.averageErr = a?.averageErr;
     }
+    searchData.subscribers_from = null;
+    searchData.post_per_day_from = null;
+    searchData.err_to = null;
+    searchData.paginate = { limit: 5, offset: 0 };
+    searchData["sort"] = { field: "created_at", order: "desc" };
+    const response2 = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(searchData),
+      }
+    );
+    const resultData2 = await response2.json();
+
+    setTotal(resultData?.total || 0);
+    setTotalAll(resultData2?.total || 0);
     setData(result);
+    // const resultRank = await fetch(
+    //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/settings/getRankfilter`
+    // );
+
+    // const rankLimit = await resultRank.json();
+    // console.log(rankLimit);
   };
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
@@ -198,7 +214,7 @@ const Ranking = (
   };
 
   useEffect(() => {
-    if (!!selectedTag || selectedCategory) {
+    if (selectedTag !== null || selectedCategory !== null) {
       doSearch(sortColumn, sortType, selectedTag, selectedCategory);
     }
   }, [selectedTag, selectedCategory]);
@@ -227,7 +243,6 @@ const Ranking = (
     }
   }, [locale, props, channelType]);
 
-  const [filterShow, setFilterShow] = useState(false);
   const isMedium = useMediaQuery("(min-width:768px)");
   console.log(selectedCategory);
   return (
@@ -254,70 +269,117 @@ const Ranking = (
           />
         ))}
       <div
-        className={`border mt-5 border-gray-200 min-h-[60vh] bg-white rounded-md p-4 md:p-[30px]`}
+        className={`border mt-5 border-gray-200 min-h-[70vh] bg-white rounded-md p-4 md:p-[30px]`}
       >
-        <div className={`${!isMedium && "flex justify-between items-center"}`}>
-          <div className="md:mb-7 font-semibold text-lg leading-none">
-            {t["rank"]}
+        <div className="flex p-4 pt-0 w-full items-center justify-between">
+          <div className="text-[12px] leading-5 items-center flex">
+            <div className="rounded-full mr-2 h-[11px] w-[11px] bg-[#FF0000]" />
+            <div>검색결과</div>
+            {selectedTag ? (
+              <div className="font-bold">“# {selectedTag.tag}”</div>
+            ) : null}{" "}
+            : <div className="font-bold ml-1">{totalAll}</div>개 채널 중{" "}
+            <div className="font-bold ml-1 text-[#FF0000]">
+              {totalAll - total}
+            </div>
+            개가 필터링 개되어{" "}
+            <div className="font-bold ml-1 text-[#3687E2]">{total}</div>개
+            채널을 찾았습니다.
           </div>
-          <div className="flex justify-end">
-            <button
-              onClick={() => setFilterShow((prev) => !prev)}
-              className="md:hidden flex gap-1 justify-center items-center rounded-lg bg-white border border-gray-200 text-sm px-2 py-1 whitespace-nowrap"
-            >
-              <AdjustmentsHorizontalIcon className="h-4" />
-              {t["channel-filter"]}
-            </button>
+          <div
+            className={`text-[12px] leading-5 items-center relative flex ${
+              session?.user.type === 2
+                ? "border p-2 rounded-md select-none group border-gray-400"
+                : ""
+            }`}
+          >
+            {session?.user.type === 2 && edit === false ? (
+              <div
+                onClick={() => setEdit(true)}
+                className="absolute -top-3 cursor-pointer rounded-md transition-all hover:scale-110 group-hover:animate-vote text-yellow-600 duration-300 group-hover:border-[#0047FF] bg-white border p-1 -right-6 text-xl"
+              >
+                <BiEdit />
+              </div>
+            ) : null}
+            {session?.user.type === 2 ? (
+              <div
+                className={`absolute text-2xl bg-white flex transition-all overflow-hidden top-1/2 z-0 -translate-y-1/2 ${
+                  edit
+                    ? "translate-x-full duration-300 opacity-100"
+                    : "translate-x-0 invisible opacity-0"
+                } right-0 rounded-l-none border-gray-400  border rounded-md`}
+              >
+                <div
+                  onClick={() => edit === true && setEdit(false)}
+                  className="flex h-8 w-9 transition-all justify-center cursor-pointer items-center bg-white hover:bg-red-400 text-red-400 hover:text-4xl hover:text-white"
+                >
+                  <RiCloseLine />
+                </div>
+                <div
+                  onClick={() => edit === true && setEdit(false)}
+                  className="flex h-8 w-9 transition-all justify-center cursor-pointer items-center bg-white text-green-400 hover:bg-green-400 hover:text-4xl hover:text-white"
+                >
+                  <RiCheckLine />
+                </div>
+              </div>
+            ) : null}
+            <div className="rounded-full mr-2 h-[11px] w-[11px] bg-[#0047FF]" />
+            필터링 조건 : 구독자
+            <div className="ml-1 text-[#3687E2]">
+              {edit ? (
+                <InputNumber
+                  status={subscribersFrom.error ? "error" : undefined}
+                  className="w-11 defualtNumberInput"
+                  size="small"
+                  min={0}
+                  value={subscribersFrom.value}
+                  onChange={(v: any) =>
+                    setSubscribersFrom({ value: v, error: false })
+                  }
+                />
+              ) : (
+                99
+              )}
+              명 이하 +
+            </div>
+            일간포스트수{" "}
+            <div className="ml-1 text-[#3687E2]">
+              {" "}
+              {session?.user.type === 2 && edit ? (
+                <InputNumber
+                  status={viewPDFrom.error ? "error" : undefined}
+                  onChange={(v: any) =>
+                    setviewPDFrom({ value: v, error: false })
+                  }
+                  className="w-11 defualtNumberInput"
+                  size="small"
+                  min={0}
+                  value={viewPDFrom.value}
+                />
+              ) : (
+                4
+              )}{" "}
+              이하 +
+            </div>
+            포스트조회율{" "}
+            <div className="ml-1 text-[#3687E2]">
+              {" "}
+              {session?.user.type === 2 && edit ? (
+                <InputNumber
+                  status={eRRTo.error ? "error" : undefined}
+                  onChange={(v: any) => setERRTo({ value: v, error: false })}
+                  className="w-11 defualtNumberInput"
+                  size="small"
+                  min={0}
+                  value={eRRTo.value}
+                />
+              ) : (
+                50
+              )}
+              % 이상
+            </div>
           </div>
         </div>
-        {(isMedium === true || filterShow === true) && (
-          <div className="md:flex gap-5 z-10 border md:border-none border-gray-200 rounded-lg p-4 md:p-0">
-            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
-              {t["channel-type"]}
-              <Select
-                instanceId={"type"}
-                defaultValue={channelType}
-                onChange={setChannelType}
-                name="type"
-                styles={colorStyles}
-                options={optionsChannelTypes}
-                placeholder={t["select-type"]}
-                isMulti
-                className="w-full mb-2 md:mb-0"
-              />
-            </label>
-            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
-              {t["channel-country"]}
-              <Select
-                value={{ value: 113, label: t["KR"] }}
-                instanceId="country"
-                onChange={setSelectedCountry}
-                name="country"
-                isLoading={isLoadingCountries}
-                styles={colorStyles}
-                options={optionsCountries}
-                placeholder={t["select-country"]}
-                isMulti
-                className="w-full mb-2 md:mb-0"
-              />
-            </label>
-            <label className="grid md:flex gap-2 items-center w-full md:w-1/3 whitespace-nowrap mb-2 md:mb-0">
-              {t["contents-language"]}
-              <Select
-                value={{ value: "ko", label: t["Korean"] }}
-                instanceId={"language"}
-                onChange={setSelectedLanguage}
-                name="language"
-                isLoading={isLoadingLanguages}
-                styles={colorStyles}
-                options={optionsLanguages}
-                placeholder={t["select-language"]}
-                isMulti
-                className="w-full"
-              />
-            </label>
-          </div>
-        )}
         <div className="mt-4">
           <Table
             autoHeight
@@ -328,7 +390,7 @@ const Ranking = (
             loading={loading}
             rowHeight={68}
             bordered
-            className="z-0 rounded-lg"
+            className="z-0 rounded-lg border-none"
             renderEmpty={() => (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
