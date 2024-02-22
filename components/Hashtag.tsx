@@ -115,7 +115,7 @@ const Hashtag = ({
 
   return (
     <div
-      className={`sticky top-0 z-20 white-box py-5 transition-all transform duration-150 overflow-hidden  ${
+      className={`sticky top-0 z-20 hidden lg:block white-box py-5 transition-all transform duration-150 overflow-hidden  ${
         pageYOffset === false
           ? "h-[340px]"
           : `h-[63px] overflow-hidden shadow-2xl ${
