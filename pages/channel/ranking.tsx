@@ -262,7 +262,7 @@ const Ranking = (
       <div
         className={`border mt-5 border-gray-200 min-h-[70vh] bg-white rounded-md p-4 md:p-[30px]`}
       >
-        <div className="flex gap-5 flex-col lg:flex-row lg:p-4 p-2 pt-0 w-full lg:items-center justify-between">
+        <div className="flex gap-5 flex-col lg:flex-row lg:p-4 p-1 pt-0 w-full lg:items-center justify-between">
           <div className="text-[12px] leading-5 items-center flex">
             <div className="rounded-full mr-2 h-[11px] w-[11px] min-w-[11px] bg-[#FF0000]" />
             <div className="flex flex-wrap">
@@ -396,7 +396,7 @@ const Ranking = (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
           >
-            <Column width={25} align="center">
+            <Column width={locale === "ko" ? 25 : 30} align="center">
               <HeaderCell>{t["rank"]}</HeaderCell>
               <Cell dataKey="rank">
                 {(rowdata) => (
