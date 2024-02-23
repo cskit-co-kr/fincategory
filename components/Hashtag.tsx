@@ -12,6 +12,8 @@ const Hashtag = ({
   setSelectedTag,
   selectedCategory,
   setSelectedCategory,
+  selectCategory,
+  setSelectCategory,
   searchListRef,
   isRank,
 }: any) => {
@@ -76,18 +78,15 @@ const Hashtag = ({
     setGroupedTags(reduceTags);
   }, []);
 
-  const [selectCategory, setSelectCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
     setSelectedTag(tag);
     setSelectCategory(category.name);
     setSelectedCategory(null);
     if (isRank) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 300,
-          behavior: "smooth",
-        });
-      }, 500);
+      window.scrollTo({
+        top: 100,
+        behavior: "smooth",
+      });
     } else {
       window.scrollTo({
         top: 1110,
@@ -102,12 +101,10 @@ const Hashtag = ({
     setSelectedTag("");
     setSelectCategory("");
     if (isRank) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 300,
-          behavior: "smooth",
-        });
-      }, 500);
+      window.scrollTo({
+        top: 100,
+        behavior: "smooth",
+      });
     } else {
       window.scrollTo({
         top: 1110,
@@ -119,7 +116,7 @@ const Hashtag = ({
 
   return (
     <div
-      className={`sticky top-0 z-20 white-box py-5 transition-all transform duration-150 overflow-hidden  ${
+      className={`sticky top-0 z-20 hidden lg:block white-box py-5 transition-all transform duration-150 overflow-hidden  ${
         pageYOffset === false
           ? "h-[340px]"
           : `h-[63px] overflow-hidden shadow-2xl ${

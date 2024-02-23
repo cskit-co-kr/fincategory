@@ -95,36 +95,6 @@ const Header = () => {
     return () => window.removeEventListener("click", handleClick, true);
   }, [searchSectionMenu]);
 
-  // const [groups, setGroups] = useState([]);
-  // const [memberInfo, setMemberInfo] = useState<MemberType>();
-
-  // const getMember = async () => {
-  //   const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getuser`, {
-  //     method: 'POST',
-  //     headers: { 'content-type': 'application/json' },
-  //   });
-  //   const memberInfo = await responseMember.json();
-  //   setMemberInfo(memberInfo);
-  // };
-
-  // useEffect(() => {
-  //   const getGroups = async () => {
-  //     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
-  //       method: 'POST',
-  //       headers: { 'content-type': 'application/json' },
-  //     });
-  //     const result = await response.json();
-  //     setGroups(result.groups);
-  //   };
-  //   getGroups();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     getMember();
-  //   }
-  // }, [session]);
-
   const resultGroup: any = useData(
     `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`,
     "POST"
