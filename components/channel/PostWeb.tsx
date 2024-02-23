@@ -151,7 +151,7 @@ const EmptyPostWebSkeleton = ({ channel }: any) => {
           src="https://lottie.host/cf8c2d72-4ee7-4707-a33d-9a5ba5b4a407/BRUeDhOcpj.json"
           style={{ width: "300px", height: "300px" }}
         ></lottie-player>
-        <div>
+        <div className="text-center lg:text-start">
           <div className="text-lg font-medium">
             Oops sorry, something went wrong.
           </div>
