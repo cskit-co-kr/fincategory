@@ -187,6 +187,7 @@ export const enUS = {
     "edit": "Edit",
     "delete": "Delete",
     "comment-saved": "Your comment has been successfully saved.",
+    "filter-saved": "Your filter has been successfully saved.",
     "tag-saved": "The tag has been successfully saved.",
     "post-url-copied": "Board Post URL copied to clipboard.",
     "search-filter": "Search filter",

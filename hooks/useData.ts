@@ -13,7 +13,7 @@ function useData(url: string, method: string) {
         if (!ignore) {
           setData(json);
         }
-      });
+      }).catch((e)=> console.log(e));
     return () => {
       ignore = true;
     };
