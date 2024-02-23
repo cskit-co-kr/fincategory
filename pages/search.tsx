@@ -33,29 +33,16 @@ const Search = () => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
-
-  const [windowWidth, setWindowWidth] = useState(0);
   const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const [searchText, setSearchText] = useState<any>("");
-  const [selectDesc, setSelectDesc] = useState(false);
+  // const [searchText, setSearchText] = useState<any>("");
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState<any | null>([
-    { value: 113, label: "Korea, Republic of" },
-  ]);
-  const [selectedLanguage, setSelectedLanguage] = useState<any | null>([
-    { value: "ko", label: "Korean" },
-  ]);
   const [channelType, setChannelType] = useState<any | null>([
     { value: "all", label: t["All"] },
   ]);
-  const [channelsAge, setChannelsAge] = useState<number>(0);
-  const [channelsERP, setChannelsERP] = useState<number>(0);
-  const [subscribersFrom, setSubscribersFrom] = useState<any | null>("");
-  const [subscribersTo, setSubscribersTo] = useState<any | null>("");
   const [sorting, setSorting] = useState({
     field: "subscription",
     order: "desc",
@@ -99,15 +86,15 @@ const Search = () => {
   useEffect(() => {
     const data: any = {
       query: null, //searchText === '' ? null : searchText,
-      withDesc: selectDesc,
+      withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
-      country: selectedCountry === null ? [] : selectedCountry,
-      language: selectedLanguage === null ? [] : selectedLanguage,
+      country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [],
       channel_type: channelType[0].value === "all" ? [] : channelType,
-      channel_age: channelsAge,
-      erp: channelsERP,
-      subscribers_from: subscribersFrom === "" ? null : subscribersFrom,
-      subscribers_to: subscribersTo === "" ? null : subscribersTo,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
       paginate: { limit: 45, offset: 0 },
       sort: sorting,
     };
@@ -204,11 +191,6 @@ const Search = () => {
     _channels24();
 
     exec();
-
-    if (typeof window !== "undefined") {
-      const windowWidth = window.innerWidth;
-      setWindowWidth(windowWidth);
-    }
   }, [router]);
 
   useEffect(() => {
@@ -224,39 +206,25 @@ const Search = () => {
   }, [locale]);
 
   const doSearch = async (q: string) => {
-    q.length > 0 && setSearchText(q);
+    console.log("ajilj bn");
+    // q.length > 0 && setSearchText(q);
 
-    let data;
-    if (selectedTag !== undefined) {
-      data = {
-        query: selectedTag ? `#${selectedTag.tag}` : null, //searchText === '' ? null : searchText,
-        withDesc: selectDesc,
-        category: selectedCategory === null ? [] : selectedCategory,
-        country: [],
-        language: [],
-        channel_type: channelType[0].value === "all" ? [] : channelType,
-        channel_age: 0,
-        erp: 0,
-        subscribers_from: "",
-        subscribers_to: "",
-        paginate: { limit: 45, offset: 0 },
-        sort: sorting,
-      };
-    } else {
-      data = {
-        query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
-        withDesc: selectDesc,
-        category: selectedCategory === null ? [] : selectedCategory,
-        country: selectedCountry === null ? [] : selectedCountry,
-        language: selectedLanguage === null ? [] : selectedLanguage,
-        channel_type: channelType[0].value === "all" ? [] : channelType,
-        channel_age: channelsAge,
-        erp: channelsERP,
-        subscribers_from: subscribersFrom === "" ? null : subscribersFrom,
-        subscribers_to: subscribersTo === "" ? null : subscribersTo,
-        paginate: { limit: 45, offset: 0 },
-        sort: sorting,
-      };
+    let data = {
+      query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
+      withDesc: false,
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [],
+      channel_type: channelType[0].value === "all" ? [] : channelType,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
+    if (!!selectedTag?.tag) {
+      data.query = `#${selectedTag.tag}`;
     }
 
     setSearchEvent(data);
@@ -405,7 +373,7 @@ const Search = () => {
                 </div>
               </div>
             </div> */}
-            {tags && (
+            {tags ? (
               <HashtagMobile
                 tags={tags}
                 selectedTag={selectedTag}
@@ -414,10 +382,9 @@ const Search = () => {
                 setSelectedCategory={setSelectedCategory}
                 searchListRef={searchListRef}
               />
-            )}
-            {tags && (
+            ) : null}
+            {tags ? (
               <Hashtag
-                isRank={true}
                 tags={tags}
                 selectedTag={selectedTag}
                 setSelectedTag={setSelectedTag}
@@ -425,7 +392,7 @@ const Search = () => {
                 setSelectedCategory={setSelectedCategory}
                 searchListRef={searchListRef}
               />
-            )}
+            ) : null}
             <Ads1 />
             <Section3 />
             <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
@@ -579,11 +546,11 @@ const Search = () => {
             )}
             {searchResult ? (
               <div className="grid md:grid-cols-3 gap-0 md:gap-4">
-                {searchResult?.map((channel: any) => {
+                {searchResult?.map((channel: any, index: number) => {
                   return channel.prod_section ? (
                     <AdChannel2
                       channel={channel}
-                      key={channel.id}
+                      key={index}
                       showType={channel.type ? true : false}
                       typeIcon={true}
                       showCategory={false}
@@ -592,7 +559,7 @@ const Search = () => {
                     <GetChannels
                       channels={channel}
                       desc={true}
-                      key={channel.id}
+                      key={index}
                       showType
                       background="px-8 md:px-4 bg-white"
                       typeIcon={false}

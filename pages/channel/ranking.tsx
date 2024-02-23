@@ -76,6 +76,7 @@ const Ranking = (
     tagQuery: any,
     categories: any
   ) => {
+    setLoading(true);
     const sorting = {
       field: field,
       order: order,
@@ -94,7 +95,7 @@ const Ranking = (
           : selectedCategory === null
           ? []
           : selectedCategory,
-      country: [],
+      country: [{ value: 113, label: "Korea, Republic of" }],
       language: [],
       channel_type: null,
       channel_age: 0,
@@ -143,9 +144,12 @@ const Ranking = (
     );
     const resultData2 = await response2.json();
 
+    setData(result);
     setTotal(resultData?.total || 0);
     setTotalAll(resultData2?.total || 0);
-    setData(result);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
@@ -221,7 +225,7 @@ const Ranking = (
       })
       .catch((e) => message.error("failed"));
   }
-
+  console.log(window.innerWidth);
   useEffect(() => {
     const exec = async () => {
       const tags = await axios
@@ -390,7 +394,7 @@ const Ranking = (
             bordered
             className="z-0 rounded-lg !border-none "
             renderEmpty={() => (
-              <div className="text-center py-10">{t["loading-text"]}</div>
+              <div className="text-center py-10">{t["no-search-results"]}</div>
             )}
             renderLoading={() => (
               <div className="text-center py-10">{t["loading-text"]}</div>

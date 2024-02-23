@@ -16,12 +16,15 @@ const HashtagMobile = ({
 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === "ko" ? koKR : enUS;
 
-  const [pageYOffset, setPageYOffset] = useState(0);
+  const [pageYOffset, setPageYOffset] = useState<any>(false);
 
   const handleScroll = () => {
-    setPageYOffset(window.scrollY);
+    if (window.scrollY > 10) {
+      pageYOffset !== true ? setPageYOffset(true) : null;
+    } else {
+      pageYOffset !== false ? setPageYOffset(false) : null;
+    }
   };
 
   const [groupedTags, setGroupedTags] = useState<any>([]);
@@ -72,7 +75,7 @@ const HashtagMobile = ({
   return (
     <div
       className={`drawer sticky top-0 z-20 lg:hidden bg-gray-50 ${
-        pageYOffset > 10 && "shadow-xl"
+        pageYOffset === true && "shadow-xl"
       }`}
     >
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -97,7 +100,9 @@ const HashtagMobile = ({
             {selectedTag ? (
               <div className="flex items-center gap-2 font-bold">
                 <TbMathGreater size={12} />
-                {selectedTag && JSON.parse(selectCategory)[locale]}
+                {selectedTag &&
+                  selectCategory &&
+                  JSON.parse(selectCategory)[locale]}
                 <TbMathGreater size={12} />
                 <div className="bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2">
                   <span className="bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]">
@@ -169,7 +174,9 @@ const HashtagMobile = ({
             {selectedTag && (
               <div className="flex items-center gap-2 font-bold">
                 <TbMathGreater size={12} />
-                {selectedTag && JSON.parse(selectCategory)[locale]}
+                {selectedTag &&
+                  selectCategory &&
+                  JSON.parse(selectCategory)[locale]}
                 <TbMathGreater size={12} />
                 <div className="bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2">
                   <span className="bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]">
