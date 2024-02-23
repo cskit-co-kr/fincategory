@@ -12,6 +12,8 @@ const Hashtag = ({
   setSelectedTag,
   selectedCategory,
   setSelectedCategory,
+  selectCategory,
+  setSelectCategory,
   searchListRef,
   isRank,
 }: any) => {
@@ -76,7 +78,6 @@ const Hashtag = ({
     setGroupedTags(reduceTags);
   }, []);
 
-  const [selectCategory, setSelectCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
     setSelectedTag(tag);
     setSelectCategory(category.name);

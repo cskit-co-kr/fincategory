@@ -40,6 +40,8 @@ const Search = () => {
 
   // const [searchText, setSearchText] = useState<any>("");
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
+  const [selectCategory, setSelectCategory] = useState<any>();
+
   const [channelType, setChannelType] = useState<any | null>([
     { value: "all", label: t["All"] },
   ]);
@@ -206,7 +208,6 @@ const Search = () => {
   }, [locale]);
 
   const doSearch = async (q: string) => {
-    console.log("ajilj bn");
     // q.length > 0 && setSearchText(q);
 
     let data = {
@@ -380,6 +381,8 @@ const Search = () => {
                 setSelectedTag={setSelectedTag}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
                 searchListRef={searchListRef}
               />
             ) : null}
@@ -388,6 +391,8 @@ const Search = () => {
                 tags={tags}
                 selectedTag={selectedTag}
                 setSelectedTag={setSelectedTag}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
                 searchListRef={searchListRef}

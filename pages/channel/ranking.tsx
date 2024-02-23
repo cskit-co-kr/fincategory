@@ -34,6 +34,7 @@ const Ranking = (
   const [total, setTotal] = useState(0);
   const [totalAll, setTotalAll] = useState(0);
   const [edit, setEdit] = useState(false);
+  const [selectCategory, setSelectCategory] = useState<any>();
 
   const [data, setData] = useState([]);
   const [subscribersFrom, setSubscribersFrom] = useState({
@@ -225,7 +226,6 @@ const Ranking = (
       })
       .catch((e) => message.error("failed"));
   }
-  console.log(window.innerWidth);
   useEffect(() => {
     const exec = async () => {
       const tags = await axios
@@ -242,27 +242,31 @@ const Ranking = (
 
   return (
     <div className="md:pt-7 bg-gray-50">
-      {tags && (
+      {tags ? (
         <HashtagMobile
           tags={tags}
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          selectCategory={selectCategory}
+          setSelectCategory={setSelectCategory}
           searchListRef={searchListRef}
         />
-      )}
-      {tags && (
+      ) : null}
+      {tags ? (
         <Hashtag
           isRank={true}
           tags={tags}
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
+          selectCategory={selectCategory}
+          setSelectCategory={setSelectCategory}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           searchListRef={searchListRef}
         />
-      )}
+      ) : null}
       <div
         className={`border mt-5 border-gray-200 min-h-[70vh] bg-white rounded-md p-4 md:p-[30px]`}
       >
@@ -400,7 +404,7 @@ const Ranking = (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
           >
-            <Column width={locale === "ko" ? 30 : 40} align="center">
+            <Column width={50} align="center">
               <HeaderCell>{t["rank"]}</HeaderCell>
               <Cell dataKey="rank">
                 {(rowdata) => (
@@ -441,7 +445,9 @@ const Ranking = (
             </Column>
 
             <Column flexGrow={2} minWidth={170}>
-              <HeaderCell>이름</HeaderCell>
+              <HeaderCell>
+                <div className="px-14">이름</div>
+              </HeaderCell>
               <Cell>
                 {(rowData) => (
                   <Link
@@ -491,11 +497,11 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={120} align="right">
+            <Column width={120} align="center">
               <HeaderCell>해시태그</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className="flex gap-0.5 h-full w-full justify-end items-center">
+                  <div className="flex gap-0.5 h-full w-full justify-center items-center">
                     {rowData.tags &&
                       rowData.tags.map(
                         (tag: {
@@ -529,7 +535,7 @@ const Ranking = (
               <Cell
                 dataKey="subscription"
                 renderCell={(a) => (
-                  <div className="flex w-full h-full justify-center items-center">
+                  <div className="flex w-full h-full justify-center items-center pr-2">
                     {formatKoreanNumber(a)}
                   </div>
                 )}
@@ -546,7 +552,7 @@ const Ranking = (
               </HeaderCell>
               <Cell dataKey="increase7d">
                 {(rowData) => (
-                  <div className="flex w-full h-full justify-center items-center">
+                  <div className="flex w-full h-full justify-center items-center pr-2">
                     {rowData.increase7d > 0 ? (
                       <span className="text-green-500">
                         +{rowData.increase7d}
@@ -570,7 +576,7 @@ const Ranking = (
               <Cell dataKey="extra_07">
                 {(rowData) => {
                   return (
-                    <div className="flex w-full h-full justify-center items-center">
+                    <div className="flex w-full h-full justify-center items-center pr-2">
                       {!!rowData.extra_06 ? (
                         <span className="">{rowData.extra_07}</span>
                       ) : (
@@ -593,7 +599,7 @@ const Ranking = (
               <Cell dataKey="extra_06">
                 {(rowData) => {
                   return (
-                    <div className="flex w-full h-full justify-center items-center">
+                    <div className="flex w-full h-full justify-center items-center pr-2">
                       {!!rowData.extra_06 ? (
                         <span className="">{rowData.extra_06}</span>
                       ) : (
@@ -616,7 +622,7 @@ const Ranking = (
               <Cell dataKey="extra_08">
                 {(rowData) => {
                   return (
-                    <div className="flex w-full h-full justify-center items-center">
+                    <div className="flex w-full h-full justify-center items-center pr-2">
                       {!!rowData.extra_08 ? (
                         <span className="">
                           {parseFloat(rowData.extra_08).toFixed(2)}%

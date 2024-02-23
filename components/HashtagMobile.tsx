@@ -12,6 +12,8 @@ const HashtagMobile = ({
   setSelectedTag,
   selectedCategory,
   setSelectedCategory,
+  selectCategory,
+  setSelectCategory,
   searchListRef,
 }: any) => {
   const router = useRouter();
@@ -40,7 +42,6 @@ const HashtagMobile = ({
     };
   }, []);
 
-  const [selectCategory, setSelectCategory] = useState<any>();
   const handleSelectTag = (tag: any, category: any) => {
     setSelectedCategory(null);
     handleClick();
