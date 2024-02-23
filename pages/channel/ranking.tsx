@@ -463,14 +463,6 @@ const Ranking = (
                           size={40}
                           shape="rounded-full min-w-[20px]"
                         />
-                        {/* <Image
-                          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/100/${rowData.channel_id}/avatar.jfif`}
-                          onError={() => '/telegram-icon-96.png'}
-                          alt={rowData.title}
-                          width={40}
-                          height={40}
-                          className='object-contain rounded-full z-0 min-w-[20px]'
-                        /> */}
                       </div>
                       <div className="flex flex-col">
                         <span>{rowData.title}</span>
@@ -501,7 +493,7 @@ const Ranking = (
               <HeaderCell>해시태그</HeaderCell>
               <Cell>
                 {(rowData) => (
-                  <div className="flex gap-0.5 h-full w-full justify-center items-center">
+                  <div className="flex gap-0.5 h-full w-full items-center">
                     {rowData.tags &&
                       rowData.tags.map(
                         (tag: {
