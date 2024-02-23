@@ -169,9 +169,9 @@ const Header = () => {
                 <span className="font-bold text-primary">Fin</span>
                 <span className="">Ca</span>
               </Link>
-              <div className="text-[11px] text-gray-500 leading-none mb-[3px]">
+              <h1 className="text-[11px] text-gray-500 leading-none mb-[3px]">
                 텔레그램 채널/그룹 정보 핀카
-              </div>
+              </h1>
             </div>
 
             {/* Mobile */}
