@@ -27,7 +27,11 @@ import {
   ChannelDetailNav,
   ChannelDetailNavSkeleton,
 } from "../../components/channel/ChannelDetailNav";
-import { PostWeb, PostWebSkeleton } from "../../components/channel/PostWeb";
+import {
+  EmptyPostWebSkeleton,
+  PostWeb,
+  PostWebSkeleton,
+} from "../../components/channel/PostWeb";
 import PostDB from "../../components/channel/PostDB";
 
 import { enUS } from "../../lang/en-US";
@@ -179,7 +183,7 @@ const ChannelDetail = ({ channel }: any) => {
       setMode("db");
       getPostsDB();
     } else {
-      result.posts.length === 0 ? null : setPosts(result.posts);
+      result.posts.length === 0 ? setPosts("empty") : setPosts(result.posts);
       result.posts.length < 12 && setLoadMore(false);
       setMode("web");
     }
@@ -218,7 +222,7 @@ const ChannelDetail = ({ channel }: any) => {
     );
 
     const result = await response?.data;
-    result.length === 0 ? null : setPosts(result);
+    result.length === 0 ? setPosts("empty") : setPosts(result);
     result.length < 10 && setLoadMore(false);
   };
 
@@ -275,7 +279,6 @@ const ChannelDetail = ({ channel }: any) => {
         title={`Telegram channel - ${channel.title} @${channel.username} `}
         description={channel.description}
         additionalMetaTags={[
-
           {
             name: "title",
             content: `Telegram channel - ${channel.title} @${channel.username} `,
@@ -290,7 +293,6 @@ const ChannelDetail = ({ channel }: any) => {
             content: `Telegram channel - ${channel.title} @${channel.username} `,
           },
           { name: "twitter:description", content: channel.description },
-
         ]}
       />
       <div className="md:pt-7 bg-gray-50">
@@ -316,31 +318,31 @@ const ChannelDetail = ({ channel }: any) => {
               />
 
               <div className="gap-4 flex flex-col w-full">
-                {posts !== null
-                  ? posts.map((post: any) => {
-                      if (mode === "web") {
-                        return (
-                          <PostWeb
-                            channel={channel}
-                            post={post}
-                            key={post.id}
-                          />
-                        );
-                      }
+                {posts === "empty" ? (
+                  <EmptyPostWebSkeleton channel={channel} />
+                ) : posts?.length > 0 ? (
+                  posts.map((post: any) => {
+                    if (mode === "web") {
+                      return (
+                        <PostWeb channel={channel} post={post} key={post.id} />
+                      );
+                    }
 
-                      if (mode === "db") {
-                        return post.post !== null ? (
-                          <PostDB channel={channel} post={post} key={post.id} />
-                        ) : (
-                          <></>
-                        );
-                      }
+                    if (mode === "db") {
+                      return post.post !== null ? (
+                        <PostDB channel={channel} post={post} key={post.id} />
+                      ) : (
+                        <></>
+                      );
+                    }
+                  })
+                ) : (
+                  Array(1)
+                    .fill(1)
+                    .map((index) => {
+                      return <PostWebSkeleton key={index} />;
                     })
-                  : Array(1)
-                      .fill(1)
-                      .map((index) => {
-                        return <PostWebSkeleton key={index} />;
-                      })}
+                )}
                 {loadMore && (
                   <div className="flex justify-center col-span-3">
                     <button
@@ -365,20 +367,16 @@ const ChannelDetail = ({ channel }: any) => {
 };
 
 export const getServerSideProps = async (context: any) => {
-
-  const getId = context.query['id'];
-
+  const getId = context.query["id"];
 
   //   let averageViews = 0;
   //   let averagePosts = 0;
   //   let averageErr = 0;
 
-
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
     { detail: getId }
   );
-
 
   const channel = response.data;
 
@@ -420,9 +418,7 @@ export const getServerSideProps = async (context: any) => {
   //       }, 0) / errPercent.length;
   //   }
 
-
   if (channel !== "") {
-
     return {
       props: { channel },
     };

@@ -152,6 +152,35 @@ const Ranking = (
       setLoading(false);
     }, 500);
   };
+  const useWindowDimensions = () => {
+    const hasWindow = typeof window !== "undefined";
+
+    function getWindowDimensions() {
+      const width = hasWindow ? window.innerWidth : null;
+      return {
+        width,
+      };
+    }
+
+    const [windowDimensions, setWindowDimensions] = useState(
+      getWindowDimensions()
+    );
+
+    useEffect(() => {
+      if (hasWindow) {
+        const handleResize = () => {
+          setWindowDimensions(getWindowDimensions());
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }
+    }, [hasWindow]);
+
+    return windowDimensions;
+  };
+
+  const { width } = useWindowDimensions();
   const getCategoryName = (catId: string): string => {
     const category = cats.find((c: any) => c.value === catId && c.label);
     return category ? category.label : "";
@@ -239,11 +268,11 @@ const Ranking = (
     doSearch("extra_08", "desc", undefined, undefined);
     exec();
   }, [locale, props]);
-
   return (
     <div className="md:pt-7 bg-gray-50">
-      {tags ? (
+      {(width || 0) < 1024 && tags ? (
         <HashtagMobile
+          isRank={true}
           tags={tags}
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
@@ -254,7 +283,7 @@ const Ranking = (
           searchListRef={searchListRef}
         />
       ) : null}
-      {tags ? (
+      {(width || 0) >= 1024 && tags ? (
         <Hashtag
           isRank={true}
           tags={tags}
@@ -404,7 +433,7 @@ const Ranking = (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
           >
-            <Column width={50} align="center">
+            <Column width={(width || 0) < 1024 ? 30 : 50} align="center">
               <HeaderCell>{t["rank"]}</HeaderCell>
               <Cell dataKey="rank">
                 {(rowdata) => (
@@ -415,26 +444,26 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={70} align="center">
+            <Column width={(width || 0) < 1024 ? 20 : 70} align="center">
               <HeaderCell>구분</HeaderCell>
               <Cell dataKey="type">
                 {(rowData) => (
                   <div className="flex w-full h-full justify-center items-center">
                     <div
-                      className={`mx-auto text-[12px] px-2 py-0.1 rounded-full w-fit h-fit whitespace-nowrap text-white ${
+                      className={` text-[12px] px-0.5 py-0.5 rounded-full whitespace-nowrap text-white ${
                         rowData.type === "channel"
                           ? "bg-[#71B2FF]"
                           : "bg-[#FF7171]"
                       }`}
                     >
                       {rowData.type === "channel" ? (
-                        <div className="flex items-center py-2 md:py-0 gap-0.5">
-                          <FaVolumeLow size={10} />
+                        <div className="flex items-center py-0 gap-0.5">
+                          <FaVolumeLow size={12} />
                           <p className="hidden md:block">{t["channel"]}</p>
                         </div>
                       ) : (
-                        <div className="flex py-2 md:py-0 items-center gap-0.5">
-                          <FaUser size={10} />
+                        <div className="flex py-0 items-center gap-0.5">
+                          <FaUser size={12} />
                           <p className="hidden md:block"> {t["Group"]}</p>
                         </div>
                       )}
@@ -444,7 +473,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column flexGrow={2} minWidth={170}>
+            <Column flexGrow={2} minWidth={290}>
               <HeaderCell>
                 <div className="px-14">이름</div>
               </HeaderCell>

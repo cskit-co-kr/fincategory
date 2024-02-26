@@ -357,6 +357,35 @@ const Search = () => {
       setChannelRankingUrl("?column=increase30d");
     }
   };
+  const useWindowDimensions = () => {
+    const hasWindow = typeof window !== "undefined";
+
+    function getWindowDimensions() {
+      const width = hasWindow ? window.innerWidth : null;
+      return {
+        width,
+      };
+    }
+
+    const [windowDimensions, setWindowDimensions] = useState(
+      getWindowDimensions()
+    );
+
+    useEffect(() => {
+      if (hasWindow) {
+        const handleResize = () => {
+          setWindowDimensions(getWindowDimensions());
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }
+    }, [hasWindow]);
+
+    return windowDimensions;
+  };
+
+  const { width } = useWindowDimensions();
 
   return (
     <>
@@ -374,7 +403,7 @@ const Search = () => {
                 </div>
               </div>
             </div> */}
-            {tags ? (
+            {(width || 0) < 1024 && tags ? (
               <HashtagMobile
                 tags={tags}
                 selectedTag={selectedTag}
@@ -386,7 +415,7 @@ const Search = () => {
                 searchListRef={searchListRef}
               />
             ) : null}
-            {tags ? (
+            {(width || 0) >= 1024 && tags ? (
               <Hashtag
                 tags={tags}
                 selectedTag={selectedTag}
