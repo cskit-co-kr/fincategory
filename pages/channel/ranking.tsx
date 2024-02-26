@@ -433,7 +433,7 @@ const Ranking = (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
           >
-            <Column width={50} align="center">
+            <Column width={(width || 0) < 768 ? 45 : 50} align="center">
               <HeaderCell>{t["rank"]}</HeaderCell>
               <Cell dataKey="rank">
                 {(rowdata) => (
