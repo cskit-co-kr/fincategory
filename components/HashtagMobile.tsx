@@ -15,17 +15,18 @@ const HashtagMobile = ({
   selectCategory,
   setSelectCategory,
   searchListRef,
+  isRank,
 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
 
-  const [pageYOffset, setPageYOffset] = useState<any>(false);
+  const [ispageYOffset, setIsPageYOffset] = useState<boolean>(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 10) {
-      pageYOffset !== true ? setPageYOffset(true) : null;
-    } else {
-      pageYOffset !== false ? setPageYOffset(false) : null;
+    if (window.scrollY === 0 && ispageYOffset === true) {
+      setIsPageYOffset(false);
+    } else if (ispageYOffset === false) {
+      setIsPageYOffset(true);
     }
   };
 
@@ -35,22 +36,25 @@ const HashtagMobile = ({
     const reduceTags = hashtagReduce(tags);
 
     setGroupedTags(reduceTags);
+  }, []);
 
+  useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [ispageYOffset]);
 
   const handleSelectTag = (tag: any, category: any) => {
     setSelectedCategory(null);
     handleClick();
     setSelectedTag(tag);
     setSelectCategory(category.name);
-    window.scrollTo({
-      top: 2280,
-      behavior: "smooth",
-    });
+    if (!isRank)
+      window.scrollTo({
+        top: 2280,
+        behavior: "smooth",
+      });
     //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -76,7 +80,7 @@ const HashtagMobile = ({
   return (
     <div
       className={`drawer sticky top-0 z-20 lg:hidden bg-gray-50 ${
-        pageYOffset === true && "shadow-xl"
+        ispageYOffset === true ? "shadow-xl" : "shadow-none"
       }`}
     >
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
