@@ -45,6 +45,12 @@
   .drawer-side {
     @apply lg:static !important;
   }
+
+  .rs-table-cell-content {
+    text-overflow: clip !important;
+    overflow: visible !important;
+  }
+
   .white-box {
     @apply w-full border border-gray-100 bg-white rounded-xl p-[30px] shadow-sm;
   }
