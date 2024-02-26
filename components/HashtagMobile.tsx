@@ -70,10 +70,11 @@ const HashtagMobile = ({
     handleClick();
     setSelectedTag("");
     setSelectCategory("");
-    window.scrollTo({
-      top: 2280,
-      behavior: "smooth",
-    });
+    if (!isRank)
+      window.scrollTo({
+        top: 2280,
+        behavior: "smooth",
+      });
     //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -101,7 +102,7 @@ const HashtagMobile = ({
           >
             전체
           </button>
-          <div className="flex overflow-x-scroll py-1 items-center gap-3">
+          <div className="flex overflow-x-auto w-full py-1 items-center gap-3">
             {selectedTag ? (
               <div className="flex items-center gap-2 font-bold">
                 <TbMathGreater size={12} />

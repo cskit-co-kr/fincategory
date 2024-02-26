@@ -444,7 +444,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={(width || 0) < 768 ? 40 : 70} align="center">
+            <Column width={(width || 0) < 768 ? 50 : 70} align="center">
               <HeaderCell>구분</HeaderCell>
               <Cell dataKey="type">
                 {(rowData) => (
@@ -458,12 +458,12 @@ const Ranking = (
                     >
                       {rowData.type === "channel" ? (
                         <div className="flex items-center py-0 gap-0.5">
-                          <FaVolumeLow size={12} />
+                          <FaVolumeLow size={13} />
                           <p className="hidden md:block">{t["channel"]}</p>
                         </div>
                       ) : (
                         <div className="flex py-0 items-center gap-0.5">
-                          <FaUser size={12} />
+                          <FaUser size={13} />
                           <p className="hidden md:block"> {t["Group"]}</p>
                         </div>
                       )}
