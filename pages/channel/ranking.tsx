@@ -433,7 +433,7 @@ const Ranking = (
               <div className="text-center py-10">{t["loading-text"]}</div>
             )}
           >
-            <Column width={(width || 0) < 1024 ? 30 : 50} align="center">
+            <Column width={(width || 0) < 768 ? 45 : 50} align="center">
               <HeaderCell>{t["rank"]}</HeaderCell>
               <Cell dataKey="rank">
                 {(rowdata) => (
@@ -444,7 +444,7 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column width={(width || 0) < 1024 ? 20 : 70} align="center">
+            <Column width={(width || 0) < 768 ? 45 : 70} align="center">
               <HeaderCell>구분</HeaderCell>
               <Cell dataKey="type">
                 {(rowData) => (
@@ -458,12 +458,12 @@ const Ranking = (
                     >
                       {rowData.type === "channel" ? (
                         <div className="flex items-center py-0 gap-0.5">
-                          <FaVolumeLow size={12} />
+                          <FaVolumeLow size={13} />
                           <p className="hidden md:block">{t["channel"]}</p>
                         </div>
                       ) : (
                         <div className="flex py-0 items-center gap-0.5">
-                          <FaUser size={12} />
+                          <FaUser size={13} />
                           <p className="hidden md:block"> {t["Group"]}</p>
                         </div>
                       )}
@@ -473,7 +473,10 @@ const Ranking = (
               </Cell>
             </Column>
 
-            <Column flexGrow={2} minWidth={290}>
+            <Column
+              flexGrow={2}
+              minWidth={(width || 0) < 550 ? (width || 0) - 100 : 300}
+            >
               <HeaderCell>
                 <div className="px-14">이름</div>
               </HeaderCell>
