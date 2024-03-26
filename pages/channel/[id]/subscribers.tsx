@@ -28,7 +28,6 @@ const subscribers = ({ channel, sub }: any) => {
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
-      console.log(payload);
       return (
         <div className="flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md">
           <span className="bg-gray-200 p-1.5">
@@ -165,7 +164,6 @@ const subscribers = ({ channel, sub }: any) => {
   };
 
   const CustomizedYAxisTick = ({ x, y, payload }: any) => {
-    console.log(payload);
     return (
       <g transform={`translate(${x},${y})`}>
         <text textAnchor="end" fill="#a3a3a3" className="text-xs">
@@ -261,7 +259,11 @@ const subscribers = ({ channel, sub }: any) => {
               </div>
 
               <ResponsiveContainer width="100%" height={420}>
-                <AreaChart width={270} height={420} data={data}>
+                <AreaChart
+                  width={270}
+                  height={420}
+                  data={data.slice(subscribersCount)}
+                >
                   <defs>
                     <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#3886E2" stopOpacity={0.3} />
@@ -291,13 +293,13 @@ const subscribers = ({ channel, sub }: any) => {
                   <Brush
                     dataKey="name"
                     stroke="#3886E2"
-                    startIndex={subscribersCount}
-                    endIndex={data.length - 1}
+                    startIndex={0}
+                    endIndex={data.slice(subscribersCount).length - 1}
                     height={35}
                     travellerWidth={15}
                     traveller={<CustomTraveller />}
                   >
-                    <AreaChart height={35} data={data}>
+                    <AreaChart height={35} data={data.slice(subscribersCount)}>
                       <rect
                         x={0}
                         y={0}
@@ -396,7 +398,11 @@ const subscribers = ({ channel, sub }: any) => {
                 </button>
               </div>
               <ResponsiveContainer width="100%" height={420}>
-                <AreaChart width={270} height={420} data={growthData}>
+                <AreaChart
+                  width={270}
+                  height={420}
+                  data={growthData.slice(subscribersGrowth)}
+                >
                   <Tooltip content={<CustomTooltip />} />
                   <XAxis dataKey="name" tick={<CustomizedAxisTick />} />
                   <YAxis
@@ -412,13 +418,16 @@ const subscribers = ({ channel, sub }: any) => {
                   <Brush
                     dataKey="name"
                     stroke="#3886E2"
-                    startIndex={subscribersGrowth}
-                    endIndex={growthData.length - 1}
+                    startIndex={0}
+                    endIndex={growthData.slice(subscribersGrowth).length - 1}
                     height={35}
                     travellerWidth={15}
                     traveller={<CustomTraveller />}
                   >
-                    <AreaChart height={35} data={data}>
+                    <AreaChart
+                      height={35}
+                      data={growthData.slice(subscribersGrowth)}
+                    >
                       <rect
                         x={0}
                         y={0}
