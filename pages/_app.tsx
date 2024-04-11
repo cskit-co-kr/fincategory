@@ -24,6 +24,55 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
 
   const session = pageProps?.session;
 
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "검색",
+        item: "https://finca.co.kr/search",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "랭킹",
+        item: "https://finca.co.kr/channel/ranking",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "게시판 - 자유게시판 | 주식 | 코인",
+        item: "https://finca.co.kr/board/free",
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: "뉴스 - 코인공지 | ICO공지 | 주식뉴스 | 코인뉴스",
+        item: "https://finca.co.kr/board/coin_notice",
+      },
+      {
+        "@type": "ListItem",
+        position: 5,
+        name: "홍보 - 채널소개 | 광고홍보",
+        item: "https://finca.co.kr/board/channel_introduction",
+      },
+      {
+        "@type": "ListItem",
+        position: 6,
+        name: "공지사항",
+        item: "https://finca.co.kr/board/announcement",
+      },
+      {
+        "@type": "ListItem",
+        position: 7,
+        name: "광고상품",
+        item: "https://finca.co.kr/member/ads",
+      },
+    ],
+  };
+
   // const [additionalMeta, setAdditionalMeta] = useState([]);
   // const [title, setTitle] = useState('');
   // const [titleTemplate, setTitleTemplate] = useState('');
@@ -68,6 +117,10 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/logo.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <meta
           name="naver-site-verification"
           content="42d7d5e1feda204b892be0e4ef58262cc9de279b"
