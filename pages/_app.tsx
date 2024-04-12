@@ -87,9 +87,7 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
   useEffect(() => {
     const setVisit = async () => {
       if (env !== "development") {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`
-        );
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/visit`);
         const data = await res.data;
         if (data.code === 200) {
           const today = new Date();
@@ -115,16 +113,17 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/logo.png" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <meta
-          name="naver-site-verification"
-          content="42d7d5e1feda204b892be0e4ef58262cc9de279b"
-        />
+        <link rel='icon' href='/favicon.ico' />
+        <link rel='apple-touch-icon' href='/logo.png' />
+        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <link data-vue-meta='1' rel='alternate' href='https://finca.co.kr/search'></link>
+        <link data-vue-meta='2' rel='alternate' href='https://finca.co.kr/channel/ranking'></link>
+        <link data-vue-meta='3' rel='alternate' href='https://finca.co.kr/board/free'></link>
+        <link data-vue-meta='4' rel='alternate' href='https://finca.co.kr/board/coin_notice'></link>
+        <link data-vue-meta='5' rel='alternate' href='https://finca.co.kr/board/channel_introduction'></link>
+        <link data-vue-meta='6' rel='alternate' href='https://finca.co.kr/board/announcement'></link>
+        <link data-vue-meta='7' rel='alternate' href='https://finca.co.kr/member/ads'></link>
+        <meta name='naver-site-verification' content='42d7d5e1feda204b892be0e4ef58262cc9de279b' />
       </Head>
       <DefaultSeo
         title={title}
@@ -140,11 +139,7 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
       <SessionProvider session={session}>
         <DataProvider>
           <Layout>
-            <NextNProgress
-              color="#3886E2"
-              height={2}
-              options={{ showSpinner: false }}
-            />
+            <NextNProgress color='#3886E2' height={2} options={{ showSpinner: false }} />
             <Component key={router.asPath} {...pageProps} />
           </Layout>
         </DataProvider>
@@ -154,9 +149,7 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
 }
 
 MyApp.getInitialProps = async () => {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`
-  );
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
   const meta = await res.data;
   return { meta };
 };
