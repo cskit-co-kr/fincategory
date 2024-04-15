@@ -116,13 +116,6 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
         <link rel='icon' href='/favicon.ico' />
         <link rel='apple-touch-icon' href='/logo.png' />
         <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <link data-vue-meta='1' rel='alternate' href='https://finca.co.kr/search'></link>
-        <link data-vue-meta='2' rel='alternate' href='https://finca.co.kr/channel/ranking'></link>
-        <link data-vue-meta='3' rel='alternate' href='https://finca.co.kr/board/free'></link>
-        <link data-vue-meta='4' rel='alternate' href='https://finca.co.kr/board/coin_notice'></link>
-        <link data-vue-meta='5' rel='alternate' href='https://finca.co.kr/board/channel_introduction'></link>
-        <link data-vue-meta='6' rel='alternate' href='https://finca.co.kr/board/announcement'></link>
-        <link data-vue-meta='7' rel='alternate' href='https://finca.co.kr/member/ads'></link>
         <meta name='naver-site-verification' content='42d7d5e1feda204b892be0e4ef58262cc9de279b' />
       </Head>
       <DefaultSeo
