@@ -1,20 +1,20 @@
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import { SelectPicker } from 'rsuite';
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { SelectPicker } from "rsuite";
 
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
 
-import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
-import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from 'rsuite';
-import { TypeAttributes } from 'rsuite/esm/@types/common';
-import { formatDate } from '../../lib/utils';
-import { Skeleton } from '@mui/material';
-import apiService from '../../lib/apiService';
+import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
+import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from "rsuite";
+import { TypeAttributes } from "rsuite/esm/@types/common";
+import { formatDate } from "../../lib/utils";
+import { Skeleton } from "@mui/material";
+import apiService from "../../lib/apiService";
 
 interface DataTags {
   tag: string;
@@ -28,10 +28,10 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const [data, setData] = useState<Array<string>>([]);
 
   const [inputVisible, setInputVisible] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
 
   const [editInputIndex, setEditInputIndex] = useState<number>(-1);
-  const [editInputValue, setEditInputValue] = useState<string>('');
+  const [editInputValue, setEditInputValue] = useState<string>("");
 
   const inputRef = useRef<PickerHandle>(null);
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +39,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const { data: session } = useSession();
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/300/${channel.channel_id}/avatar.jfif`;
 
@@ -63,7 +63,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       const obj = JSON.parse(item.name);
       return {
         value: item.id,
-        label: locale === 'ko' ? obj.ko : obj.en,
+        label: locale === "ko" ? obj.ko : obj.en,
       };
     });
     setCategoryLoadData(cats);
@@ -104,7 +104,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   const handleEditInputChange = (value: string, e: ChangeEvent<HTMLInputElement>) => {
-    const val = value.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
+    const val = value.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "").toLowerCase();
 
     setEditInputValue(val);
   };
@@ -114,7 +114,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     newTags[editInputIndex] = editInputValue;
     setTags(newTags);
     setEditInputIndex(-1);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleInputConfirm = () => {
@@ -122,12 +122,12 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       setTags([...tags, inputValue]);
     }
     setInputVisible(false);
-    setInputValue('');
+    setInputValue("");
     setData([]);
   };
 
   const handleSearch = async (newValue: string) => {
-    const val = newValue.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, '').toLowerCase();
+    const val = newValue.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "").toLowerCase();
 
     if (val && val.length > 0) {
       const data: any = tagsList.filter((t: string) => t.startsWith(val));
@@ -135,7 +135,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       setInputValue(val);
     } else {
       setData([]);
-      setInputValue('');
+      setInputValue("");
     }
   };
 
@@ -144,19 +144,19 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       setTags([...tags, data]);
     }
     setInputVisible(false);
-    setInputValue('');
+    setInputValue("");
     setData([]);
   };
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleInputConfirm();
     }
   };
 
   const tagInputStyle: React.CSSProperties = {
     width: 160,
-    verticalAlign: 'top',
+    verticalAlign: "top",
     marginBottom: 10,
   };
 
@@ -169,13 +169,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     const data = res.data;
 
     if (res.status === 200 && data.code === 200) {
-      toaster.push(message('info', t['tag-saved']), {
-        placement: 'topEnd',
+      toaster.push(message("info", t["tag-saved"]), {
+        placement: "topEnd",
         duration: 5000,
       });
     } else {
-      toaster.push(message('error', 'UnSuccessfull'), {
-        placement: 'topEnd',
+      toaster.push(message("error", "UnSuccessfull"), {
+        placement: "topEnd",
         duration: 5000,
       });
     }
@@ -186,11 +186,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setCategoryData(categoryLoadData);
   };
 
-  const [channelCategory, setChannelCategory] = useState<any>(channel.category ? JSON.parse(channel.category.name)[locale] : null);
+  const [channelCategory, setChannelCategory] = useState<any>(
+    channel.category ? JSON.parse(channel.category.name)[locale] : null
+  );
   const setCategory = async (e: any) => {
     setValue(e);
     const result = await apiService.updateCategory(channel.id, e);
-    if (result === 'Success') {
+    if (result === "Success") {
       const c: any = categoryData.filter((c: any) => c.value === e);
       setChannelCategory(c[0].label);
     }
@@ -201,7 +203,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
       <div className='sticky inset-y-4 min-h-[289px]'>
         <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
           <Image
-            src={error ? '/telegram-icon-96.png' : avatar}
+            src={error ? "/telegram-icon-96.png" : avatar}
             alt={channel.title}
             width={170}
             height={170}
@@ -210,7 +212,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           />
           <div className='text-xl font-semibold text-center'>{channel.title}</div>
           <a
-            href={`https://t.me/${channel.type === 'private_group' ? '+' : ''}${channel.username}`}
+            href={`https://t.me/${channel.type === "private_group" ? "+" : ""}${channel.username}`}
             target='_blank'
             className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
                             transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
@@ -222,14 +224,14 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
           <div className='w-full'>
             <div
               className={`text-white text-[13px] w-fit rounded-full px-2 py-0.5 ${
-                channel.type === 'channel' ? 'bg-[#71B2FF]' : 'bg-[#FF7171]'
+                channel.type === "channel" ? "bg-[#71B2FF]" : "bg-[#FF7171]"
               }`}
             >
-              {channel.type === 'channel' ? t['channel'] : t['Group']}
+              {channel.type === "channel" ? t["channel"] : t["Group"]}
             </div>
           </div>
           <div className='w-full'>
-            <div className='text-gray-400'>{t['category']}</div>
+            <div className='text-gray-400'>{t["category"]}</div>
             <div className='text-primary'>{channelCategory}</div>
             {session?.user.type === 2 && (
               <div className='bg-primary/10 rounded-lg p-2 mt-2 text-xs flex items-center gap-2'>
@@ -237,7 +239,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 <SelectPicker
                   data={categoryData}
                   name='category'
-                  placeholder={t['select-topic']}
+                  placeholder={t["select-topic"]}
                   searchable={false}
                   cleanable={false}
                   value={value}
@@ -249,18 +251,18 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
             )}
           </div>
           <div className='w-full'>
-            <span className='text-gray-400'>{t['channel-region-and-language']}</span>
+            <span className='text-gray-400'>{t["channel-region-and-language"]}</span>
             <div className='flex gap-5'>
               <span>{t[channel.country?.iso as keyof typeof t]}</span>
               <span>{channel.language && t[channel.language.value as keyof typeof t]}</span>
             </div>
           </div>
           <div className='w-full'>
-            <div className='text-gray-400'>{t['date-registered']}</div>
+            <div className='text-gray-400'>{t["date-registered"]}</div>
             <div>{formatDate(channel.created_at)}</div>
           </div>
           <div className='flex flex-col justify-between w-full'>
-            <span className='text-gray-400'>{t['tags']}</span>
+            <span className='text-gray-400'>{t["tags"]}</span>
             {session?.user.type === 2 ? (
               <div className='admin-mode mt-1'>
                 <div className='mb-1 '>
@@ -282,8 +284,18 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                     }
                     const isLongTag = tag.length > 20;
                     const tagElem = (
-                      <Whisper key={index} trigger={'hover'} placement={'bottom'} speaker={<Tooltip>Double Click to Edit</Tooltip>}>
-                        <Tag key={index} closable={true} style={{ userSelect: 'none', marginBottom: 4 }} onClose={() => handleClose(tag)}>
+                      <Whisper
+                        key={index}
+                        trigger={"hover"}
+                        placement={"bottom"}
+                        speaker={<Tooltip>Double Click to Edit</Tooltip>}
+                      >
+                        <Tag
+                          key={index}
+                          closable={true}
+                          style={{ userSelect: "none", marginBottom: 4 }}
+                          onClose={() => handleClose(tag)}
+                        >
                           <span
                             onDoubleClick={(e) => {
                               setEditInputIndex(index);
@@ -326,7 +338,12 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                     >
                       <PlusSmallIcon className='h-6 w-6 text-white' /> New Tag
                     </span>
-                    <Button appearance='primary' size='xs' className='bg-[#3498ff] border border-dashed' onClick={saveTag}>
+                    <Button
+                      appearance='primary'
+                      size='xs'
+                      className='bg-[#3498ff] border border-dashed'
+                      onClick={saveTag}
+                    >
                       Save
                     </Button>
                   </div>
@@ -337,7 +354,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 {channel.tags.map((tag: { id: number; channel_id: number; tag: string }, index: number) => {
                   return (
                     <Link
-                      href={`/search?q=#${tag.tag}`}
+                      href={`/?q=#${tag.tag}`}
                       className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
                       key={index}
                     >
@@ -359,9 +376,9 @@ const ChannelDetailLeftSidebarSkeleton = () => {
     <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4 min-h-[289px]'>
       <div className='sticky inset-y-4'>
         <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
-          <Skeleton variant='circular' sx={{ bgcolor: 'grey.100' }} animation='wave' width={170} height={170} />
-          <Skeleton variant='text' sx={{ bgcolor: 'grey.100' }} animation='wave' width={'70%'} height={40} />
-          <Skeleton variant='rectangular' sx={{ bgcolor: 'grey.100' }} animation='wave' width={'90%'} height={300} />
+          <Skeleton variant='circular' sx={{ bgcolor: "grey.100" }} animation='wave' width={170} height={170} />
+          <Skeleton variant='text' sx={{ bgcolor: "grey.100" }} animation='wave' width={"70%"} height={40} />
+          <Skeleton variant='rectangular' sx={{ bgcolor: "grey.100" }} animation='wave' width={"90%"} height={300} />
         </div>
       </div>
     </div>

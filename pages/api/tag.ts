@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         order: 'desc',
       },
     };
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/search`, query);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/`, query);
     const result = await response.data;
 
     if (response.status === 200) {

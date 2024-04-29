@@ -1,32 +1,40 @@
-import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, HeartIcon, PencilIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
-import ChatBubbleOvalLeftEllipsisIcon from '@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon';
-import { TbPhotoCircle, TbHeartFilled } from 'react-icons/tb';
-import { PiChatCircleTextLight } from 'react-icons/pi';
-import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
-import { getCookie, setCookie } from 'cookies-next';
-import { InferGetServerSidePropsType, NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/react';
-import { NextSeo } from 'next-seo';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Message, Modal, Pagination, useToaster } from 'rsuite';
-import { TypeAttributes } from 'rsuite/esm/@types/common';
-import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  HeartIcon,
+  PencilIcon,
+  PhotoIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import ChatBubbleOvalLeftEllipsisIcon from "@heroicons/react/24/outline/ChatBubbleOvalLeftEllipsisIcon";
+import { TbPhotoCircle, TbHeartFilled } from "react-icons/tb";
+import { PiChatCircleTextLight } from "react-icons/pi";
+import SpinnerIcon from "@rsuite/icons/legacy/Spinner";
+import { getCookie, setCookie } from "cookies-next";
+import { InferGetServerSidePropsType, NextPage } from "next";
+import { getSession, useSession } from "next-auth/react";
+import { NextSeo } from "next-seo";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { Avatar, Button, Message, Modal, Pagination, useToaster } from "rsuite";
+import { TypeAttributes } from "rsuite/esm/@types/common";
+import { PlacementType } from "rsuite/esm/toaster/ToastContainer";
 
-import BoardSidebar from '../../../components/board/BoardSidebar';
-import ButtonLink from '../../../components/board/buttonLink';
+import BoardSidebar from "../../../components/board/BoardSidebar";
+import ButtonLink from "../../../components/board/buttonLink";
 
-import { enUS } from '../../../lang/en-US';
-import { koKR } from '../../../lang/ko-KR';
+import { enUS } from "../../../lang/en-US";
+import { koKR } from "../../../lang/ko-KR";
 
-import { formatDate, getHrefValue, toDateTimeformat } from '../../../lib/utils';
-import { CommentType, PostType } from '../../../typings';
+import { formatDate, getHrefValue, toDateTimeformat } from "../../../lib/utils";
+import { CommentType, PostType } from "../../../typings";
 
-import 'react-quill/dist/quill.snow.css';
-import LinkPreview from '../../../components/board/LinkPreview';
-import BoardComment from '../../../components/board/comment';
+import "react-quill/dist/quill.snow.css";
+import LinkPreview from "../../../components/board/LinkPreview";
+import BoardComment from "../../../components/board/comment";
 
 export type HTMLElementCustom = HTMLElement & { showModal: () => {} };
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
@@ -53,11 +61,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const [commentList, setCommentList] = useState<Array<CommentType>>([]);
 
   const [selectedComment, setSelectedComment] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
+  const [comment, setComment] = useState<string>("");
   const [reaction, setReaction] = useState<boolean>(false);
   const [reactionTotal, setReactionTotal] = useState<number>(props.reactionTotal);
 
-  const [placement, setPlacement] = useState<PlacementType>('topEnd');
+  const [placement, setPlacement] = useState<PlacementType>("topEnd");
 
   const [commentPage, setCommentPage] = useState<number>(1);
   const [commentPerPage, setCommentPerPage] = useState<number>(10);
@@ -69,7 +77,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const { data: session } = useSession();
 
   const { locale } = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const toaster = useToaster();
 
@@ -83,12 +91,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   );
 
   const handleScrollTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
     getUser();
-    setCookie('postboardname', post.board.name);
+    setCookie("postboardname", post.board.name);
     if (post.reaction === null) {
       setReaction(false);
     } else {
@@ -117,8 +125,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     setCommentLoading(true);
     const currentSession = await getSession();
     const responseComment = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getcomments`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         id: router.query.id,
         query: null,
@@ -127,8 +135,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           limit: commentPerPage,
         },
         sort: {
-          field: 'created_at',
-          value: 'ASC',
+          field: "created_at",
+          value: "ASC",
         },
         user: currentSession?.user.id,
         boardid: post.board.id,
@@ -144,19 +152,19 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   // Post URL copy to clipboard
   const handleUrlToClipboard = async () => {
-    if ('clipboard' in navigator) {
+    if ("clipboard" in navigator) {
       await navigator.clipboard.writeText(window.location.toString());
     } else {
-      document.execCommand('copy', true, window.location.toString());
+      document.execCommand("copy", true, window.location.toString());
     }
-    toastShow('info', t['post-url-copied']);
+    toastShow("info", t["post-url-copied"]);
   };
 
   // Save Comment
   const saveComment = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=insertcomment`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         comment: comment,
         parent: 0,
@@ -168,25 +176,25 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     const result = await response.json();
 
     if (response.status === 200) {
-      if (result.code === 201 && result.message === 'Inserted') {
-        toastShow('info', t['comment-saved']);
-        setComment('');
+      if (result.code === 201 && result.message === "Inserted") {
+        toastShow("info", t["comment-saved"]);
+        setComment("");
         loadComments();
       }
     } else {
-      toastShow('error', t['login-to-comment']);
+      toastShow("error", t["login-to-comment"]);
     }
   };
 
   // Go to Comment List
   const handleGotoComment = () => {
-    commentListRef.current?.scrollIntoView({ behavior: 'smooth' });
+    commentListRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleReaction = async (action: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=postReaction`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         user: Number(session?.user.id),
         post: router.query.id,
@@ -196,7 +204,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     const result = await response.json();
 
     if (result.code === 200) {
-      if (result.message === 'add') {
+      if (result.message === "add") {
         setReaction(true);
         setReactionTotal(reactionTotal + 1);
       } else {
@@ -204,25 +212,25 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         setReactionTotal(reactionTotal - 1);
       }
     } else {
-      toastShow('error', t['error-save-reaction']);
+      toastShow("error", t["error-save-reaction"]);
     }
   };
 
   const deletePost = async () => {
     if (session?.user.id === post.user.id || memberInfo?.member?.type === 2) {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           post: [post.id],
         }),
       });
       const result = await response.json();
       if (result.success === true) {
-        router.push('/board');
+        router.push("/board");
       }
     } else {
-      return alert('permission error');
+      return alert("permission error");
     }
   };
 
@@ -232,13 +240,13 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const getPostsList = async () => {
     setIsLoading(true);
     const board = post.board.name;
-    const category = 'null';
+    const category = "null";
     const currentSession = await getSession();
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postPerPage}&offset=${postPage}&user=${currentSession?.user.id}&boardid=${post.board.id}`,
       {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
       }
     );
     const postList = await responsePost.json();
@@ -250,7 +258,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     if (session?.user) {
       setComment(e.currentTarget.value);
     } else {
-      const element: HTMLElementCustom | null = document.getElementById('my_modal_1') as HTMLElementCustom;
+      const element: HTMLElementCustom | null = document.getElementById("my_modal_1") as HTMLElementCustom;
       element?.showModal();
     }
   };
@@ -262,8 +270,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       const responseMember = await fetch(
         `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${currentSession?.user.id}`,
         {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
+          method: "POST",
+          headers: { "content-type": "application/json" },
         }
       );
       let u = await responseMember.json();
@@ -284,15 +292,18 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         noindex={false}
         nofollow={false}
         title={post.title}
-        description={post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...'}
+        description={post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "..."}
         additionalMetaTags={[
-          { name: 'title', content: post.title },
-          { name: 'og:title', content: post.title },
-          { name: 'og:description', content: (post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...') as string },
-          { name: 'twitter:title', content: post.title },
+          { name: "title", content: post.title },
+          { name: "og:title", content: post.title },
           {
-            name: 'twitter:description',
-            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, '') + '...') as string,
+            name: "og:description",
+            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "...") as string,
+          },
+          { name: "twitter:title", content: post.title },
+          {
+            name: "twitter:description",
+            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "...") as string,
           },
         ]}
       />
@@ -317,12 +328,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             <div className='text-xl font-bold'>{post.board.title}</div>
             <div className='flex justify-end gap-[10px]'>
               <ButtonLink
-                url={prevNext.prev !== null ? `/board/post/${prevNext.prev}` : '#'}
+                url={prevNext.prev !== null ? `/board/post/${prevNext.prev}` : "#"}
                 text='이전글'
                 icon={<ChevronUpIcon className='h-3' />}
               />
               <ButtonLink
-                url={prevNext.next !== null ? `/board/post/${prevNext.next}` : '#'}
+                url={prevNext.next !== null ? `/board/post/${prevNext.next}` : "#"}
                 text='다음글'
                 icon={<ChevronDownIcon className='h-3' />}
               />
@@ -344,7 +355,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                       {post.user?.nickname} [{post.user?.username}]
                     </p>
                     <p className='m-0 pt-[5px] text-[13px] leading-[16px] text-[#949494]'>
-                      {toDateTimeformat(post.created_at, '.')} 조회 {post.views}
+                      {toDateTimeformat(post.created_at, ".")} 조회 {post.views}
                     </p>
                   </div>
                   <div className='right ml-auto self-center md:flex items-center'>
@@ -356,7 +367,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         </span>
                       </div>
                       <span>
-                        URL{' '}
+                        URL{" "}
                         <span className='cursor-pointer hover:text-[#000]' onClick={handleUrlToClipboard}>
                           복사
                         </span>
@@ -366,7 +377,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                       <div className='md:flex gap-2 ml-2'>
                         <ButtonLink
                           url={`/board/write?board=${post.board.name}&mode=edit&id=${post.id}`}
-                          text={t['edit']}
+                          text={t["edit"]}
                           icon={<PencilIcon className='h-3' />}
                         />
                         <button
@@ -374,7 +385,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                           onClick={handleOpen}
                         >
                           <TrashIcon className='h-3' />
-                          {t['delete']}
+                          {t["delete"]}
                         </button>
                       </div>
                     )}
@@ -401,13 +412,14 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 }
                 className='flex text-black hover:underline items-center'
               >
-                <span className='mr-[8px]'>{post.user?.nickname}님의 게시글 더보기</span> <ChevronRightIcon className='w-[10px]' />
+                <span className='mr-[8px]'>{post.user?.nickname}님의 게시글 더보기</span>{" "}
+                <ChevronRightIcon className='w-[10px]' />
               </button>
             </div>
             <div className='comment' ref={commentListRef}>
               <div className='flex border-b border-gray-200 pb-[14px]'>
-                <span className='mr-[7px] cursor-pointer' onClick={() => handleReaction(reaction ? 'remove' : 'add')}>
-                  <HeartIcon className={`w-[18px] ${reaction ? 'text-red-500' : ''}`} />
+                <span className='mr-[7px] cursor-pointer' onClick={() => handleReaction(reaction ? "remove" : "add")}>
+                  <HeartIcon className={`w-[18px] ${reaction ? "text-red-500" : ""}`} />
                 </span>
                 <span className='text-[12px] pr-2'>좋아요 {reactionTotal}</span>
                 <span className='mr-[7px]'>
@@ -486,10 +498,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     ))}
                     <li
                       className={`${
-                        commentLoading ? 'flex' : 'hidden'
+                        commentLoading ? "flex" : "hidden"
                       } bg-white opacity-80 absolute left-0 top-0 right-0 bottom-0 justify-center items-center`}
                     >
-                      <SpinnerIcon pulse style={{ fontSize: '2em' }} />
+                      <SpinnerIcon pulse style={{ fontSize: "2em" }} />
                     </li>
                   </ul>
                 </div>
@@ -544,7 +556,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
             <div className='post-list border-t border-gray-400 text-base md:text-xs'>
               <div className='w-full'>
                 <div className='border-b border-gray-200 hidden md:flex font-bold'>
-                  <div className='text-center p-2 min-w-[80px]'>{postList.board ? '말머리' : ''}</div>
+                  <div className='text-center p-2 min-w-[80px]'>{postList.board ? "말머리" : ""}</div>
                   <div className='text-center p-2 flex-grow'>제목</div>
                   <div className='text-left p-2 min-w-[128px]'>작성자</div>
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
@@ -554,10 +566,15 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                   {postList?.posts?.map((post: PostType, idx: number) => {
                     const current = post.id === parseInt(router.query.id as string) ? true : false;
                     return (
-                      <div className={`border-b border-gray-200 md:flex ${current ? 'font-bold text-[#0a5dc2]' : ''}`} key={post.id}>
+                      <div
+                        className={`border-b border-gray-200 md:flex ${current ? "font-bold text-[#0a5dc2]" : ""}`}
+                        key={post.id}
+                      >
                         <div className='hidden md:block text-center p-2 min-w-[80px]'>
                           {post.category ? (
-                            <Link href={`/board/${postList?.board?.name}/${post.category?.id}`}>{post.category?.category}</Link>
+                            <Link href={`/board/${postList?.board?.name}/${post.category?.id}`}>
+                              {post.category?.category}
+                            </Link>
                           ) : (
                             post.id
                           )}
@@ -584,14 +601,14 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                               {JSON.parse(post.reaction).length}
                             </div>
                           )}
-                          {post.extra_01 === '1' && (
+                          {post.extra_01 === "1" && (
                             <span>
                               <TbPhotoCircle size={16} className='hidden md:block text-green-500' />
                             </span>
                           )}
-                          {post.extra_01 === '1' && (
+                          {post.extra_01 === "1" && (
                             <Image
-                              src={post.extra_02 || '/logo.png'}
+                              src={post.extra_02 || "/logo.png"}
                               width='56'
                               height='56'
                               alt='Image'
@@ -602,7 +619,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
                         <div className='flex gap-3 md:gap-0 px-4 pb-4 pt-1.5 md:p-0 text-gray-400 md:text-gray-600 text-xs'>
                           <div className='md:block text-left md:p-2 md:min-w-[128px]'>{post.user?.nickname}</div>
-                          <div className='md:block md:text-center md:p-2 md:min-w-[96px]'>{formatDate(post.created_at)}</div>
+                          <div className='md:block md:text-center md:p-2 md:min-w-[96px]'>
+                            {formatDate(post.created_at)}
+                          </div>
                           <div className='md:block md:text-center md:p-2 md:min-w-[48px]'>
                             <span className='md:hidden'>조회</span> {post.views}
                           </div>
@@ -630,17 +649,17 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         <dialog id='my_modal_1' className='modal'>
           <div className='modal-box rounded-md '>
             {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
-            <p className=''>{t['go-to-login-1']}</p>
-            <p className=''>{t['go-to-login-2']}</p>
+            <p className=''>{t["go-to-login-1"]}</p>
+            <p className=''>{t["go-to-login-2"]}</p>
             <div className='modal-action'>
               <form method='dialog'>
                 <Link
                   className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-2'
-                  href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+                  href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ""}`}
                 >
-                  {t['ok']}
+                  {t["ok"]}
                 </Link>
-                <button>{t['close']}</button>
+                <button>{t["close"]}</button>
               </form>
             </div>
           </div>
@@ -652,8 +671,8 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
 export const getServerSideProps = async (context: any) => {
   const req = context.req;
-  const page = (getCookie('page', { req }) as string) || '1';
-  const perPage = (getCookie('perPage', { req }) as string) || '20';
+  const page = (getCookie("page", { req }) as string) || "1";
+  const perPage = (getCookie("perPage", { req }) as string) || "20";
 
   // Get Member Information
   // let memberInfo = '';
@@ -669,8 +688,8 @@ export const getServerSideProps = async (context: any) => {
   // Get Post
   try {
     const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         id: context.query.id,
       }),
@@ -682,7 +701,7 @@ export const getServerSideProps = async (context: any) => {
     if (!post) {
       return {
         redirect: {
-          destination: '/board',
+          destination: "/board",
           permanent: false,
         },
       };
@@ -732,7 +751,7 @@ export const getServerSideProps = async (context: any) => {
   } catch (error) {
     return {
       redirect: {
-        destination: '/search',
+        destination: "/",
         permanent: false,
       },
     };

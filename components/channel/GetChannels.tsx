@@ -1,13 +1,13 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import { Channel } from '../../typings';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import ChannelAvatar from './ChannelAvatar';
-import { LiaUserSolid } from 'react-icons/lia';
-import { Skeleton } from '@mui/material';
-import axios from 'axios';
+import React, { FunctionComponent, useState, useEffect } from "react";
+import { Channel } from "../../typings";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import ChannelAvatar from "./ChannelAvatar";
+import { LiaUserSolid } from "react-icons/lia";
+import { Skeleton } from "@mui/material";
+import axios from "axios";
 
 type Props = {
   channels: Channel;
@@ -38,12 +38,12 @@ const GetChannels: FunctionComponent<Props> = ({
 }) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const style =
     bordered === true
-      ? 'p-4 border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300'
-      : '';
+      ? "p-4 border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300"
+      : "";
 
   // const style2 = 'text-white border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300';
   // background = 'bg-primary';
@@ -73,12 +73,14 @@ const GetChannels: FunctionComponent<Props> = ({
             )}
           </h2>
 
-          {desc === true && <p className='break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>}
+          {desc === true && (
+            <p className='break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1'>{channels.description}</p>
+          )}
         </Link>
         <div className='flex items-center justify-between text-xs text-gray-500 font-semibold'>
           <span className='flex gap-0.5 items-center'>
             <LiaUserSolid size={16} />
-            {t['subscribers']} {channels.subscription?.toLocaleString()}
+            {t["subscribers"]} {channels.subscription?.toLocaleString()}
           </span>
           {views === true && (
             <span>
@@ -100,8 +102,8 @@ const GetChannels: FunctionComponent<Props> = ({
                   <button
                     onClick={() => {
                       router.push({
-                        pathname: 'search',
-                        query: { q: '#' + tag.tag },
+                        pathname: "",
+                        query: { q: "#" + tag.tag },
                       });
                     }}
                     className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mb-0.5 rounded-full text-sm md:text-xs font-semibold hover:underline text-gray-700'
@@ -122,7 +124,7 @@ const GetChannelsSkeleton = () => {
   return (
     <Skeleton
       className={`relative flex md:rounded-xl p-4 gap-2.5 text-black `}
-      sx={{ bgcolor: 'grey.100' }}
+      sx={{ bgcolor: "grey.100" }}
       variant='rectangular'
       animation='wave'
       width={310}
@@ -134,9 +136,9 @@ GetChannels.defaultProps = {
   tag: true,
   views: true,
   bordered: true,
-  background: 'bg-white',
+  background: "bg-white",
   showType: false,
-  typeStyle: 'mt-3',
+  typeStyle: "mt-3",
   typeIcon: true,
   showCategory: false,
 };
