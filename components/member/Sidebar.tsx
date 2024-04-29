@@ -24,19 +24,19 @@ const Sidebar = ({ memberInfo }: any) => {
       id: 1,
       title: "내정보",
       icon: <UserIcon className='h-5' />,
-      link: "/member/profile",
+      link: "/board/profile",
     },
     {
       id: 2,
       title: "핀코인",
       icon: <StopCircleIcon className='h-5' />,
-      link: "/member/wallet",
+      link: "/board/wallet",
     },
     {
       id: 3,
       title: "상품구매내역",
       icon: <DocumentTextIcon className='h-5' />,
-      link: "/member/ads-history",
+      link: "/board/ads-history",
     },
     {
       id: 4,
@@ -62,7 +62,7 @@ const Sidebar = ({ memberInfo }: any) => {
                 <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                   <UserCircleIcon className='h-6 text-black' />
                   <span className='font-semibold'>
-                    <Link href='/member/profile'>{session?.user.nickname}</Link>
+                    <Link href='/board/profile'>{session?.user.nickname}</Link>
                   </span>
                   <button
                     onClick={() => signOut({ callbackUrl: "/" })}

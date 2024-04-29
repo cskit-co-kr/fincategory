@@ -1,21 +1,27 @@
-import { BoltIcon, CalendarDaysIcon, ChartBarSquareIcon, ClipboardDocumentListIcon, UsersIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
-import { useSession } from 'next-auth/react';
-import { NextSeo } from 'next-seo';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { Button, Loader, Message, useToaster } from 'rsuite';
-import { TypeAttributes } from 'rsuite/esm/@types/common';
-import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
+import {
+  BoltIcon,
+  CalendarDaysIcon,
+  ChartBarSquareIcon,
+  ClipboardDocumentListIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Button, Loader, Message, useToaster } from "rsuite";
+import { TypeAttributes } from "rsuite/esm/@types/common";
+import { PlacementType } from "rsuite/esm/toaster/ToastContainer";
 
-import { ChannelDetailLeftSidebar } from '../../../components/channel/ChannelDetailLeftSidebar';
-import { ChannelDetailNav } from '../../../components/channel/ChannelDetailNav';
+import { ChannelDetailLeftSidebar } from "../../../components/channel/ChannelDetailLeftSidebar";
+import { ChannelDetailNav } from "../../../components/channel/ChannelDetailNav";
 
-import ChannelComment from '../../../components/channel/ChannelComment';
-import { enUS } from '../../../lang/en-US';
-import { koKR } from '../../../lang/ko-KR';
-import RightSidebar from '../../../components/channel/RightSidebar';
+import ChannelComment from "../../../components/channel/ChannelComment";
+import { enUS } from "../../../lang/en-US";
+import { koKR } from "../../../lang/ko-KR";
+import RightSidebar from "../../../components/channel/RightSidebar";
 
 type TComment = {
   id: number;
@@ -44,13 +50,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
-  const [loadMoreText, setLoadMoreText] = useState<any>(t['load-more']);
+  const t = locale === "ko" ? koKR : enUS;
+  const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
   const [comments, setComments] = useState<Array<TComment>>([]);
-  const [review, setReview] = useState<string>('');
+  const [review, setReview] = useState<string>("");
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
-  const [placement, setPlacement] = useState<PlacementType>('topEnd');
+  const [placement, setPlacement] = useState<PlacementType>("topEnd");
 
   const message = (type: TypeAttributes.Status, message: string) => (
     <Message showIcon type={type} closable>
@@ -66,10 +72,10 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   useEffect(() => {
     const data = sub?.map((item: any) => {
       const date = new Date(item.created_at);
-      const formattedDate = date.toLocaleDateString(locale === 'ko' ? 'ko-KR' : 'en-US', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
+      const formattedDate = date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
       });
 
       return { name: formattedDate, sub: item.count };
@@ -89,8 +95,8 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
         offset: getCommentData.offset,
       },
       sort: {
-        field: 'created_at',
-        order: 'DESC',
+        field: "created_at",
+        order: "DESC",
       },
     });
 
@@ -101,7 +107,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
   };
 
   const handleLoadMore = async (getCommentData: any) => {
-    setLoadMoreText(<Loader content={t['loading-text']} />);
+    setLoadMoreText(<Loader content={t["loading-text"]} />);
     getCommentData.offset = getCommentData.offset + 10;
 
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/comment/list`, {
@@ -111,15 +117,15 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
         offset: getCommentData.offset,
       },
       sort: {
-        field: 'created_at',
-        order: 'DESC',
+        field: "created_at",
+        order: "DESC",
       },
     });
     const result = response.data;
     result.comments.length < 10 && setLoadMore(false);
 
     setComments(comments.concat(result.comments));
-    setLoadMoreText(t['load-more']);
+    setLoadMoreText(t["load-more"]);
   };
 
   // Save Comment
@@ -133,13 +139,13 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
     const result = response.data;
 
     if (response.status === 200) {
-      if (result.code === 201 && result.message === 'Inserted') {
-        toastShow('info', t['comment-saved']);
-        setReview('');
+      if (result.code === 201 && result.message === "Inserted") {
+        toastShow("info", t["comment-saved"]);
+        setReview("");
         getComments();
       }
     } else {
-      toastShow('error', t['login-to-comment']);
+      toastShow("error", t["login-to-comment"]);
     }
   };
 
@@ -156,11 +162,11 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
         title={channel.title}
         description={channel.description}
         additionalMetaTags={[
-          { name: 'title', content: `${channel.title} | FinCa ` },
-          { name: 'og:title', content: channel.title },
-          { name: 'og:description', content: channel.description },
-          { name: 'twitter:title', content: channel.title },
-          { name: 'twitter:description', content: channel.description },
+          { name: "title", content: `${channel.title} | FinCa ` },
+          { name: "og:title", content: channel.title },
+          { name: "og:description", content: channel.description },
+          { name: "twitter:title", content: channel.title },
+          { name: "twitter:description", content: channel.description },
         ]}
       />
       <div className='md:pt-7 bg-gray-50'>
@@ -169,7 +175,13 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
           <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
             <ChannelDetailNav channel={channel} />
             <div className='flex flex-col lg:flex-row-reverse gap-4'>
-              <RightSidebar channel={channel} data={data} averageViews={averageViews} averagePosts={averagePosts} averageErr={averageErr} />
+              <RightSidebar
+                channel={channel}
+                data={data}
+                averageViews={averageViews}
+                averagePosts={averagePosts}
+                averageErr={averageErr}
+              />
 
               <div className='gap-4 flex flex-col w-full'>
                 <div className='bg-[#f2f2f2]'>
@@ -188,18 +200,18 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                           disabled={review.trim().length > 0 ? false : true}
                           onClick={saveReview}
                         >
-                          {t['register']}
+                          {t["register"]}
                         </Button>
                       </>
                     ) : (
                       <div className='p-10'>
-                        <div className='text-center pb-5'>{t['login-to-comment']}</div>
+                        <div className='text-center pb-5'>{t["login-to-comment"]}</div>
                         <Button
                           appearance='primary'
                           className='bg-primary text-white py-2 px-5 text-center hover:text-white'
-                          onClick={() => router.push(`/member/signin?callbackUrl=/channel/${channel.username}/comments`)}
+                          onClick={() => router.push(`/board/signin?callbackUrl=/channel/${channel.username}/comments`)}
                         >
-                          {t['sign-in']}
+                          {t["sign-in"]}
                         </Button>
                       </div>
                     )}
@@ -208,11 +220,18 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
                 {comments.length !== 0 ? (
                   <div className='p-4 border border-gray-200 rounded-md bg-white'>
                     {comments.map((comment: any, index: number) => {
-                      return <ChannelComment comment={comment} userID={Number(session?.user.id)} fncToast={toastShow} key={comment.id} />;
+                      return (
+                        <ChannelComment
+                          comment={comment}
+                          userID={Number(session?.user.id)}
+                          fncToast={toastShow}
+                          key={comment.id}
+                        />
+                      );
                     })}
                   </div>
                 ) : (
-                  <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t['no-comments']}</div>
+                  <div className='text-center p-10 border border-gray-200 rounded-md bg-white'>{t["no-comments"]}</div>
                 )}
                 {loadMore && (
                   <div className='flex justify-center col-span-3'>
@@ -234,7 +253,7 @@ const Comments = ({ channel, sub, averageViews, averagePosts, averageErr }: any)
 };
 
 export const getServerSideProps = async (context: any) => {
-  const getId = context.query['id'];
+  const getId = context.query["id"];
   let averageViews = 0;
   let averagePosts = 0;
   let averageErr = 0;
@@ -242,12 +261,14 @@ export const getServerSideProps = async (context: any) => {
   const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
   const channel = response.data;
 
-  const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, { id: channel.channel_id });
+  const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, {
+    id: channel.channel_id,
+  });
   const sub = responseSub.data;
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    method: "POST",
+    headers: { "content-type": "application/json" },
     body: JSON.stringify({ channel_id: channel.channel_id }),
   });
   const combinedReturn = await res.json();
@@ -276,7 +297,7 @@ export const getServerSideProps = async (context: any) => {
       }, 0) / errPercent.length;
   }
 
-  if (channel !== '') {
+  if (channel !== "") {
     return {
       props: { channel, sub, averageViews, averagePosts, averageErr },
     };

@@ -26,7 +26,7 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType, typeIcon, sho
       <div className='absolute bottom-0 right-0 bg-primary rounded-tl-lg md:rounded-br-lg text-white text-[10px] px-2.5 py-[1px]'>
         ad
       </div>
-      <Link href={channel.channel_id ? `/channel/${channel.username}` : "/member/ads"} target='_blank'>
+      <Link href={channel.channel_id ? `/channel/${channel.username}` : "/board/ads"} target='_blank'>
         {channel.channel_id ? (
           <ChannelAvatar
             id={channel.channel_id}
@@ -46,7 +46,7 @@ const AdChannel2: FunctionComponent<Props> = ({ channel, showType, typeIcon, sho
       </Link>
       <div className='space-y-3 w-full'>
         <Link
-          href={channel.channel_id ? `/channel/${channel.username}` : "/member/ads"}
+          href={channel.channel_id ? `/channel/${channel.username}` : "/board/ads"}
           className='hover:no-underline hover:text-black'
           target='_blank'
         >

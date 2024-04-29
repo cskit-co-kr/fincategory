@@ -1,9 +1,9 @@
-import { getSession, useSession } from 'next-auth/react';
-import Sidebar from '../../components/member/Sidebar';
-import Image from 'next/image';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
+import { getSession, useSession } from "next-auth/react";
+import Sidebar from "../../components/member/Sidebar";
+import Image from "next/image";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
 import {
   QuestionMarkCircleIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -12,18 +12,18 @@ import {
   StopCircleIcon,
   UserCircleIcon,
   AtSymbolIcon,
-} from '@heroicons/react/24/outline';
-import Link from 'next/link';
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const Profile = ({ memberInfo, wallet }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/member/signin');
+      router.push("/board/signin");
     },
   });
 
@@ -31,35 +31,35 @@ const Profile = ({ memberInfo, wallet }: any) => {
 
   const cards = [
     {
-      title: '핀코인',
+      title: "핀코인",
       icon: <StopCircleIcon className='h-6 text-[#25A510]' />,
-      iconBg: 'bg-[#EAFFE7]',
-      link: '/member/wallet',
-      tooltip: '',
+      iconBg: "bg-[#EAFFE7]",
+      link: "/board/wallet",
+      tooltip: "",
       content: balance,
     },
     {
-      title: '상품구매내역',
+      title: "상품구매내역",
       icon: <DocumentTextIcon className='h-6 text-[#B61CEC]' />,
-      iconBg: 'bg-[#F7E1FF]',
-      link: '',
-      tooltip: '',
+      iconBg: "bg-[#F7E1FF]",
+      link: "",
+      tooltip: "",
       content: 0,
     },
     {
-      title: '내가 쓴 글',
+      title: "내가 쓴 글",
       icon: <PencilSquareIcon className='h-6 text-[#F6C619]' />,
-      iconBg: 'bg-[#FFF8DD]',
-      link: '',
-      tooltip: '',
+      iconBg: "bg-[#FFF8DD]",
+      link: "",
+      tooltip: "",
       content: memberInfo?.post,
     },
     {
-      title: '내가 쓴 댓글',
+      title: "내가 쓴 댓글",
       icon: <ChatBubbleBottomCenterTextIcon className='h-6 text-primary' />,
-      iconBg: 'bg-[#E3F0FF]',
-      link: '',
-      tooltip: '',
+      iconBg: "bg-[#E3F0FF]",
+      link: "",
+      tooltip: "",
       content: memberInfo?.comment,
     },
   ];
@@ -83,8 +83,8 @@ const Profile = ({ memberInfo, wallet }: any) => {
                 <span className='text-gray-400'>{session?.user.email}</span>
               </div>
               <div>
-                <button className='blue-button' onClick={() => router.push('/member/profile-edit')}>
-                  {t['edit-basic-info']}
+                <button className='blue-button' onClick={() => router.push("/board/profile-edit")}>
+                  {t["edit-basic-info"]}
                 </button>
               </div>
             </div>
@@ -103,7 +103,9 @@ const Profile = ({ memberInfo, wallet }: any) => {
                   </button>
                 </div>
                 <div className={`${card.iconBg} rounded-full p-3 w-fit justify-self-center`}>{card.icon}</div>
-                <div className='font-rubik font-semibold text-3xl md:text-4xl mt-2.5'>{card.content.toLocaleString()}</div>
+                <div className='font-rubik font-semibold text-3xl md:text-4xl mt-2.5'>
+                  {card.content.toLocaleString()}
+                </div>
                 <div className='text-gray-400 mt-4'>{card.title}</div>
               </Link>
             ))}
@@ -114,7 +116,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
               <AtSymbolIcon className='h-20 text-white' />
             </div>
             <span className='text-2xl mt-5'>텔레그램 채널을 추가하세요</span>
-            <button className='blue-button justify-self-center mt-5' onClick={() => router.push('/add')}>
+            <button className='blue-button justify-self-center mt-5' onClick={() => router.push("/add")}>
               채널 추가
             </button>
           </div>
@@ -126,13 +128,16 @@ const Profile = ({ memberInfo, wallet }: any) => {
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = "";
   const session = await getSession(context);
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
   }
 

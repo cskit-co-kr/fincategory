@@ -1,13 +1,13 @@
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import Sidebar from '../../components/member/Sidebar';
-import Ads1 from '../../public/ads1.png';
-import Ads2 from '../../public/ads-2.jpg';
-import Image from 'next/image';
-import { getSession, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import ModalAdsPurchaseConfirm from '../../components/member/ModalAdsPurchaseConfirm';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import Sidebar from "../../components/member/Sidebar";
+import Ads1 from "../../public/ads1.png";
+import Ads2 from "../../public/ads-2.jpg";
+import Image from "next/image";
+import { getSession, useSession } from "next-auth/react";
+import Link from "next/link";
+import ModalAdsPurchaseConfirm from "../../components/member/ModalAdsPurchaseConfirm";
 
 type ads = {
   id: string;
@@ -18,7 +18,7 @@ type ads = {
 const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activeProducts2 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, status } = useSession();
 
@@ -56,7 +56,7 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                 <div className='font-semibold'>나의 FinCoin</div>
                 <div>보유 : {balance} FinCoin </div>
                 <div className='text-[#f12323]'>
-                  <Link href='/member/fincoin-purchase'>[핀코인 구매하기]</Link>
+                  <Link href='/board/fincoin-purchase'>[핀코인 구매하기]</Link>
                 </div>
               </div>
               <div className='mt-6'>
@@ -66,8 +66,8 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
-                      {status === 'unauthenticated' ? (
-                        <Link href='/member/signin'>[구매하기]</Link>
+                      {status === "unauthenticated" ? (
+                        <Link href='/board/signin'>[구매하기]</Link>
                       ) : activeProducts < 9 ? (
                         <button
                           onClick={() => {
@@ -81,7 +81,13 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                       ) : (
                         <div className='text-red-500'>[매진]</div>
                       )}
-                      <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads1' userId={session?.user.id} />
+                      <ModalAdsPurchaseConfirm
+                        data={ad}
+                        balance={balance}
+                        modalId={index}
+                        adsGroup='ads1'
+                        userId={session?.user.id}
+                      />
                     </div>
                   </div>
                 ))}
@@ -113,7 +119,7 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                 <div className='font-semibold'>나의 FinCoin</div>
                 <div>보유 : {balance} FinCoin </div>
                 <div className='text-[#f12323]'>
-                  <Link href='/member/fincoin-purchase'>[핀코인 구매하기]</Link>
+                  <Link href='/board/fincoin-purchase'>[핀코인 구매하기]</Link>
                 </div>
               </div>
               <div className='mt-6'>
@@ -123,8 +129,8 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                     <div>{ad.duration}</div>
                     <div className='ml-3'>{ad.coin.toLocaleString()} FinCoin</div>
                     <div className='ml-10'>
-                      {status === 'unauthenticated' ? (
-                        <Link href='/member/signin'>[구매하기]</Link>
+                      {status === "unauthenticated" ? (
+                        <Link href='/board/signin'>[구매하기]</Link>
                       ) : activeProducts2 < 45 ? (
                         <button
                           onClick={() => {
@@ -138,7 +144,13 @@ const Ads = ({ memberInfo, wallet, section1, section2, activeProducts, activePro
                       ) : (
                         <div className='text-red-500'>[매진]</div>
                       )}
-                      <ModalAdsPurchaseConfirm data={ad} balance={balance} modalId={index} adsGroup='ads2' userId={session?.user.id} />
+                      <ModalAdsPurchaseConfirm
+                        data={ad}
+                        balance={balance}
+                        modalId={index}
+                        adsGroup='ads2'
+                        userId={session?.user.id}
+                      />
                     </div>
                   </div>
                 ))}
@@ -165,10 +177,13 @@ export const getServerSideProps = async (context: any) => {
   let wallet = null;
   const session = await getSession(context);
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);

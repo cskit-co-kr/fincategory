@@ -1,23 +1,23 @@
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
-import { Table, Pagination } from 'rsuite';
-import apiService from '../../lib/apiService';
-import { useSession } from 'next-auth/react';
-import { toDateTimeformat } from '../../lib/utils';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import { Table, Pagination } from "rsuite";
+import apiService from "../../lib/apiService";
+import { useSession } from "next-auth/react";
+import { toDateTimeformat } from "../../lib/utils";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const PurchaseHistory = () => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/member/signin');
+      router.push("/board/signin");
     },
   });
   const [page, setPage] = useState<number>(1);
@@ -46,7 +46,7 @@ const PurchaseHistory = () => {
       >
         <Column width={160}>
           <HeaderCell>일시</HeaderCell>
-          <Cell>{(rowData) => toDateTimeformat(rowData.created_at, '-')}</Cell>
+          <Cell>{(rowData) => toDateTimeformat(rowData.created_at, "-")}</Cell>
         </Column>
 
         <Column width={120} align='center'>
@@ -79,13 +79,13 @@ const PurchaseHistory = () => {
           <HeaderCell>상태</HeaderCell>
           <Cell>
             {(rowData) => {
-              if (rowData.state === 'waiting') {
+              if (rowData.state === "waiting") {
                 return <div className='text-yellow-500 font-semibold'>대기</div>;
-              } else if (rowData.state === 'success') {
+              } else if (rowData.state === "success") {
                 return <div className='text-green-500 font-semibold'>입금완료</div>;
-              } else if (rowData.state === 'noincome') {
+              } else if (rowData.state === "noincome") {
                 return <div className='text-orange-500 font-semibold'>미입금</div>;
-              } else if (rowData.state === 'return') {
+              } else if (rowData.state === "return") {
                 return <div className='text-red-500 font-semibold'>환불</div>;
               }
             }}

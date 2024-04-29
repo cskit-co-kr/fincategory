@@ -127,9 +127,6 @@ const MemberSignIn = () => {
                   <div>{t["sign-in"]}</div>
                 </button>
               </div>
-              {/* <div>
-                <button onClick={() => signIn('kakao', { callbackUrl: '/member/kakaoLogin' })}>Sign in with Kakao</button>
-              </div> */}
               <div className='mt-4 flex divide-x place-content-center'>
                 <div className='px-4'>
                   <button onClick={() => setPage("forgot")} className='underline'>
@@ -137,7 +134,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className='px-4'>
-                  <Link href={`/member/signup`} className='underline'>
+                  <Link href={`/board/signup`} className='underline'>
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -175,7 +172,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className='px-4'>
-                  <Link href={`/member/signup`} className='underline'>
+                  <Link href={`/board/signup`} className='underline'>
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -194,7 +191,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/member/profile",
+        destination: "/board/profile",
         permanent: false,
       },
     };

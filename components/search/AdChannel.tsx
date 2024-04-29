@@ -22,7 +22,7 @@ const AdChannel: FunctionComponent<Props> = ({ channel, showType }) => {
   return (
     <div className={`${style} relative flex rounded-xl gap-2.5 text-black bg-white mx-4 md:mx-0`}>
       <Image src='/ad.png' alt='' width={24} height={17} className='absolute -right-[7px] top-3' />
-      <Link href={channel.channel_id ? `/channel/${channel.username}` : "/member/ads"} target='_blank'>
+      <Link href={channel.channel_id ? `/channel/${channel.username}` : "/board/ads"} target='_blank'>
         {channel.channel_id ? (
           <ChannelAvatar
             id={channel.channel_id}
@@ -42,7 +42,7 @@ const AdChannel: FunctionComponent<Props> = ({ channel, showType }) => {
       </Link>
       <div className='space-y-3 w-full'>
         <Link
-          href={channel.channel_id ? `/channel/${channel.username}` : "/member/ads"}
+          href={channel.channel_id ? `/channel/${channel.username}` : "/board/ads"}
           className='hover:no-underline hover:text-black'
           target='_blank'
         >

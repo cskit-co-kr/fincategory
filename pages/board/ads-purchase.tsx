@@ -1,31 +1,31 @@
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
-import Sidebar from '../../components/member/Sidebar';
-import Link from 'next/link';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Sidebar from "../../components/member/Sidebar";
+import Link from "next/link";
 
 const FincoinPurchase = () => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/member/signin');
+      router.push("/board/signin");
     },
   });
 
   const showModal = () => {
-    const modal = document.getElementById('confirm') as HTMLDialogElement;
+    const modal = document.getElementById("confirm") as HTMLDialogElement;
     if (modal) {
       modal.showModal();
     }
   };
 
   const closeModal = () => {
-    const modal = document.getElementById('confirm') as HTMLDialogElement;
+    const modal = document.getElementById("confirm") as HTMLDialogElement;
     if (modal) {
       modal.close();
     }
@@ -54,12 +54,16 @@ const FincoinPurchase = () => {
                 <div className='w-1/4 font-semibold'>텔레그램 채널 ID:</div>
                 <div className='w-3/4 border border-gray-200 rounded-lg flex items-center'>
                   <div className='bg-gray-50 px-4 py-2 rounded-l-lg'>t.me/</div>
-                  <input type='text' className='w-full px-5 py-2 rounded-r-lg' placeholder='Input your channel name...' />
+                  <input
+                    type='text'
+                    className='w-full px-5 py-2 rounded-r-lg'
+                    placeholder='Input your channel name...'
+                  />
                   <div className='whitespace-nowrap pr-3 text-xs text-gray-400'>
-                    Not Found!{' '}
+                    Not Found!{" "}
                     <Link href='/add' target='_blank' className='text-primary underline'>
                       Click here
-                    </Link>{' '}
+                    </Link>{" "}
                     to add your channel first.
                   </div>
                 </div>
@@ -71,7 +75,10 @@ const FincoinPurchase = () => {
               </div>
 
               <div className='flex justify-center gap-4'>
-                <button className='blue-button bg-white border-2 border-primary text-primary' onClick={() => router.back()}>
+                <button
+                  className='blue-button bg-white border-2 border-primary text-primary'
+                  onClick={() => router.back()}
+                >
                   취소
                 </button>
                 <button className='blue-button border-2 border-primary' onClick={showModal}>

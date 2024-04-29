@@ -1,32 +1,32 @@
-import { getSession, useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import BoardSidebar from '../../components/board/BoardSidebar';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { BoardType, PostType } from '../../typings';
-import * as cheerio from 'cheerio';
-import { Loader } from 'rsuite';
-import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { SelectPicker } from 'rsuite';
+import { getSession, useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import BoardSidebar from "../../components/board/BoardSidebar";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { BoardType, PostType } from "../../typings";
+import * as cheerio from "cheerio";
+import { Loader } from "rsuite";
+import { ChevronDownIcon, ChevronUpIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { SelectPicker } from "rsuite";
 
-import 'react-quill/dist/quill.snow.css';
-import { formatDate } from '../../lib/utils';
+import "react-quill/dist/quill.snow.css";
+import { formatDate } from "../../lib/utils";
 
-const Quill = dynamic(import('react-quill'), {
+const Quill = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 const modules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }, { font: [] }],
+    [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image', 'video'],
-    ['clean'],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+    ["link", "image", "video"],
+    ["clean"],
   ],
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
@@ -34,60 +34,60 @@ const modules = {
   },
 };
 const formats = [
-  'header',
-  'font',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image',
-  'video',
-  'color',
-  'background',
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+  "color",
+  "background",
 ];
 
 const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(false);
   const [draftPopup, setDraftPopup] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [selectedBoard, setSelectedBoard] = useState<any>();
   const [selectedCategory, setSelectedCategory] = useState();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const handleContentChange = (newContent: any) => {
     const $ = cheerio.load(newContent);
-    const iframes = $('iframe');
+    const iframes = $("iframe");
     iframes.each((index, iframe) => {
-      const src = $(iframe).attr('src');
-      if (src?.includes('<iframe')) {
+      const src = $(iframe).attr("src");
+      if (src?.includes("<iframe")) {
         $(iframe).remove();
         alert("Don't add embed code. Only add video URL");
       }
     });
     let updatedContent = $.html();
-    updatedContent = updatedContent.replace(/<\/?(html|head|body)[^>]*>/gi, '');
+    updatedContent = updatedContent.replace(/<\/?(html|head|body)[^>]*>/gi, "");
     setContent(updatedContent);
   };
 
   const saveDraft = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
-    if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
+    if (selectedBoard === 0 || selectedBoard === "0") return alert("게시판을 선택해 주세요.");
+    if (title === "" || content === "") return alert("제목이나 내용을 입력해주세요.");
     setLoading(true);
-    if (router.query.mode === 'edit') {
+    if (router.query.mode === "edit") {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           title: title,
           content: content,
@@ -99,13 +99,13 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       });
       const result = await response.json();
       setLoading(false);
-      if (result.code === 201 && result.message === 'Updated') {
-        router.push('/board');
+      if (result.code === 201 && result.message === "Updated") {
+        router.push("/board");
       }
     } else {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           title: title,
           content: content,
@@ -118,20 +118,20 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       });
       const result = await response.json();
       setLoading(false);
-      if (result.code === 201 && result.message === 'Inserted') {
-        router.push('/board');
+      if (result.code === 201 && result.message === "Inserted") {
+        router.push("/board");
       }
     }
   };
 
   const savePost = async () => {
-    if (selectedBoard === 0 || selectedBoard === '0') return alert('게시판을 선택해 주세요.');
-    if (title === '' || content === '') return alert('제목이나 내용을 입력해주세요.');
+    if (selectedBoard === 0 || selectedBoard === "0") return alert("게시판을 선택해 주세요.");
+    if (title === "" || content === "") return alert("제목이나 내용을 입력해주세요.");
     setLoading(true);
-    if (router.query.mode === 'edit') {
+    if (router.query.mode === "edit") {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=editpost`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           title: title,
           content: content,
@@ -143,13 +143,13 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       });
       const result = await response.json();
       setLoading(false);
-      if (result.code === 201 && result.message === 'Updated') {
-        router.push(`/board/${router.query.board === undefined ? '' : router.query.board}`);
+      if (result.code === 201 && result.message === "Updated") {
+        router.push(`/board/${router.query.board === undefined ? "" : router.query.board}`);
       }
     } else {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=savepost`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           title: title,
           content: content,
@@ -162,8 +162,8 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
       });
       const result = await response.json();
       setLoading(false);
-      if (result.code === 201 && result.message === 'Inserted') {
-        router.push(`/board/${router.query.board === undefined ? '' : router.query.board}`);
+      if (result.code === 201 && result.message === "Inserted") {
+        router.push(`/board/${router.query.board === undefined ? "" : router.query.board}`);
       }
     }
   };
@@ -172,8 +172,8 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   const [postDraft, setPostDraft] = useState<any>([]);
   const getDraft = async () => {
     const resPostDraft = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getdraftpostlist`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
     });
     const data = await resPostDraft.json();
     setPostDraft(data);
@@ -184,14 +184,14 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   }, []);
 
   useEffect(() => {
-    if (router.query.mode === 'edit') {
+    if (router.query.mode === "edit") {
       setContent(post.content);
       setSelectedBoard(post.board.id);
       setTitle(post.title);
     } else {
-      setContent('');
+      setContent("");
       setSelectedBoard(0);
-      setTitle('');
+      setTitle("");
     }
     if (router.query.board) {
       allBoards.boards.find((board: BoardType) => {
@@ -205,10 +205,10 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
   }, [router]);
 
   const deletePost = async (id: any) => {
-    if (!session?.user) return alert('error');
+    if (!session?.user) return alert("error");
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         post: [id],
       }),
@@ -254,7 +254,8 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
                     className='border border-l-0 border-gray-200 rounded-r-md p-2 pl-3 font-semibold flex items-center gap-2 hover:underline'
                     onClick={() => setDraftPopup((prev) => !prev)}
                   >
-                    {postDraft?.total} {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                    {postDraft?.total}{" "}
+                    {draftPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                   </button>
                   {draftPopup && (
                     <div className='absolute top-[33px] right-0 border border-gray-200 bg-white p-4 flex max-w-xs z-10 rounded-md'>
@@ -263,7 +264,9 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
                           <li key={draft.id} className='flex items-center gap-2 justify-between'>
                             <Link
                               href=''
-                              onClick={() => router.push(`/board/write?mode=edit&id=${draft.id}`).then(() => setDraftPopup(false))}
+                              onClick={() =>
+                                router.push(`/board/write?mode=edit&id=${draft.id}`).then(() => setDraftPopup(false))
+                              }
                               className='p-2 truncate'
                             >
                               {draft.title}
@@ -357,7 +360,7 @@ const WritePost = ({ allBoards, groupsList, post, memberInfo }: any) => {
             formats={formats}
             theme='snow'
             onChange={handleContentChange}
-            style={{ height: '490px', marginBottom: '40px' }}
+            style={{ height: "490px", marginBottom: "40px" }}
             value={content}
           />
         </div>
@@ -371,26 +374,29 @@ export const getServerSideProps = async (context: any) => {
   if (!session?.user) {
     return {
       redirect: {
-        destination: '/member/signin', // Redirect to the login page if not logged in
+        destination: "/board/signin", // Redirect to the login page if not logged in
         permanent: false,
       },
     };
   }
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = "";
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
   }
   // Get Post
   let post = [];
-  if (session?.user && context.query.mode === 'edit' && context.query.id) {
+  if (session?.user && context.query.mode === "edit" && context.query.id) {
     const resPost = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         id: context.query.id,
       }),
@@ -400,18 +406,18 @@ export const getServerSideProps = async (context: any) => {
     if (!post) {
       return {
         redirect: {
-          destination: '/board',
+          destination: "/board",
           permanent: false,
         },
       };
     }
     if (session?.user.type === 2) {
-      console.log('ok');
+      console.log("ok");
     } else if (session?.user.id !== post.user.id) {
-      console.log('oh no');
+      console.log("oh no");
       return {
         redirect: {
-          destination: '/board',
+          destination: "/board",
           permanent: false,
         },
       };
@@ -420,14 +426,14 @@ export const getServerSideProps = async (context: any) => {
 
   // Get Group
   const responseGroup = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    method: "POST",
+    headers: { "content-type": "application/json" },
   });
   const groupsList = await responseGroup.json();
   // Get Boards List
   const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    method: "POST",
+    headers: { "content-type": "application/json" },
   });
   const allBoards = await response.json();
 

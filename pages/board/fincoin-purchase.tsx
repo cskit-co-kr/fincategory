@@ -1,15 +1,15 @@
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { useSession, getSession } from 'next-auth/react';
-import Sidebar from '../../components/member/Sidebar';
-import GuideImage from '../../public/fincoin-purchase-guide.png';
-import Image from 'next/image';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { Table } from 'rsuite';
-import { useEffect, useState } from 'react';
-import ModalFincoinPurchaseConfirm from '../../components/member/ModalFincoinPurchaseConfirm';
-import Link from 'next/link';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import { useSession, getSession } from "next-auth/react";
+import Sidebar from "../../components/member/Sidebar";
+import GuideImage from "../../public/fincoin-purchase-guide.png";
+import Image from "next/image";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Table } from "rsuite";
+import { useEffect, useState } from "react";
+import ModalFincoinPurchaseConfirm from "../../components/member/ModalFincoinPurchaseConfirm";
+import Link from "next/link";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -61,18 +61,18 @@ const data = [
 const FincoinPurchaseGuide = ({ memberInfo }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/member/signin');
+      router.push("/board/signin");
     },
   });
   const [purchaseInfo, setPurchaseInfo] = useState({
-    name: '',
-    phone: '',
-    email: '',
+    name: "",
+    phone: "",
+    email: "",
   });
   useEffect(() => {
     session && setPurchaseInfo({ ...purchaseInfo, email: session.user.email });
@@ -95,15 +95,15 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
 
   const showConfirm = () => {
     const updatedErrors = {
-      name: purchaseInfo.name === '' ? 'Please input name' : null,
-      phone: purchaseInfo.phone === '' ? 'Please input phone' : null,
-      email: purchaseInfo.email === '' ? 'Please input email' : null,
+      name: purchaseInfo.name === "" ? "Please input name" : null,
+      phone: purchaseInfo.phone === "" ? "Please input phone" : null,
+      email: purchaseInfo.email === "" ? "Please input email" : null,
     };
 
     setErrors(updatedErrors);
 
     if (!updatedErrors.name && !updatedErrors.phone && !updatedErrors.email) {
-      const modal = document.getElementById('my_modal_1') as any;
+      const modal = document.getElementById("my_modal_1") as any;
       modal?.showModal();
     }
   };
@@ -123,7 +123,15 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
           <div className='white-box'>
             <div className='text-xl font-bold'>핀코인 구매 안내</div>
             <div className='grid justify-center mt-[30px]'>
-              <Table data={data} width={690} onRowClick={rowClickHandle} bordered cellBordered autoHeight className='rounded-lg'>
+              <Table
+                data={data}
+                width={690}
+                onRowClick={rowClickHandle}
+                bordered
+                cellBordered
+                autoHeight
+                className='rounded-lg'
+              >
                 <Column width={50} align='center'>
                   <HeaderCell>선택</HeaderCell>
                   <Cell className='cursor-pointer'>
@@ -185,7 +193,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
                 <div>
                   <Link href='https://t.me/fincatele' target='_blank' className='font-bold underline'>
                     @fincatele
-                  </Link>{' '}
+                  </Link>{" "}
                   메시지로 입금방법 문의주세요
                 </div>
               </div>
@@ -201,10 +209,12 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
                     value={purchaseInfo.name}
                     onChange={(e) => setPurchaseInfo({ ...purchaseInfo, name: e.target.value })}
                   />
-                  {errors.name ? <div className='text-red-500 italic text-end'>{errors.name}</div> : ''}
+                  {errors.name ? <div className='text-red-500 italic text-end'>{errors.name}</div> : ""}
                 </div>
               </div>
-              <div className='px-5 py-2.5 border-b border-gray-100 font-semibold'>입금 오류 발생시 연락할 연락처 또는 이메일 주소</div>
+              <div className='px-5 py-2.5 border-b border-gray-100 font-semibold'>
+                입금 오류 발생시 연락할 연락처 또는 이메일 주소
+              </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
                 <div className='font-semibold'>
                   연락처<span className='text-red-500'>*</span>:
@@ -217,7 +227,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
                     value={purchaseInfo.phone}
                     onChange={(e) => setPurchaseInfo({ ...purchaseInfo, phone: e.target.value })}
                   />
-                  {errors.phone ? <div className='text-red-500 italic text-end'>{errors.phone}</div> : ''}
+                  {errors.phone ? <div className='text-red-500 italic text-end'>{errors.phone}</div> : ""}
                 </div>
               </div>
               <div className='grid grid-cols-2 px-5 py-3.5 border-b border-gray-100'>
@@ -232,7 +242,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
                     value={purchaseInfo.email}
                     onChange={(e) => setPurchaseInfo({ ...purchaseInfo, email: e.target.value })}
                   />
-                  {errors.email ? <div className='text-red-500 italic text-end'>{errors.email}</div> : ''}
+                  {errors.email ? <div className='text-red-500 italic text-end'>{errors.email}</div> : ""}
                 </div>
               </div>
               <button className='blue-button m-2.5 justify-self-center' onClick={showConfirm}>
@@ -255,13 +265,16 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = "";
   const session = await getSession(context);
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
   }
 

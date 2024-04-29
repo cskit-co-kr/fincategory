@@ -88,7 +88,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                       <priority>${priority3}</priority>
                     </url>
                     <url>
-                      <loc>https://test-fincat.fincategory.com/member/signin</loc>
+                      <loc>https://test-fincat.fincategory.com/board/signin</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>

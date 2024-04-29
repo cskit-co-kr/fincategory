@@ -118,19 +118,19 @@ const Header = () => {
       id: 1,
       title: "내정보",
       icon: <UserIcon className='h-5' />,
-      link: "/member/profile",
+      link: "/board/profile",
     },
     {
       id: 2,
       title: "핀코인",
       icon: <StopCircleIcon className='h-5' />,
-      link: "/member/wallet",
+      link: "/board/wallet",
     },
     {
       id: 3,
       title: "상품구매내역",
       icon: <DocumentTextIcon className='h-5' />,
-      link: "/member/ads-history",
+      link: "/board/ads-history",
     },
     {
       id: 4,
@@ -249,7 +249,7 @@ const Header = () => {
                         <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
                           <UserCircleIcon className='h-6 text-black' />
                           <span className='font-semibold text-base'>
-                            <Link href='/member/profile' className='flex gap-1' onClick={handleClick}>
+                            <Link href='/board/profile' className='flex gap-1' onClick={handleClick}>
                               {session?.user.nickname}
                               <Cog6ToothIcon className='h-4' />
                             </Link>
@@ -454,7 +454,7 @@ const Header = () => {
                         ref={browseRef}
                       >
                         <Link
-                          href='/member/profile'
+                          href='/board/profile'
                           onClick={() => setUserMenu(false)}
                           className='flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl'
                         >

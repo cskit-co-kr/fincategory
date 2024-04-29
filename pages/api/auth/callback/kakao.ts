@@ -13,6 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
   const result = await response.json();
   if (result.code === 200 && result.message === 'Inserted') {
-    console.log('/member/success');
+    console.log('/board/success');
   }
 }
