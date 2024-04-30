@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import apiService from "../../lib/apiService";
 import TransactionHistory from "../../components/wallet/TransactionHistory";
 import PurchaseHistory from "../../components/wallet/PurchaseHistory";
+import { NextSeo } from "next-seo";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -42,6 +43,13 @@ const Wallet = ({ memberInfo, wallet }: any) => {
 
   return (
     <>
+      <NextSeo
+        title={`핀코인`}
+        titleTemplate={`핀코인`}
+        noindex={true}
+        nofollow={true}
+        description={session?.user.nickname + ` ${session?.user.email}...`}
+      />
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
         <Sidebar memberInfo={memberInfo} />

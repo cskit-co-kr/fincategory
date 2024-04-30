@@ -13,6 +13,7 @@ import { koKR } from "../../lang/ko-KR";
 import { PostType } from "../../typings";
 import { formatDate } from "../../lib/utils";
 import { HTMLElementCustom } from "./post/[id]";
+import { NextSeo } from "next-seo";
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -230,6 +231,11 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   return (
     <>
+      <NextSeo
+        title={`핀카텔레 | ${postsList.board ? postsList.board.title : t["view-all-articles"]} -목록`}
+        titleTemplate={`핀카텔레 | ${postsList.board ? postsList.board.title : t["view-all-articles"]} -목록`}
+        description={postsList.board ? postsList.board.title : t["view-all-articles"] + ` | ${postsList.total} 개의 글`}
+      />
       <div className='flex gap-4 md:pt-7 md:bg-gray-50 text-base md:text-[13px]'>
         {/* Sidebar */}
         <BoardSidebar memberInfo={memberInfo} />

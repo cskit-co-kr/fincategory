@@ -11,7 +11,6 @@ import { Section1, Section1Skeleton } from "../components/search/Section1";
 import { Section2_1Skeleton, Section2_1 } from "../components/search/Section2_1";
 import { Section2_2, Section2_2Skeleton } from "../components/search/Section2_2";
 import { Skeleton } from "@mui/material";
-import HashtagScroll from "../components/HashtagScroll";
 import Section3 from "../components/search/Section3";
 import SearchFilterBar from "../components/search/SearchFilterBar";
 import Ads1 from "../components/search/Ads1";
@@ -19,6 +18,7 @@ import addAds2 from "../lib/ads2";
 import AdChannel2 from "../components/search/AdChannel2";
 import Hashtag from "../components/Hashtag";
 import HashtagMobile from "../components/HashtagMobile";
+import { NextSeo } from "next-seo";
 
 const Home = () => {
   const router = useRouter();
@@ -94,7 +94,8 @@ const Home = () => {
       data["channel_type"] = null;
       const channelsNew = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data?.channel)
+        .catch((e) => console.log(e));
       setChannelsNew(channelsNew);
     };
 
@@ -105,7 +106,8 @@ const Home = () => {
       data["channel_type"] = null;
       const channelsToday = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
 
       setChannelsToday(channelsToday);
       setChannelsTotalToday(channelsToday);
@@ -118,17 +120,20 @@ const Home = () => {
       data["channel_type"] = null;
       const channels24h = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
       // Get most increased subscriptions in 7d
       data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
       const channels7d = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
       // Get most increased subscriptions in 30d
       data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
       const channels30d = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
 
       setChannels24(channels24h);
       setChannels7d(channels7d);
@@ -152,7 +157,8 @@ const Home = () => {
       data["sort"] = { field: "total", order: "desc" };
       const channelsTotal = await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-        .then((response) => response.data.channel);
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
       setChannelsTotal(channelsTotal);
     };
     getTotal();
@@ -347,6 +353,11 @@ const Home = () => {
 
   return (
     <>
+      <NextSeo
+        title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        description={"2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"}
+      />
       <div className='flex flex-1 flex-col md:pt-7'>
         <div className='grid md:flex'>
           <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>

@@ -289,23 +289,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   return (
     <>
       <NextSeo
-        noindex={false}
-        nofollow={false}
-        title={post.title}
+        title={`핀카텔레 | ${post.title}`}
+        titleTemplate={`${post.title}--AI 관련 코인 어플깔아두기만해도 쌓이는거발견`}
         description={post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "..."}
-        additionalMetaTags={[
-          { name: "title", content: post.title },
-          { name: "og:title", content: post.title },
-          {
-            name: "og:description",
-            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "...") as string,
-          },
-          { name: "twitter:title", content: post.title },
-          {
-            name: "twitter:description",
-            content: (post.content?.substring(0, 120).replace(/<\/?p>/g, "") + "...") as string,
-          },
-        ]}
       />
       <Modal backdrop='static' role='alertdialog' open={open} onClose={handleClose} size='xs'>
         <Modal.Body>게시글을 삭제하시겠습니까?</Modal.Body>

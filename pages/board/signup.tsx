@@ -9,6 +9,7 @@ import { getSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { NextSeo } from "next-seo";
 
 const MemberSignUp = () => {
   const router = useRouter();
@@ -99,6 +100,11 @@ const MemberSignUp = () => {
 
   return (
     <>
+      <NextSeo
+        title={`핀카텔레 | ${t["sign-up"]}`}
+        titleTemplate={`핀카텔레 | ${t["sign-up"]}`}
+        description={`핀카텔레 | ${t["sign-up"]}`}
+      />
       <div className='gap-4 pt-7 bg-gray-50'>
         <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
           <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>

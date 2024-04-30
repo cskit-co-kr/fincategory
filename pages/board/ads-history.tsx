@@ -7,6 +7,7 @@ import { Table, Pagination } from "rsuite";
 import { useState, useEffect } from "react";
 import apiService from "../../lib/apiService";
 import { getDuration, toDateTimeformat } from "../../lib/utils";
+import { NextSeo } from "next-seo";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -52,6 +53,11 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
 
   return (
     <>
+      <NextSeo
+        title={`광고 | 핀카 상단광고, 첫페이지 광고`}
+        titleTemplate={`핀카 상단광고, 첫페이지 광고`}
+        description={"핀카 상단광고, 첫페이지 광고를 할수 있습니다. 핀코인 구매후 자유롭게 광고를 게제하세요."}
+      />
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         <Sidebar memberInfo={memberInfo} />
         <div className='mx-auto w-full px-5 md:px-0 gap-4'>

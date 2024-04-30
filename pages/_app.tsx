@@ -13,27 +13,13 @@ import Layout from "../components/layout";
 import { DataProvider } from "../context/context";
 import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
+import { url } from "inspector";
 
-interface CustomAppProps extends AppProps {
-  meta: any; // Replace 'any' with the actual type of your 'meta' property
-}
-
-function MyApp({ Component, pageProps, meta }: CustomAppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const env = process.env.NODE_ENV;
 
   const session = pageProps?.session;
-
-  // const [additionalMeta, setAdditionalMeta] = useState([]);
-  // const [title, setTitle] = useState('');
-  // const [titleTemplate, setTitleTemplate] = useState('');
-  // const [description, setDescription] = useState('');
-
-  const parsedMeta = meta.meta[0].meta.replace(/\n/g, "").replace(/'/g, '"');
-  const additionalMeta = JSON.parse(parsedMeta);
-  const title = meta.meta[0].title;
-  const titleTemplate = meta.meta[0].titleTemplate;
-  const description = meta.meta[0].description;
 
   useEffect(() => {
     const setVisit = async () => {
@@ -63,16 +49,31 @@ function MyApp({ Component, pageProps, meta }: CustomAppProps) {
 
   return (
     <>
-      <Head>
-        <link rel='icon' href='/favicon.ico' />
-        <link rel='apple-touch-icon' href='/logo.png' />
-        <meta name='naver-site-verification' content='42d7d5e1feda204b892be0e4ef58262cc9de279b' />
-      </Head>
       <DefaultSeo
-        title={title}
-        titleTemplate={titleTemplate}
-        description={description}
-        additionalMetaTags={additionalMeta}
+        title={"핀카텔레"}
+        additionalLinkTags={[
+          { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+          { rel: "apple-touch-icon", href: "/logo.png" },
+        ]}
+        openGraph={{
+          type: "website",
+          url: "https://www.finca.co.kr",
+          title: "핀카텔레",
+          description: "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에",
+          images: [{ url: "/favicon.ico" }],
+          site_name: "핀카텔레",
+        }}
+        additionalMetaTags={[
+          { name: "naver-site-verification", content: "42d7d5e1feda204b892be0e4ef58262cc9de279b" },
+          { name: "author", content: "핀카" },
+          {
+            name: "keywords",
+            content:
+              "텔레그램, 유빈아카이브, 코인텔레그램, 주식, 취미, k pop,  비트코인, 메타버스, NFT, 취미생활방, 코인왕, DeFi 농부 조선생, 크립토 트랜드, 코인 공지방, 주식급등일보, 가치투자클럽, 여의도스토리, 야뎊저장용, 🤍여캠&인스타&인플 모음🤍, 로직파일, 지옥열차, 심기불편한 시팡이 공부방",
+          },
+        ]}
+        titleTemplate={"핀카텔레"}
+        description={"2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"}
         twitter={{
           site: "finca.co.kr",
         }}

@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import { Loader } from "rsuite";
+import { NextSeo } from "next-seo";
 // import CryptoJS from 'crypto-js';
 
 const secretKey = "TemuulenGuai";
@@ -84,6 +85,11 @@ const MemberSignIn = () => {
 
   return (
     <>
+      <NextSeo
+        title={`핀카텔레 | ${t["sign-in"]}`}
+        titleTemplate={`핀카텔레 | ${t["sign-in"]}`}
+        description={`핀카텔레 | ${t["sign-in"]}`}
+      />
       <div className='gap-4 pt-7 bg-gray-50'>
         <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
           <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
