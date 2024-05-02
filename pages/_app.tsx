@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
 
   const session = pageProps?.session;
-
+  const bgWhite = router.asPath === "/privacy-policy" || router.asPath === "/terms";
   useEffect(() => {
     const setVisit = async () => {
       if (env !== "development") {
@@ -82,7 +82,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       {env === "development" ? "" : <GoogleAnalytics />}
       <SessionProvider session={session}>
         <DataProvider>
-          <Layout>
+          <Layout iswhite={bgWhite}>
             <NextNProgress color='#3886E2' height={2} options={{ showSpinner: false }} />
             <Component key={router.asPath} {...pageProps} />
           </Layout>
@@ -91,11 +91,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
-
-MyApp.getInitialProps = async () => {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/meta/read`);
-  const meta = await res.data;
-  return { meta };
-};
 
 export default MyApp;

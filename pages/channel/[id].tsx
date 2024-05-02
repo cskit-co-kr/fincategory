@@ -26,6 +26,7 @@ import { Skeleton } from "@mui/material";
 import { start } from "repl";
 import SubscriberChartMini from "../../components/channel/SubscriberChartMini";
 import RightSidebar from "../../components/channel/RightSidebar";
+import _ from "lodash";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -313,6 +314,14 @@ export const getServerSideProps = async (context: any) => {
 
   const channel = response.data;
 
+  if (_.isEmpty(channel) && getId === "ranking") {
+    return {
+      redirect: {
+        destination: "/ranking",
+        permanent: false,
+      },
+    };
+  }
   //   if (!channel) {
   //     return { notFound: true };
   //   }

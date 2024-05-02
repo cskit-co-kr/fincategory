@@ -3,20 +3,20 @@ import Header from "./Header";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-const Layout = ({ children }: any) => {
+const Layout = ({ children, iswhite }: any) => {
   return (
     <>
-      <div className="relative wrapper bg-gray-50">
+      <div className={`relative wrapper ${iswhite ? "bg-white" : "bg-gray-50"}`}>
         <Link
-          href="https://t.me/fincatele"
-          target="_blank"
-          className="hidden md:block fixed right-10 bottom-10 rounded-full shadow-lg bg-primary p-3 group z-[9999]"
+          href='https://t.me/fincatele'
+          target='_blank'
+          className='hidden md:block fixed right-10 bottom-10 rounded-full shadow-lg bg-primary p-3 group z-[9999]'
         >
-          <ChatBubbleLeftEllipsisIcon className="h-6 text-white group-hover:animate-spin" />
+          <ChatBubbleLeftEllipsisIcon className='h-6 text-white group-hover:animate-spin' />
         </Link>
         <Header />
         <main>
-          <div className="container" id="main">
+          <div className='container' id='main'>
             {children}
           </div>
         </main>

@@ -33,6 +33,15 @@ module.exports = {
   env: {
     PUBLIC_URL: "/",
   },
+  async redirects() {
+    return [
+      {
+        source: "/search",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
   poweredByHeader: false,
   // async headers() {
   //   return [

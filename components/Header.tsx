@@ -1,29 +1,32 @@
-import { useEffect, useState, useRef } from "react";
 import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
-  Cog6ToothIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-  UserCircleIcon,
   ChatBubbleBottomCenterTextIcon,
+  Cog6ToothIcon,
   DocumentTextIcon,
+  MagnifyingGlassIcon,
   PencilSquareIcon,
+  PlusIcon,
   StopCircleIcon,
+  UserCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { ChartBarIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
-import { FaCaretDown, FaTelegramPlane } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { enUS } from "../lang/en-US";
-import { koKR } from "../lang/ko-KR";
-import LanguageSelector from "./LanguageSelector";
-import { GroupType, MemberType } from "../typings";
+import { ChartBarIcon } from "@heroicons/react/24/solid";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useSession, signOut, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { FaCaretDown, FaTelegramPlane } from "react-icons/fa";
+import { HiArrowUp } from "react-icons/hi2";
+import { PiCurrencyKrwBold } from "react-icons/pi";
+import { RiBarChartHorizontalFill } from "react-icons/ri";
 import { Nav } from "rsuite";
 import useData from "../hooks/useData";
-import { PiCurrencyKrwBold } from "react-icons/pi";
+import { enUS } from "../lang/en-US";
+import { koKR } from "../lang/ko-KR";
+import { GroupType } from "../typings";
+import LanguageSelector from "./LanguageSelector";
+var moment = require("moment-timezone");
 
 const Header = () => {
   const router = useRouter();
@@ -41,6 +44,7 @@ const Header = () => {
   const [userMenu, setUserMenu] = useState(false);
   const [searchSection, setSearchSection] = useState(1);
   const [searchSectionMenu, setSearchSectionMenu] = useState(false);
+  const [isOpen, setOpen] = useState(true);
 
   const handleSubmit = () => {
     if (searchField !== "") {
@@ -241,9 +245,9 @@ const Header = () => {
                 </label>
               </div>
               <div className='drawer-side '>
-                <label htmlFor='my-drawer-4' className='drawer-overlay'></label>
-                <div className='menu p-2 w-80 bg-gray-100'>
-                  <div className='grid'>
+                <label htmlFor='my-drawer-4' className='drawer-overlay !fixed w-full top-0 right-0 !h-full'></label>
+                <div className='menu p-2 w-80 min-h-screen bg-gray-100'>
+                  <div className='grid mb-10'>
                     {session?.user ? (
                       <div className='flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4'>
                         <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
@@ -303,7 +307,7 @@ const Header = () => {
                       <div className='grid gap-2 my-3 bg-white p-4 rounded-xl shadow-sm'>
                         <Link className='font-semibold flex gap-2 items-center' href='/' onClick={handleClick}>
                           <FaTelegramPlane className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
-                          {t["search0"]}
+                          {t["home"]}
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/ranking' onClick={handleClick}>
                           <ChartBarIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
@@ -311,7 +315,7 @@ const Header = () => {
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/ads' onClick={handleClick}>
                           <PiCurrencyKrwBold className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
-                          광고 상품
+                          광고
                         </Link>
                         <Link className='font-semibold flex gap-2 items-center' href='/add' onClick={handleClick}>
                           <PlusIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
@@ -328,59 +332,62 @@ const Header = () => {
                             글쓰기
                           </Link>
                         )}
-                        <div className='border-b border-gray-200 pb-2 font-semibold'>
-                          <Link href='/board' onClick={handleClick} className='flex gap-1 items-center'>
-                            {t["view-all-articles"]}
-                          </Link>
+                        <div
+                          className='border-b border-gray-200 pb-2 font-semibold flex w-full relative items-center gap-2'
+                          onClick={() => setOpen(!isOpen)}
+                        >
+                          <div className='absolute right-0'>
+                            <HiArrowUp
+                              className={`mask mask-squircle h-6 w-6 bg-slate-100 text-gray-500 p-1 transition-transform duration-500 ${
+                                isOpen ? "" : "rotate-180"
+                              }`}
+                            />
+                          </div>
+                          <RiBarChartHorizontalFill className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />
+                          {t["board"]}
                         </div>
-                        <div className='flex flex-col gap-2 py-2'>
+                        <div
+                          className={`flex ml-3  flex-col gap-2 py-2 overflow-hidden transition-all duration-500 ${
+                            isOpen ? "h-[380px]" : "h-0"
+                          }`}
+                        >
                           {groups?.map((group: GroupType) =>
-                            group.id !== 99 ? (
-                              <div key={group.id} className='flex flex-col gap-2'>
-                                <div className='font-semibold py-1 flex gap-1 items-center'>{group.name}</div>
-                                {group.boards.map((board: any) => (
-                                  <Link
-                                    key={board.id}
-                                    href={`/board/${board.name}`}
-                                    className='ml-3'
-                                    onClick={handleClick}
-                                  >
-                                    {board.title}
-                                  </Link>
-                                ))}
-                              </div>
-                            ) : (
-                              group.boards.map((board: any) => (
-                                <Link
-                                  key={board.id}
-                                  href={`/board/${board.name}`}
-                                  className='py-1 font-semibold'
-                                  onClick={handleClick}
-                                >
-                                  {board.title}
-                                </Link>
-                              ))
-                            )
+                            group.boards.map((board: any) => (
+                              <Link key={board.id} href={`/board/${board.name}`} className='py-1' onClick={handleClick}>
+                                {board.title}
+                              </Link>
+                            ))
                           )}
                         </div>
                       </div>
                     </div>
-                    <div className='bg-white p-2 rounded-xl shadow-sm mt-3 w-full'>
-                      <Link href='mailto:jopaint@naver.com' className='flex items-center gap-2'>
-                        <EnvelopeIcon className='mask mask-squircle h-6 w-6 bg-primary text-white p-1' />{" "}
-                        jopaint@naver.com
-                      </Link>
-                    </div>
-                    <div className='font-raleway text-2xl flex gap-3 items-end mx-auto my-10'>
-                      <Link
-                        href='/'
-                        className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'
-                      >
-                        <span className='font-bold text-primary'>Fin</span>
-                        <span className=''>Ca</span>
-                      </Link>
-                      <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
-                    </div>
+                  </div>
+                  <div className='mt-auto font-raleway text-2xl flex gap-3 items-end mx-auto my-5'>
+                    <Link
+                      href='/'
+                      className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'
+                    >
+                      <span className='font-bold text-primary'>Fin</span>
+                      <span className=''>Ca</span>
+                    </Link>
+                    <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
+                  </div>
+                  <div className='text-center mb-5'>
+                    <p>
+                      씨스킷주식회사 |{" "}
+                      <a className='underline text-blue-400' href='tel:3098107535'>
+                        309 81 07535
+                      </a>
+                    </p>
+                    <p className='pr-4'>
+                      <a className='underline text-blue-400' href='mailto:cho@cskit.co.kr'>
+                        cho@cskit.co.kr
+                      </a>{" "}
+                      | @fincatele
+                    </p>
+                    <p className='mt-5'>
+                      (c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT Inc. all rights reserved.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -485,14 +492,9 @@ const Header = () => {
           </div>
           <nav className='text-sm font-bold items-center hidden md:flex flex-nowrap break-keep'>
             <ul className='flex'>
-              <li className='hidden'>
-                <button className={getPath === "/" ? activePath : normalPath} onClick={() => router.push("/")}>
-                  {t["home"]}
-                </button>
-              </li>
               <li>
                 <button className={getPath === "/" ? activePath : normalPath} onClick={() => router.push("/")}>
-                  {t["search0"]}
+                  {t["home"]}
                 </button>
               </li>
               <li>
@@ -504,27 +506,19 @@ const Header = () => {
                 </button>
               </li>
               <Nav className='mt-1 custom-nav-menu z-30 flex' appearance='subtle'>
-                {groups?.map((group: GroupType) =>
-                  group.id !== 99 ? (
-                    <Nav.Menu key={group.id} title={group.name}>
-                      {group.boards.map((board: any) => (
-                        <Nav.Item key={board.id} as={Link} href={`/board/${board.name}`}>
-                          {board.title}
-                        </Nav.Item>
-                      ))}
-                    </Nav.Menu>
-                  ) : (
+                <Nav.Menu title={t["board"]}>
+                  {groups?.map((group: GroupType) =>
                     group.boards.map((board: any) => (
                       <Nav.Item key={board.id} as={Link} href={`/board/${board.name}`}>
                         {board.title}
                       </Nav.Item>
                     ))
-                  )
-                )}
+                  )}
+                </Nav.Menu>
               </Nav>
               <li>
                 <button className={getPath === "/ads" ? activePath : normalPath} onClick={() => router.push("/ads")}>
-                  광고 상품
+                  광고
                 </button>
               </li>
             </ul>
