@@ -12,11 +12,11 @@ const PrivacyPolicy = () => {
   return (
     <div
       style={{ letterSpacing: "-1px" }}
-      className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:py-[101px]'
+      className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:p-[30px]'
     >
-      <div className='max-w-[1196px] w-full py-[46px] px-[22px] md:px-[41px]'>
-        <h1 className='leading-[26px] font-semibold text-[20px] mb-[14px] lg:mb-[35px]'>개인정보처리방침</h1>
-        <Text className='pb-[14px] md:pb-[44px]'>
+      <div className='max-w-[1196px] w-full'>
+        <h1 className='leading-[26px] font-semibold text-[20px] mb-[14px] lg:mb-[30px]'>개인정보처리방침</h1>
+        <Text className='pb-[15px]'>
           핀카(이하 '회사'라 합니다)는 고객님의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을
           준수하고 있습니다. 회사는 개인정보취급방침을 통하여 고객님께서 제공하시는 개인정보가 어떠한 용도와 방식으로
           이용되고 있으며, 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드리며 이에 회원은 제공된 개인 정보를
@@ -24,19 +24,19 @@ const PrivacyPolicy = () => {
           내용을 담고 있습니다.
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>1. 회원 본인이 기재한 개인정보 내용</HeadText>
-        <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
+        <HeadText className='pt-[30px]'>1. 회원 본인이 기재한 개인정보 내용</HeadText>
+        <Text className='pt-[11px] md:pt-[30px] pb-[15px]'>
           필수항목 : 회원 아이디, 회원 비밀번호, 닉네임, 이메일, 유튜브 채널아이디 수집방법 : 홈페이지(회원가입)
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>2. 개인정보 수집에 대한 동의</HeadText>
-        <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
+        <HeadText className='pt-[30px]'>2. 개인정보 수집에 대한 동의</HeadText>
+        <Text className='pt-[11px] md:pt-[30px] pb-[15px]'>
           회사는 이용자들이 회사의 개인정보 보호정책 또는 이용약관의 내용에 대하여 공지 하고 회원 가입 시 동의한 것으로
           간주한다
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>3. 개인정보의 수집목적 및 이용목적</HeadText>
-        <Text className='pt-[11px] md:pt-[35px]'>
+        <HeadText className='pt-[30px]'>3. 개인정보의 수집목적 및 이용목적</HeadText>
+        <Text className='pt-[11px] md:pt-[30px]'>
           ‘개인정보’라 함은 생존하는 개인에 관한 정보로서 정보에 포함되어 있는 성명, 휴대폰번호 등의 사항에 의해 당해
           개인을 식별할 수 있는 정보를 말한다. 대부분의 서비스는 별도의 사용자 등록이 없이 언제든지 사용할 수 있다.
           다만, 회사는 무료/유료 서비스 등을 통해 이용자들에게 맞춤식 서비스와 더 향상된 양질의 서비스를 제공하기 위해
@@ -57,8 +57,8 @@ const PrivacyPolicy = () => {
           4) 회사에 회원 본인이 기재한 개인정보는 개인맞춤 서비스를 제공하기 위해 수집되는 자료로 이용한다.
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>4. 개인정보 제3자 제공 및 공유</HeadText>
-        <Text className='pt-[11px] md:pt-[35px]'>
+        <HeadText className='pt-[30px]'>4. 개인정보 제3자 제공 및 공유</HeadText>
+        <Text className='pt-[11px] md:pt-[30px]'>
           ‘개인정보’라 함은 생존하는 개인에 관한 정보로서 정보에 포함되어 있는 성명, 휴대폰번호 등의 사항에 의해 당해
           개인을 식별할 수 있는 정보를 말한다. 대부분의 서비스는 별도의 사용자 등록이 없이 언제든지 사용할 수 있다.
           다만, 회사는 무료/유료 서비스 등을 통해 이용자들에게 맞춤식 서비스와 더 향상된 양질의 서비스를 제공하기 위해
@@ -80,8 +80,8 @@ const PrivacyPolicy = () => {
           관한 개인정보를 전송, 수집하기 전에 회원에게 그러한 사항을 공지 및 동의 절차를 거쳐서 제공할 수 있다.
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>5. 개인정보 보유 유효기간</HeadText>
-        <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
+        <HeadText className='pt-[30px]'>5. 개인정보 보유 유효기간</HeadText>
+        <Text className='pt-[11px] md:pt-[30px] pb-[15px]'>
           개인정보의 이용 및 보유기간은 회원가입시를 기점으로 하여 탈회 후 파기하는 것을 원칙으로 하되, 아래와 같은
           경우는 예외로 한다.
         </Text>
@@ -94,23 +94,23 @@ const PrivacyPolicy = () => {
           3) 대금결제 및 재화 등의 공급에 관한 기록 : 5년 <br />
           4) 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년
         </Text>
-        <HeadText className='pt-[29px] md:pt-[93px]'>
+        <HeadText className='pt-[30px]'>
           6. 개인정보 제공 동의 거부 권리 및 동의 거부 따른 불이익 내용 또는 제한사항
         </HeadText>
-        <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
+        <Text className='pt-[11px] md:pt-[30px] pb-[15px]'>
           귀하는 개인정보 제공 동의를 거부할 권리가 있으며 동의 거부에 따른 불이익은 없으나, 회사에서 제공되는 일체의
           안내 및 공지에 관한 서비스를 받을 수 없다.
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>7. 개인정보의 파기 절차 및 방법</HeadText>
-        <Text className='pt-[11px] md:pt-[35px]'>파기절차</Text>
+        <HeadText className='pt-[30px]'>7. 개인정보의 파기 절차 및 방법</HeadText>
+        <Text className='pt-[11px] md:pt-[30px]'>파기절차</Text>
         <Text className='pt-[17px] pl-[20px]'>
           {" "}
           <span className='-ml-2'>&#x2022;</span> 회원님이 회원가입 등을 위해 입력하신 정보는 목적이 달성된 후 회원정보
           DB에서 내부 방침 기타 관련 법령에 의한 정보보호 사유에 따라 일정 기간 저장된 후 파기된다. 동 개인정보는 법률에
           의한 경우가 아니고서는 다른 목적으로 이용되지 않는다.
         </Text>
-        <Text className='pt-[11px] md:pt-[35px]'>파기방법</Text>
+        <Text className='pt-[11px] md:pt-[30px]'>파기방법</Text>
         <Text className='pt-[17px] pl-[20px]'>
           {" "}
           <span className='-ml-2'>&#x2022;</span> 전자적 파일형태로 저장된 개인정보는 기록을 재생할 수 없는 기술적
@@ -121,7 +121,7 @@ const PrivacyPolicy = () => {
           <span className='-ml-2'>&#x2022;</span> 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>8. 이용자 및 법정대리인의 권리와 그 행사방법</HeadText>
+        <HeadText className='pt-[30px]'>8. 이용자 및 법정대리인의 권리와 그 행사방법</HeadText>
         <Text className='pt-[17px] pl-[20px]'>
           {" "}
           <span className='-ml-2'>&#x2022;</span> 이용자 및 법정 대리인은 언제든지 등록되어 있는 자신 혹은 당해 만 14세
@@ -136,8 +136,8 @@ const PrivacyPolicy = () => {
           처리하고 있다.
         </Text>
 
-        <HeadText className='pt-[29px] md:pt-[93px]'>9. 개인정보에 관한 민원 서비스</HeadText>
-        <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
+        <HeadText className='pt-[30px]'>9. 개인정보에 관한 민원 서비스</HeadText>
+        <Text className='pt-[11px] md:pt-[30px] pb-[15px]'>
           회사는 고객의 개인정보를 보호라고 개인정보과 관련한 불만을 처리하기 위해 아래와 같이 개인정보 책임자를
           지정하고 있다.
         </Text>
