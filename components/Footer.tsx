@@ -70,13 +70,9 @@ function Footer() {
           <div className='flex gap-2'>
             <p>씨스킷주식회사</p>
             <p>|</p>
-            <a className='underline text-blue-400' href='tel:3098107535'>
-              309 81 07535
-            </a>
+            <p>309 81 07535</p>
             <p>|</p>
-            <a className='underline text-blue-400' href='mailto:cho@cskit.co.kr'>
-              cho@cskit.co.kr
-            </a>
+            <p>cho@cskit.co.kr</p>
             <p>|</p>
             <p>@fincatele</p>
           </div>

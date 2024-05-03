@@ -374,16 +374,10 @@ const Header = () => {
                   </div>
                   <div className='text-center mb-5'>
                     <p>
-                      씨스킷주식회사 |{" "}
-                      <a className='underline text-blue-400' href='tel:3098107535'>
-                        309 81 07535
-                      </a>
+                      씨스킷주식회사 | <p>309 81 07535</p>
                     </p>
                     <p className='pr-4'>
-                      <a className='underline text-blue-400' href='mailto:cho@cskit.co.kr'>
-                        cho@cskit.co.kr
-                      </a>{" "}
-                      | @fincatele
+                      <p>cho@cskit.co.kr</p> | @fincatele
                     </p>
                     <p className='mt-5'>
                       (c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT Inc. all rights reserved.
