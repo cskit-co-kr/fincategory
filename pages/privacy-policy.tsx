@@ -14,7 +14,7 @@ const PrivacyPolicy = () => {
       style={{ letterSpacing: "-1px" }}
       className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:p-[30px]'
     >
-      <div className='max-w-[1196px] w-full'>
+      <div className='max-w-[1196px] w-full my-[20px]'>
         <h1 className='leading-[26px] font-semibold text-[20px] mb-[14px] lg:mb-[30px]'>개인정보처리방침</h1>
         <Text className='pb-[15px]'>
           핀카(이하 '회사'라 합니다)는 고객님의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을

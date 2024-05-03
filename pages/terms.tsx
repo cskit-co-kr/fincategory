@@ -12,7 +12,7 @@ const Terms = () => {
       style={{ letterSpacing: "-1px" }}
       className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:py-[30px]'
     >
-      <div className='max-w-[1196px] w-full '>
+      <div className='max-w-[1196px] w-full my-[20px]'>
         <h1 className='leading-[26px] font-semibold text-[20px]'>이용약관</h1>
         <HeadText className='pt-[30px] pb-[15px]'>제1장 총칙</HeadText>
 
