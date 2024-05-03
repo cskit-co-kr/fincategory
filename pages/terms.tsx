@@ -1,34 +1,28 @@
 import React from "react";
 
-const Border = () => (
-  <div className='flex gap-1 w-full'>
-    <div className='w-[10px] h-[1px] bg-[#3687E2]' />
-    <div className='w-full h-[1px] bg-[#EBEEEF]' />
-  </div>
-);
-
 const HeadText = ({ children, className }: any) => (
-  <div className={`text-base md:text-[20px] font-semibold md:leading-[30px] ${className}`}>{children}</div>
+  <div className={`text-base md:text-sm font-semibold ${className}`}>{children}</div>
 );
 
-const Text = ({ children, className }: any) => (
-  <div className={`md:leading-[33px] leading-5 text-sm md:text-base ${className}`}>{children}</div>
-);
+const Text = ({ children, className }: any) => <div className={` text-sm md:text-sm ${className}`}>{children}</div>;
 
 const Terms = () => {
   return (
-    <div style={{ letterSpacing: "-1px" }} className='w-full flex justify-center bg-white lg:py-[101px]'>
+    <div
+      style={{ letterSpacing: "-1px" }}
+      className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:py-[101px]'
+    >
       <div className='max-w-[1196px] w-full py-[46px] px-[22px] md:px-[41px]'>
         <h1 className='leading-[26px] font-semibold text-[20px]'>이용약관</h1>
         <HeadText className='py-5 lg:py-11'>제1장 총칙</HeadText>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제1조 목적</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           이 약관은 핀카(이하 "회사"라 합니다)가 제공하는 서비스(이용자가 PC, 멀티미디어 모바일 등의 각종 디지털기기
           또는 프로그램을 통하여 이용할 수 있도록 회사가 제공하는 모든 서비스를 의미합니다)와 관련하여, 회사와
           이용자간에 서비스 이용조건 및 절차, 권리ㆍ의무 및 책임사항 기타 필요한 사항을 규정함을 목적으로 합니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제2조 약관의 효력과 변경</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ① 이 약관은 ”회사”가 제공하는 모든 인터넷서비스에 게시하여 공시합니다. "회사"는 "약관의 규제에 관한 법률",
@@ -43,15 +37,15 @@ const Terms = () => {
           사항의 변경인 경우에는 30일) 내에 변경된 약관에 대해 거절의 의사를 표시하지 않았을 때에는 본 약관의 변경에
           동의한 것으로 간주합니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제3조 약관의 적용</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           이 약관에 명시되지 아니한 사항에 대하여는 별도의 세부 약관, 상관행, 회사의 공지, 이용안내, 관계법령에서 정한
           바에 따릅니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px] pb-[15px]'>제2장 이용계약의 체결</HeadText>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제4조 서비스의 구분</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ①"회사"가 이용자에게 제공하는 서비스는 무료서비스, 유료서비스 등으로 구분합니다.
@@ -60,7 +54,7 @@ const Terms = () => {
           ② 무료서비스, 유료서비스 등의 종류와 이용방법 등은 이 약관 및 "회사"가 공지 또는 이용안내에서 별도로 정하는
           바에 의합니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제5조 이용계약의 성립 및 체결단위</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ① 이용계약은 이용자의 이용신청에 대한 "회사"의 이용승낙으로 성립합니다.
@@ -69,7 +63,7 @@ const Terms = () => {
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           ③ "서비스"의 대량이용 등 특별한 "서비스" 이용에 관한 계약은 별도의 계약으로 합니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제6조 이용신청</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ① 이용자가 "서비스"의 이용을 원할 경우 인터넷 접속 등의 방식으로 "회사"가 소정의 가입신청 양식에서 요구하는
@@ -80,7 +74,7 @@ const Terms = () => {
           ③ 이용자가 전항의 고지 하단에 있는, 동의 버튼을 클릭하거나 또는 체크박스에 체크하고 이용신청을 하는 것은 이
           약관에 대한 동의로 간주됩니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제7조 이용신청의 승낙</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ① "회사"는 다음 각호에 해당하는 이용신청에 대하여는 승낙을 하지 아니 할 수 있습니다.
@@ -93,7 +87,7 @@ const Terms = () => {
           2. 이용자의 권익보호 및 의무 등에 관한 사항 <br />
           3. 기타 이용자가 "서비스" 이용 時 알아야 할 사항
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제8조 이용신청에 대한 불승낙과 승낙의 보류</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>① "회사"는 원칙적으로 이용자가 신청한대로 아이디를 부여합니다.</Text>
         <Text className='pt-[11px] md:pt-[35px]'>
@@ -111,7 +105,7 @@ const Terms = () => {
           <br />
           2. "서비스"에 장애가 있는 경우
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제9조 아이디 부여등</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>① "회사"는 원칙적으로 이용자가 신청한대로 아이디를 부여합니다.</Text>
         <Text className='pt-[11px] md:pt-[35px]'>② 아이디는 변경할 수 없는 것을 원칙으로 합니다.</Text>
@@ -119,9 +113,9 @@ const Terms = () => {
           ③ 아이디 또는 닉네임이 제12조 제6항 각호에 해당하는 경우에는 "회사"는 해당 이용자에 대한 "서비스" 제공을
           중단하고, 새로운 아이디 또는 닉네임으로 이용신청 할 것을 권할 수 있습니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px] pb-[15px]'>제3장 계약당사자의 의무</HeadText>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제10조 회사의 의무</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ①"회사"는 이용자로부터 제기되는 의견이나 불만이 정당하다고 인정할 경우에는 즉시 처리하여야 합니다. 다만, 즉시
@@ -148,14 +142,14 @@ const Terms = () => {
           ④ “회사”는 대표자의 성명, 상호, 주소, 전화번호, 모사전송번호(FAX), 통신판매업 신고번호, 이용약관,
           개인정보취급방침 등을 이용자가 쉽게 알 수 있도록 온라인 서비스 초기화면에 게시합니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제11조 개인정보보호</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           "회사"는 이용자들의 개인정보를 중요시하며, 정보통신망법, 개인정보보호법, 전기통신사업법 등 관련 법규를
           준수하고 있습니다. "회사"는 개인정보보호방침을 통하여 이용자가 제공하는 개인정보가 어떠한 용도와 방식으로
           이용되고 있으며 개인정보보호를 위해 어떠한 조치가 취해지고 있는지 알려드립니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[40px] md:pt-[80px]'>제12조 이용자의 의무</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ① 이용자는 회원가입을 통해 이용신청을 할 경우 사실에 근거하여 작성하여야 합니다. 이용자가 허위, 또는 타인의
@@ -226,7 +220,6 @@ const Terms = () => {
           <br />
           12. 수신자의 의사에 반하는 광고성 정보, 전자우편을 지속적으로 전송하는 경우
         </Text>
-        <Border />
       </div>
     </div>
   );

@@ -1,26 +1,21 @@
 import React from "react";
-const Border = () => (
-  <div className='flex gap-1 w-full'>
-    <div className='w-[10px] h-[1px] bg-[#3687E2]' />
-    <div className='w-full h-[1px] bg-[#EBEEEF]' />
-  </div>
-);
 
 const HeadText = ({ children, className }: any) => (
-  <div className={`text-[20px] font-semibold leading-[30px] ${className}`}>{children}</div>
+  <div className={`text-sm font-semibold ${className}`}>{children}</div>
 );
 
 const Text = ({ children, className }: any) => (
-  <div className={`md:leading-[33px] leading-5 text-xs md:text-base ${className}`}>{children}</div>
+  <div className={`md:leading-[33px] text-xs md:text-sm ${className}`}>{children}</div>
 );
 
 const PrivacyPolicy = () => {
   return (
-    <div style={{ letterSpacing: "-1px" }} className='w-full flex justify-center bg-white lg:py-[101px]'>
+    <div
+      style={{ letterSpacing: "-1px" }}
+      className='w-full flex justify-center bg-white md:rounded-xl md:border md:border-gray-200 md:mt-7 lg:py-[101px]'
+    >
       <div className='max-w-[1196px] w-full py-[46px] px-[22px] md:px-[41px]'>
-        <h1 className='leading-[26px] font-semibold text-[20px]'>개인정보처리방침</h1>
-        <div className='h-[15px] w-[15px] rounded-full border my-[14px] md:my-11 border-[#3687E2]' />
-
+        <h1 className='leading-[26px] font-semibold text-[20px] mb-[14px] lg:mb-[35px]'>개인정보처리방침</h1>
         <Text className='pb-[14px] md:pb-[44px]'>
           핀카(이하 '회사'라 합니다)는 고객님의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을
           준수하고 있습니다. 회사는 개인정보취급방침을 통하여 고객님께서 제공하시는 개인정보가 어떠한 용도와 방식으로
@@ -28,18 +23,18 @@ const PrivacyPolicy = () => {
           아래에 기재된 수집목적과 이용 목적에 따라 수집, 활용함에 동의해야합니다. 회사의 개인정보취급방침은 다음과 같은
           내용을 담고 있습니다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>1. 회원 본인이 기재한 개인정보 내용</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           필수항목 : 회원 아이디, 회원 비밀번호, 닉네임, 이메일, 유튜브 채널아이디 수집방법 : 홈페이지(회원가입)
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>2. 개인정보 수집에 대한 동의</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           회사는 이용자들이 회사의 개인정보 보호정책 또는 이용약관의 내용에 대하여 공지 하고 회원 가입 시 동의한 것으로
           간주한다
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>3. 개인정보의 수집목적 및 이용목적</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ‘개인정보’라 함은 생존하는 개인에 관한 정보로서 정보에 포함되어 있는 성명, 휴대폰번호 등의 사항에 의해 당해
@@ -61,7 +56,7 @@ const PrivacyPolicy = () => {
           3) 또한, 공지사항 전달, 불만처리, 알림 문자서비스 등 원활한 의사소통 경로로 이용한다. <br />
           4) 회사에 회원 본인이 기재한 개인정보는 개인맞춤 서비스를 제공하기 위해 수집되는 자료로 이용한다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>4. 개인정보 제3자 제공 및 공유</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>
           ‘개인정보’라 함은 생존하는 개인에 관한 정보로서 정보에 포함되어 있는 성명, 휴대폰번호 등의 사항에 의해 당해
@@ -84,13 +79,13 @@ const PrivacyPolicy = () => {
           3) 회사와 제휴시간에 공동 이벤트 기간 동안 수집된 정보의 전부 또는 일부를 제휴사와 공유할 수 있으며 회원에
           관한 개인정보를 전송, 수집하기 전에 회원에게 그러한 사항을 공지 및 동의 절차를 거쳐서 제공할 수 있다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>5. 개인정보 보유 유효기간</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           개인정보의 이용 및 보유기간은 회원가입시를 기점으로 하여 탈회 후 파기하는 것을 원칙으로 하되, 아래와 같은
           경우는 예외로 한다.
         </Text>
-        <Border />
+
         <Text className='pt-[17px] pl-[20px] pb-[15px]'>
           1) 충분한 법률적 근거가 필요한 경우 관계 법령에 적시된 보존기간 동안 보존한다.
           <br />
@@ -106,7 +101,7 @@ const PrivacyPolicy = () => {
           귀하는 개인정보 제공 동의를 거부할 권리가 있으며 동의 거부에 따른 불이익은 없으나, 회사에서 제공되는 일체의
           안내 및 공지에 관한 서비스를 받을 수 없다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>7. 개인정보의 파기 절차 및 방법</HeadText>
         <Text className='pt-[11px] md:pt-[35px]'>파기절차</Text>
         <Text className='pt-[17px] pl-[20px]'>
@@ -125,7 +120,7 @@ const PrivacyPolicy = () => {
           {" "}
           <span className='-ml-2'>&#x2022;</span> 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>8. 이용자 및 법정대리인의 권리와 그 행사방법</HeadText>
         <Text className='pt-[17px] pl-[20px]'>
           {" "}
@@ -140,13 +135,12 @@ const PrivacyPolicy = () => {
           개인정보는 ‘개인정보의 보유 및 이용기간’에 명시된 바에 따라 처리하고 그 외의 용도로 열람 또는 이용할 수 없도록
           처리하고 있다.
         </Text>
-        <Border />
+
         <HeadText className='pt-[29px] md:pt-[93px]'>9. 개인정보에 관한 민원 서비스</HeadText>
         <Text className='pt-[11px] md:pt-[35px] pb-[15px]'>
           회사는 고객의 개인정보를 보호라고 개인정보과 관련한 불만을 처리하기 위해 아래와 같이 개인정보 책임자를
           지정하고 있다.
         </Text>
-        <Border />
       </div>
     </div>
   );

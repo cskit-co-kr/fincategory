@@ -3,10 +3,10 @@ import Header from "./Header";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-const Layout = ({ children, iswhite }: any) => {
+const Layout = ({ children }: any) => {
   return (
     <>
-      <div className={`relative wrapper ${iswhite ? "bg-white" : "bg-gray-50"}`}>
+      <div className={`relative wrapper bg-gray-50`}>
         <Link
           href='https://t.me/fincatele'
           target='_blank'
