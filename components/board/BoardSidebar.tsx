@@ -15,6 +15,7 @@ import { koKR } from "../../lang/ko-KR";
 import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import Sidebar from "../member/Sidebar";
+import Image from "next/image";
 
 const BoardSidebar = ({ memberInfo }: any) => {
   const router = useRouter();
@@ -63,10 +64,11 @@ const BoardSidebar = ({ memberInfo }: any) => {
                   <Link
                     key={key}
                     href={`/board/${board.name}`}
-                    className={`focus:no-underline py-2 font-semibold ${board.name === name ? "text-primary" : ""} ${
-                      router.query.id && postBoardName === board.name ? "text-primary" : ""
-                    }`}
+                    className={`focus:no-underline py-1 items-center flex gap-2 ${
+                      board.name === name ? "text-primary" : ""
+                    } ${router.query.id && postBoardName === board.name ? "text-primary" : ""}`}
                   >
+                    <Image src='/Group.png' width={20} height={20} alt='group' className='h-3 w-3' />
                     {board.title}
                   </Link>
                 ))
