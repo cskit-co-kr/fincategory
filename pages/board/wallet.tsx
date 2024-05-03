@@ -1,25 +1,26 @@
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { useRouter } from 'next/router';
-import { getSession, useSession } from 'next-auth/react';
-import Sidebar from '../../components/member/Sidebar';
-import { Table, Pagination, Nav } from 'rsuite';
-import { useState, useEffect } from 'react';
-import apiService from '../../lib/apiService';
-import TransactionHistory from '../../components/wallet/TransactionHistory';
-import PurchaseHistory from '../../components/wallet/PurchaseHistory';
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { useRouter } from "next/router";
+import { getSession, useSession } from "next-auth/react";
+import Sidebar from "../../components/member/Sidebar";
+import { Table, Pagination, Nav } from "rsuite";
+import { useState, useEffect } from "react";
+import apiService from "../../lib/apiService";
+import TransactionHistory from "../../components/wallet/TransactionHistory";
+import PurchaseHistory from "../../components/wallet/PurchaseHistory";
+import { NextSeo } from "next-seo";
 
 const { Column, HeaderCell, Cell } = Table;
 
 const Wallet = ({ memberInfo, wallet }: any) => {
   const router = useRouter();
   const { locale }: any = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/member/signin');
+      router.push("/board/signin");
     },
   });
 
@@ -42,6 +43,13 @@ const Wallet = ({ memberInfo, wallet }: any) => {
 
   return (
     <>
+      <NextSeo
+        title={`핀코인`}
+        titleTemplate={`핀코인`}
+        noindex={true}
+        nofollow={true}
+        description={session?.user.nickname + ` ${session?.user.email}...`}
+      />
       <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
         {/* Sidebar */}
         <Sidebar memberInfo={memberInfo} />
@@ -51,17 +59,23 @@ const Wallet = ({ memberInfo, wallet }: any) => {
               내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
             </div>
             <div className='ml-auto mt-auto'>
-              <button className='gradient-button' onClick={() => router.push('/member/fincoin-purchase')}>
+              <button className='gradient-button' onClick={() => router.push("/board/fincoin-purchase")}>
                 핀코인 구매
               </button>
             </div>
           </div>
           <div className='white-box mt-4 p-[30px]'>
             <div className='flex gap-1 mb-4'>
-              <button className={`${activeTab === 1 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(1)}>
+              <button
+                className={`${activeTab === 1 ? "button-tab-active" : "button-tab"}`}
+                onClick={() => setActiveTab(1)}
+              >
                 핀코인
               </button>
-              <button className={`${activeTab === 2 ? 'button-tab-active' : 'button-tab'}`} onClick={() => setActiveTab(2)}>
+              <button
+                className={`${activeTab === 2 ? "button-tab-active" : "button-tab"}`}
+                onClick={() => setActiveTab(2)}
+              >
                 구매내역
               </button>
             </div>
@@ -103,13 +117,16 @@ const Wallet = ({ memberInfo, wallet }: any) => {
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = "";
   const session = await getSession(context);
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
   }
 

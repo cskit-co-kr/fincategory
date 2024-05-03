@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://finca.co.kr</loc><lastmod>2024-04-29T07:58:11.988Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/add</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/ads</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/ads-history</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/ads-purchase</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/fincoin-purchase</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/profile</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/profile-edit</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/signin</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/signup</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/success</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/wallet</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/board/write</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://finca.co.kr/ranking</loc><lastmod>2024-04-29T07:58:11.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+</urlset>

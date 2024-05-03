@@ -1,18 +1,19 @@
-import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
-import { setCookie, getCookie, hasCookie } from 'cookies-next';
-import { getSession, useSession } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { Loader, Pagination } from 'rsuite';
-import BoardSidebar from '../../components/board/BoardSidebar';
-import ListPostRow from '../../components/board/ListPostRow';
-import { enUS } from '../../lang/en-US';
-import { koKR } from '../../lang/ko-KR';
-import { PostType } from '../../typings';
-import { formatDate } from '../../lib/utils';
-import { HTMLElementCustom } from './post/[id]';
+import { ChevronDownIcon, ChevronUpIcon, ListBulletIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
+import { setCookie, getCookie, hasCookie } from "cookies-next";
+import { getSession, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { Loader, Pagination } from "rsuite";
+import BoardSidebar from "../../components/board/BoardSidebar";
+import ListPostRow from "../../components/board/ListPostRow";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
+import { PostType } from "../../typings";
+import { formatDate } from "../../lib/utils";
+import { HTMLElementCustom } from "./post/[id]";
+import { NextSeo } from "next-seo";
 
 const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
   const htmlElRef = useRef<HTMLInputElement | null>(null);
@@ -27,18 +28,18 @@ const useFocus = (): [React.RefObject<HTMLInputElement>, () => void] => {
 const Board = ({ allBoards, postList, memberInfo }: any) => {
   const router = useRouter();
   const { locale } = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
 
-  let initSearchTerm = 'title';
-  let initSearchTermText = t['st-title'];
-  if (router.query.show === 'posts') {
-    initSearchTerm = 'author';
-    initSearchTermText = t['st-author'];
-  } else if (router.query.show === 'comments') {
-    initSearchTerm = 'commenter';
-    initSearchTermText = t['st-commenter'];
+  let initSearchTerm = "title";
+  let initSearchTermText = t["st-title"];
+  if (router.query.show === "posts") {
+    initSearchTerm = "author";
+    initSearchTermText = t["st-author"];
+  } else if (router.query.show === "comments") {
+    initSearchTerm = "commenter";
+    initSearchTermText = t["st-commenter"];
   }
-  let initSearchInput = '';
+  let initSearchInput = "";
   if (router.query.member) {
     initSearchInput = router.query.member as string;
   } else if (router.query.q) {
@@ -56,15 +57,15 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const [loading, setLoading] = useState(false);
   const [clickCheck, setClickCheck] = useState(false);
-  const [viewPort, setViewPort] = useState('list');
+  const [viewPort, setViewPort] = useState("list");
 
   const [perpagePopup, setPerpagePopup] = useState(false);
   const [searchDatePopup, setSearchDatePopup] = useState(false);
   const [searchTermPopup, setSearchTermPopup] = useState(false);
-  const [searchDateText, setSearchDateText] = useState(t['whole-period']);
-  const [searchDate, setSearchDate] = useState('all');
-  const [searchStartDate, setSearchStartDate] = useState('');
-  const [searchEndDate, setSearchEndDate] = useState('');
+  const [searchDateText, setSearchDateText] = useState(t["whole-period"]);
+  const [searchDate, setSearchDate] = useState("all");
+  const [searchStartDate, setSearchStartDate] = useState("");
+  const [searchEndDate, setSearchEndDate] = useState("");
   const [searchInput, setSearchInput] = useState(initSearchInput);
   const [inputRef, setInputFocus] = useFocus();
   const [searchTerm, setSearchTerm] = useState(initSearchTerm);
@@ -81,28 +82,28 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   const setSearchDateHandler = (label: string, value: string) => {
     switch (value) {
-      case 'all':
-        setSearchStartDate('');
-        setSearchEndDate('');
+      case "all":
+        setSearchStartDate("");
+        setSearchEndDate("");
         break;
-      case '1day':
-        setSearchStartDate(getDate('1day') as string);
+      case "1day":
+        setSearchStartDate(getDate("1day") as string);
         setSearchEndDate(getToday());
         break;
-      case '1week':
-        setSearchStartDate(getDate('1week') as string);
+      case "1week":
+        setSearchStartDate(getDate("1week") as string);
         setSearchEndDate(getToday());
         break;
-      case '1month':
-        setSearchStartDate(getDate('1month') as string);
+      case "1month":
+        setSearchStartDate(getDate("1month") as string);
         setSearchEndDate(getToday());
         break;
-      case '6months':
-        setSearchStartDate(getDate('6months') as string);
+      case "6months":
+        setSearchStartDate(getDate("6months") as string);
         setSearchEndDate(getToday());
         break;
-      case '1year':
-        setSearchStartDate(getDate('1year') as string);
+      case "1year":
+        setSearchStartDate(getDate("1year") as string);
         setSearchEndDate(getToday());
         break;
       default:
@@ -119,29 +120,29 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   };
 
   const resetSearch = () => {
-    setSearchStartDate('');
-    setSearchEndDate('');
-    setSearchInput('');
-    setSearchTermHandler(t['st-title'], 'title');
+    setSearchStartDate("");
+    setSearchEndDate("");
+    setSearchInput("");
+    setSearchTermHandler(t["st-title"], "title");
   };
 
   // Get Posts List
   const getPostsList = async () => {
     setIsLoading(true);
     const boardQuery = router.query.name;
-    const board = boardQuery === undefined ? 'null' : boardQuery[0];
-    const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+    const board = boardQuery === undefined ? "null" : boardQuery[0];
+    const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : "null";
     const q = router.query.member ? router.query.member : router.query.q ? router.query.q : null;
 
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=${postsPerPage}&offset=${activePage}`,
       {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           search: {
-            start: searchStartDate === '' ? null : searchStartDate,
-            end: searchEndDate === '' ? null : searchEndDate,
+            start: searchStartDate === "" ? null : searchStartDate,
+            end: searchEndDate === "" ? null : searchEndDate,
             field: searchTerm,
             value: q,
           },
@@ -162,8 +163,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   useEffect(() => {
     setClickCheck((prev) => !prev);
     setPerpagePopup(false);
-    setCookie('perPage', postsPerPage);
-    setCookie('page', activePage);
+    setCookie("perPage", postsPerPage);
+    setCookie("page", activePage);
   }, [postsPerPage, activePage, viewPort]);
 
   // Checkbox functions
@@ -180,10 +181,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 
   // Admin delete post
   const deletePost = async () => {
-    if (checkedItems.length === 0) return alert('No items selected');
+    if (checkedItems.length === 0) return alert("No items selected");
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=deletepost`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({
         post: checkedItems,
       }),
@@ -214,29 +215,36 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
   // }, [postsPerPage]);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setClickCheck((prev) => !prev);
       e.target.blur();
     }
   };
   const handleWrite = () => {
     if (!session?.user) {
-      const element: HTMLElementCustom | null = document.getElementById('my_modal_1') as HTMLElementCustom;
+      const element: HTMLElementCustom | null = document.getElementById("my_modal_1") as HTMLElementCustom;
       element?.showModal();
     } else {
-      router.push(`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`);
+      router.push(`/board/write?board=${router.query.name !== undefined ? router.query.name : ""}`);
     }
   };
 
   return (
     <>
+      <NextSeo
+        title={`핀카텔레 | ${postsList.board ? postsList.board.title : t["view-all-articles"]} -목록`}
+        titleTemplate={`핀카텔레 | ${postsList.board ? postsList.board.title : t["view-all-articles"]} -목록`}
+        description={postsList.board ? postsList.board.title : t["view-all-articles"] + ` | ${postsList.total} 개의 글`}
+      />
       <div className='flex gap-4 md:pt-7 md:bg-gray-50 text-base md:text-[13px]'>
         {/* Sidebar */}
         <BoardSidebar memberInfo={memberInfo} />
         {/* Main */}
         <div className='w-full xl:w-[974px] md:border border-gray-200 bg-white rounded-lg md:p-[30px]'>
           <div className='flex items-center justify-between'>
-            <p className='text-xl font-bold p-4 md:p-0'>{postsList.board ? postsList.board.title : t['view-all-articles']}</p>
+            <p className='text-xl font-bold p-4 md:p-0'>
+              {postsList.board ? postsList.board.title : t["view-all-articles"]}
+            </p>
             <div className='p-4 md:p-0'>
               {/* <Link
                 className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white'
@@ -248,26 +256,27 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline rounded-md'
                 onClick={() => handleWrite()}
               >
-                {t['write']}
+                {t["write"]}
               </button>
             </div>
           </div>
           <div className='hidden md:flex justify-between items-center text-xs mt-4 pb-2.5'>
             <div className='text-[13px]'>{postsList.total} 개의 글</div>
             <div className='flex items-center gap-3 relative'>
-              <button onClick={() => setViewPort('list')}>
-                <ListBulletIcon className={`h-5 ${viewPort === 'list' && 'text-primary'}`} />
+              <button onClick={() => setViewPort("list")}>
+                <ListBulletIcon className={`h-5 ${viewPort === "list" && "text-primary"}`} />
               </button>
-              <button onClick={() => setViewPort('grid')}>
-                <Squares2X2Icon className={`h-5 ${viewPort === 'grid' && 'text-primary'}`} />
+              <button onClick={() => setViewPort("grid")}>
+                <Squares2X2Icon className={`h-5 ${viewPort === "grid" && "text-primary"}`} />
               </button>
-              {viewPort === 'list' && (
+              {viewPort === "list" && (
                 <>
                   <button
                     className='border border-gray-200 p-2 flex items-center gap-2 hover:underline'
                     onClick={() => setPerpagePopup((prev) => !prev)}
                   >
-                    {postsPerPage}개씩 {perpagePopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                    {postsPerPage}개씩{" "}
+                    {perpagePopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                   </button>
                   {perpagePopup && (
                     <ul className='absolute top-[33px] right-0 border border-gray-200 bg-white'>
@@ -303,10 +312,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
             </div>
           </div>
           <div className='border-t border-gray-400'>
-            {viewPort === 'list' && (
+            {viewPort === "list" && (
               <div className='w-full'>
                 <div className='border-b border-gray-200 hidden md:flex font-bold'>
-                  <div className='text-center p-2 min-w-[80px]'>{postsList.board ? '글번호' : ''}</div>
+                  <div className='text-center p-2 min-w-[80px]'>{postsList.board ? "글번호" : ""}</div>
                   <div className='text-center p-2 flex-grow'>제목</div>
                   <div className='text-left p-2 min-w-[128px]'>작성자</div>
                   <div className='text-center p-2 min-w-[96px]'>작성일</div>
@@ -333,16 +342,16 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 </div>
               </div>
             )}
-            {viewPort === 'grid' && (
+            {viewPort === "grid" && (
               <div className='w-full text-sm mt-4 grid md:grid-cols-4 gap-4'>
                 {postsList?.posts?.map(
                   (post: PostType) =>
-                    post.extra_01 === '1' && (
+                    post.extra_01 === "1" && (
                       <div className='' key={post.id}>
                         <div className=''>
                           <Link href={`/board/post/${post.id}`}>
                             <Image
-                              src={post.extra_02 || '/logo.png'}
+                              src={post.extra_02 || "/logo.png"}
                               width='200'
                               height='200'
                               alt='Image'
@@ -373,7 +382,10 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
           <div className=' flex items-center justify-items-end'>
             {session?.user && memberInfo?.member?.type === 2 && (
               <div>
-                <button className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline' onClick={() => deletePost()}>
+                <button
+                  className='bg-primary text-white py-2 px-5 text-xs text-center hover:underline'
+                  onClick={() => deletePost()}
+                >
                   선택삭제
                 </button>
               </div>
@@ -383,7 +395,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                 className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline rounded-md'
                 onClick={() => handleWrite()}
               >
-                {t['write']}
+                {t["write"]}
               </button>
             </div>
           </div>
@@ -409,41 +421,60 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     setSearchTermPopup(false);
                   }}
                 >
-                  {searchDateText} {searchDatePopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                  {searchDateText}{" "}
+                  {searchDatePopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                 </button>
                 {searchDatePopup && (
                   <ul className='absolute top-[33px] left-0 border border-gray-200 bg-white'>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['whole-period'], 'all')}>
-                        {t['whole-period']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["whole-period"], "all")}
+                      >
+                        {t["whole-period"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['1-day'], '1day')}>
-                        {t['1-day']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["1-day"], "1day")}
+                      >
+                        {t["1-day"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['1-week'], '1week')}>
-                        {t['1-week']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["1-week"], "1week")}
+                      >
+                        {t["1-week"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['1-month'], '1month')}>
-                        {t['1-month']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["1-month"], "1month")}
+                      >
+                        {t["1-month"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['6-months'], '6months')}>
-                        {t['6-months']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["6-months"], "6months")}
+                      >
+                        {t["6-months"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchDateHandler(t['1-year'], '1year')}>
-                        {t['1-year']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchDateHandler(t["1-year"], "1year")}
+                      >
+                        {t["1-year"]}
                       </button>
                     </li>
-                    <li className='p-2 border-t border-gray-200'>{t['enter-period']}</li>
+                    <li className='p-2 border-t border-gray-200'>{t["enter-period"]}</li>
                     <li className='flex gap-2 px-2 pb-2'>
                       <input
                         type='text'
@@ -464,8 +495,8 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                       <button
                         className='bg-primary text-white py-2 px-5 text-sm text-center hover:underline whitespace-nowrap'
                         onClick={() => {
-                          setSearchDate(searchStartDate + '&' + searchEndDate);
-                          setSearchDateText(searchStartDate + ' - ' + searchEndDate);
+                          setSearchDate(searchStartDate + "&" + searchEndDate);
+                          setSearchDateText(searchStartDate + " - " + searchEndDate);
                           setSearchDatePopup(false);
                           setInputFocus();
                         }}
@@ -484,28 +515,41 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                     setSearchDatePopup(false);
                   }}
                 >
-                  {searchTermText} {searchTermPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
+                  {searchTermText}{" "}
+                  {searchTermPopup ? <ChevronUpIcon className='h-3' /> : <ChevronDownIcon className='h-3' />}
                 </button>
                 {searchTermPopup && (
                   <ul className='absolute top-[33px] left-0 border border-gray-200 bg-white'>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchTermHandler(t['st-title'], 'title')}>
-                        {t['st-title']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchTermHandler(t["st-title"], "title")}
+                      >
+                        {t["st-title"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchTermHandler(t['st-author'], 'author')}>
-                        {t['st-author']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchTermHandler(t["st-author"], "author")}
+                      >
+                        {t["st-author"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchTermHandler(t['st-comment'], 'comment')}>
-                        {t['st-comment']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchTermHandler(t["st-comment"], "comment")}
+                      >
+                        {t["st-comment"]}
                       </button>
                     </li>
                     <li>
-                      <button className='perpage w-full text-left' onClick={() => setSearchTermHandler(t['st-commenter'], 'commenter')}>
-                        {t['st-commenter']}
+                      <button
+                        className='perpage w-full text-left'
+                        onClick={() => setSearchTermHandler(t["st-commenter"], "commenter")}
+                      >
+                        {t["st-commenter"]}
                       </button>
                     </li>
                   </ul>
@@ -514,7 +558,7 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
               <input
                 type='text'
                 name='searchPost'
-                placeholder={t['enter-search-term']}
+                placeholder={t["enter-search-term"]}
                 className='border border-gray-200 p-2'
                 value={searchInput}
                 ref={inputRef}
@@ -530,24 +574,24 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
                   //getPostsList();
                 }}
               >
-                {t['search0']}
+                {t["search0"]}
               </button>
             </div>
           </div>
           <dialog id='my_modal_1' className='modal'>
             <div className='modal-box rounded-md '>
               {/* <h3 className="font-bold text-lg">{t['warning-text']}</h3> */}
-              <p className=''>{t['go-to-login-1']}</p>
-              <p className=''>{t['go-to-login-2']}</p>
+              <p className=''>{t["go-to-login-1"]}</p>
+              <p className=''>{t["go-to-login-2"]}</p>
               <div className='modal-action'>
                 <form method='dialog'>
                   <Link
                     className='bg-primary text-white py-2 px-5 text-sm text-center hover:text-white rounded-md mr-4'
-                    href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ''}`}
+                    href={`/board/write?board=${router.query.name !== undefined ? router.query.name : ""}`}
                   >
-                    {t['ok']}
+                    {t["ok"]}
                   </Link>
-                  <button>{t['close']}</button>
+                  <button>{t["close"]}</button>
                 </form>
               </div>
             </div>
@@ -561,9 +605,9 @@ const Board = ({ allBoards, postList, memberInfo }: any) => {
 function getToday() {
   const today = new Date();
   const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const formattedDate = year + '-' + month + '-' + day;
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDate = year + "-" + month + "-" + day;
   return formattedDate;
 }
 function getDate(interval: any) {
@@ -571,19 +615,19 @@ function getDate(interval: any) {
   let fromDate = new Date();
 
   switch (interval) {
-    case '1day':
+    case "1day":
       fromDate.setDate(today.getDate() - 1);
       break;
-    case '1week':
+    case "1week":
       fromDate.setDate(today.getDate() - 7);
       break;
-    case '1month':
+    case "1month":
       fromDate.setMonth(today.getMonth() - 1);
       break;
-    case '6months':
+    case "6months":
       fromDate.setMonth(today.getMonth() - 6);
       break;
-    case '1year':
+    case "1year":
       fromDate.setFullYear(today.getFullYear() - 1);
       break;
     default:
@@ -591,39 +635,42 @@ function getDate(interval: any) {
       return null;
   }
   const year = fromDate.getFullYear();
-  const month = String(fromDate.getMonth() + 1).padStart(2, '0');
-  const day = String(fromDate.getDate()).padStart(2, '0');
+  const month = String(fromDate.getMonth() + 1).padStart(2, "0");
+  const day = String(fromDate.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
-  let memberInfo = '';
+  let memberInfo = "";
   const session = await getSession(context);
   if (session?.user) {
-    const responseMember = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    });
+    const responseMember = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      }
+    );
     memberInfo = await responseMember.json();
   }
   try {
     // Get Boards List
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getallboardslist`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      method: "POST",
+      headers: { "content-type": "application/json" },
     });
     const allBoards = await response.json();
 
     // Get Posts List
     const boardQuery = context.query.name;
-    const board = boardQuery === undefined ? 'null' : boardQuery[0];
-    const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : 'null';
+    const board = boardQuery === undefined ? "null" : boardQuery[0];
+    const category = boardQuery !== undefined && boardQuery.length > 1 ? boardQuery[1] : "null";
     const responsePost = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=${board}&category=${category}&postsperpage=20`,
       {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
       }
     );
     const postList = await responsePost.json();
@@ -634,7 +681,7 @@ export const getServerSideProps = async (context: any) => {
   } catch (error) {
     return {
       redirect: {
-        destination: '/search',
+        destination: "/",
         permanent: false,
       },
     };

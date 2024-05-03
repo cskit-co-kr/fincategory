@@ -1,19 +1,19 @@
 /** @type {import('next').NextConfig} */
 
-const webpack = require('webpack');
+const webpack = require("webpack");
 
 module.exports = {
   reactStrictMode: false,
   webpack(config) {
     config.module.rules.push({
       test: /.svg$/,
-      use: ['@svgr/webpack'],
+      use: ["@svgr/webpack"],
     });
     return config;
   },
   i18n: {
-    locales: ['ko', 'en'],
-    defaultLocale: 'ko',
+    locales: ["ko", "en"],
+    defaultLocale: "ko",
     localeDetection: false,
   },
   images: {
@@ -21,23 +21,23 @@ module.exports = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**.telegram-cdn.org',
+        protocol: "https",
+        hostname: "**.telegram-cdn.org",
       },
       {
-        protocol: 'https',
-        hostname: '**.fincategory.com',
+        protocol: "https",
+        hostname: "**.fincategory.com",
       },
     ],
   },
   env: {
-    PUBLIC_URL: '/',
+    PUBLIC_URL: "/",
   },
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/search',
+        source: "/search",
+        destination: "/",
         permanent: true,
       },
     ];

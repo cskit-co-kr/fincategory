@@ -1,4 +1,9 @@
-
+# *
 User-agent: *
 Allow: /
-Disallow: /node_modules
+
+# Host
+Host: https://finca.co.kr
+
+# Sitemaps
+Sitemap: https://finca.co.kr/sitemap.xml

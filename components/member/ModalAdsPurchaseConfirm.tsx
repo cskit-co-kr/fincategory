@@ -1,33 +1,33 @@
-import { Loader, Notification, useToaster, Checkbox } from 'rsuite';
-import apiService from '../../lib/apiService';
-import Image from 'next/image';
-import Link from 'next/link';
-import axios from 'axios';
-import { useState } from 'react';
-import ChannelAvatar from '../channel/ChannelAvatar';
-import { AiFillCheckCircle } from 'react-icons/ai';
+import { Loader, Notification, useToaster, Checkbox } from "rsuite";
+import apiService from "../../lib/apiService";
+import Image from "next/image";
+import Link from "next/link";
+import axios from "axios";
+import { useState } from "react";
+import ChannelAvatar from "../channel/ChannelAvatar";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: any) => {
   const toaster = useToaster();
 
   const [lowBalance, setLowBalance] = useState<string | null>(null);
   const [channelError, setChannelError] = useState<string | null>(null);
-  const [channel, setChannel] = useState('');
+  const [channel, setChannel] = useState("");
   const [checkUser, setCheckUser] = useState<string | null>(null);
   const [checkUsernameLoading, setCheckUsernameLoading] = useState(false);
   const [checkChannel, setCheckChannel] = useState<any | null>(null);
   const extractUsername = (input: any) => {
     let arr = [];
-    let text = '';
+    let text = "";
 
-    if (input.includes('+')) {
-      arr = input.split('+');
+    if (input.includes("+")) {
+      arr = input.split("+");
       text = arr.reverse()[0];
-    } else if (input.includes('@')) {
-      arr = input.split('@');
+    } else if (input.includes("@")) {
+      arr = input.split("@");
       text = arr.reverse()[0];
-    } else if (input.includes('/')) {
-      arr = input.split('/');
+    } else if (input.includes("/")) {
+      arr = input.split("/");
       text = arr.reverse()[0];
     } else {
       text = input;
@@ -35,7 +35,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
     return text;
   };
   const checkUsername = async () => {
-    if (channel !== '') {
+    if (channel !== "") {
       setCheckUsernameLoading(true);
       setCheckUser(null);
       setCheckChannel(null);
@@ -44,10 +44,10 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
       const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
       const data = await res.data;
       if (data.existed) {
-        setCheckUser('Channel existed in our database!');
+        setCheckUser("Channel existed in our database!");
         setCheckChannel(data);
       } else {
-        setCheckUser('입력하신 채널/그룹은 핀카에 없습니다. ');
+        setCheckUser("입력하신 채널/그룹은 핀카에 없습니다. ");
       }
       setCheckUsernameLoading(false);
     }
@@ -55,9 +55,9 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
 
   const submitPurchase = async () => {
     if (balance < data.coin) {
-      return setLowBalance('잔액이 부족합니다.');
+      return setLowBalance("잔액이 부족합니다.");
     } else if (!checkChannel) {
-      return setChannelError('Input valid Channel');
+      return setChannelError("Input valid Channel");
     } else {
       const d = {
         product_info_id: data.id,
@@ -67,7 +67,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
       const result = await apiService.saveAdsPurchase(d);
 
       if (result.code === 400) {
-        alert('Sold Out');
+        alert("Sold Out");
       } else if (result.code === 201) {
         const modal = document.getElementById(`${adsGroup}_modal_${modalId}`) as any;
         modal?.close();
@@ -81,13 +81,13 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
           </Notification>
         );
 
-        toaster.push(message, { placement: 'topCenter' });
+        toaster.push(message, { placement: "topCenter" });
       }
     }
   };
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       checkUsername();
     }
   };
@@ -105,7 +105,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             <div>
               <input
                 className='border border-[#d9d9d9] rounded-md px-3 py-2 w-full'
-                value={`${adsGroup === 'ads1' ? '최상단 배너' : '첫 페이지 노출'} ${data.duration}`}
+                value={`${adsGroup === "ads1" ? "최상단 배너" : "첫 페이지 노출"} ${data.duration}`}
                 disabled
               />
             </div>
@@ -124,7 +124,7 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             <div className='font-semibold'>텔레그램 채널/그룹 ID</div>
             <div className='flex gap-2 relative'>
               <input
-                className={`border rounded-md px-3 py-2 w-full ${channelError ? 'border-red-500' : 'border-[#d9d9d9]'}`}
+                className={`border rounded-md px-3 py-2 w-full ${channelError ? "border-red-500" : "border-[#d9d9d9]"}`}
                 placeholder='광고할 채널/그룹 ID를 입력하세요.'
                 value={channel}
                 onChange={(e: any) => setChannel(e.target.value)}
@@ -168,11 +168,11 @@ const ModalAdsPurchaseConfirm = ({ data, balance, modalId, adsGroup, userId }: a
             <div className='font-semibold'>사용자 지갑 잔액:</div>
             <div className='flex gap-2'>
               <input
-                className={`border rounded-md px-3 py-2 w-full ${lowBalance ? 'border-red-500' : 'border-[#d9d9d9]'}`}
+                className={`border rounded-md px-3 py-2 w-full ${lowBalance ? "border-red-500" : "border-[#d9d9d9]"}`}
                 value={balance}
                 disabled
               />
-              <Link href='/member/fincoin-purchase' className='blue-button'>
+              <Link href='/board/fincoin-purchase' className='blue-button'>
                 핀코인 구매
               </Link>
             </div>

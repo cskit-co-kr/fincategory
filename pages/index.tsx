@@ -1,309 +1,583 @@
-import axios from 'axios';
-import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { enUS } from '../lang/en-US';
-import { koKR } from '../lang/ko-KR';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import { GetChannelsByCategory } from '../components/channel/GetChannelsByCategory';
-import { Category, PostType } from '../typings';
-import { GetChannels } from '../components/channel/GetChannels';
-import HashtagBox from '../components/HashtagBox';
-import HomeBoardPostList from '../components/HomeBoardPostList';
-import { useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { Pagination } from 'rsuite';
-import GridPostRow from '../components/board/GridPostRow';
-import Link from 'next/link';
-import Section3 from '../components/search/Section3';
+import axios from "axios";
+import React, { useEffect, useRef, useState, useTransition } from "react";
+import { enUS } from "../lang/en-US";
+import { koKR } from "../lang/ko-KR";
+import { useRouter } from "next/router";
+import { GetChannels, GetChannelsSkeleton } from "../components/channel/GetChannels";
+import { Loader } from "rsuite";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { Section1, Section1Skeleton } from "../components/search/Section1";
+import { Section2_1Skeleton, Section2_1 } from "../components/search/Section2_1";
+import { Section2_2, Section2_2Skeleton } from "../components/search/Section2_2";
+import { Skeleton } from "@mui/material";
+import Section3 from "../components/search/Section3";
+import SearchFilterBar from "../components/search/SearchFilterBar";
+import Ads1 from "../components/search/Ads1";
+import addAds2 from "../lib/ads2";
+import AdChannel2 from "../components/search/AdChannel2";
+import Hashtag from "../components/Hashtag";
+import HashtagMobile from "../components/HashtagMobile";
+import { NextSeo } from "next-seo";
 
-const Home: NextPage = ({
-  channels,
-  channelsToday,
-  channels24h,
-  categories,
-  postList,
-  gridPostList,
-  tags,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home = () => {
   const router = useRouter();
   const { locale } = router;
-  const t = locale === 'ko' ? koKR : enUS;
+  const t = locale === "ko" ? koKR : enUS;
+  const [selectedTag, setSelectedTag] = useState<any>();
+  const [sortType, setSortType] = useState(1);
 
-  const [selectedTags, setSelectedTags] = useState([tags[5].tag]);
-  const [taggedChannels, setTaggedChannels] = useState<any>([]);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const [activePage, setActivePage] = useState(1);
+  // const [searchText, setSearchText] = useState<any>("");
+  const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
+  const [selectCategory, setSelectCategory] = useState<any>();
+
+  const [channelType, setChannelType] = useState<any | null>([{ value: "all", label: t["All"] }]);
+  const [sorting, setSorting] = useState({
+    field: "subscription",
+    order: "desc",
+  });
+  const [selectedSorting, setSelectedSorting] = useState<string>("subscription_desc");
+
+  const [searchResult, setSearchResult] = useState<any | null>(null);
+  const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
+
+  const [searchEvent, setSearchEvent] = useState<any | null>(null);
+
+  const [totalChannels, setTotalChannels] = useState<number>(0);
+  const [channelsNew, setChannelsNew] = useState<any>(null);
+  const [channelsToday, setChannelsToday] = useState<any>(null);
+  const [channelsTotal, setChannelsTotal] = useState<any>(null);
+  const [channelsTotalToday, setChannelsTotalToday] = useState<any>(channelsToday);
+
+  const [channels24, setChannels24] = useState<any>(null);
+  const [channels7d, setChannels7d] = useState<any>(null);
+  const [channels30d, setChannels30d] = useState<any>(null);
+  const [channels24_7_30, setChannels24_7_30] = useState();
+
+  const [tags, setTags] = useState<any>();
+
+  const [loadMore, setLoadMore] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loadBar, setLoadBar] = useState(false);
+
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setActivePage(1);
-  }, [selectedTags]);
-
-  useEffect(() => {
-    async function getChannels() {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/tag`, {
-        query: selectedTags,
-        offset: (activePage - 1) * 15,
-      });
-      const result = await response.data;
-      setTaggedChannels(result);
+    if (!isFirstLoad) {
+      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : "";
+      doSearch(tag);
     }
-    getChannels();
-  }, [selectedTags, activePage]);
+    setIsFirstLoad(false);
+  }, [selectedTag, selectedCategory]);
 
-  function PrevArrow(props: any) {
-    const { className, style, onClick } = props;
-    return (
-      <div style={{ ...style, display: 'block' }} onClick={onClick}>
-        <ChevronLeftIcon className='text-gray-400 h-6 absolute top-2 -left-5 lg:-left-7 cursor-pointer hover:text-black' />
-      </div>
-    );
-  }
-  function NextArrow(props: any) {
-    const { className, style, onClick } = props;
-    return (
-      <div style={{ ...style, display: 'block' }} onClick={onClick}>
-        <ChevronRightIcon className='text-gray-400 h-6 absolute top-2 -right-5 lg:-right-7 cursor-pointer hover:text-black' />
-      </div>
-    );
-  }
+  useEffect(() => {
+    const data: any = {
+      query: null, //searchText === '' ? null : searchText,
+      withDesc: false,
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [],
+      channel_type: channelType[0].value === "all" ? [] : channelType,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
+    const newChannels = async () => {
+      // Get recently added channels
+      data["sort"] = { field: "created_at", order: "desc" };
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["channel_type"] = null;
+      const channelsNew = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data?.channel)
+        .catch((e) => console.log(e));
+      setChannelsNew(channelsNew);
+    };
 
-  const settings = {
-    className: 'slider variable-width',
-    variableWidth: true,
-    dots: false,
-    infinite: true,
-    speed: 2000,
-    slidesToShow: 1,
-    slidesToScroll: 8,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1340,
-        settings: {
-          slidesToShow: 8,
-          slidesToScroll: 5,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-        },
-      },
-    ],
+    const todayChannels = async () => {
+      // Get most viewed channels today
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["sort"] = { field: "today", order: "desc" };
+      data["channel_type"] = null;
+      const channelsToday = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+
+      setChannelsToday(channelsToday);
+      setChannelsTotalToday(channelsToday);
+    };
+
+    const _channels24 = async () => {
+      // Get most increased subscriptions in 24h
+      data["paginate"] = { limit: 6, offset: 0 };
+      data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
+      data["channel_type"] = null;
+      const channels24h = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+      // Get most increased subscriptions in 7d
+      data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
+      const channels7d = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+      // Get most increased subscriptions in 30d
+      data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
+      const channels30d = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+
+      setChannels24(channels24h);
+      setChannels7d(channels7d);
+      setChannels30d(channels30d);
+
+      setChannels24_7_30(channels24h);
+    };
+
+    const exec = async () => {
+      const tags = await axios
+        .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
+        .then((response) => response.data);
+
+      startTransition(() => {
+        setTags(tags);
+      });
+    };
+
+    const getTotal = async () => {
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["sort"] = { field: "total", order: "desc" };
+      const channelsTotal = await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+      setChannelsTotal(channelsTotal);
+    };
+    getTotal();
+
+    newChannels();
+    todayChannels();
+    _channels24();
+
+    exec();
+  }, [router]);
+
+  useEffect(() => {
+    if (router.query.q !== undefined) {
+      doSearch(router.query.q as string);
+    } else {
+      doSearch("");
+    }
+  }, [router.query.q, sorting]);
+
+  useEffect(() => {
+    setLoadMoreText(t["load-more"]);
+  }, [locale]);
+
+  const doSearch = async (q: string) => {
+    // q.length > 0 && setSearchText(q);
+
+    let data = {
+      query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
+      withDesc: false,
+      category: selectedCategory === null ? [] : selectedCategory,
+      country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [],
+      channel_type: channelType[0].value === "all" ? [] : channelType,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
+    if (!!selectedTag?.tag) {
+      data.query = `#${selectedTag.tag}`;
+    }
+
+    setSearchEvent(data);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const resultData = await response.json();
+    const result = resultData.channel;
+
+    if (result) {
+      setTotalChannels(resultData.total);
+
+      // add ad section 2 channels --------------------------------------
+      const ads2Added = await addAds2(result);
+      // ----------------------------------------------------------------
+
+      setSearchResult(ads2Added);
+      // setSearchResult(result);
+      result.length < 45 ? setLoadMore(false) : setLoadMore(true);
+    }
+
+    setLoadBar(false);
   };
+
+  const handleLoadMore = async (data: any) => {
+    setIsLoading(true);
+    setLoadMoreText(<Loader content={t["loading-text"]} />);
+    data["paginate"].limit = data["paginate"].limit + 45;
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data);
+    const resultData = await response.data;
+    const result = resultData.channel;
+    result.length - searchResult.length < 45 && setLoadMore(false);
+
+    // add ad section 2 channels --------------------------------------
+    const ads2Added = await addAds2(result);
+    // ----------------------------------------------------------------
+
+    setSearchResult(ads2Added);
+    // setSearchResult(result);
+    setIsLoading(false);
+    setLoadMoreText(t["load-more"]);
+  };
+
+  const doFilter = (e: any) => {
+    switch (e) {
+      case "subscription_desc":
+        return setSorting({ field: "subscription", order: "desc" });
+      case "subscription_asc":
+        return setSorting({ field: "subscription", order: "asc" });
+      case "today_asc":
+        return setSorting({ field: "today", order: "asc" });
+      case "today_desc":
+        return setSorting({ field: "today", order: "desc" });
+      case "total_asc":
+        return setSorting({ field: "total", order: "asc" });
+      case "total_desc":
+        return setSorting({ field: "total", order: "desc" });
+      case "created_desc":
+        return setSorting({ field: "created_at", order: "desc" });
+      default:
+        return "foo";
+    }
+  };
+
+  function handleClick() {
+    const element = document.getElementById("my-drawer-2");
+    if (element) {
+      element.click();
+    }
+  }
+
+  const switchTodayTotalSortType = (type: number) => {
+    if (type === 1) {
+      setSortType(1);
+      setChannelsTotalToday(channelsToday);
+    } else {
+      setSortType(2);
+      setChannelsTotalToday(channelsTotal);
+    }
+  };
+
+  // Mobile scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadMore === false) return;
+      const isMobile = window.innerWidth <= 768;
+      if (
+        isLoading === false &&
+        isMobile &&
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight
+      ) {
+        handleLoadMore(searchEvent);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loadMore, searchEvent]);
+
+  const searchListRef = useRef(null);
+
+  const [channelRankingUrl, setChannelRankingUrl] = useState("?column=increase24h");
+  const [text24730, setText24730] = useState(1);
+  const change24_7_30 = (x: number) => {
+    if (x === 24) {
+      setChannels24_7_30(channels24);
+      setText24730(1);
+      setChannelRankingUrl("?column=increase24h");
+    } else if (x === 7) {
+      setChannels24_7_30(channels7d);
+      setText24730(2);
+      setChannelRankingUrl("?column=increase7d");
+    } else if (x === 30) {
+      setChannels24_7_30(channels30d);
+      setText24730(3);
+      setChannelRankingUrl("?column=increase30d");
+    }
+  };
+  const useWindowDimensions = () => {
+    const hasWindow = typeof window !== "undefined";
+
+    function getWindowDimensions() {
+      const width = hasWindow ? window.innerWidth : null;
+      return {
+        width,
+      };
+    }
+
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+    useEffect(() => {
+      if (hasWindow) {
+        const handleResize = () => {
+          setWindowDimensions(getWindowDimensions());
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }
+    }, [hasWindow]);
+
+    return windowDimensions;
+  };
+
+  const { width } = useWindowDimensions();
 
   return (
-    <div className='pt-7 px-4 lg:px-0 text-black'>
-      <div className='space-y-4'>
-        <span className='font-bold text-base'>(오늘)조회수 상위 채널</span>
-        <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
-          {channelsToday.map((channel: any, index: number) => {
-            return (
-              <div className='relative' key={channel.id}>
-                <GetChannels channels={channel} desc={true} />
-                <div className='absolute mask mask-decagon bg-yellow-500 -right-2 -top-2.5 font-bold text-xs text-white p-2'>{++index}</div>
+    <>
+      <NextSeo
+        title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        description={"2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"}
+      />
+      <div className='flex flex-1 flex-col md:pt-7'>
+        <div className='grid md:flex'>
+          <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
+            {/* <div
+              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
+              ref={ref}
+            >
+              <div className='font-bold text-xl'>#</div>
+              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
+                <div className='ml-2'>
+                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className='space-y-4 mt-7'>
-        <div className='font-bold text-base items-center flex gap-2'>
-          <span>최근 추가 채널</span>
-          <span className='bg-[#D6e8FC] px-2 py-1 rounded-lg text-primary text-[11px] leading-none'>New</span>
-        </div>
-        <div className='grid md:grid-cols-5 border border-gray-200 rounded-xl bg-white p-1'>
-          {channels.map((channel: any) => {
-            return <GetChannels channels={channel} desc={false} tag={false} views={false} bordered={false} key={channel.id} />;
-          })}
-        </div>
-      </div>
-
-      <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>이런 채널은 어떨까요?</span>
-        <div className='grid md:grid-cols-4 gap-0 md:gap-4 space-y-4 md:space-y-0'>
-          <HashtagBox channels={channelsToday} />
-          <HashtagBox channels={channels24h} />
-          <HashtagBox channels={channelsToday} />
-          <HashtagBox channels={channels24h} />
-        </div>
-      </div>
-
-      <div className='space-y-4 my-7'>
-        <span className='font-bold text-base'>구독자 상승 채널(24H)</span>
-        <div className='grid md:grid-cols-4 gap-0 md:gap-4'>
-          {channels24h.map((channel: any) => {
-            return <GetChannels channels={channel} desc={true} extra={1} key={channel.id} />;
-          })}
-        </div>
-      </div>
-
-      <Section3 />
-
-      <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>코인공지</span>
-        <div className='w-full text-sm mt-4 grid md:grid-cols-6 gap-5 border border-gray-200 bg-white rounded-xl p-7'>
-          {gridPostList?.posts?.map((post: PostType) => post.extra_01 === '1' && <GridPostRow post={post} key={post.id} />)}
-        </div>
-      </div>
-
-      <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>채널 해시태그</span>
-        <div className='relative block space-x-3 w-[97%] mx-auto'>
-          <Slider {...settings}>
-            {tags?.map((tag: any) => (
-              <div key={tag.tag} className='mr-1'>
-                <button
-                  className={`px-3 py-2 whitespace-nowrap border border-gray-200 rounded-2xl hover:bg-primary hover:text-white transition duration-300 ${
-                    selectedTags.find((e) => e === tag.tag) ? 'bg-primary text-white font-bold' : 'text-black bg-white'
-                  }`}
-                  key={tag.tag}
-                  onClick={() => {
-                    selectedTags.find((e) => e === tag.tag)
-                      ? setSelectedTags((current) =>
-                          current.filter((element) => {
-                            return element !== tag.tag;
-                          })
-                        )
-                      : setSelectedTags([tag.tag]);
-                  }}
+            </div> */}
+            {(width || 0) < 1024 && tags ? (
+              <HashtagMobile
+                tags={tags}
+                selectedTag={selectedTag}
+                setSelectedTag={setSelectedTag}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
+                searchListRef={searchListRef}
+              />
+            ) : null}
+            {(width || 0) >= 1024 && tags ? (
+              <Hashtag
+                tags={tags}
+                selectedTag={selectedTag}
+                setSelectedTag={setSelectedTag}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                searchListRef={searchListRef}
+              />
+            ) : null}
+            <Ads1 />
+            <Section3 />
+            <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
+              <div className='flex items-center px-5 pt-5 pb-6'>
+                <div className='font-semibold text-sm'>유저 상승 상위</div>
+                <div className='font-semibold flex gap-2 ml-6'>
+                  <button
+                    onClick={() => change24_7_30(24)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${
+                      text24730 === 1 && "bg-primary text-white"
+                    }`}
+                  >
+                    24H
+                  </button>
+                  <button
+                    onClick={() => change24_7_30(7)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${
+                      text24730 === 2 && "bg-primary text-white"
+                    }`}
+                  >
+                    7D
+                  </button>
+                  <button
+                    onClick={() => change24_7_30(30)}
+                    className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${
+                      text24730 === 3 && "bg-primary text-white"
+                    }`}
+                  >
+                    30D
+                  </button>
+                </div>
+                <Link
+                  className='flex gap-1 text-primary items-center ml-auto'
+                  href={`/ranking${channelRankingUrl}`}
+                  target='_blank'
                 >
-                  {tag.tag}
+                  {t["see-more"]}
+                  <ChevronRightIcon className='h-3' />
+                </Link>
+              </div>
+              {channels24 ? <Section1 channels24h={channels24_7_30} extra={text24730} /> : <Section1Skeleton />}
+            </div>
+
+            <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
+                <div className='flex flex-row justify-between items-center pt-5 pb-2 px-5'>
+                  <div className='font-semibold text-sm flex gap-2 items-center'>
+                    <div>조회수</div>
+                    <button
+                      className={`ml-6 rounded-full bg-gray-100 px-2 py-0.5 text-xs ${
+                        sortType === 1 && "bg-primary text-white"
+                      }`}
+                      onClick={() => {
+                        switchTodayTotalSortType(1);
+                      }}
+                    >
+                      오늘
+                    </button>
+                    <button
+                      className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${
+                        sortType === 2 && "bg-primary text-white"
+                      }`}
+                      onClick={() => {
+                        switchTodayTotalSortType(2);
+                      }}
+                    >
+                      누적
+                    </button>
+                  </div>
+                  <button
+                    className='flex gap-1 text-primary items-center'
+                    onClick={() => {
+                      sortType === 1 ? setSelectedSorting("today_desc") : setSelectedSorting("total_desc");
+                      sortType === 1 ? doFilter("today_desc") : doFilter("total_desc");
+                      if (searchListRef.current) {
+                        (searchListRef.current as HTMLElement).scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    {t["see-more"]}
+                    <ChevronRightIcon className='h-3' />
+                  </button>
+                </div>
+                {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
+              </div>
+
+              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
+                <div className='flex justify-between items-center pt-5 pb-2 px-5'>
+                  <div className='font-semibold text-sm'>{t["recently-added"]}</div>
+                  <button
+                    className='flex gap-1 text-primary items-center'
+                    onClick={() => {
+                      setSelectedSorting("created_desc");
+                      doFilter("created_desc");
+                      if (searchListRef.current) {
+                        (searchListRef.current as HTMLElement).scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    {t["see-more"]}
+                    <ChevronRightIcon className='h-3' />
+                  </button>
+                </div>
+                {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
+                <div id='search'></div>
+              </div>
+            </div>
+            <div ref={searchListRef}></div>
+            {searchResult ? (
+              <SearchFilterBar
+                totalChannels={totalChannels}
+                doFilter={doFilter}
+                setSelectedSorting={setSelectedSorting}
+                selectedSorting={selectedSorting}
+                loadBar={loadBar}
+                channelType={channelType}
+                setChannelType={setChannelType}
+                selectedTag={selectedTag?.tag}
+                handleClick={handleClick}
+                doSearch={doSearch}
+              />
+            ) : (
+              <Skeleton
+                variant='rectangular'
+                sx={{ bgcolor: "grey.100" }}
+                animation='wave'
+                className='min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 '
+              />
+            )}
+            {searchResult ? (
+              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+                {searchResult?.map((channel: any, index: number) => {
+                  return channel.prod_section ? (
+                    <AdChannel2
+                      channel={channel}
+                      key={index}
+                      showType={channel.type ? true : false}
+                      typeIcon={true}
+                      showCategory={false}
+                    />
+                  ) : (
+                    <GetChannels
+                      channels={channel}
+                      desc={true}
+                      key={index}
+                      showType
+                      background='px-8 md:px-4 bg-white'
+                      typeIcon={false}
+                      typeStyle='px-1 mt-3 border-0'
+                      showCategory={true}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+                {Array(10)
+                  .fill(1)
+                  .map((val, index) => {
+                    return <GetChannelsSkeleton key={index} />;
+                  })}
+              </div>
+            )}
+            {loadMore && (
+              <div className='flex justify-center'>
+                <button
+                  onClick={() => handleLoadMore(searchEvent)}
+                  className='bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                >
+                  {loadMoreText}
                 </button>
               </div>
-            ))}
-          </Slider>
-        </div>
-        <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-          {taggedChannels.channel?.map((channel: any, index: number) => {
-            return <GetChannels channels={channel} desc={true} key={index} />;
-          })}
-        </div>
-        <div className='p-5 flex justify-center'>
-          <Pagination
-            total={taggedChannels.total}
-            limit={15}
-            activePage={activePage}
-            onChangePage={setActivePage}
-            maxButtons={6}
-            last
-            first
-            ellipsis
-          />
+            )}
+          </div>
         </div>
       </div>
-
-      {/* <div className='space-y-4 mt-7'>
-        <span className='font-bold text-base'>채널 카테고리</span>
-        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {categories?.map((category: Category) => (
-            <div key={category.id}>
-              <div className='flex items-center'>
-                <h2 className='font-bold'>{JSON.parse(category.name)[locale as string]}</h2>
-                <a href='' className='ml-auto flex gap-1 items-center text-xs text-primary'>
-                  {t['see-more']}
-                  <ChevronRightIcon className='h-3' />
-                </a>
-              </div>
-              <div className='border border-gray-200 rounded-md bg-white p-4'>{<GetChannelsByCategory value={category.id} label='' />}</div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-    </div>
+    </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  let data: any = {
-    query: null,
-    withDesc: false,
-    category: [],
-    country: [],
-    language: [{ value: 'ko', label: 'Korean' }],
-    channel_type: null,
-    channel_age: 0,
-    erp: 0,
-    subscribers_from: null,
-    subscribers_to: null,
-    paginate: { limit: 4, offset: 0 },
-    sort: { field: 'created_at', order: 'desc' },
-  };
-
-  // Get recently added channels
-  data['paginate'] = { limit: 10, offset: 0 };
-  const channels = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
-
-  // Get most viewed channels today
-  data['paginate'] = { limit: 4, offset: 0 };
-  data['sort'] = { field: 'today', order: 'desc' };
-  const channelsToday = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
-
-  // Get most increased subscriptions in 24h channels
-  data['paginate'] = { limit: 4, offset: 0 };
-  data['sort'] = { field: 'extra_02', order: 'desc', type: 'integer' };
-  const channels24h = await axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
-    .then((response) => response.data.channel);
-
-  // Get Categories
-  const categories = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`).then((response) => response.data);
-
-  // Get Posts List
-  const postList = await axios
-    .post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getpostlist&board=stock&category=null&postsperpage=6`)
-    .then((response) => response.data);
-
-  // Get Grid Posts List
-  const gridPostQuery = {
-    board: 'coin_notice',
-    paginate: {
-      offset: 0,
-      limit: 9,
-    },
-    sort: {
-      field: 'created_at',
-      order: 'DESC',
-    },
-    filter: {
-      field: 'extra_01',
-      value: '1',
-    },
-    search: {
-      start: null,
-      end: null,
-      field: 'author',
-      value: null,
-    },
-  };
-  const gridPostList = await axios
-    .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, gridPostQuery)
-    .then((response) => response.data);
-
-  // Get Tag List
-  const tags = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`).then((response) => response.data);
-
-  return {
-    props: { channels, channelsToday, channels24h, categories, postList, gridPostList, tags },
-  };
 };
 
 export default Home;
