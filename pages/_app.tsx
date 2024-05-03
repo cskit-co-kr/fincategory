@@ -20,7 +20,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const env = process.env.NODE_ENV;
 
   const session = pageProps?.session;
-  const bgWhite = router.asPath === "/privacy-policy" || router.asPath === "/terms";
   useEffect(() => {
     const setVisit = async () => {
       if (env !== "development") {
@@ -82,7 +81,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       {env === "development" ? "" : <GoogleAnalytics />}
       <SessionProvider session={session}>
         <DataProvider>
-          <Layout iswhite={bgWhite}>
+          <Layout>
             <NextNProgress color='#3886E2' height={2} options={{ showSpinner: false }} />
             <Component key={router.asPath} {...pageProps} />
           </Layout>
