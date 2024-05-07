@@ -373,12 +373,12 @@ const Header = () => {
                     <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
                   </div>
                   <div className='text-center mb-5'>
-                    <p>
+                    <div>
                       씨스킷주식회사 | <p>309 81 07535</p>
-                    </p>
-                    <p className='pr-4'>
+                    </div>
+                    <div className='pr-4'>
                       <p>cho@cskit.co.kr</p> | @fincatele
-                    </p>
+                    </div>
                     <p className='mt-5'>
                       (c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT Inc. all rights reserved.
                     </p>

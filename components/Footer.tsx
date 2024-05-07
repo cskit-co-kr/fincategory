@@ -32,40 +32,42 @@ function Footer() {
             <Link href={"/terms"}>이용약관</Link>
           </div>
         </div>
-        <div className='sm:grid md:grid-cols-7 lg:grid-cols-9 border-b-2 xl:pb-10 py-4 xl:p-0'>
-          <div>
+        <ul className='sm:grid md:grid-cols-7 lg:grid-cols-9 border-b-2 xl:pb-10 py-4 xl:p-0'>
+          <li>
             <Link className={"font-bold text-base"} href={"/"}>
               {t["home"]}
             </Link>
-          </div>
-          <div>
+          </li>
+          <li>
             <Link className={"font-bold text-base"} href={"/ranking"}>
               {t["rank"]}
             </Link>
-          </div>
-          <div className='col-span-2'>
-            <div className={"cursor-default font-bold text-base"}>{t["board"]}</div>
-            <div className='grid mt-4 grid-cols-2 pr-10 pl-2'>
+          </li>
+          <li className='col-span-2'>
+            <p className={"cursor-default font-bold text-base"}>{t["board"]}</p>
+            <ul className='grid mt-4 grid-cols-2 pr-10 pl-2'>
               {groups?.map((group: GroupType) =>
                 group.boards.map((board: any) => (
-                  <Link key={board.id} href={`/board/${board.name}`} className='py-1'>
-                    {board.title}
-                  </Link>
+                  <li key={board.id}>
+                    <Link href={`/board/${board.name}`} className='py-1'>
+                      {board.title}
+                    </Link>
+                  </li>
                 ))
               )}
-            </div>
-          </div>
-          <div>
+            </ul>
+          </li>
+          <li>
             <Link className={"font-bold text-base"} href={"/ads"}>
               광고
             </Link>
-          </div>
-          <div className=' col-span-2'>
+          </li>
+          <li className=' col-span-2'>
             <Link className={"font-bold text-base"} href={"/add"}>
               {t["new-channel-registration"]}
             </Link>
-          </div>
-        </div>
+          </li>
+        </ul>
         <div className='mt-5 mb-10'>
           <div className='flex gap-2'>
             <p>씨스킷주식회사</p>
