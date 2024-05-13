@@ -70,15 +70,19 @@ function Footer() {
         </ul>
         <div className='mt-5 mb-10'>
           <div className='flex gap-2'>
-            <p>씨스킷주식회사</p>
+            <a className='font-bold' target='_blank' href='https://cskit.co.kr/'>
+              씨스킷주식회사
+            </a>
             <p>|</p>
             <p>309 81 07535</p>
             <p>|</p>
             <p>cho@cskit.co.kr</p>
             <p>|</p>
-            <p>@fincatele</p>
+            <a target='_blank' className='font-bold' href='https://t.me/fincatele'>
+              @fincatele
+            </a>
           </div>
-          <p className='mt-2'>(c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT Inc. all rights reserved.</p>
+          <p className='mt-2'>(c) 2023. CSKIT Inc. all rights reserved.</p>
         </div>
       </div>
     </footer>
