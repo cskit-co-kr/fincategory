@@ -92,10 +92,7 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
     let arr = [];
     let text = "";
 
-    if (input.includes("+")) {
-      arr = input.split("+");
-      text = arr.reverse()[0];
-    } else if (input.includes("@")) {
+    if (input.includes("@")) {
       arr = input.split("@");
       text = arr.reverse()[0];
     } else if (input.includes("/")) {
