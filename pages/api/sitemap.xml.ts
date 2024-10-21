@@ -70,25 +70,25 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
                   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
                     <url>
-                      <loc>https://test-fincat.finca.co.kr/</loc>
+                      <loc>https://fincat.finca.co.kr/</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>daily</changefreq>
                       <priority>${priority8}</priority>
                     </url>
                     <url>
-                      <loc>https://test-fincat.finca.co.kr/ranking</loc>
+                      <loc>https://finca.co.kr/ranking</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>daily</changefreq>
                       <priority>${priority3}</priority>
                     </url>
                     <url>
-                      <loc>https://test-fincat.finca.co.kr/add</loc>
+                      <loc>https://finca.co.kr/add</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
                     </url>
                     <url>
-                      <loc>https://test-fincat.finca.co.kr/board/signin</loc>
+                      <loc>https://finca.co.kr/board/signin</loc>
                       <lastmod>${yesterday}</lastmod>
                       <changefreq>monthly</changefreq>
                       <priority>${priority3}</priority>
