@@ -1,4 +1,8 @@
-import { LockClosedIcon, UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
+import {
+  LockClosedIcon,
+  UserCircleIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 import { useRouter } from "next/router";
@@ -33,7 +37,9 @@ const MemberSignIn = () => {
       username: usernameInput,
       password: passwordInput,
       redirect: false,
-      callbackUrl: router.query.callbackUrl ? (router.query.callbackUrl as string) : "/",
+      callbackUrl: router.query.callbackUrl
+        ? (router.query.callbackUrl as string)
+        : "/",
     });
     if (result?.error === "CredentialsSignin") {
       setErrorMessage("Invalid email or password");
@@ -52,13 +58,16 @@ const MemberSignIn = () => {
   const onForgotSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=resetpassword`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        email: emailInput,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=resetpassword`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email: emailInput,
+        }),
+      }
+    );
     const result = await response.json();
     setLoading(false);
     if (result.code === 200) {
@@ -90,31 +99,31 @@ const MemberSignIn = () => {
         titleTemplate={`핀카텔레 | ${t["sign-in"]}`}
         description={`핀카텔레 | ${t["sign-in"]}`}
       />
-      <div className='gap-4 pt-7 bg-gray-50'>
-        <div className='w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm'>
-          <div className='flex gap-2 items-center border-b border-gray-200 pb-2.5'>
-            <UserCircleIcon className='h-6 text-black' />
-            <span className='font-semibold'>ID {t["sign-in"]}</span>
+      <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
+        <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">
+          <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
+            <UserCircleIcon className="h-6 text-black" />
+            <span className="font-semibold">ID {t["sign-in"]}</span>
           </div>
           {page === "login" && (
             <>
-              <div className='mt-4'>
-                <div className='w-full border border-gray-200 rounded-t-md px-4 py-2 flex items-center gap-1'>
-                  <UserIcon className='h-4' />
+              <div className="mt-4">
+                <div className="w-full border border-gray-200 rounded-t-md px-4 py-2 flex items-center gap-1">
+                  <UserIcon className="h-4" />
                   <input
-                    type='text'
+                    type="text"
                     placeholder={t["username"]}
-                    className='w-full p-1'
+                    className="w-full p-1"
                     value={usernameInput}
                     onChange={(e) => setUsernameInput(e.target.value)}
                   />
                 </div>
-                <div className='w-full border border-gray-200 rounded-b-md px-4 py-2 flex items-center gap-1 -mt-[1px]'>
-                  <LockClosedIcon className='h-4' />
+                <div className="w-full border border-gray-200 rounded-b-md px-4 py-2 flex items-center gap-1 -mt-[1px]">
+                  <LockClosedIcon className="h-4" />
                   <input
-                    type='password'
+                    type="password"
                     placeholder={t["password"]}
-                    className='w-full p-1'
+                    className="w-full p-1"
                     value={passwordInput}
                     onKeyDown={handleKeyDown}
                     onChange={(e) => setPasswordInput(e.target.value)}
@@ -124,23 +133,28 @@ const MemberSignIn = () => {
                   <input type='checkbox' id='rememberme' checked={rememberMe} onChange={() => setRememberMe((prev) => !prev)} />
                   <label htmlFor='rememberme'>로그인 상태 유지</label>
                 </div> */}
-                {errorMessage && <p className='text-xs text-red-600 mt-2'>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="text-xs text-red-600 mt-2">{errorMessage}</p>
+                )}
                 <button
-                  className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center'
+                  className="bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center"
                   onClick={(e) => onSubmit(e)}
                 >
                   {loading && <Loader />}
                   <div>{t["sign-in"]}</div>
                 </button>
               </div>
-              <div className='mt-4 flex divide-x place-content-center'>
-                <div className='px-4'>
-                  <button onClick={() => setPage("forgot")} className='underline'>
+              <div className="mt-4 flex divide-x place-content-center">
+                <div className="px-4">
+                  <button
+                    onClick={() => setPage("forgot")}
+                    className="underline"
+                  >
                     {t["forgot-password"]}
                   </button>
                 </div>
-                <div className='px-4'>
-                  <Link href={`/board/signup`} className='underline'>
+                <div className="px-4">
+                  <Link href={`/board/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -149,36 +163,43 @@ const MemberSignIn = () => {
           )}
           {page === "forgot" && (
             <>
-              <div className='mt-4'>
+              <div className="mt-4">
                 {forgotResultText !== "" && (
-                  <div className='bg-gray-100 p-4 text-center rounded-lg my-4'>{forgotResultText}</div>
+                  <div className="bg-gray-100 p-4 text-center rounded-lg my-4">
+                    {forgotResultText}
+                  </div>
                 )}
-                <div className='w-full border border-gray-200 rounded-md px-4 py-2 flex items-center gap-1'>
+                <div className="w-full border border-gray-200 rounded-md px-4 py-2 flex items-center gap-1">
                   <input
-                    type='text'
+                    type="text"
                     placeholder={t["email"]}
-                    className='w-full p-1'
+                    className="w-full p-1"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                   />
                 </div>
-                {errorMessage && <p className='text-xs text-red-600 mt-2'>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="text-xs text-red-600 mt-2">{errorMessage}</p>
+                )}
                 <button
-                  className='bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center'
+                  className="bg-primary font-semibold text-white py-3 px-5 text-base mt-4 w-full rounded-md flex gap-1 items-center justify-center"
                   onClick={(e) => onForgotSubmit(e)}
                 >
                   {loading && <Loader />}
                   <div>{t["find-password"]}</div>
                 </button>
               </div>
-              <div className='mt-4 flex divide-x place-content-center'>
-                <div className='px-4'>
-                  <button onClick={() => setPage("login")} className='underline'>
+              <div className="mt-4 flex divide-x place-content-center">
+                <div className="px-4">
+                  <button
+                    onClick={() => setPage("login")}
+                    className="underline"
+                  >
                     {t["sign-in"]}
                   </button>
                 </div>
-                <div className='px-4'>
-                  <Link href={`/board/signup`} className='underline'>
+                <div className="px-4">
+                  <Link href={`/board/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>

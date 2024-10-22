@@ -1,5 +1,15 @@
 // prettier-ignore
 export const enUS = {
+    "reset password": "Reset password",
+    "Set a password": "Set a password",
+"Create Password": "Create Password",
+"Re-enter Password": "Re-enter Password",
+"Set password": "Set password",
+"Cancel": "Cancel",
+"Password don’t match": "Password don’t match",
+"Password changed successfully !": "Password changed successfully !",
+"Please login to your email account again": "Please login to your email account again",
+"Login now": "Login now",
     "fincategory": "Fincategory",
     "quick-search": "Quick search...",
     "Korean": "한국어",
