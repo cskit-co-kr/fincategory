@@ -26,7 +26,7 @@ module.exports = {
       },
       {
         protocol: "https",
-        hostname: "**.fincategory.com",
+        hostname: "**.finca.co.kr",
       },
     ],
   },
