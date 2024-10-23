@@ -1,5 +1,7 @@
 // prettier-ignore
 export const enUS = {
+    "채널/그룹을 추가하면 1시간 이내 자동추가 됩니다.": "If you add a channel/group, it will be automatically added within 1 hour.",
+    "채널 정보를 불러올 수 없으면 자동추가되지 않습니다.": "If channel information cannot be retrieved, it will not be automatically added.",
     "reset password": "Reset password",
     "Set a password": "Set a password",
 "Create Password": "Create Password",

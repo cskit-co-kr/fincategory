@@ -56,25 +56,43 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
   const [resultState, setResultState] = useState<string | null>(null);
 
   async function handleSubmit() {
-    input === "" ? setErrorInput(t["please-username"]) : errorInput === "" ? setErrorInput(null) : null;
-    selectedCountry === "" ? setErrorCountry(t["please-country"]) : setErrorCountry(null);
-    selectedLanguage === "" ? setErrorLanguage(t["please-language"]) : setErrorLanguage(null);
-    selectedCategory === "" ? setErrorCategory(t["please-category"]) : setErrorCategory(null);
+    input === ""
+      ? setErrorInput(t["please-username"])
+      : errorInput === ""
+      ? setErrorInput(null)
+      : null;
+    selectedCountry === ""
+      ? setErrorCountry(t["please-country"])
+      : setErrorCountry(null);
+    selectedLanguage === ""
+      ? setErrorLanguage(t["please-language"])
+      : setErrorLanguage(null);
+    selectedCategory === ""
+      ? setErrorCategory(t["please-category"])
+      : setErrorCategory(null);
 
     if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
       let text = extractUsername(input);
-      if (input !== "" && selectedCountry !== "" && selectedLanguage !== "" && selectedCategory !== "") {
+      if (
+        input !== "" &&
+        selectedCountry !== "" &&
+        selectedLanguage !== "" &&
+        selectedCategory !== ""
+      ) {
         const data = {
           title: text.trim(),
           country: selectedCountry,
           language: selectedLanguage,
           category: selectedCategory,
         };
-        const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/addchannel`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(data),
+          }
+        );
         const result = await response.json();
         if (result === "OK") {
           setResultState(`${text} ${t["channel-add"]}`);
@@ -107,7 +125,9 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
   const checkUsername = async (e: any) => {
     if (e.target.value !== "") {
       const username = extractUsername(e.target.value);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`
+      );
       const data = await res.data;
       if (data.existed) {
         setErrorInput(t["username-existed"]);
@@ -121,91 +141,116 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
   };
 
   return (
-    <div className='flex flex-col pt-7 bg-gray-50 min-h-screen'>
+    <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
       <NextSeo
         title={`광고 | ${t["add-channel"]}`}
         titleTemplate={`광고 | ${t["add-channel"]}`}
-        description={"채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."}
+        description={
+          "채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."
+        }
       />
-      <div className='md:flex md:flex-col w-full xl:w-[1280px] mx-auto'>
-        <div className='text-xl font-bold text-center'>{t["add-channel"]}</div>
-        <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
+      <div className="md:flex md:flex-col w-full xl:w-[1280px] mx-auto">
+        <div className="text-xl font-bold text-center">{t["add-channel"]}</div>
+        <div className="p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
           {resultState !== null ? (
-            <div className='flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center'>
+            <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center">
               {resultState}
             </div>
           ) : (
             ""
           )}
-          <div className='font-semibold'>
+          <div className="font-semibold">
             {t["link-to"]}
-            <span className='text-red-500'>*</span>
+            <span className="text-red-500">*</span>
           </div>
           <input
             value={input}
             onChange={onChangeInput}
             onMouseLeave={(e) => checkUsername(e)}
-            type='text'
-            placeholder='@username, t.me/ASRJIfjdk..., t.me/+ABCD12345'
-            className='border border-gray-200 rounded-md p-2 outline-non'
+            type="text"
+            placeholder="@username, t.me/ASRJIfjdk..., t.me/+ABCD12345"
+            className="border border-gray-200 rounded-md p-2 outline-non"
           />
-          {errorInput !== null ? <div className='text-red-500 -mt-3 italic'>{errorInput}</div> : ""}
+          {errorInput !== null ? (
+            <div className="text-red-500 -mt-3 italic">{errorInput}</div>
+          ) : (
+            ""
+          )}
         </div>
-        <div className='p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4'>
-          <div className='flex items-center'>
-            <div className='font-semibold min-w-[140px]'>
+        <div className="p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
+          <div className="flex items-center">
+            <div className="font-semibold min-w-[140px]">
               {t["country"]}
-              <span className='text-red-500'>*</span>
+              <span className="text-red-500">*</span>
             </div>
             <SelectPicker
-              className='w-full'
+              className="w-full"
               onChange={setSelectedCountry}
-              name='country'
+              name="country"
               data={countries}
               placeholder={t["choose-country"]}
               searchable={false}
             />
           </div>
-          {errorCountry !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCountry}</div> : ""}
-          <div className='flex items-center'>
-            <div className='font-semibold min-w-[140px]'>
+          {errorCountry !== null ? (
+            <div className="text-red-500 -mt-3 italic ml-auto">
+              {errorCountry}
+            </div>
+          ) : (
+            ""
+          )}
+          <div className="flex items-center">
+            <div className="font-semibold min-w-[140px]">
               {t["contents-language"]}
-              <span className='text-red-500'>*</span>
+              <span className="text-red-500">*</span>
             </div>
             <SelectPicker
-              className='w-full'
+              className="w-full"
               onChange={setSelectedLanguage}
-              name='language'
+              name="language"
               data={languages}
               placeholder={t["choose-language"]}
               searchable={false}
             />
           </div>
-          {errorLanguage !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorLanguage}</div> : ""}
-          <div className='flex items-center'>
-            <div className='font-semibold min-w-[140px]'>
+          {errorLanguage !== null ? (
+            <div className="text-red-500 -mt-3 italic ml-auto">
+              {errorLanguage}
+            </div>
+          ) : (
+            ""
+          )}
+          <div className="flex items-center">
+            <div className="font-semibold min-w-[140px]">
               {t["category"]}
-              <span className='text-red-500'>*</span>
+              <span className="text-red-500">*</span>
             </div>
             <SelectPicker
-              className='w-full'
+              className="w-full"
               onChange={setSelectedCategory}
-              name='category'
+              name="category"
               data={cats}
               placeholder={t["select-topic"]}
               searchable={false}
             />
           </div>
-          {errorCategory !== null ? <div className='text-red-500 -mt-3 italic ml-auto'>{errorCategory}</div> : ""}
+          {errorCategory !== null ? (
+            <div className="text-red-500 -mt-3 italic ml-auto">
+              {errorCategory}
+            </div>
+          ) : (
+            ""
+          )}
           <button
             onClick={() => handleSubmit()}
-            className='mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]'
+            className="mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]"
           >
             {t["register"]}
           </button>
         </div>
-        <div className='mx-auto mt-8 px-5 text-center text-[#3687E2] font-medium'>
-          * 채널/그룹을 추가하면 24시간~48시간 이내 관리자의 승인 후 등록됩니다.
+        <div className="mx-auto mt-8 px-5  text-[#3687E2] font-medium">
+          * {t["채널/그룹을 추가하면 1시간 이내 자동추가 됩니다."]}
+          <br />* {t["채널 정보를 불러올 수 없으면 자동추가되지 않습니다."]}
         </div>
       </div>
     </div>
@@ -213,13 +258,19 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
 };
 
 export const getServerSideProps = async () => {
-  const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+  const result = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`
+  );
   const _categories = await result.data;
 
-  const resCountry = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`);
+  const resCountry = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCountry`
+  );
   const _countries = await resCountry.data;
 
-  const resLanguage = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`);
+  const resLanguage = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`
+  );
   const _languages = await resLanguage.data;
   console.log("--------------------------------------->");
   console.log(_languages);
