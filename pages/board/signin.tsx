@@ -42,7 +42,7 @@ const MemberSignIn = () => {
         : "/",
     });
     if (result?.error === "CredentialsSignin") {
-      setErrorMessage("Invalid email or password");
+      setErrorMessage("Invalid username or password");
       setLoading(false);
     } else if (result?.status === 200) {
       // if (rememberMe === true) {
@@ -147,7 +147,10 @@ const MemberSignIn = () => {
               <div className="mt-4 flex divide-x place-content-center">
                 <div className="px-4">
                   <button
-                    onClick={() => setPage("forgot")}
+                    onClick={() => {
+                      setPage("forgot");
+                      setErrorMessage("");
+                    }}
                     className="underline"
                   >
                     {t["forgot-password"]}
@@ -192,7 +195,10 @@ const MemberSignIn = () => {
               <div className="mt-4 flex divide-x place-content-center">
                 <div className="px-4">
                   <button
-                    onClick={() => setPage("login")}
+                    onClick={() => {
+                      setPage("login");
+                      setErrorMessage("");
+                    }}
                     className="underline"
                   >
                     {t["sign-in"]}
