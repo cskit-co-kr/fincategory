@@ -9,12 +9,28 @@ import { SelectPicker } from "rsuite";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 
-import { ArrowTopRightOnSquareIcon, PlusIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
-import { AutoComplete, Button, Input, Message, PickerHandle, Tag, Tooltip, Whisper, toaster } from "rsuite";
-import { TypeAttributes } from "rsuite/esm/@types/common";
+import {
+  ArrowTopRightOnSquareIcon,
+  PlusIcon,
+  PlusSmallIcon,
+} from "@heroicons/react/24/outline";
+import {
+  AutoComplete,
+  Button,
+  Input,
+  Message,
+  PickerHandle,
+  Tag,
+  Tooltip,
+  Whisper,
+  toaster,
+} from "rsuite";
+// import { TypeAttributes } from "rsuite/esm/@types/common";
 import { formatDate } from "../../lib/utils";
 import { Skeleton } from "@mui/material";
 import apiService from "../../lib/apiService";
+
+type Status = "success" | "error" | "warning" | "info";
 
 interface DataTags {
   tag: string;
@@ -43,7 +59,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/300/${channel.channel_id}/avatar.jfif`;
 
-  const message = (type: TypeAttributes.Status, message: string) => (
+  const message = (type: Status, message: string) => (
     <Message showIcon type={type} closable>
       {message}
     </Message>
@@ -54,7 +70,9 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const [value, setValue] = useState<any>(null);
 
   const loadCategory = async () => {
-    const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`);
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getCategory`
+    );
     const _categories = await result.data;
     const cats = _categories?.map((item: any) => {
       if (channel.category?.id === item.id) {
@@ -70,7 +88,9 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setCategoryData(cats);
   };
   const loadTags = async () => {
-    const tags: any = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`);
+    const tags: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`
+    );
 
     const tagsList = tags.data.reduce((acc: Array<string>, e: DataTags) => {
       acc.push(e.tag);
@@ -82,10 +102,16 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
   useEffect(() => {
     loadCategory();
-    const tags = channel.tags.reduce((acc: Array<string>, e: { id: number; channel_id: number; tag: string }) => {
-      acc.push(e.tag);
-      return acc;
-    }, []);
+    const tags = channel.tags.reduce(
+      (
+        acc: Array<string>,
+        e: { id: number; channel_id: number; tag: string }
+      ) => {
+        acc.push(e.tag);
+        return acc;
+      },
+      []
+    );
 
     setTags(tags);
 
@@ -103,8 +129,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setTags(newTags);
   };
 
-  const handleEditInputChange = (value: string, e: ChangeEvent<HTMLInputElement>) => {
-    const val = value.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "").toLowerCase();
+  const handleEditInputChange = (
+    value: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const val = value
+      .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
+      .toLowerCase();
 
     setEditInputValue(val);
   };
@@ -127,7 +158,9 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   const handleSearch = async (newValue: string) => {
-    const val = newValue.replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "").toLowerCase();
+    const val = newValue
+      .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
+      .toLowerCase();
 
     if (val && val.length > 0) {
       const data: any = tagsList.filter((t: string) => t.startsWith(val));
@@ -161,10 +194,13 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   const saveTag = async () => {
-    const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`, {
-      tags: tags,
-      channel: channel.channel_id,
-    });
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`,
+      {
+        tags: tags,
+        channel: channel.channel_id,
+      }
+    );
 
     const data = res.data;
 
@@ -199,29 +235,33 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
   };
 
   return (
-    <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4'>
-      <div className='sticky inset-y-4 min-h-[289px]'>
-        <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
+    <div className="flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4">
+      <div className="sticky inset-y-4 min-h-[289px]">
+        <div className="flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center">
           <Image
             src={error ? "/telegram-icon-96.png" : avatar}
             alt={channel.title}
             width={170}
             height={170}
-            className='rounded-full object-contain w-20 h-20 md:w-[170px] md:h-[170px]'
+            className="rounded-full object-contain w-20 h-20 md:w-[170px] md:h-[170px]"
             onError={() => setError(true)}
           />
-          <div className='text-xl font-semibold text-center'>{channel.title}</div>
+          <div className="text-xl font-semibold text-center">
+            {channel.title}
+          </div>
           <a
-            href={`https://t.me/${channel.type === "private_group" ? "+" : ""}${channel.username}`}
-            target='_blank'
-            className='flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
-                            transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white'
+            href={`https://t.me/${channel.type === "private_group" ? "+" : ""}${
+              channel.username
+            }`}
+            target="_blank"
+            className="flex items-center gap-1 w-min border-2 border-primary px-3 py-1 rounded-full text-primary text-sm 
+                            transition ease-in-out duration-300 hover:bg-primary hover:no-underline hover:text-white"
           >
             @{channel.username}
-            <ArrowTopRightOnSquareIcon className='h-4' />
+            <ArrowTopRightOnSquareIcon className="h-4" />
           </a>
-          <p className='break-all'>{channel.description}</p>
-          <div className='w-full'>
+          <p className="break-all">{channel.description}</p>
+          <div className="w-full">
             <div
               className={`text-white text-[13px] w-fit rounded-full px-2 py-0.5 ${
                 channel.type === "channel" ? "bg-[#71B2FF]" : "bg-[#FF7171]"
@@ -230,55 +270,60 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               {channel.type === "channel" ? t["channel"] : t["Group"]}
             </div>
           </div>
-          <div className='w-full'>
-            <div className='text-gray-400'>{t["category"]}</div>
-            <div className='text-primary'>{channelCategory}</div>
+          <div className="w-full">
+            <div className="text-gray-400">{t["category"]}</div>
+            <div className="text-primary">{channelCategory}</div>
             {session?.user.type === 2 && (
-              <div className='bg-primary/10 rounded-lg p-2 mt-2 text-xs flex items-center gap-2'>
+              <div className="bg-primary/10 rounded-lg p-2 mt-2 text-xs flex items-center gap-2">
                 <div>Select category</div>
                 <SelectPicker
                   data={categoryData}
-                  name='category'
+                  name="category"
                   placeholder={t["select-topic"]}
                   searchable={false}
                   cleanable={false}
                   value={value}
                   onChange={setCategory}
                   onOpen={updateCategoryData}
-                  className='min-w-[130px]'
+                  className="min-w-[130px]"
                 />
               </div>
             )}
           </div>
-          <div className='w-full'>
-            <span className='text-gray-400'>{t["channel-region-and-language"]}</span>
-            <div className='flex gap-5'>
+          <div className="w-full">
+            <span className="text-gray-400">
+              {t["channel-region-and-language"]}
+            </span>
+            <div className="flex gap-5">
               <span>{t[channel.country?.iso as keyof typeof t]}</span>
-              <span>{channel.language && t[channel.language.value as keyof typeof t]}</span>
+              <span>
+                {channel.language &&
+                  t[channel.language.value as keyof typeof t]}
+              </span>
             </div>
           </div>
-          <div className='w-full'>
-            <div className='text-gray-400'>{t["date-registered"]}</div>
+          <div className="w-full">
+            <div className="text-gray-400">{t["date-registered"]}</div>
             <div>{formatDate(channel.created_at)}</div>
           </div>
-          <div className='flex flex-col justify-between w-full'>
-            <span className='text-gray-400'>{t["tags"]}</span>
+          <div className="flex flex-col justify-between w-full">
+            <span className="text-gray-400">{t["tags"]}</span>
             {session?.user.type === 2 ? (
-              <div className='admin-mode mt-1'>
-                <div className='mb-1 '>
+              <div className="admin-mode mt-1">
+                <div className="mb-1 ">
                   {tags.map((tag, index: number) => {
                     if (editInputIndex === index) {
                       return (
                         <Input
                           ref={editInputRef}
                           key={index}
-                          size='xs'
+                          size="xs"
                           style={tagInputStyle}
                           value={editInputValue}
                           onChange={handleEditInputChange}
                           onBlur={handleEditInputConfirm}
                           onPressEnter={handleEditInputConfirm}
-                          className='focus-within:outline-none'
+                          className="focus-within:outline-none"
                         />
                       );
                     }
@@ -318,7 +363,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                   })}
                 </div>
                 {inputVisible ? (
-                  <div className='border-t-[1px] pt-2 flex items-center'>
+                  <div className="border-t-[1px] pt-2 flex items-center">
                     <AutoComplete
                       ref={inputRef}
                       onChange={handleSearch}
@@ -326,22 +371,22 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                       onBlur={handleInputConfirm}
                       onKeyUp={handleKeyDown}
                       data={data}
-                      size='xs'
-                      className='w-[160px] focus-within:outline-none'
+                      size="xs"
+                      className="w-[160px] focus-within:outline-none"
                     />
                   </div>
                 ) : (
-                  <div className='border-t-[1px] pt-2 flex items-center'>
+                  <div className="border-t-[1px] pt-2 flex items-center">
                     <span
-                      className='flex items-center bg-[#3498ff] text-white border border-dashed text-[12px] rounded-md pr-2 mr-2'
+                      className="flex items-center bg-[#3498ff] text-white border border-dashed text-[12px] rounded-md pr-2 mr-2"
                       onClick={showInput}
                     >
-                      <PlusSmallIcon className='h-6 w-6 text-white' /> New Tag
+                      <PlusSmallIcon className="h-6 w-6 text-white" /> New Tag
                     </span>
                     <Button
-                      appearance='primary'
-                      size='xs'
-                      className='bg-[#3498ff] border border-dashed'
+                      appearance="primary"
+                      size="xs"
+                      className="bg-[#3498ff] border border-dashed"
                       onClick={saveTag}
                     >
                       Save
@@ -350,18 +395,23 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 )}
               </div>
             ) : (
-              <div className='hashtags flex gap-1'>
-                {channel.tags.map((tag: { id: number; channel_id: number; tag: string }, index: number) => {
-                  return (
-                    <Link
-                      href={`/?q=#${tag.tag}`}
-                      className='bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700'
-                      key={index}
-                    >
-                      #{tag.tag}
-                    </Link>
-                  );
-                })}
+              <div className="hashtags flex gap-1">
+                {channel.tags.map(
+                  (
+                    tag: { id: number; channel_id: number; tag: string },
+                    index: number
+                  ) => {
+                    return (
+                      <Link
+                        href={`/?q=#${tag.tag}`}
+                        className="bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700"
+                        key={index}
+                      >
+                        #{tag.tag}
+                      </Link>
+                    );
+                  }
+                )}
               </div>
             )}
           </div>
@@ -373,12 +423,30 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
 
 const ChannelDetailLeftSidebarSkeleton = () => {
   return (
-    <div className='flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4 min-h-[289px]'>
-      <div className='sticky inset-y-4'>
-        <div className='flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center'>
-          <Skeleton variant='circular' sx={{ bgcolor: "grey.100" }} animation='wave' width={170} height={170} />
-          <Skeleton variant='text' sx={{ bgcolor: "grey.100" }} animation='wave' width={"70%"} height={40} />
-          <Skeleton variant='rectangular' sx={{ bgcolor: "grey.100" }} animation='wave' width={"90%"} height={300} />
+    <div className="flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4 min-h-[289px]">
+      <div className="sticky inset-y-4">
+        <div className="flex flex-col gap-y-5 border border-gray-200 rounded-md p-4 bg-white items-center">
+          <Skeleton
+            variant="circular"
+            sx={{ bgcolor: "grey.100" }}
+            animation="wave"
+            width={170}
+            height={170}
+          />
+          <Skeleton
+            variant="text"
+            sx={{ bgcolor: "grey.100" }}
+            animation="wave"
+            width={"70%"}
+            height={40}
+          />
+          <Skeleton
+            variant="rectangular"
+            sx={{ bgcolor: "grey.100" }}
+            animation="wave"
+            width={"90%"}
+            height={300}
+          />
         </div>
       </div>
     </div>
