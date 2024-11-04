@@ -30,6 +30,8 @@ module.exports = {
       },
       colors: {
         gray: colors.neutral,
+        "blue-primary": "#3687E2",
+        "gray-primary": "rgba(54, 135, 226, 0.05);",
       },
       aspectRatio: {
         "4/3": "4 / 3",

@@ -218,5 +218,7 @@ export const koKR = {
     "Private Group": "비공개 그룹",
     "warning-text": "경고",
     "ok": '확인',
-    "close": "취소"
+    "close": "취소",
+    "Telegram channel/group information": "텔레그램 채널/그룹 정보 핀카",
+    "Ads": "광고"
 }

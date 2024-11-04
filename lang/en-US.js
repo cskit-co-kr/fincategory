@@ -220,7 +220,7 @@ export const enUS = {
     "Private Group": "Private Group",
     "warning-text": "Warning",
     "ok": 'Ok',
-    "close": "Close"
-
-    
+    "close": "Close",
+    "Telegram channel/group information":"Telegram channel/group information",
+    "Ads":"Ads",
 }

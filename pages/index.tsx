@@ -3,13 +3,22 @@ import React, { useEffect, useRef, useState, useTransition } from "react";
 import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
 import { useRouter } from "next/router";
-import { GetChannels, GetChannelsSkeleton } from "../components/channel/GetChannels";
+import {
+  GetChannels,
+  GetChannelsSkeleton,
+} from "../components/channel/GetChannels";
 import { Loader } from "rsuite";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Section1, Section1Skeleton } from "../components/search/Section1";
-import { Section2_1Skeleton, Section2_1 } from "../components/search/Section2_1";
-import { Section2_2, Section2_2Skeleton } from "../components/search/Section2_2";
+import {
+  Section2_1Skeleton,
+  Section2_1,
+} from "../components/search/Section2_1";
+import {
+  Section2_2,
+  Section2_2Skeleton,
+} from "../components/search/Section2_2";
 import { Skeleton } from "@mui/material";
 import Section3 from "../components/search/Section3";
 import SearchFilterBar from "../components/search/SearchFilterBar";
@@ -33,12 +42,15 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
   const [selectCategory, setSelectCategory] = useState<any>();
 
-  const [channelType, setChannelType] = useState<any | null>([{ value: "all", label: t["All"] }]);
+  const [channelType, setChannelType] = useState<any | null>([
+    { value: "all", label: t["All"] },
+  ]);
   const [sorting, setSorting] = useState({
     field: "subscription",
     order: "desc",
   });
-  const [selectedSorting, setSelectedSorting] = useState<string>("subscription_desc");
+  const [selectedSorting, setSelectedSorting] =
+    useState<string>("subscription_desc");
 
   const [searchResult, setSearchResult] = useState<any | null>(null);
   const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
@@ -49,7 +61,8 @@ const Home = () => {
   const [channelsNew, setChannelsNew] = useState<any>(null);
   const [channelsToday, setChannelsToday] = useState<any>(null);
   const [channelsTotal, setChannelsTotal] = useState<any>(null);
-  const [channelsTotalToday, setChannelsTotalToday] = useState<any>(channelsToday);
+  const [channelsTotalToday, setChannelsTotalToday] =
+    useState<any>(channelsToday);
 
   const [channels24, setChannels24] = useState<any>(null);
   const [channels7d, setChannels7d] = useState<any>(null);
@@ -78,7 +91,7 @@ const Home = () => {
       withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
       country: [{ value: 113, label: "Korea, Republic of" }],
-      language: [],
+      language: [{ value: locale }],
       channel_type: channelType[0].value === "all" ? [] : channelType,
       channel_age: 0,
       erp: 0,
@@ -93,7 +106,10 @@ const Home = () => {
       data["paginate"] = { limit: 5, offset: 0 };
       data["channel_type"] = null;
       const channelsNew = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data?.channel)
         .catch((e) => console.log(e));
       setChannelsNew(channelsNew);
@@ -105,7 +121,10 @@ const Home = () => {
       data["sort"] = { field: "today", order: "desc" };
       data["channel_type"] = null;
       const channelsToday = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data.channel)
         .catch((e) => console.log(e));
 
@@ -119,19 +138,28 @@ const Home = () => {
       data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
       data["channel_type"] = null;
       const channels24h = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data.channel)
         .catch((e) => console.log(e));
       // Get most increased subscriptions in 7d
       data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
       const channels7d = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data.channel)
         .catch((e) => console.log(e));
       // Get most increased subscriptions in 30d
       data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
       const channels30d = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data.channel)
         .catch((e) => console.log(e));
 
@@ -156,7 +184,10 @@ const Home = () => {
       data["paginate"] = { limit: 5, offset: 0 };
       data["sort"] = { field: "total", order: "desc" };
       const channelsTotal = await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, data)
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
         .then((response) => response.data.channel)
         .catch((e) => console.log(e));
       setChannelsTotal(channelsTotal);
@@ -190,7 +221,7 @@ const Home = () => {
       withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
       country: [{ value: 113, label: "Korea, Republic of" }],
-      language: [],
+      language: [{ value: locale }],
       channel_type: channelType[0].value === "all" ? [] : channelType,
       channel_age: 0,
       erp: 0,
@@ -205,11 +236,14 @@ const Home = () => {
 
     setSearchEvent(data);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
     const resultData = await response.json();
     const result = resultData.channel;
 
@@ -232,7 +266,10 @@ const Home = () => {
     setIsLoading(true);
     setLoadMoreText(<Loader content={t["loading-text"]} />);
     data["paginate"].limit = data["paginate"].limit + 45;
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`, data);
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`,
+      data
+    );
     const resultData = await response.data;
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
@@ -293,7 +330,8 @@ const Home = () => {
       if (
         isLoading === false &&
         isMobile &&
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight
+        window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight
       ) {
         handleLoadMore(searchEvent);
       }
@@ -306,7 +344,9 @@ const Home = () => {
 
   const searchListRef = useRef(null);
 
-  const [channelRankingUrl, setChannelRankingUrl] = useState("?column=increase24h");
+  const [channelRankingUrl, setChannelRankingUrl] = useState(
+    "?column=increase24h"
+  );
   const [text24730, setText24730] = useState(1);
   const change24_7_30 = (x: number) => {
     if (x === 24) {
@@ -333,7 +373,9 @@ const Home = () => {
       };
     }
 
-    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [windowDimensions, setWindowDimensions] = useState(
+      getWindowDimensions()
+    );
 
     useEffect(() => {
       if (hasWindow) {
@@ -356,11 +398,13 @@ const Home = () => {
       <NextSeo
         title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
         titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
-        description={"2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"}
+        description={
+          "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
+        }
       />
-      <div className='flex flex-1 flex-col md:pt-7'>
-        <div className='grid md:flex'>
-          <div className='flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full'>
+      <div className="flex flex-1 flex-col .md:pt-7">
+        <div className="grid md:flex">
+          <div className="flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full">
             {/* <div
               className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
@@ -396,12 +440,12 @@ const Home = () => {
                 searchListRef={searchListRef}
               />
             ) : null}
-            <Ads1 />
+            {/* <Ads1 /> */}
             <Section3 />
-            <div className='bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]'>
-              <div className='flex items-center px-5 pt-5 pb-6'>
-                <div className='font-semibold text-sm'>유저 상승 상위</div>
-                <div className='font-semibold flex gap-2 ml-6'>
+            {/* <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
+              <div className="flex items-center px-5 pt-5 pb-6">
+                <div className="font-semibold text-sm">유저 상승 상위</div>
+                <div className="font-semibold flex gap-2 ml-6">
                   <button
                     onClick={() => change24_7_30(24)}
                     className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs min-w-[40px] ${
@@ -428,21 +472,25 @@ const Home = () => {
                   </button>
                 </div>
                 <Link
-                  className='flex gap-1 text-primary items-center ml-auto'
+                  className="flex gap-1 text-primary items-center ml-auto"
                   href={`/ranking${channelRankingUrl}`}
-                  target='_blank'
+                  target="_blank"
                 >
                   {t["see-more"]}
-                  <ChevronRightIcon className='h-3' />
+                  <ChevronRightIcon className="h-3" />
                 </Link>
               </div>
-              {channels24 ? <Section1 channels24h={channels24_7_30} extra={text24730} /> : <Section1Skeleton />}
-            </div>
+              {channels24 ? (
+                <Section1 channels24h={channels24_7_30} extra={text24730} />
+              ) : (
+                <Section1Skeleton />
+              )}
+            </div> */}
 
-            <div className='grid md:grid-cols-2 gap-4 min-h-[281px]'>
-              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
-                <div className='flex flex-row justify-between items-center pt-5 pb-2 px-5'>
-                  <div className='font-semibold text-sm flex gap-2 items-center'>
+            <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
+              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+                <div className="flex flex-row justify-between items-center pt-5 pb-2 px-5">
+                  <div className="font-semibold text-sm flex gap-2 items-center">
                     <div>조회수</div>
                     <button
                       className={`ml-6 rounded-full bg-gray-100 px-2 py-0.5 text-xs ${
@@ -466,10 +514,14 @@ const Home = () => {
                     </button>
                   </div>
                   <button
-                    className='flex gap-1 text-primary items-center'
+                    className="flex gap-1 text-primary items-center"
                     onClick={() => {
-                      sortType === 1 ? setSelectedSorting("today_desc") : setSelectedSorting("total_desc");
-                      sortType === 1 ? doFilter("today_desc") : doFilter("total_desc");
+                      sortType === 1
+                        ? setSelectedSorting("today_desc")
+                        : setSelectedSorting("total_desc");
+                      sortType === 1
+                        ? doFilter("today_desc")
+                        : doFilter("total_desc");
                       if (searchListRef.current) {
                         (searchListRef.current as HTMLElement).scrollIntoView({
                           behavior: "smooth",
@@ -478,17 +530,23 @@ const Home = () => {
                     }}
                   >
                     {t["see-more"]}
-                    <ChevronRightIcon className='h-3' />
+                    <ChevronRightIcon className="h-3" />
                   </button>
                 </div>
-                {channelsToday ? <Section2_1 channels={channelsTotalToday} /> : <Section2_1Skeleton />}
+                {channelsToday ? (
+                  <Section2_1 channels={channelsTotalToday} />
+                ) : (
+                  <Section2_1Skeleton />
+                )}
               </div>
 
-              <div className='bg-white md:border md:border-gray-200 md:rounded-xl'>
-                <div className='flex justify-between items-center pt-5 pb-2 px-5'>
-                  <div className='font-semibold text-sm'>{t["recently-added"]}</div>
+              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+                <div className="flex justify-between items-center pt-5 pb-2 px-5">
+                  <div className="font-semibold text-sm">
+                    {t["recently-added"]}
+                  </div>
                   <button
-                    className='flex gap-1 text-primary items-center'
+                    className="flex gap-1 text-primary items-center"
                     onClick={() => {
                       setSelectedSorting("created_desc");
                       doFilter("created_desc");
@@ -500,11 +558,15 @@ const Home = () => {
                     }}
                   >
                     {t["see-more"]}
-                    <ChevronRightIcon className='h-3' />
+                    <ChevronRightIcon className="h-3" />
                   </button>
                 </div>
-                {channelsNew ? <Section2_2 channelsNew={channelsNew} /> : <Section2_2Skeleton />}
-                <div id='search'></div>
+                {channelsNew ? (
+                  <Section2_2 channelsNew={channelsNew} />
+                ) : (
+                  <Section2_2Skeleton />
+                )}
+                <div id="search"></div>
               </div>
             </div>
             <div ref={searchListRef}></div>
@@ -523,15 +585,22 @@ const Home = () => {
               />
             ) : (
               <Skeleton
-                variant='rectangular'
+                variant="rectangular"
                 sx={{ bgcolor: "grey.100" }}
-                animation='wave'
-                className='min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 '
+                animation="wave"
+                className="min-h-[64px] sorting flex items-center w-full  md:rounded-xl p-3 md:p-4 "
               />
             )}
             {searchResult ? (
-              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
-                {searchResult?.map((channel: any, index: number) => {
+              <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+                {[
+                  ...searchResult?.filter(
+                    (channel: any) => channel.prod_section
+                  ),
+                  ...searchResult?.filter(
+                    (channel: any) => !channel.prod_section
+                  ),
+                ].map((channel: any, index: number) => {
                   return channel.prod_section ? (
                     <AdChannel2
                       channel={channel}
@@ -546,16 +615,40 @@ const Home = () => {
                       desc={true}
                       key={index}
                       showType
-                      background='px-8 md:px-4 bg-white'
+                      background="px-8 md:px-4 bg-white"
                       typeIcon={false}
-                      typeStyle='px-1 mt-3 border-0'
+                      typeStyle="px-1 mt-3 border-0"
                       showCategory={true}
                     />
                   );
                 })}
               </div>
             ) : (
-              <div className='grid md:grid-cols-3 gap-0 md:gap-4'>
+              // <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+              //   {searchResult?.map((channel: any, index: number) => {
+              //     return channel.prod_section ? (
+              //       <AdChannel2
+              //         channel={channel}
+              //         key={index}
+              //         showType={channel.type ? true : false}
+              //         typeIcon={true}
+              //         showCategory={false}
+              //       />
+              //     ) : (
+              //       <GetChannels
+              //         channels={channel}
+              //         desc={true}
+              //         key={index}
+              //         showType
+              //         background="px-8 md:px-4 bg-white"
+              //         typeIcon={false}
+              //         typeStyle="px-1 mt-3 border-0"
+              //         showCategory={true}
+              //       />
+              //     );
+              //   })}
+              // </div>
+              <div className="grid md:grid-cols-3 gap-0 md:gap-4">
                 {Array(10)
                   .fill(1)
                   .map((val, index) => {
@@ -564,10 +657,10 @@ const Home = () => {
               </div>
             )}
             {loadMore && (
-              <div className='flex justify-center'>
+              <div className="flex justify-center">
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
-                  className='bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]'
+                  className="bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
                 >
                   {loadMoreText}
                 </button>

@@ -305,7 +305,6 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   useEffect(() => {
     getPostsList();
   }, [clickCheck]);
-
   return (
     <>
       <NextSeo
