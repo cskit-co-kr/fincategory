@@ -546,7 +546,7 @@ const Header = () => {
             </div>
           </div>
           <nav className="text-sm font-bold items-center hidden md:flex flex-nowrap break-keep">
-            {/* <ul className="flex">
+            <ul className="flex">
               <li>
                 <button
                   className={getPath === "/" ? activePath : normalPath}
@@ -589,7 +589,7 @@ const Header = () => {
                   {t["Ads"]}
                 </button>
               </li>
-            </ul> */}
+            </ul>
             <button
               className={`${
                 getPath === "/new-channel"
@@ -604,7 +604,7 @@ const Header = () => {
         </div>
       </header>
       {/* active users */}
-      <div className="flex flex-row items-center gap-[10px] py-[12px] container">
+      {/* <div className="flex flex-row items-center gap-[10px] py-[12px] container">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
@@ -617,7 +617,7 @@ const Header = () => {
         <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
           Online : {"82"}
         </span>
-      </div>
+      </div> */}
     </>
   );
 };

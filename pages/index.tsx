@@ -33,6 +33,7 @@ const Home = () => {
   const router = useRouter();
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
+  // console.log("locale", locale);
   const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
@@ -90,7 +91,7 @@ const Home = () => {
       query: null, //searchText === '' ? null : searchText,
       withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
-      country: [{ value: 113, label: "Korea, Republic of" }],
+      // country: [{ value: 113, label: "Korea, Republic of" }],
       language: [{ value: locale }],
       channel_type: channelType[0].value === "all" ? [] : channelType,
       channel_age: 0,
@@ -207,7 +208,7 @@ const Home = () => {
     } else {
       doSearch("");
     }
-  }, [router.query.q, sorting]);
+  }, [router.query.q, sorting, locale]);
 
   useEffect(() => {
     setLoadMoreText(t["load-more"]);
@@ -220,7 +221,7 @@ const Home = () => {
       query: q.length > 0 ? q : null, //searchText === '' ? null : searchText,
       withDesc: false,
       category: selectedCategory === null ? [] : selectedCategory,
-      country: [{ value: 113, label: "Korea, Republic of" }],
+      // country: [{ value: 113, label: "Korea, Republic of" }],
       language: [{ value: locale }],
       channel_type: channelType[0].value === "all" ? [] : channelType,
       channel_age: 0,
@@ -402,7 +403,7 @@ const Home = () => {
           "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
         }
       />
-      <div className="flex flex-1 flex-col .md:pt-7">
+      <div className="flex flex-1 flex-col md:pt-7">
         <div className="grid md:flex">
           <div className="flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full">
             {/* <div
@@ -440,9 +441,9 @@ const Home = () => {
                 searchListRef={searchListRef}
               />
             ) : null}
-            {/* <Ads1 /> */}
+            <Ads1 />
             <Section3 />
-            {/* <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
+            <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
               <div className="flex items-center px-5 pt-5 pb-6">
                 <div className="font-semibold text-sm">유저 상승 상위</div>
                 <div className="font-semibold flex gap-2 ml-6">
@@ -485,7 +486,7 @@ const Home = () => {
               ) : (
                 <Section1Skeleton />
               )}
-            </div> */}
+            </div>
 
             <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
               <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
