@@ -1,9 +1,9 @@
-import apiService from './apiService';
+import apiService from "./apiService";
 
 async function addAds2(channels: any) {
   const ads = await apiService.getAds2();
 
-  const getRandomIndex = (max: any) => Math.floor(Math.random() * (max + 1));
+  // const getRandomIndex = (max: any) => Math.floor(Math.random() * (max + 1));
 
   let newArray = channels;
 
@@ -12,11 +12,16 @@ async function addAds2(channels: any) {
     newArray = channels.slice(0, channels.length - ads.length);
   }
 
+  // console.log("ads2Added", ads);
+
   // Insert the additional array into random positions in the new array
-  ads.forEach((item: any) => {
-    const randomIndex = getRandomIndex(newArray.length > 45 ? 45 : newArray.length);
-    newArray.splice(randomIndex, 0, item);
-  });
+  // ads.forEach((item: any) => {
+  //   const randomIndex = getRandomIndex(newArray.length > 45 ? 45 : newArray.length);
+  //   newArray.splice(randomIndex, 0, item);
+  // });
+
+  // Prepend the ads array to the top of the new array
+  newArray = [...ads, ...newArray];
 
   return newArray;
 }

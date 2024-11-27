@@ -11,28 +11,35 @@ function Footer() {
   const router = useRouter();
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
-  const resultGroup: any = useData(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`, "POST");
+  const resultGroup: any = useData(
+    `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/board?f=getgroups`,
+    "POST"
+  );
   const groups = resultGroup?.groups;
   return (
-    <footer className='bg-white py-8 bottom-0 w-full mt-10 hidden md:block'>
-      <div className='container px-5'>
-        <div className='flex items-end w-full justify-between mb-10'>
-          <div className='font-raleway text-2xl flex gap-3 items-end'>
+    <footer className="bg-white pt-[32px] pb-[22px] bottom-0 w-full mt-[22px] hidden md:block">
+      <div className="container px-5">
+        <div className="flex items-end w-full justify-between pb-[24px] border-b-[2px] border-[#EFF2F5]">
+          <div className="font-raleway text-2xl flex gap-3 items-end">
             <Link
-              href='/'
-              className='hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none'
+              href="/"
+              className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none"
             >
-              <span className='font-bold text-primary'>Fin</span>
-              <span className=''>Ca</span>
+              <span className="font-bold text-primary">Fin</span>
+              <span className="">Cago</span>
+              {/* <span className="">go</span> */}
             </Link>
-            <div className='text-[11px] text-gray-500 leading-none mb-[3px]'>텔레그램 채널정보, 핀카</div>
+            <div className="text-[11px] leading-none mb-[3px] text-gray-text font-segoe">
+              {/* 텔레그램 채널정보, 핀카 */}
+              {t["Telegram channel/group information"]}
+            </div>
           </div>
-          <div className='flex gap-5'>
+          {/* <div className="flex gap-5">
             <Link href={"/privacy-policy"}>개인정보처리방침</Link>
             <Link href={"/terms"}>이용약관</Link>
-          </div>
+          </div> */}
         </div>
-        <ul className='sm:grid md:grid-cols-7 lg:grid-cols-9 border-b-2 xl:pb-10 py-4 xl:p-0'>
+        {/* <ul className='sm:grid md:grid-cols-7 lg:grid-cols-9 border-b-2 xl:pb-10 py-4 xl:p-0'>
           <li>
             <Link className={"font-bold text-base"} href={"/"}>
               {t["home"]}
@@ -67,22 +74,31 @@ function Footer() {
               {t["new-channel-registration"]}
             </Link>
           </li>
-        </ul>
-        <div className='mt-5 mb-10'>
-          <div className='flex gap-2'>
-            <a className='font-bold' target='_blank' href='https://cskit.co.kr/'>
-              씨스킷주식회사
-            </a>
-            <p>|</p>
-            <p>309 81 07535</p>
-            <p>|</p>
-            <p>cho@cskit.co.kr</p>
-            <p>|</p>
-            <a target='_blank' className='font-bold' href='https://t.me/fincatele'>
-              @fincatele
-            </a>
-          </div>
-          <p className='mt-2'>(c) 2023. CSKIT Inc. all rights reserved.</p>
+        </ul> */}
+        <div className="flex gap-[8px] text-gray-text mt-[26px] mb-[13px]">
+          <a className=".font-bold" target="_blank" href="https://cskit.co.kr/">
+            {/* 씨스킷주식회사 */}
+            {t["Cskit"]}
+          </a>
+          {/* <p>|</p> */}
+          {/* <p>309 81 07535</p> */}
+          <p>|</p>
+          <p>cho@cskit.co.kr</p>
+          <p>|</p>
+          <a
+            target="_blank"
+            className=".font-bold"
+            href="https://t.me/fincatele"
+          >
+            @fincatele
+          </a>
+        </div>
+        {/* <p className="mt-2">(c) 2023. CSKIT Inc. all rights reserved.</p> */}
+        <div
+          className="flex p-[10px] justify-center items-center rouded-[25px] bg-blue-gradient 
+        text-gray-text"
+        >
+          (c) 2023. CSKIT Inc. all rights reserved.
         </div>
       </div>
     </footer>

@@ -98,6 +98,8 @@ export const enUS = {
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
+    "All":"All",
+    "today": "Today",
     "today-desc": "Today ↓",
     "today-asc": "Today ↑",
     "total-desc": "Total ↓",
@@ -223,4 +225,6 @@ export const enUS = {
     "close": "Close",
     "Telegram channel/group information":"Telegram channel/group information",
     "Ads":"Ads",
+    // footer,
+    "Cskit":"Cskit"
 }

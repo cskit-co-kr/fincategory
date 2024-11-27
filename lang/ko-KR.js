@@ -97,6 +97,8 @@ export const koKR = {
     "sort-by": "정렬 기준",
     "subscribers-desc": "구독자순 ",
     "subscribers-asc": "구독자순 ",
+    "All":"누적",
+    "today": "오늘",
     "today-desc": "오늘 조회수 순 ↓",
     "today-asc": "오늘 조회수 순 ↑",
     "total-desc": "누적 조회수 순 ↓",
@@ -168,7 +170,7 @@ export const koKR = {
     "The-average-number": "채널 게시물의 평균 조회수입니다.",
     "Views-of-the": "일 전체 포스트 조회 수",
     "Total-number-of": "채널의 모든 게시물이 하루에 얻는 총 조회수입니다.",
-    "Views": "조회 수",
+    "Views": "조회수",
     "ERR-engagement-by-views": "일 포스트 조회율",
     "Percentage-of-subscribers": "채널 게시물을 읽는 구독자 비율",
     /* detail - attraction */
@@ -220,5 +222,7 @@ export const koKR = {
     "ok": '확인',
     "close": "취소",
     "Telegram channel/group information": "텔레그램 채널/그룹 정보 핀카",
-    "Ads": "광고"
+    "Ads": "광고",
+    // footer
+    "Cskit":"씨스킷주식회사"
 }

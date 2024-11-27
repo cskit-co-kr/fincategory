@@ -39,7 +39,8 @@ const Hashtag = ({
     };
   }, [pageYOffset]);
   const [groupedTags, setGroupedTags] = useState<any>([]);
-
+  // console.log("tags", tags);
+  // console.log("groupedTags", groupedTags);
   useEffect(() => {
     const reduceTags = tags.reduce((result: any, currentItem: any) => {
       const existingGroup = result.find(

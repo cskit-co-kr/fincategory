@@ -171,10 +171,9 @@ const Header = () => {
                 className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none w-[94px]"
               >
                 <span className="font-bold text-primary">Fin</span>
-                <span className="">Ca</span>
-                <span className="">go</span>
+                <span className="">Cago</span>
               </Link>
-              <h1 className="text-[11px] text-gray-500 leading-none mb-[3px]">
+              <h1 className="text-[11px] leading-none mb-[3px] text-gray-text font-segoe">
                 {t["Telegram channel/group information"]}
                 {/* 텔레그램 채널/그룹 정보 핀카 */}
               </h1>
@@ -460,7 +459,7 @@ const Header = () => {
                 placeholder="Search..."
               />
               <button
-                className="text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center"
+                className="text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center text-dark-primary"
                 onClick={() => setSearchSectionMenu((prev) => !prev)}
               >
                 {searchSection === 1 ? t["channel/group"] : t["board"]}
@@ -546,7 +545,22 @@ const Header = () => {
             </div>
           </div>
           <nav className="text-sm font-bold items-center hidden md:flex flex-nowrap break-keep">
-            <ul className="flex">
+            {/* active users */}
+            <div className="flex flex-row items-center gap-[10px] py-[12px] container h-[47px]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+                fill="none"
+              >
+                <circle cx="5" cy="5" r="5" fill="#18D166" />
+              </svg>
+              <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
+                Online : {"82"}
+              </span>
+            </div>
+            {/* <ul className="flex">
               <li>
                 <button
                   className={getPath === "/" ? activePath : normalPath}
@@ -589,8 +603,37 @@ const Header = () => {
                   {t["Ads"]}
                 </button>
               </li>
-            </ul>
+            </ul> */}
             <button
+              onClick={() => router.push("/add")}
+              className={`flex flex-row gap-[4px] items-center 
+                bg-primary font-semibold text-white rounded-full py-[6px] px-[12px] text-sm hover:text-white`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="11"
+                height="11"
+                viewBox="0 0 11 11"
+                fill="none"
+              >
+                <path
+                  d="M1 5.5H10"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M5.5 1V10"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="whitespace-pre">Add channel</span>
+            </button>
+            {/* <button
               className={`${
                 getPath === "/new-channel"
                   ? activePath + " ml-auto"
@@ -599,25 +642,10 @@ const Header = () => {
               onClick={() => router.push("/add")}
             >
               {t["new-channel-registration"]}
-            </button>
+            </button> */}
           </nav>
         </div>
       </header>
-      {/* active users */}
-      {/* <div className="flex flex-row items-center gap-[10px] py-[12px] container">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          fill="none"
-        >
-          <circle cx="5" cy="5" r="5" fill="#18D166" />
-        </svg>
-        <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
-          Online : {"82"}
-        </span>
-      </div> */}
     </>
   );
 };

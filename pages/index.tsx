@@ -29,6 +29,9 @@ import Hashtag from "../components/Hashtag";
 import HashtagMobile from "../components/HashtagMobile";
 import { NextSeo } from "next-seo";
 
+import ListChannels from "../components/channel/ListChannels";
+import CategoriesSection from "../components/category/categoriesSection";
+
 const Home = () => {
   const router = useRouter();
   const { locale } = router;
@@ -71,12 +74,15 @@ const Home = () => {
   const [channels24_7_30, setChannels24_7_30] = useState();
 
   const [tags, setTags] = useState<any>();
+  const [categories, setCategories] = useState<any>();
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadBar, setLoadBar] = useState(false);
 
   const [isPending, startTransition] = useTransition();
+
+  const [viewPort, setViewPort] = useState("grid");
 
   useEffect(() => {
     if (!isFirstLoad) {
@@ -181,6 +187,18 @@ const Home = () => {
       });
     };
 
+    const getCategoriesWithCount = async () => {
+      const resCat = await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
+        )
+        .then((response) => response.data);
+      // console.log("resCat", resCat);
+      startTransition(() => {
+        setCategories(resCat);
+      });
+    };
+
     const getTotal = async () => {
       data["paginate"] = { limit: 5, offset: 0 };
       data["sort"] = { field: "total", order: "desc" };
@@ -200,6 +218,8 @@ const Home = () => {
     _channels24();
 
     exec();
+    //
+    getCategoriesWithCount();
   }, [router]);
 
   useEffect(() => {
@@ -272,6 +292,7 @@ const Home = () => {
       data
     );
     const resultData = await response.data;
+    console.log("handleLoadMore >>> resultData", resultData);
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
 
@@ -394,6 +415,7 @@ const Home = () => {
 
   const { width } = useWindowDimensions();
 
+  // console.log("searchResult", searchResult);
   return (
     <>
       <NextSeo
@@ -403,9 +425,9 @@ const Home = () => {
           "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
         }
       />
-      <div className="flex flex-1 flex-col md:pt-7">
-        <div className="grid md:flex">
-          <div className="flex flex-col gap-0 md:gap-4 justify-items-stretch content-start w-full">
+      <div className="flex flex-1 flex-col md:pt-[30px]">
+        <div className="flex .grid .md:flex">
+          <div className="flex flex-col .gap-0 gap-4 justify-items-stretch content-start w-full">
             {/* <div
               className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
               ref={ref}
@@ -417,7 +439,22 @@ const Home = () => {
                 </div>
               </div>
             </div> */}
-            {(width || 0) < 1024 && tags ? (
+            {/* {(width || 0) >= 1024 && tags ? ( */}
+            {categories ? (
+              <CategoriesSection
+                tags={tags}
+                selectedTag={selectedTag}
+                setSelectedTag={setSelectedTag}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
+                searchListRef={searchListRef}
+                categories={categories}
+              />
+            ) : null}
+            {/*  */}
+            {/* {(width || 0) < 1024 && tags ? (
               <HashtagMobile
                 tags={tags}
                 selectedTag={selectedTag}
@@ -440,10 +477,10 @@ const Home = () => {
                 setSelectedCategory={setSelectedCategory}
                 searchListRef={searchListRef}
               />
-            ) : null}
-            <Ads1 />
-            <Section3 />
-            <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
+            ) : null} */}
+            {/* <Ads1 /> */}
+            {/* <Section3 /> */}
+            {/* <div className="bg-white md:rounded-xl md:border md:border-gray-200 my-4 md:my-0 min-h-[263px]">
               <div className="flex items-center px-5 pt-5 pb-6">
                 <div className="font-semibold text-sm">유저 상승 상위</div>
                 <div className="font-semibold flex gap-2 ml-6">
@@ -486,32 +523,37 @@ const Home = () => {
               ) : (
                 <Section1Skeleton />
               )}
-            </div>
+            </div> */}
 
             <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
               <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
-                <div className="flex flex-row justify-between items-center pt-5 pb-2 px-5">
-                  <div className="font-semibold text-sm flex gap-2 items-center">
-                    <div>조회수</div>
+                <div className="flex flex-row justify-between items-center pt-6 pb-3 px-5">
+                  <div className="font-semibold text-sm flex gap-[12px] items-center">
+                    <div className="min-w-[42.2px] h-[25px]">
+                      {/* 조회수 */}
+                      {t["Views"]}
+                    </div>
                     <button
-                      className={`ml-6 rounded-full bg-gray-100 px-2 py-0.5 text-xs ${
+                      className={`rounded-full bg-gray-100 px-2 py-1 text-xs ${
                         sortType === 1 && "bg-primary text-white"
                       }`}
                       onClick={() => {
                         switchTodayTotalSortType(1);
                       }}
                     >
-                      오늘
+                      {/* 오늘 */}
+                      {t["today"]}
                     </button>
                     <button
-                      className={`rounded-full bg-gray-100 px-2 py-0.5 text-xs ${
+                      className={`rounded-full bg-gray-100 px-2 py-1 text-xs w-[40.2px] ${
                         sortType === 2 && "bg-primary text-white"
                       }`}
                       onClick={() => {
                         switchTodayTotalSortType(2);
                       }}
                     >
-                      누적
+                      {/* 누적 */}
+                      {t["All"]}
                     </button>
                   </div>
                   <button
@@ -570,7 +612,10 @@ const Home = () => {
                 <div id="search"></div>
               </div>
             </div>
-            <div ref={searchListRef}></div>
+            {/* <div ref={searchListRef}></div> */}
+            {/*  */}
+            {/* all, channels, groups */}
+            {/*  */}
             {searchResult ? (
               <SearchFilterBar
                 totalChannels={totalChannels}
@@ -583,6 +628,8 @@ const Home = () => {
                 selectedTag={selectedTag?.tag}
                 handleClick={handleClick}
                 doSearch={doSearch}
+                viewPort={viewPort}
+                setViewPort={setViewPort}
               />
             ) : (
               <Skeleton
@@ -593,68 +640,64 @@ const Home = () => {
               />
             )}
             {searchResult ? (
-              <div className="grid md:grid-cols-3 gap-0 md:gap-4">
-                {[
-                  ...searchResult?.filter(
-                    (channel: any) => channel.prod_section
-                  ),
-                  ...searchResult?.filter(
-                    (channel: any) => !channel.prod_section
-                  ),
-                ].map((channel: any, index: number) => {
-                  return channel.prod_section ? (
-                    <AdChannel2
-                      channel={channel}
-                      key={index}
-                      showType={channel.type ? true : false}
-                      typeIcon={true}
-                      showCategory={false}
+              searchResult.length > 0 ? (
+                viewPort === "grid" ? (
+                  <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+                    {
+                      // [
+                      //   ...searchResult?.filter(
+                      //     (channel: any) => channel.prod_section
+                      //   ),
+                      //   ...searchResult?.filter(
+                      //     (channel: any) => !channel.prod_section
+                      //   ),
+                      // ]
+                      searchResult.map((channel: any, index: number) => {
+                        return channel.prod_section ? (
+                          <AdChannel2
+                            channel={channel}
+                            key={index}
+                            showType={!!channel.type}
+                            typeIcon={true}
+                            showCategory={false}
+                          />
+                        ) : (
+                          <GetChannels
+                            channels={channel}
+                            desc={true}
+                            key={index}
+                            showType
+                            background="px-8 md:px-4 bg-white"
+                            typeIcon={false}
+                            typeStyle="px-1 mt-3 border-0"
+                            showCategory={true}
+                          />
+                        );
+                      })
+                    }
+                  </div>
+                ) : (
+                  <div>
+                    <ListChannels
+                      searchResult={searchResult}
+                      sorting={sorting}
                     />
-                  ) : (
-                    <GetChannels
-                      channels={channel}
-                      desc={true}
-                      key={index}
-                      showType
-                      background="px-8 md:px-4 bg-white"
-                      typeIcon={false}
-                      typeStyle="px-1 mt-3 border-0"
-                      showCategory={true}
-                    />
-                  );
-                })}
-              </div>
+                  </div>
+                )
+              ) : (
+                // Render empty sign when `searchResult` is empty
+                <div className="text-center py-8 text-gray-500">
+                  No channels found.
+                </div>
+              )
             ) : (
-              // <div className="grid md:grid-cols-3 gap-0 md:gap-4">
-              //   {searchResult?.map((channel: any, index: number) => {
-              //     return channel.prod_section ? (
-              //       <AdChannel2
-              //         channel={channel}
-              //         key={index}
-              //         showType={channel.type ? true : false}
-              //         typeIcon={true}
-              //         showCategory={false}
-              //       />
-              //     ) : (
-              //       <GetChannels
-              //         channels={channel}
-              //         desc={true}
-              //         key={index}
-              //         showType
-              //         background="px-8 md:px-4 bg-white"
-              //         typeIcon={false}
-              //         typeStyle="px-1 mt-3 border-0"
-              //         showCategory={true}
-              //       />
-              //     );
-              //   })}
-              // </div>
+              // Loading skeletons while fetching
               <div className="grid md:grid-cols-3 gap-0 md:gap-4">
                 {Array(10)
                   .fill(1)
-                  .map((val, index) => {
-                    return <GetChannelsSkeleton key={index} />;
-                  })}
+                  .map((_, index) => (
+                    <GetChannelsSkeleton key={index} />
+                  ))}
               </div>
             )}
             {loadMore && (
