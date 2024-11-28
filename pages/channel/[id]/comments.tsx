@@ -231,7 +231,7 @@ const Comments = ({
                           disabled={review.trim().length > 0 ? false : true}
                           onClick={saveReview}
                         >
-                          {t["register"]}
+                          {t["등록"]}
                         </Button>
                       </>
                     ) : (
