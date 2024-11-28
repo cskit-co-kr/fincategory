@@ -22,7 +22,7 @@ const ResetPassword = () => {
   const onChangePassword = async () => {
     if (password1 === password2) {
       if (password1.length < 6) {
-        setErrorMessage("no to min 6");
+        setErrorMessage(t["no to min 6"]);
         return;
       }
       if (password1.length > 20) {

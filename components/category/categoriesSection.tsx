@@ -288,7 +288,7 @@ const CategoriesSection = ({
             size={18}
             className="border-2 border-black rounded-md p-0.5"
           />
-          <div className="font-bold">카테고리</div>|
+          <div className="font-bold">{t["카테고리"]}</div>|
           <button
             onClick={() => handleSelectTag("", "")}
             className={`rounded-xl font-bold px-4 py-[1px] border hover:underline ${
@@ -297,7 +297,7 @@ const CategoriesSection = ({
                 : "bg-primary border-primary text-white"
             }`}
           >
-            전체
+            {t["All"]}
           </button>
           {selectedCategory && (
             <div className="flex items-center gap-2 font-bold">
@@ -385,7 +385,7 @@ const CategoriesSection = ({
               });
             }}
           >
-            <RxPinTop /> 맨위로
+            <RxPinTop /> {t["맨위로"]}
           </button>
         </div>
       </div>

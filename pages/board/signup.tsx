@@ -25,11 +25,11 @@ const MemberSignUp = () => {
       .string()
       .min(5, "no to min 5")
       .max(20, "no to max 20")
-      .required("You can't leave this empty.")
+      .required(t["You can't leave this empty."])
       .test("usernameAvailable", "Username already taken", (value) =>
         validateUsername(value)
       ),
-    fullName: yup.string().required("You can't leave this empty."),
+    fullName: yup.string().required(t["You can't leave this empty."]),
     email: yup
       .string()
       .email("Invalid email address")
@@ -39,13 +39,13 @@ const MemberSignUp = () => {
       ),
     password: yup
       .string()
-      .min(6, "no to min 6")
+      .min(6, t["no to min 6"])
       .max(20, "no to max 20")
-      .required("You can't leave this empty."),
+      .required(t["You can't leave this empty."]),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), undefined], "Passwords must match")
-      .required("You can't leave this empty."),
+      .oneOf([yup.ref("password"), undefined], t["Passwords must match"])
+      .required(t["You can't leave this empty."]),
   });
 
   const {

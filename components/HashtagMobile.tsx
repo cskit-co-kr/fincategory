@@ -19,6 +19,7 @@ const HashtagMobile = ({
 }: any) => {
   const router = useRouter();
   const { locale }: any = router;
+  const t = locale === "ko" ? koKR : enUS;
 
   const [ispageYOffset, setIsPageYOffset] = useState<boolean>(false);
 
@@ -100,7 +101,7 @@ const HashtagMobile = ({
                 : "bg-primary border-primary text-white"
             }`}
           >
-            전체
+            {t["All"]}
           </button>
           <div className="flex overflow-x-auto w-full py-1 items-center gap-3">
             {selectedTag ? (
@@ -164,7 +165,7 @@ const HashtagMobile = ({
               size={18}
               className="border-2 border-black rounded-md p-0.5"
             />
-            <div className="font-bold">카테고리</div>
+            <div className="font-bold">{t["카테고리"]}</div>
           </div>
           <div className="flex items-center gap-2 mb-2">
             <button
@@ -175,7 +176,7 @@ const HashtagMobile = ({
                   : "bg-primary border-primary text-white"
               }`}
             >
-              전체
+              {t["All"]}
             </button>
             {selectedTag && (
               <div className="flex items-center gap-2 font-bold">

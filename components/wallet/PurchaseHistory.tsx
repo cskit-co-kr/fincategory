@@ -27,7 +27,10 @@ const PurchaseHistory = () => {
   useEffect(() => {
     (async () => {
       if (session) {
-        const result = await apiService.transactionListPurchase(session?.user.id, page);
+        const result = await apiService.transactionListPurchase(
+          session?.user.id,
+          page
+        );
         setData(result.data);
         setPageTotal(result.total);
       }
@@ -39,28 +42,30 @@ const PurchaseHistory = () => {
       <Table
         data={data}
         bordered
-        className='wallet-table rounded-lg'
+        className="wallet-table rounded-lg"
         autoHeight
-        renderLoading={() => <div className='text-center py-10'></div>}
-        renderEmpty={() => <div className='text-center py-10'></div>}
+        renderLoading={() => <div className="text-center py-10"></div>}
+        renderEmpty={() => <div className="text-center py-10"></div>}
       >
         <Column width={160}>
-          <HeaderCell>일시</HeaderCell>
+          <HeaderCell>{t["일시"]}</HeaderCell>
           <Cell>{(rowData) => toDateTimeformat(rowData.created_at, "-")}</Cell>
         </Column>
 
-        <Column width={120} align='center'>
+        <Column width={120} align="center">
           <HeaderCell>구입한 핀코인</HeaderCell>
           <Cell>{(rowData) => rowData.coin.toLocaleString()}</Cell>
         </Column>
 
-        <Column width={120} align='center'>
+        <Column width={120} align="center">
           <HeaderCell>입금 금액</HeaderCell>
-          <Cell>{(rowData) => <>{rowData.coin_transit.toLocaleString()}원</>}</Cell>
+          <Cell>
+            {(rowData) => <>{rowData.coin_transit.toLocaleString()}원</>}
+          </Cell>
         </Column>
 
         <Column minWidth={170} flexGrow={1}>
-          <HeaderCell>입력한 연락처/이메일</HeaderCell>
+          <HeaderCell>입력한 연락처/{t["email"]}</HeaderCell>
           <Cell>
             {(rowData) => (
               <>
@@ -70,31 +75,37 @@ const PurchaseHistory = () => {
           </Cell>
         </Column>
 
-        <Column width={170} align='center'>
+        <Column width={170} align="center">
           <HeaderCell>입금자 명</HeaderCell>
           <Cell>{(rowData) => rowData.sender_name}</Cell>
         </Column>
 
-        <Column width={100} align='center'>
-          <HeaderCell>상태</HeaderCell>
+        <Column width={100} align="center">
+          <HeaderCell>{t["상태"]}</HeaderCell>
           <Cell>
             {(rowData) => {
               if (rowData.state === "waiting") {
-                return <div className='text-yellow-500 font-semibold'>대기</div>;
+                return (
+                  <div className="text-yellow-500 font-semibold">대기</div>
+                );
               } else if (rowData.state === "success") {
-                return <div className='text-green-500 font-semibold'>입금완료</div>;
+                return (
+                  <div className="text-green-500 font-semibold">입금완료</div>
+                );
               } else if (rowData.state === "noincome") {
-                return <div className='text-orange-500 font-semibold'>미입금</div>;
+                return (
+                  <div className="text-orange-500 font-semibold">미입금</div>
+                );
               } else if (rowData.state === "return") {
-                return <div className='text-red-500 font-semibold'>환불</div>;
+                return <div className="text-red-500 font-semibold">환불</div>;
               }
             }}
           </Cell>
         </Column>
       </Table>
-      <div className='p-5'>
+      <div className="p-5">
         <Pagination
-          className='justify-center'
+          className="justify-center"
           prev
           next
           first

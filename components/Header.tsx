@@ -127,31 +127,31 @@ const Header = () => {
   const menus = [
     {
       id: 1,
-      title: "내정보",
+      title: t["내정보"],
       icon: <UserIcon className="h-5" />,
       link: "/board/profile",
     },
     {
       id: 2,
-      title: "핀코인",
+      title: t["핀코인"],
       icon: <StopCircleIcon className="h-5" />,
       link: "/board/wallet",
     },
     {
       id: 3,
-      title: "상품구매내역",
+      title: t["상품구매내역"],
       icon: <DocumentTextIcon className="h-5" />,
       link: "/board/ads-history",
     },
     {
       id: 4,
-      title: "내가 쓴 글",
+      title: t["내가 쓴 글"],
       icon: <PencilSquareIcon className="h-5" />,
       link: `/board?member=${session?.user.nickname}&show=posts`,
     },
     {
       id: 5,
-      title: "내가 쓴 댓글",
+      title: t["내가 쓴 댓글"],
       icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
       link: `/board?member=${session?.user.nickname}&show=comments`,
     },
@@ -234,7 +234,7 @@ const Header = () => {
                     name="search"
                     className="bg-primary text-white px-5 py-2 rounded-lg"
                   >
-                    검색
+                    {t["검색"]}
                   </button>
                   <button
                     onClick={() => setMobileSearch(false)}
@@ -433,7 +433,7 @@ const Header = () => {
                   </div>
                   <div className="text-center mb-5">
                     <div>
-                      씨스킷주식회사 | <p>309 81 07535</p>
+                      {t["씨스킷주식회사"]} | <p>309 81 07535</p>
                     </div>
                     <div className="pr-4">
                       <p>cho@cskit.co.kr</p> | @fincatele
@@ -631,7 +631,7 @@ const Header = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="whitespace-pre">Add channel</span>
+              <span className="whitespace-pre">{t["Add channel"]}</span>
             </button>
             {/* <button
               className={`${
