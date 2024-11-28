@@ -98,7 +98,11 @@ function getHrefValue(str: string) {
 const formatKoreanNumber = (value: number): string => {
   // if (value >= 1000 && value < 10000) return (Math.floor((value / 1000) * 10) / 10).toLocaleString() + '천';
   // if (value >= 10000) return (Math.floor((value / 10000) * 10) / 10).toLocaleString() + '만';
-  return value.toLocaleString().toString();
+  if (value) {
+    return value.toLocaleString().toString();
+  } else {
+    return "";
+  }
 };
 
 const getDuration = (start: any, end: any) => {

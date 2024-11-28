@@ -1,53 +1,56 @@
-import * as cheerio from 'cheerio';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from './auth/[...nextauth]';
+import * as cheerio from "cheerio";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth/[...nextauth]";
 
 let haveImage = 0;
-let haveImageUrl = '';
+let haveImageUrl = "";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.query.f) {
-    case 'getgroups':
+    case "getgroups":
       return getGroups();
-    case 'getallboardslist':
+    case "getallboardslist":
       return getBoardList();
-    case 'getpostlist':
+    case "getpostlist":
       return getPostList();
-    case 'getdraftpostlist':
+    case "getdraftpostlist":
       return getDraftPostList();
-    case 'getpost':
+    case "getpost":
       return getPost();
-    case 'deletepost':
+    case "deletepost":
       return deletePost();
-    case 'savepost':
+    case "savepost":
       return savePost();
-    case 'editpost':
+    case "editpost":
       return editPost();
-    case 'getcomments':
+    case "getcomments":
       return getComments();
-    case 'insertcomment':
+    case "insertcomment":
       return insertComment();
-    case 'postReaction':
+    case "postReaction":
       return postReaction();
-    case 'commentReaction':
+    case "commentReaction":
       return commentReaction();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
   async function getGroups() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/group/read`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        mode: 'full',
-        sort: {
-          field: 'id',
-          order: 'asc',
-        },
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/group/read`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          mode: "full",
+          sort: {
+            field: "id",
+            order: "asc",
+          },
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -57,22 +60,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getBoardList() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/read`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        query: null,
-        mode: null,
-        paginate: {
-          offset: 0,
-          limit: 20,
-        },
-        sort: {
-          field: 'hot_low',
-          order: 'ASC',
-        },
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/read`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          query: null,
+          mode: null,
+          paginate: {
+            offset: 0,
+            limit: 20,
+          },
+          sort: {
+            field: "hot_low",
+            order: "ASC",
+          },
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -83,39 +89,45 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   async function getPostList() {
     const limit = req.query.postsperpage ? req.query.postsperpage : 20;
-    const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
+    const offset = req.query.offset
+      ? (parseInt(req.query.offset as string, 10) - 1) *
+        parseInt(limit as string, 10)
+      : 0;
     const filter =
-      req.body.hasImage === 'grid'
+      req.body.hasImage === "grid"
         ? {
-            field: 'extra_01',
-            value: '1',
+            field: "extra_01",
+            value: "1",
           }
         : {
-            field: req.query.category === 'null' ? null : 'category_id',
-            value: req.query.category === 'null' ? null : req.query.category,
+            field: req.query.category === "null" ? null : "category_id",
+            value: req.query.category === "null" ? null : req.query.category,
           };
     let data: any = {
-      board: req.query.board === 'null' ? null : req.query.board,
+      board: req.query.board === "null" ? null : req.query.board,
       paginate: {
         offset: offset,
         limit: limit,
       },
       sort: {
-        field: 'created_at',
-        order: 'DESC',
+        field: "created_at",
+        order: "DESC",
       },
       filter: filter,
       user: req.query.user,
       boardid: req.query.boardid,
     };
     if (req.body.search) {
-      data['search'] = req.body.search;
+      data["search"] = req.body.search;
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
     const result = await response.json();
 
@@ -129,7 +141,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const session = await getServerSession(req, res, authOptions);
       if (session?.user) {
         const limit = req.query.postsperpage ? req.query.postsperpage : 20;
-        const offset = req.query.offset ? (parseInt(req.query.offset as string, 10) - 1) * parseInt(limit as string, 10) : 0;
+        const offset = req.query.offset
+          ? (parseInt(req.query.offset as string, 10) - 1) *
+            parseInt(limit as string, 10)
+          : 0;
         let data: any = {
           board: null,
           paginate: {
@@ -137,31 +152,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             limit: limit,
           },
           sort: {
-            field: 'created_at',
-            order: 'DESC',
+            field: "created_at",
+            order: "DESC",
           },
           filter: {
-            field: 'status',
+            field: "status",
             value: 0,
           },
           search: {
             start: null,
             end: null,
-            field: 'author',
+            field: "author",
             value: session?.user.username,
           },
         };
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/list`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(data),
+          }
+        );
 
         const result = await response.json();
 
         return res.status(200).json(result);
       } else {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: "Unauthorized" });
       }
     } catch (error) {
       return res.status(500).json({ error: (error as Error).message });
@@ -169,7 +187,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getPost() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/get/${req.body.id}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/get/${req.body.id}`
+    );
     const result = await response.json();
     if (result) return res.status(200).json(result);
 
@@ -182,10 +202,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (session?.user) {
         await Promise.all(
           req.body.post.map(async (id: string) => {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/delete/${id}`, {
-              method: 'DELETE',
-              headers: { 'content-type': 'application/json' },
-            });
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/delete/${id}`,
+              {
+                method: "DELETE",
+                headers: { "content-type": "application/json" },
+              }
+            );
             const result = await response.json();
             if (!response.ok) {
               throw new Error(result.message);
@@ -195,7 +218,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         );
         return res.status(200).json({ success: true });
       } else {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: "Unauthorized" });
       }
     } catch (error) {
       return res.status(500).json({ error: (error as Error).message });
@@ -203,25 +226,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function savePost() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/insert`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        title: req.body.title,
-        content: await processContent(req.body.content),
-        board: req.body.board,
-        category: req.body.category === 0 ? null : req.body.category,
-        flag: req.body.flag === 'null' ? null : req.body.flag,
-        status: req.body.status,
-        user: req.body.user,
-        extra_01: haveImage === 1 ? 1 : 0,
-        extra_02: haveImage === 1 ? `${process.env.NEXT_PUBLIC_AVATAR_URL}` + haveImageUrl : '',
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/insert`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          title: req.body.title,
+          content: await processContent(req.body.content),
+          board: req.body.board,
+          category: req.body.category === 0 ? null : req.body.category,
+          flag: req.body.flag === "null" ? null : req.body.flag,
+          status: req.body.status,
+          user: req.body.user,
+          extra_01: haveImage === 1 ? 1 : 0,
+          extra_02:
+            haveImage === 1
+              ? `${process.env.NEXT_PUBLIC_AVATAR_URL}` + haveImageUrl
+              : "",
+        }),
+      }
+    );
 
     const result = await response.json();
     haveImage = 0;
-    haveImageUrl = '';
+    haveImageUrl = "";
     if (result) return res.status(200).json(result);
 
     return res.status(500).send(response.text());
@@ -231,24 +260,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const processedContent = await processContent(req.body.content);
     let srcValue: string | undefined;
     const $ = cheerio.load(processedContent);
-    const imgElement = $('img').first();
+    const imgElement = $("img").first();
 
     if (imgElement.length) {
-      srcValue = imgElement.attr('src');
+      srcValue = imgElement.attr("src");
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/update/${req.body.id}`, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        title: req.body.title,
-        content: processedContent,
-        board: req.body.board,
-        status: req.body.status,
-        category: req.body.category === 0 ? null : req.body.category,
-        extra_01: haveImage === 1 || req.body.content.includes('<img') ? 1 : null,
-        extra_02: haveImage === 1 || req.body.content.includes('<img') ? srcValue : null,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/update/${req.body.id}`,
+      {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          title: req.body.title,
+          content: processedContent,
+          board: req.body.board,
+          status: req.body.status,
+          category: req.body.category === 0 ? null : req.body.category,
+          extra_01:
+            haveImage === 1 || req.body.content.includes("<img") ? 1 : null,
+          extra_02:
+            haveImage === 1 || req.body.content.includes("<img")
+              ? srcValue
+              : null,
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -258,24 +294,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   async function getComments() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        post: req.body.id,
-        query: req.body.query,
-        paginate: {
-          offset: req.body.paginate.offset,
-          limit: req.body.paginate.limit,
-        },
-        sort: {
-          field: req.body.sort.field,
-          order: req.body.sort.value,
-        },
-        user: req.body.user,
-        boardid: req.body.boardid,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/list`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          post: req.body.id,
+          query: req.body.query,
+          paginate: {
+            offset: req.body.paginate.offset,
+            limit: req.body.paginate.limit,
+          },
+          sort: {
+            field: req.body.sort.field,
+            order: req.body.sort.value,
+          },
+          user: req.body.user,
+          boardid: req.body.boardid,
+        }),
+      }
+    );
 
     const result = await response.json();
 
@@ -287,17 +326,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // INSERT COMMENT
   async function insertComment() {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/insert`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          comment: req.body.comment,
-          parent: req.body.parent,
-          user: req.body.user,
-          post: req.body.post,
-          board: req.body.board,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/insert`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            comment: req.body.comment,
+            parent: req.body.parent,
+            user: req.body.user,
+            post: req.body.post,
+            board: req.body.board,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -306,7 +348,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (error instanceof Error) {
         res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' });
+        res.status(500).json({ error: "Unexpected error" });
       }
     }
   }
@@ -314,14 +356,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // GET LIST
   async function postReaction() {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/reaction/${req.body.post}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          user: req.body.user,
-          action: req.body.action,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/post/reaction/${req.body.post}`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            user: req.body.user,
+            action: req.body.action,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -330,7 +375,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (error instanceof Error) {
         res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' });
+        res.status(500).json({ error: "Unexpected error" });
       }
     }
   }
@@ -338,15 +383,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // GET LIST
   async function commentReaction() {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/reaction/${req.body.comment}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          user: req.body.user,
-          action: req.body.action,
-          type: req.body.type,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/board/comment/reaction/${req.body.comment}`,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            user: req.body.user,
+            action: req.body.action,
+            type: req.body.type,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -355,7 +403,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (error instanceof Error) {
         res.status(500).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Unexpected error' });
+        res.status(500).json({ error: "Unexpected error" });
       }
     }
   }
@@ -369,29 +417,33 @@ interface MyComponentProps {
 
 const processContent = async (htmlContent: string) => {
   const $ = cheerio.load(htmlContent);
-  const imgElements = $('img');
+  const imgElements = $("img");
 
   for (let i = 0; i < imgElements.length; i++) {
     const element = imgElements[i];
-    const src = $(element).attr('src');
+    const src = $(element).attr("src");
 
-    if (src && src.startsWith('data:image')) {
-      const imageData = src.split(';')[0].split(':')[1]; // Extract image data format
-      const base64Data = src.split(',')[1]; // Extract Base64 data
+    if (src && src.startsWith("data:image")) {
+      const imageData = src.split(";")[0].split(":")[1]; // Extract image data format
+      const base64Data = src.split(",")[1]; // Extract Base64 data
       const binaryData = base64ToBinary(base64Data);
       const blobData = createBlobFromData(binaryData, imageData);
       const changedPath = await uploadImage(blobData, imageData);
-      $(element).replaceWith(`<img src="${process.env.NEXT_PUBLIC_AVATAR_URL}${changedPath}" alt="Image" class='post-image' />`);
+      $(element).replaceWith(
+        `<img src="${process.env.NEXT_PUBLIC_AVATAR_URL}${changedPath}" alt="Image" class='post-image' />`
+      );
     } else if (src && src.startsWith(`${process.env.NEXT_PUBLIC_AVATAR_URL}`)) {
-      $(element).replaceWith(`<img src="${src}" alt="Image" class='post-image' />`);
+      $(element).replaceWith(
+        `<img src="${src}" alt="Image" class='post-image' />`
+      );
     }
   }
   let modifiedHtml = $.html(); // Get the modified HTML content with the root tags
-  modifiedHtml = modifiedHtml.replace(/<\/?(html|head|body)[^>]*>/gi, ''); // Remove opening and closing tags of <html>, <head>, and <body>
+  modifiedHtml = modifiedHtml.replace(/<\/?(html|head|body)[^>]*>/gi, ""); // Remove opening and closing tags of <html>, <head>, and <body>
   return modifiedHtml;
 };
 const base64ToBinary = (base64Data: any) => {
-  const binaryString = Buffer.from(base64Data, 'base64').toString('binary');
+  const binaryString = Buffer.from(base64Data, "base64").toString("binary");
   const byteArray = new Uint8Array(binaryString.length);
 
   for (let i = 0; i < binaryString.length; i++) {
@@ -404,17 +456,20 @@ const createBlobFromData = (data: any, type: any) => {
   return new Blob([data], { type });
 };
 const uploadImage = async (file: any, imageData: string) => {
-  const extension = imageData.split('/')[1]; // Extract the file extension
+  const extension = imageData.split("/")[1]; // Extract the file extension
   const filename = `image.${extension}`;
 
   const formData = new FormData();
-  formData.append('image', file, filename);
+  formData.append("image", file, filename);
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/files/uploads`, {
-      method: 'POST',
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/files/uploads`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     if (response.ok) {
       const result = await response.json();
@@ -424,10 +479,10 @@ const uploadImage = async (file: any, imageData: string) => {
       haveImage = 1;
       return result.path;
     } else {
-      console.error('Image upload failed.');
+      console.error("Image upload failed.");
     }
   } catch (error) {
-    console.error('An error occurred while uploading the image:', error);
+    console.error("An error occurred while uploading the image:", error);
   }
 };
 

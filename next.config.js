@@ -28,6 +28,10 @@ module.exports = {
         protocol: "https",
         hostname: "**.finca.co.kr",
       },
+      {
+        protocol: "https",
+        hostname: "**.fincago.com",
+      },
     ],
   },
   env: {
