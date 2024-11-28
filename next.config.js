@@ -14,7 +14,7 @@ module.exports = {
   i18n: {
     locales: ["ko", "en"],
     defaultLocale: "en",
-    localeDetection: false,
+    localeDetection: true,
   },
   images: {
     // domains: ['fincategory.com', 'cdn5.telegram-cdn.org'],

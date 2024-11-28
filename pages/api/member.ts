@@ -161,6 +161,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         email: req.body.email,
       }),
     });
+    console.log("dddd: ", resp.json);
     const { total } = await resp.json();
     if (total === 1) {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/resetPassword`, {

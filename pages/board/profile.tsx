@@ -128,7 +128,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
                   {card.icon}
                 </div>
                 <div className="font-rubik font-semibold text-3xl md:text-4xl mt-2.5">
-                  {card.content.toLocaleString()}
+                  {card.content?.toLocaleString()}
                 </div>
                 <div className="text-gray-400 mt-4">{card.title}</div>
               </Link>
@@ -156,8 +156,10 @@ const Profile = ({ memberInfo, wallet }: any) => {
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
   let memberInfo = "";
+  let wallet = "";
   const session = await getSession(context);
-  if (session?.user) {
+  console.log(">>>>>>>", session?.user);
+  if (!!session?.user) {
     const responseMember = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
       {
@@ -166,13 +168,13 @@ export const getServerSideProps = async (context: any) => {
       }
     );
     memberInfo = await responseMember.json();
-  }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`
-  );
-  const result = await response.json();
-  const wallet = result.wallet;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`
+    );
+    const result = await response.json();
+    wallet = result.wallet;
+  }
 
   // Return
   return {
