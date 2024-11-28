@@ -98,7 +98,7 @@ export const enUS = {
     "sort-by": "Sort by: ",
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
-    "All":"All",
+    "All-cumulative":"All",
     "today": "Today",
     "today-desc": "Today ↓",
     "today-asc": "Today ↑",

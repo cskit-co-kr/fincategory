@@ -164,8 +164,8 @@ const Header = () => {
     <>
       <header className="bg-white z-20">
         <div className="container">
-          <div className="flex py-5 justify-between items-center border-b">
-            <div className="font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end">
+          <div className="flex py-[16px] lg:py-5 justify-between items-center lg:border-b px-[16px] lg:px-[0px]">
+            <div className="font-raleway text-2xl flex gap-3 items-end">
               <Link
                 href="/"
                 className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none w-[94px]"
@@ -181,7 +181,7 @@ const Header = () => {
 
             {/* Mobile */}
 
-            {mobileSearch && (
+            {/* {mobileSearch && (
               <div className="fixed top-0 left-0 w-full bg-white md:hidden z-[999999] h-full">
                 <div className="flex items-center px-4 py-4 shadow-md">
                   <MagnifyingGlassIcon className="h-6 text-gray-500 mr-1" />
@@ -244,21 +244,24 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
 
-            <div className="md:hidden drawer w-fit z-50">
-              <button onClick={() => setMobileSearch(true)}>
+            <div className="lg:hidden drawer w-fit z-50">
+              {/* <button onClick={() => setMobileSearch(true)}>
                 <MagnifyingGlassIcon className="h-5 mr-4" />
-              </button>
+              </button> */}
+              <div className="flex items-center">
+                <LanguageSelector />
+              </div>
               <input
                 id="my-drawer-4"
                 type="checkbox"
                 className="drawer-toggle"
               />
-              <div className="drawer-content ml-auto pr-4">
+              <div className="drawer-content ml-auto">
                 {/* Page content here */}
                 <label htmlFor="my-drawer-4" className="">
-                  <Bars3Icon className="h-7" />
+                  <Bars3Icon className="h-[24px]" />
                 </label>
               </div>
               <div className="drawer-side ">
@@ -339,7 +342,7 @@ const Header = () => {
                         </button>
                       </div>
                     )}
-                    <div className="text-sm">
+                    {/* <div className="text-sm">
                       <div className="grid gap-2 my-3 bg-white p-4 rounded-xl shadow-sm">
                         <Link
                           className="font-semibold flex gap-2 items-center"
@@ -417,9 +420,9 @@ const Header = () => {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="mt-auto font-raleway text-2xl flex gap-3 items-end mx-auto my-5">
+                  {/* <div className="mt-auto font-raleway text-2xl flex gap-3 items-end mx-auto my-5">
                     <Link
                       href="/"
                       className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none"
@@ -442,12 +445,13 @@ const Header = () => {
                       (c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT
                       Inc. all rights reserved.
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
 
-            <div className="relative border border-primary items-center py-2 px-3 rounded-full hidden md:inline-flex hover:shadow-md">
+            {/* Desktop search */}
+            <div className="relative border border-primary items-center py-2 px-3 rounded-full hidden lg:inline-flex hover:shadow-md">
               <input
                 type="text"
                 name="search"
@@ -494,7 +498,8 @@ const Header = () => {
                 <MagnifyingGlassIcon className="h-5 text-primary mr-1" />
               </button>
             </div>
-            <div className="hidden md:flex gap-4 items-center">
+
+            <div className="hidden lg:flex gap-4 items-center">
               <div>
                 <LanguageSelector />
               </div>
@@ -544,10 +549,63 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <nav className="text-sm font-bold items-center hidden md:flex flex-nowrap break-keep">
+
+          {/* Mobile search */}
+          <div className="flex items-center justify-center w-full pb-[15px] border-b lg:border-none px-[16px]">
+            <div className="flex justify-between relative border border-primary items-center py-[8px] px-[15px] rounded-full lg:hidden hover:shadow-md w-full max-w-[560px]">
+              <input
+                type="text"
+                name="search"
+                value={searchField}
+                onChange={(e) => setSearchField(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="outline-none max-[370px]:max-w-[140px] text-sm"
+                aria-label="Search"
+                placeholder="Search..."
+              />
+              <div className="inline-flex">
+                <button
+                  className="text-xs p-[5px] flex gap-[3px] items-center rounded-full min-w-[70px] justify-center text-dark-primary"
+                  onClick={() => setSearchSectionMenu((prev) => !prev)}
+                >
+                  {searchSection === 1 ? t["channel/group"] : t["board"]}
+                  <FaCaretDown size={14} />
+                </button>
+                {searchSectionMenu && (
+                  <div
+                    className="absolute top-9 right-10 border shadow-md bg-white flex flex-col rounded-xl min-w-[50px] text-xs"
+                    ref={searchRef}
+                  >
+                    <button
+                      onClick={() => {
+                        setSearchSection(1);
+                        setSearchSectionMenu((prev) => !prev);
+                      }}
+                      className="px-3 py-2 hover:bg-gray-50 rounded-xl"
+                    >
+                      {t["channel/group"]}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSearchSection(2);
+                        setSearchSectionMenu((prev) => !prev);
+                      }}
+                      className="px-3 py-2 hover:bg-gray-50 rounded-xl"
+                    >
+                      {t["board"]}
+                    </button>
+                  </div>
+                )}
+                <button onClick={handleSubmit} name="search">
+                  <MagnifyingGlassIcon className="h-5 text-primary" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <nav className="text-sm font-bold items-center flex flex-nowrap break-keep max-[1023px]:px-[16px] max-[1023px]:py-[12px]">
             {/* active users */}
-            <div className="flex flex-row items-center gap-[10px] py-[12px] container h-[47px]">
-              <svg
+            <div className="flex flex-row items-center gap-[10px] container lg:h-[47px]">
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"
                 height="10"
@@ -558,7 +616,7 @@ const Header = () => {
               </svg>
               <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
                 Online : {"82"}
-              </span>
+              </span> */}
             </div>
             {/* <ul className="flex">
               <li>

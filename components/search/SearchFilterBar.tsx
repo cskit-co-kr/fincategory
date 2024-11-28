@@ -84,10 +84,10 @@ const SearchFilterBar = ({
   const menuItems = [
     {
       key: "all",
-      label: t["All"],
+      label: t["All-cumulative"],
       icon: null,
       action: () => {
-        updateChannelType([{ value: "all", label: t["All"] }]);
+        updateChannelType([{ value: "all", label: t["All-cumulative"] }]);
         setDropdownVisible(!dropdownVisible);
       },
       isActive: channelType[0].value === "all",

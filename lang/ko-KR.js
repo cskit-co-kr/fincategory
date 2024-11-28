@@ -97,7 +97,7 @@ export const koKR = {
     "sort-by": "정렬 기준",
     "subscribers-desc": "구독자순 ",
     "subscribers-asc": "구독자순 ",
-    "All":"누적",
+    "All-cumulative":"누적",
     "today": "오늘",
     "today-desc": "오늘 조회수 순 ↓",
     "today-asc": "오늘 조회수 순 ↑",

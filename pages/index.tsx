@@ -47,7 +47,7 @@ const Home = () => {
   const [selectCategory, setSelectCategory] = useState<any>();
 
   const [channelType, setChannelType] = useState<any | null>([
-    { value: "all", label: t["All"] },
+    { value: "all", label: t["All-cumulative"] },
   ]);
   const [sorting, setSorting] = useState({
     field: "subscription",
@@ -187,17 +187,17 @@ const Home = () => {
       });
     };
 
-    const getCategoriesWithCount = async () => {
-      const resCat = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
-        )
-        .then((response) => response.data);
-      // console.log("resCat", resCat);
-      startTransition(() => {
-        setCategories(resCat);
-      });
-    };
+    // const getCategoriesWithCount = async () => {
+    //   const resCat = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
+    //     )
+    //     .then((response) => response.data);
+    //   // console.log("resCat", resCat);
+    //   startTransition(() => {
+    //     setCategories(resCat);
+    //   });
+    // };
 
     const getTotal = async () => {
       data["paginate"] = { limit: 5, offset: 0 };
@@ -219,7 +219,7 @@ const Home = () => {
 
     exec();
     //
-    getCategoriesWithCount();
+    // getCategoriesWithCount();
   }, [router]);
 
   useEffect(() => {
@@ -228,11 +228,62 @@ const Home = () => {
     } else {
       doSearch("");
     }
+    // getCategoriesWithCount();
   }, [router.query.q, sorting, locale]);
 
   useEffect(() => {
     setLoadMoreText(t["load-more"]);
+    getCategoriesWithCount();
+    setSelectedCategory(null);
   }, [locale]);
+
+  // const getCategoriesWithCount = async () => {
+  //   let data = {
+  //     language: locale,
+  //   };
+  //   const resCat = await axios
+  //     .post(
+  //       // `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
+  //       `http://localhost:8080/v1/category/getCategoriesWithCount`
+  //     )
+  //     .then((response) => response.data);
+  //   // console.log("resCat", resCat);
+  //   startTransition(() => {
+  //     setCategories(resCat);
+  //   });
+  // };
+
+  const getCategoriesWithCount = async () => {
+    const data = {
+      language: locale,
+    };
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`,
+        // "http://localhost:8080/v1/category/getCategoriesWithCount",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      // console.log("response", response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // console.log("response", response);
+      const resCat = await response.json();
+
+      startTransition(() => {
+        setCategories(resCat);
+      });
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const doSearch = async (q: string) => {
     // q.length > 0 && setSearchText(q);
@@ -254,7 +305,7 @@ const Home = () => {
     if (!!selectedTag?.tag) {
       data.query = `#${selectedTag.tag}`;
     }
-
+    // console.log("data", data);
     setSearchEvent(data);
 
     const response = await fetch(
@@ -425,7 +476,7 @@ const Home = () => {
           "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
         }
       />
-      <div className="flex flex-1 flex-col md:pt-[30px]">
+      <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
         <div className="flex .grid .md:flex">
           <div className="flex flex-col .gap-0 gap-4 justify-items-stretch content-start w-full">
             {/* <div
@@ -553,7 +604,7 @@ const Home = () => {
                       }}
                     >
                       {/* 누적 */}
-                      {t["All"]}
+                      {t["All-cumulative"]}
                     </button>
                   </div>
                   <button
@@ -612,7 +663,7 @@ const Home = () => {
                 <div id="search"></div>
               </div>
             </div>
-            {/* <div ref={searchListRef}></div> */}
+            <div ref={searchListRef}></div>
             {/*  */}
             {/* all, channels, groups */}
             {/*  */}
