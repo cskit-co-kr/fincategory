@@ -33,7 +33,10 @@ const Wallet = ({ memberInfo, wallet }: any) => {
   useEffect(() => {
     (async () => {
       if (session) {
-        const result = await apiService.transactionListUser(session?.user.id, page);
+        const result = await apiService.transactionListUser(
+          session?.user.id,
+          page
+        );
         setData(result.data);
       }
     })();
@@ -44,39 +47,47 @@ const Wallet = ({ memberInfo, wallet }: any) => {
   return (
     <>
       <NextSeo
-        title={`핀코인`}
-        titleTemplate={`핀코인`}
+        title={t["핀코인"]}
+        titleTemplate={t["핀코인"]}
         noindex={true}
         nofollow={true}
         description={session?.user.nickname + ` ${session?.user.email}...`}
       />
-      <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
+      <div className="flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50">
         {/* Sidebar */}
         <Sidebar memberInfo={memberInfo} />
-        <div className='mx-auto w-full px-5 md:px-0 gap-4'>
+        <div className="mx-auto w-full px-5 md:px-0 gap-4">
           <div className='p-[30px] text-white bg-[#2B2B2B] rounded-xl bg-[url("/circle-lines.png")] bg-no-repeat bg-right-bottom grid grid-cols-2'>
-            <div className='font-rubik grid'>
-              내 지갑<span className='text-4xl font-semibold mt-2.5'>{balance}</span>
+            <div className="font-rubik grid">
+              {t["내 지갑"]}
+              <span className="text-4xl font-semibold mt-2.5">{balance}</span>
             </div>
-            <div className='ml-auto mt-auto'>
-              <button className='gradient-button' onClick={() => router.push("/board/fincoin-purchase")}>
+            <div className="ml-auto mt-auto">
+              <button
+                className="gradient-button"
+                onClick={() => router.push("/board/fincoin-purchase")}
+              >
                 핀코인 구매
               </button>
             </div>
           </div>
-          <div className='white-box mt-4 p-[30px]'>
-            <div className='flex gap-1 mb-4'>
+          <div className="white-box mt-4 p-[30px]">
+            <div className="flex gap-1 mb-4">
               <button
-                className={`${activeTab === 1 ? "button-tab-active" : "button-tab"}`}
+                className={`${
+                  activeTab === 1 ? "button-tab-active" : "button-tab"
+                }`}
                 onClick={() => setActiveTab(1)}
               >
-                핀코인
+                {t["핀코인"]}
               </button>
               <button
-                className={`${activeTab === 2 ? "button-tab-active" : "button-tab"}`}
+                className={`${
+                  activeTab === 2 ? "button-tab-active" : "button-tab"
+                }`}
                 onClick={() => setActiveTab(2)}
               >
-                구매내역
+                {t["구매내역"]}
               </button>
             </div>
 
@@ -130,7 +141,9 @@ export const getServerSideProps = async (context: any) => {
     memberInfo = await responseMember.json();
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`
+  );
   const result = await response.json();
   const wallet = result.wallet;
 

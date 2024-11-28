@@ -332,7 +332,7 @@ const SearchFilterBar = ({
           ${viewPort === "list" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
             onClick={() => setViewPort("list")}
           >
-            List
+            {t["List"]}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="17"
@@ -355,7 +355,7 @@ const SearchFilterBar = ({
           ${viewPort === "grid" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
             onClick={() => setViewPort("grid")}
           >
-            Card
+            {t["Card"]}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"

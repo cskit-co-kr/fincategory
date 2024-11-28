@@ -56,50 +56,62 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
       <NextSeo
         title={`광고 | 핀카 상단광고, 첫페이지 광고`}
         titleTemplate={`핀카 상단광고, 첫페이지 광고`}
-        description={"핀카 상단광고, 첫페이지 광고를 할수 있습니다. 핀코인 구매후 자유롭게 광고를 게제하세요."}
+        description={
+          "핀카 상단광고, 첫페이지 광고를 할수 있습니다. 핀코인 구매후 자유롭게 광고를 게제하세요."
+        }
       />
-      <div className='flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50'>
+      <div className="flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50">
         <Sidebar memberInfo={memberInfo} />
-        <div className='mx-auto w-full px-5 md:px-0 gap-4'>
-          <div className='white-box p-[30px]'>
-            <div className='text-xl font-bold pb-5'>상품구매내역</div>
+        <div className="mx-auto w-full px-5 md:px-0 gap-4">
+          <div className="white-box p-[30px]">
+            <div className="text-xl font-bold pb-5">{t["상품구매내역"]}</div>
 
-            <Table data={data} bordered className='wallet-table rounded-lg' autoHeight>
+            <Table
+              data={data}
+              bordered
+              className="wallet-table rounded-lg"
+              autoHeight
+            >
               <Column minWidth={250} flexGrow={1}>
-                <HeaderCell>상품명</HeaderCell>
-                <Cell dataKey='product_name' />
+                <HeaderCell>{t["상품명"]}</HeaderCell>
+                <Cell dataKey="product_name" />
               </Column>
 
               <Column width={150}>
-                <HeaderCell>채널 ID</HeaderCell>
-                <Cell dataKey='channel_name' />
+                <HeaderCell>{t["channel"]} ID</HeaderCell>
+                <Cell dataKey="channel_name" />
               </Column>
 
-              <Column width={110} align='right'>
-                <HeaderCell>구매가격</HeaderCell>
-                <Cell>{(rowData) => `${rowData.fincoin.toLocaleString()} FinCoin`}</Cell>
+              <Column width={110} align="right">
+                <HeaderCell>{t["구매가격"]}</HeaderCell>
+                <Cell>
+                  {(rowData) => `${rowData.fincoin.toLocaleString()} FinCoin`}
+                </Cell>
               </Column>
 
-              <Column width={110} align='center'>
-                <HeaderCell>상태</HeaderCell>
+              <Column width={110} align="center">
+                <HeaderCell>{t["상태"]}</HeaderCell>
                 <Cell>
                   {(rowData) =>
-                    checkStatus(rowData.started_at, rowData.ended_at) === "active" ? (
-                      <div className='flex'>
-                        <div className='rounded-full border border-green-400 text-green-400 text-[12px] pb-[1px] px-1'>
+                    checkStatus(rowData.started_at, rowData.ended_at) ===
+                    "active" ? (
+                      <div className="flex">
+                        <div className="rounded-full border border-green-400 text-green-400 text-[12px] pb-[1px] px-1">
                           Active
                         </div>
-                        <div className='ml-0.5 rounded-full border border-red-400 text-red-400 text-[12px] pb-[1px] px-1'>
+                        <div className="ml-0.5 rounded-full border border-red-400 text-red-400 text-[12px] pb-[1px] px-1">
                           D-{getDuration(new Date(), rowData.ended_at)}
                         </div>
                       </div>
-                    ) : checkStatus(rowData.started_at, rowData.ended_at) === "ended" ? (
-                      <div className='rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1'>
+                    ) : checkStatus(rowData.started_at, rowData.ended_at) ===
+                      "ended" ? (
+                      <div className="rounded-full border border-gray-400 text-gray-400 text-xs pb-[1px] px-1">
                         Ended
                       </div>
                     ) : (
-                      checkStatus(rowData.started_at, rowData.ended_at) === "scheduled" && (
-                        <div className='rounded-full border border-blue-400 text-blue-400 text-xs pb-[1px] px-1'>
+                      checkStatus(rowData.started_at, rowData.ended_at) ===
+                        "scheduled" && (
+                        <div className="rounded-full border border-blue-400 text-blue-400 text-xs pb-[1px] px-1">
                           Scheduled
                         </div>
                       )
@@ -107,18 +119,22 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
                   }
                 </Cell>
               </Column>
-              <Column width={150} align='center'>
-                <HeaderCell>구매 날짜</HeaderCell>
-                <Cell>{(rowData) => toDateTimeformat(rowData.started_at, "-")}</Cell>
+              <Column width={150} align="center">
+                <HeaderCell>{t["구매 날짜"]}</HeaderCell>
+                <Cell>
+                  {(rowData) => toDateTimeformat(rowData.started_at, "-")}
+                </Cell>
               </Column>
-              <Column width={150} align='center'>
-                <HeaderCell>만료 날짜</HeaderCell>
-                <Cell>{(rowData) => toDateTimeformat(rowData.ended_at, "-")}</Cell>
+              <Column width={150} align="center">
+                <HeaderCell>{t["만료 날짜"]}</HeaderCell>
+                <Cell>
+                  {(rowData) => toDateTimeformat(rowData.ended_at, "-")}
+                </Cell>
               </Column>
             </Table>
-            <div className='p-5'>
+            <div className="p-5">
               <Pagination
-                className='justify-center'
+                className="justify-center"
                 prev
                 next
                 first

@@ -32,7 +32,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
 
   const cards = [
     {
-      title: "핀코인",
+      title: t["핀코인"],
       icon: <StopCircleIcon className="h-6 text-[#25A510]" />,
       iconBg: "bg-[#EAFFE7]",
       link: "/board/wallet",
@@ -40,7 +40,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
       content: balance,
     },
     {
-      title: "상품구매내역",
+      title: t["상품구매내역"],
       icon: <DocumentTextIcon className="h-6 text-[#B61CEC]" />,
       iconBg: "bg-[#F7E1FF]",
       link: "",
@@ -48,7 +48,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
       content: 0,
     },
     {
-      title: "내가 쓴 글",
+      title: t["내가 쓴 글"],
       icon: <PencilSquareIcon className="h-6 text-[#F6C619]" />,
       iconBg: "bg-[#FFF8DD]",
       link: "",
@@ -56,7 +56,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
       content: memberInfo?.post,
     },
     {
-      title: "내가 쓴 댓글",
+      title: t["내가 쓴 댓글"],
       icon: <ChatBubbleBottomCenterTextIcon className="h-6 text-primary" />,
       iconBg: "bg-[#E3F0FF]",
       link: "",
@@ -68,8 +68,8 @@ const Profile = ({ memberInfo, wallet }: any) => {
   return (
     <>
       <NextSeo
-        title={`내정보`}
-        titleTemplate={`내정보`}
+        title={t["내정보"]}
+        titleTemplate={t["내정보"]}
         noindex={true}
         nofollow={true}
         description={session?.user.nickname + ` ${session?.user.email}...`}
@@ -128,7 +128,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
                   {card.icon}
                 </div>
                 <div className="font-rubik font-semibold text-3xl md:text-4xl mt-2.5">
-                  {card.content.toLocaleString()}
+                  {card.content?.toLocaleString()}
                 </div>
                 <div className="text-gray-400 mt-4">{card.title}</div>
               </Link>
@@ -139,12 +139,14 @@ const Profile = ({ memberInfo, wallet }: any) => {
             <div className="bg-primary rounded-3xl p-2.5 w-fit justify-self-center">
               <AtSymbolIcon className="h-20 text-white" />
             </div>
-            <span className="text-2xl mt-5">텔레그램 채널을 추가하세요</span>
+            <span className="text-2xl mt-5">
+              {t["텔레그램 채널을 추가하세요"]}
+            </span>
             <button
               className="blue-button justify-self-center mt-5"
               onClick={() => router.push("/add")}
             >
-              채널 추가
+              {t["채널 추가"]}
             </button>
           </div>
         </div>
@@ -156,8 +158,10 @@ const Profile = ({ memberInfo, wallet }: any) => {
 export const getServerSideProps = async (context: any) => {
   // Get Member Information
   let memberInfo = "";
+  let wallet = "";
   const session = await getSession(context);
-  if (session?.user) {
+  console.log(">>>>>>>", session?.user);
+  if (!!session?.user) {
     const responseMember = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
       {
@@ -166,13 +170,13 @@ export const getServerSideProps = async (context: any) => {
       }
     );
     memberInfo = await responseMember.json();
-  }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`
-  );
-  const result = await response.json();
-  const wallet = result.wallet;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session?.user.id}`
+    );
+    const result = await response.json();
+    wallet = result.wallet;
+  }
 
   // Return
   return {

@@ -42,7 +42,7 @@ const MemberSignIn = () => {
         : "/",
     });
     if (result?.error === "CredentialsSignin") {
-      setErrorMessage("Invalid username or password");
+      setErrorMessage(t["Invalid username or password"]);
       setLoading(false);
     } else if (result?.status === 200) {
       // if (rememberMe === true) {
@@ -73,7 +73,7 @@ const MemberSignIn = () => {
     if (result.code === 200) {
       setForgotResultText(t["temp-password-sent"]);
     } else if (result.code === 404) {
-      setForgotResultText(result.message);
+      setForgotResultText(t["Email not found!"]);
     }
   };
 

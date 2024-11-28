@@ -245,7 +245,7 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
             onClick={() => handleSubmit()}
             className="mt-2 bg-primary px-10 rounded-md text-sm py-2 w-fit mx-auto text-white active:bg-[#143A66]"
           >
-            {t["register"]}
+            {t["등록"]}
           </button>
         </div>
         <div className="mx-auto mt-8 px-5  text-[#3687E2] font-medium">

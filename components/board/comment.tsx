@@ -8,6 +8,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { CommentType } from "../../typings";
 import { FunctionComponent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { enUS } from "../../lang/en-US";
+import { koKR } from "../../lang/ko-KR";
 // import { TypeAttributes } from "rsuite/esm/@types/common";
 
 type Status = "success" | "error" | "warning" | "info";
@@ -43,6 +46,9 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
   const [reaction, setReaction] = useState<string | null>(comment.reaction);
   const [showReply, setShowReply] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
+  const router = useRouter();
+  const { locale } = router;
+  const t = locale === "ko" ? koKR : enUS;
 
   useEffect(() => {
     if (comment.id !== selectedComment) {
@@ -321,7 +327,7 @@ const BoardComment: FunctionComponent<TBoardComment> = ({
             disabled={content.trim().length > 0 ? false : true}
             onClick={showEdit ? editComment : saveComment}
           >
-            등록
+            {t["등록"]}
           </Button>
           <button
             className="ml-1 rounded-md border border-gray-200 px-4 py-2"

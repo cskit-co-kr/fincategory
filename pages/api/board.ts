@@ -253,7 +253,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     haveImageUrl = "";
     if (result) return res.status(200).json(result);
 
-    return res.status(500);
+    return res.status(500).send(response.text());
   }
 
   async function editPost() {

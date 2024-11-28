@@ -382,7 +382,7 @@ const Ranking = (prop?: any) => {
           <Column width={140} align="center">
             <HeaderCell>
               <div className="h-full flex items-center">
-                Click per day / Total
+                {t["Click per day"]} / {t["Total"]}
               </div>
             </HeaderCell>
             <Cell>

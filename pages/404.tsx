@@ -11,7 +11,7 @@ export default function PageNotFound() {
   return (
     <div className="flex flex-col pt-7 bg-gray-50">
       <Head>
-        <title>FinCategory - Add channel</title>
+        <title>FinCategory - {t["Add channel"]}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className='w-full md:flex xl:w-[1280px] mx-auto bg-[url("/404_bg.png")] bg-no-repeat bg-right'>
@@ -27,7 +27,7 @@ export default function PageNotFound() {
               onClick={() => router.back()}
               className="border-2 rounded-full w-fit px-4 py-2 font-semibold"
             >
-              Go Back
+              {t["뒤로"]}
             </button>
             <button
               onClick={() => router.push("/")}
@@ -44,7 +44,7 @@ export default function PageNotFound() {
             onClick={() => router.push("/add")}
             className="bg-primary text-white rounded-full w-fit px-4 py-2 font-semibold"
           >
-            Add Channel
+            {t["Add channel"]}
           </button>
         </div>
       </div>
