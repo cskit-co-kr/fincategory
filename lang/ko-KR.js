@@ -267,5 +267,7 @@ export const koKR = {
     "Cskit":"씨스킷주식회사",
     "씨스킷주식회사": "씨스킷주식회사",
     "맨위로": "맨위로",
-    "회원가입": "회원가입"
+    "회원가입": "회원가입",
+    // seo
+    "Fincago  | Home - Telegram Channel/Group Information": "핀카텔레 | 홈-텔레그램 채널/그룹 정보"
 }

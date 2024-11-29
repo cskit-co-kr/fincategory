@@ -492,11 +492,16 @@ const Home = () => {
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
-        titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
-        description={
-          "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
+        // title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        // titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        title={t["Fincago  | Home - Telegram Channel/Group Information"]}
+        titleTemplate={
+          t["Fincago  | Home - Telegram Channel/Group Information"]
         }
+        // description={
+        //   "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
+        // }
+        description={t["Fincago  | Home - Telegram Channel/Group Information"]}
       />
       <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
         <div className="flex .grid .md:flex">

@@ -95,9 +95,10 @@ const MemberSignIn = () => {
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | ${t["sign-in"]}`}
-        titleTemplate={`핀카텔레 | ${t["sign-in"]}`}
-        description={`핀카텔레 | ${t["sign-in"]}`}
+        // title={`핀카텔레 | ${t["sign-in"]}`}
+        title={`${t["sign-in"]}`}
+        titleTemplate={`${t["sign-in"]}`}
+        description={`${t["sign-in"]}`}
       />
       <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
         <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">

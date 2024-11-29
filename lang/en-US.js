@@ -267,5 +267,7 @@ export const enUS = {
     "Cskit":"Cskit",
     "씨스킷주식회사": "Cskit Co., Ltd.",
     "맨위로": "Top",
-    "회원가입": "Sign up"
+    "회원가입": "Sign up",
+    // seo
+    "Fincago  | Home - Telegram Channel/Group Information": "Fincago  | Home - Telegram Channel/Group Information"
 }

@@ -292,7 +292,16 @@ const CategoriesSection = ({
                   <div className="w-[20px] h-[20px]"></div>
                 )}
 
-                <span> {JSON.parse(category.category_name)[locale]}</span>
+                {/* <span> {JSON.parse(category.category_name)[locale]}</span> */}
+                <span>
+                  {category.category_name &&
+                  JSON.parse(category.category_name)[locale]
+                    ? JSON.parse(category.category_name)
+                        [locale].charAt(0)
+                        .toUpperCase() +
+                      JSON.parse(category.category_name)[locale].slice(1)
+                    : ""}
+                </span>
                 <span>({category?.channel_count})</span>
               </button>
             ))}
@@ -348,7 +357,16 @@ const CategoriesSection = ({
                       ) : (
                         <div className="w-[20px] h-[20px]"></div>
                       )}
-                      <span>{JSON.parse(category.category_name)[locale]}</span>
+                      {/* <span>{JSON.parse(category.category_name)[locale]}</span> */}
+                      <span>
+                        {category.category_name &&
+                        JSON.parse(category.category_name)[locale]
+                          ? JSON.parse(category.category_name)
+                              [locale].charAt(0)
+                              .toUpperCase() +
+                            JSON.parse(category.category_name)[locale].slice(1)
+                          : ""}
+                      </span>
                       <span>({category?.channel_count})</span>
                     </button>
                   ))}
