@@ -90,6 +90,54 @@ const Home = () => {
       doSearch(tag);
     }
     setIsFirstLoad(false);
+    const data: any = {
+      query: null, //searchText === '' ? null : searchText,
+      withDesc: false,
+      category: selectedCategory === null ? [] : selectedCategory,
+      // country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [{ value: locale }],
+      channel_type: channelType[0].value === "all" ? [] : channelType,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
+
+    const newChannels = async () => {
+      // Get recently added channels
+      data["sort"] = { field: "created_at", order: "desc" };
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["channel_type"] = null;
+      const channelsNew = await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
+        .then((response) => response.data?.channel)
+        .catch((e) => console.log(e));
+      setChannelsNew(channelsNew);
+    };
+
+    const todayChannels = async () => {
+      // Get most viewed channels today
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["sort"] = { field: "today", order: "desc" };
+      data["channel_type"] = null;
+      const channelsToday = await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+
+      setChannelsToday(channelsToday);
+      setChannelsTotalToday(channelsToday);
+    };
+    newChannels();
+    todayChannels();
   }, [selectedTag, selectedCategory]);
 
   useEffect(() => {
@@ -162,6 +210,7 @@ const Home = () => {
         .catch((e) => console.log(e));
       // Get most increased subscriptions in 30d
       data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
+      // console.log("data123", data);
       const channels30d = await axios
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
@@ -186,18 +235,6 @@ const Home = () => {
         setTags(tags);
       });
     };
-
-    // const getCategoriesWithCount = async () => {
-    //   const resCat = await axios
-    //     .post(
-    //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
-    //     )
-    //     .then((response) => response.data);
-    //   // console.log("resCat", resCat);
-    //   startTransition(() => {
-    //     setCategories(resCat);
-    //   });
-    // };
 
     const getTotal = async () => {
       data["paginate"] = { limit: 5, offset: 0 };
@@ -236,22 +273,6 @@ const Home = () => {
     getCategoriesWithCount();
     setSelectedCategory(null);
   }, [locale]);
-
-  // const getCategoriesWithCount = async () => {
-  //   let data = {
-  //     language: locale,
-  //   };
-  //   const resCat = await axios
-  //     .post(
-  //       // `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
-  //       `http://localhost:8080/v1/category/getCategoriesWithCount`
-  //     )
-  //     .then((response) => response.data);
-  //   // console.log("resCat", resCat);
-  //   startTransition(() => {
-  //     setCategories(resCat);
-  //   });
-  // };
 
   const getCategoriesWithCount = async () => {
     const data = {
@@ -343,7 +364,7 @@ const Home = () => {
       data
     );
     const resultData = await response.data;
-    console.log("handleLoadMore >>> resultData", resultData);
+    // console.log("handleLoadMore >>> resultData", resultData);
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
 
@@ -467,6 +488,7 @@ const Home = () => {
   const { width } = useWindowDimensions();
 
   // console.log("searchResult", searchResult);
+  // console.log("channelsToday", channelsToday);
   return (
     <>
       <NextSeo
@@ -565,7 +587,7 @@ const Home = () => {
             </div> */}
 
             <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
-              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+              <div className="bg-white md:border md:border-gray-secondary md:rounded-xl">
                 <div className="flex flex-row justify-between items-center pt-6 pb-3 px-5">
                   <div className="font-semibold text-sm flex gap-[12px] items-center">
                     <div className="min-w-[42.2px] h-[25px]">
@@ -626,7 +648,7 @@ const Home = () => {
                 )}
               </div>
 
-              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+              <div className="bg-white md:border md:border-gray-secondary md:rounded-xl">
                 <div className="flex justify-between items-center pt-5 pb-2 px-5">
                   <div className="font-semibold text-sm">
                     {t["recently-added"]}
@@ -690,39 +712,29 @@ const Home = () => {
             {searchResult ? (
               searchResult.length > 0 ? (
                 viewPort === "grid" ? (
-                  <div className="grid md:grid-cols-3 gap-0 md:gap-[16px]">
-                    {
-                      // [
-                      //   ...searchResult?.filter(
-                      //     (channel: any) => channel.prod_section
-                      //   ),
-                      //   ...searchResult?.filter(
-                      //     (channel: any) => !channel.prod_section
-                      //   ),
-                      // ]
-                      searchResult.map((channel: any, index: number) => {
-                        return channel.prod_section ? (
-                          <AdChannel2
-                            channel={channel}
-                            key={index}
-                            showType={!!channel.type}
-                            typeIcon={true}
-                            showCategory={false}
-                          />
-                        ) : (
-                          <GetChannels
-                            channels={channel}
-                            desc={true}
-                            key={index}
-                            showType
-                            background="px-8 md:px-4 bg-white"
-                            typeIcon={false}
-                            typeStyle="px-1 mt-3 border-0"
-                            showCategory={true}
-                          />
-                        );
-                      })
-                    }
+                  <div className="grid md:grid-cols-3 gap-[8px] md:gap-[16px]">
+                    {searchResult.map((channel: any, index: number) => {
+                      return channel.prod_section ? (
+                        <AdChannel2
+                          channel={channel}
+                          key={index}
+                          showType={!!channel.type}
+                          typeIcon={true}
+                          showCategory={false}
+                        />
+                      ) : (
+                        <GetChannels
+                          channels={channel}
+                          desc={true}
+                          key={index}
+                          showType
+                          background=".px-8 .md:px-4 px-4 bg-white"
+                          typeIcon={false}
+                          typeStyle="px-1 mt-3 border-0"
+                          showCategory={true}
+                        />
+                      );
+                    })}
                   </div>
                 ) : (
                   <div>

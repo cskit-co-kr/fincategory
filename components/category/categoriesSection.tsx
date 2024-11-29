@@ -44,7 +44,7 @@ const CategoriesSection = ({
         .includes(searchField.toLowerCase())
     );
     setFilteredCategories(filtered);
-    console.log("filterCategories");
+    // console.log("filterCategories");
   };
 
   const handleSubmit = () => {
@@ -128,7 +128,7 @@ const CategoriesSection = ({
       className={`sticky top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}`}
     >
       <div
-        className={`white-box max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
+        className={`white-box border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
             : `overflow-hidden !shadow-2xl !rounded-xl border-none`
@@ -142,11 +142,9 @@ const CategoriesSection = ({
           }`}
         >
           <div
-            className={`flex items-center justify-between gap-[10px] border-b border-[#e5e5e5] pt-[16px] pb-[16px] 
+            className={`flex items-center justify-between gap-[10px] border-gray-secondary pt-[16px] pb-[16px] 
             lg:py-[19px] lg:px-[10px] ${
-              pageYOffset === false
-                ? "border-b border-[#e5e5e5]"
-                : `border-b-[0px]`
+              pageYOffset === false ? "border-b" : `border-b-[0px]`
             }`}
           >
             <div className="flex items-center gap-3 min-h-[36px] font-semibold">
@@ -267,7 +265,7 @@ const CategoriesSection = ({
               )}
             </div>
           </div>
-          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[4px] gap-x-[4px] grid-flow-row hidden mt-[20px]">
+          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[4px] gap-x-[6px] grid-flow-row hidden mt-[20px]">
             {filteredCategories.map((category: any, index: number) => (
               <button
                 onClick={() =>

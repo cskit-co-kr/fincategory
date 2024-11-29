@@ -42,7 +42,7 @@ const GetChannels: FunctionComponent<Props> = ({
 
   const style =
     bordered === true
-      ? "p-4 border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300"
+      ? "p-4 border-b md:border border-gray-secondary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300"
       : "";
 
   // const style2 = 'text-white border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300';

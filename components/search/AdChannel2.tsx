@@ -30,7 +30,7 @@ const AdChannel2: FunctionComponent<Props> = ({
   return (
     // <div className={`${style} relative flex md:rounded-xl gap-2.5 text-black bg-white min-h-[131px]`}>
     <div
-      className={`p-4 px-8 md:px-4 border border-blue-primary hover:shadow-sm transition ease-in-out duration-300
+      className={`p-4 px-4 border border-blue-primary hover:shadow-sm transition ease-in-out duration-300
     relative flex md:rounded-xl gap-2.5 text-black bg-gray-primary min-h-[131px]`}
     >
       <div className="absolute bottom-0 right-0 bg-blue-primary rounded-tl-lg md:rounded-br-lg text-white text-[10px] px-2.5 py-[1px]">

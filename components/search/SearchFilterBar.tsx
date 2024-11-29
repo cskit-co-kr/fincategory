@@ -136,7 +136,7 @@ const SearchFilterBar = ({
   // console.log("selectedCategory[0].label", selectedCategory[0].label);
   return (
     <>
-      <div className="sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-200">
+      <div className="sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-secondary">
         {/* Mobile Dropdown menu */}
         <div className="md:hidden">
           <Dropdown
@@ -343,7 +343,7 @@ const SearchFilterBar = ({
       {/*  */}
       {/*  */}
       {/*  */}
-      <div className="flex items-center p-4 md:p-0 gap-3">
+      <div className="flex items-center px-4 md:p-0 gap-3">
         <div className="text-sm">
           {/* {`${t["total-search-results1"]} ${
             selectedCategory
