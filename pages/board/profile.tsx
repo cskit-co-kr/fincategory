@@ -107,7 +107,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-[30px]">
+          {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-[30px]">
             {cards.map((card, index) => (
               <Link
                 href={card.link}
@@ -133,7 +133,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
                 <div className="text-gray-400 mt-4">{card.title}</div>
               </Link>
             ))}
-          </div>
+          </div> */}
 
           <div className="white-box mt-[30px] grid justify-center">
             <div className="bg-primary rounded-3xl p-2.5 w-fit justify-self-center">

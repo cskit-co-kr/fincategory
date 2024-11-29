@@ -417,25 +417,25 @@ const Home = () => {
 
   const searchListRef = useRef(null);
 
-  const [channelRankingUrl, setChannelRankingUrl] = useState(
-    "?column=increase24h"
-  );
-  const [text24730, setText24730] = useState(1);
-  const change24_7_30 = (x: number) => {
-    if (x === 24) {
-      setChannels24_7_30(channels24);
-      setText24730(1);
-      setChannelRankingUrl("?column=increase24h");
-    } else if (x === 7) {
-      setChannels24_7_30(channels7d);
-      setText24730(2);
-      setChannelRankingUrl("?column=increase7d");
-    } else if (x === 30) {
-      setChannels24_7_30(channels30d);
-      setText24730(3);
-      setChannelRankingUrl("?column=increase30d");
-    }
-  };
+  // const [channelRankingUrl, setChannelRankingUrl] = useState(
+  //   "?column=increase24h"
+  // );
+  // const [text24730, setText24730] = useState(1);
+  // const change24_7_30 = (x: number) => {
+  //   if (x === 24) {
+  //     setChannels24_7_30(channels24);
+  //     setText24730(1);
+  //     setChannelRankingUrl("?column=increase24h");
+  //   } else if (x === 7) {
+  //     setChannels24_7_30(channels7d);
+  //     setText24730(2);
+  //     setChannelRankingUrl("?column=increase7d");
+  //   } else if (x === 30) {
+  //     setChannels24_7_30(channels30d);
+  //     setText24730(3);
+  //     setChannelRankingUrl("?column=increase30d");
+  //   }
+  // };
   const useWindowDimensions = () => {
     const hasWindow = typeof window !== "undefined";
 
@@ -478,19 +478,7 @@ const Home = () => {
       />
       <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
         <div className="flex .grid .md:flex">
-          <div className="flex flex-col .gap-0 gap-4 justify-items-stretch content-start w-full">
-            {/* <div
-              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
-              ref={ref}
-            >
-              <div className='font-bold text-xl'>#</div>
-              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
-                <div className='ml-2'>
-                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
-                </div>
-              </div>
-            </div> */}
-            {/* {(width || 0) >= 1024 && tags ? ( */}
+          <div className="flex flex-col gap-[16px] justify-items-stretch content-start w-full">
             {categories ? (
               <CategoriesSection
                 tags={tags}
@@ -616,11 +604,15 @@ const Home = () => {
                       sortType === 1
                         ? doFilter("today_desc")
                         : doFilter("total_desc");
-                      if (searchListRef.current) {
-                        (searchListRef.current as HTMLElement).scrollIntoView({
-                          behavior: "smooth",
-                        });
-                      }
+                      window.scrollTo({
+                        top: 500,
+                        behavior: "smooth",
+                      });
+                      // if (searchListRef.current) {
+                      //   (searchListRef.current as HTMLElement).scrollIntoView({
+                      //     behavior: "smooth",
+                      //   });
+                      // }
                     }}
                   >
                     {t["see-more"]}
@@ -644,11 +636,15 @@ const Home = () => {
                     onClick={() => {
                       setSelectedSorting("created_desc");
                       doFilter("created_desc");
-                      if (searchListRef.current) {
-                        (searchListRef.current as HTMLElement).scrollIntoView({
-                          behavior: "smooth",
-                        });
-                      }
+                      window.scrollTo({
+                        top: 500,
+                        behavior: "smooth",
+                      });
+                      // if (searchListRef.current) {
+                      //   (searchListRef.current as HTMLElement).scrollIntoView({
+                      //     behavior: "smooth",
+                      //   });
+                      // }
                     }}
                   >
                     {t["see-more"]}
@@ -663,7 +659,7 @@ const Home = () => {
                 <div id="search"></div>
               </div>
             </div>
-            <div ref={searchListRef}></div>
+            {/* <div ref={searchListRef}></div> */}
             {/*  */}
             {/* all, channels, groups */}
             {/*  */}
@@ -681,6 +677,7 @@ const Home = () => {
                 doSearch={doSearch}
                 viewPort={viewPort}
                 setViewPort={setViewPort}
+                selectedCategory={selectedCategory}
               />
             ) : (
               <Skeleton
@@ -693,7 +690,7 @@ const Home = () => {
             {searchResult ? (
               searchResult.length > 0 ? (
                 viewPort === "grid" ? (
-                  <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+                  <div className="grid md:grid-cols-3 gap-0 md:gap-[16px]">
                     {
                       // [
                       //   ...searchResult?.filter(
@@ -743,7 +740,7 @@ const Home = () => {
               )
             ) : (
               // Loading skeletons while fetching
-              <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+              <div className="grid md:grid-cols-3 gap-0 md:gap-[16px]">
                 {Array(10)
                   .fill(1)
                   .map((_, index) => (

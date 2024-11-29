@@ -7,16 +7,16 @@ const Layout = ({ children }: any) => {
   return (
     <>
       <div className={`relative wrapper bg-gray-50`}>
-        <Link
+        {/* <Link
           href='https://t.me/fincatele'
           target='_blank'
           className='hidden md:block fixed right-10 bottom-10 rounded-full shadow-lg bg-primary p-3 group z-[9999]'
         >
           <ChatBubbleLeftEllipsisIcon className='h-6 text-white group-hover:animate-spin' />
-        </Link>
+        </Link> */}
         <Header />
         <main>
-          <div className='container' id='main'>
+          <div className="container" id="main">
             {children}
           </div>
         </main>

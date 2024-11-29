@@ -49,6 +49,12 @@ const CategoriesSection = ({
 
   const handleSubmit = () => {
     filterCategories();
+    if (pageYOffset) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   };
 
   useEffect(() => {
@@ -82,8 +88,12 @@ const CategoriesSection = ({
         behavior: "smooth",
       });
     } else {
+      // window.scrollTo({
+      //   top: 1110,
+      //   behavior: "smooth",
+      // });
       window.scrollTo({
-        top: 1110,
+        top: 500,
         behavior: "smooth",
       });
     }
@@ -102,7 +112,7 @@ const CategoriesSection = ({
       });
     } else {
       window.scrollTo({
-        top: 1110,
+        top: 500,
         behavior: "smooth",
       });
     }
@@ -118,29 +128,28 @@ const CategoriesSection = ({
       className={`sticky top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}`}
     >
       <div
-        className={`.sticky .top-0 .z-20 white-box max-[1023px]:!px-[16px] lg:pb-[20px] transition-all transform duration-150 overflow-hidden h-fit ${
-          pageYOffset === false ? "" : `overflow-hidden !shadow-2xl !rounded-xl`
+        className={`white-box max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
+          pageYOffset === false
+            ? ""
+            : `overflow-hidden !shadow-2xl !rounded-xl border-none`
         } max-[1023px]:rounded-none max-[1023px]:shadow-none  ${
           mobileCategoryModal ? "!shadow-2xl !rounded-xl" : ""
         }`}
-        // className={`sticky top-0 z-20 white-box lg:pb-[20px] transition-all transform duration-150 overflow-hidden ${
-        //   pageYOffset === false
-        //     ? "h-[68px] lg:h-[464px]"
-        //     : `h-[68px] lg:h-[76px] overflow-hidden !shadow-2xl !rounded-xl`
-        // } max-[1023px]:rounded-none max-[1023px]:shadow-none`}
       >
         <div
-          className={`transition-all transform duration-150 ${
-            pageYOffset === false
-              ? "h-[68px] lg:h-[464px]"
-              : `h-[68px] lg:h-[76px]`
+          className={`transition-all transform duration-150 lg:pb-[19px] ${
+            pageYOffset === false ? "h-[68px] lg:h-fit" : `h-[68px] lg:h-[76px]`
           }`}
         >
           <div
-            className="flex items-center justify-between gap-[10px] border-b border-[#e5e5e5] pt-[16px] pb-[16px] 
-      lg:pt-[20px] lg:pb-[19px] lg:px-[10px]"
+            className={`flex items-center justify-between gap-[10px] border-b border-[#e5e5e5] pt-[16px] pb-[16px] 
+            lg:py-[19px] lg:px-[10px] ${
+              pageYOffset === false
+                ? "border-b border-[#e5e5e5]"
+                : `border-b-[0px]`
+            }`}
           >
-            <div className="flex items-center gap-3 min-h-[36px]">
+            <div className="flex items-center gap-3 min-h-[36px] font-semibold">
               <Image
                 onClick={
                   window.innerWidth < 1024 ? showMobileCategory : undefined
@@ -150,16 +159,16 @@ const CategoriesSection = ({
                 width={20}
                 height={20}
               />
-              <div className="font-bold">
+              <div className="">
                 {/* 카테고리 */}
                 {t["category"]}
               </div>
               |
               <button
                 onClick={() => handleSelectTag("", "")}
-                className={`rounded-xl font-bold px-4 py-[1px] border hover:underline ${
-                  selectedTag || selectedCategory
-                    ? "bg-white text-black border-[#e5e5e5]"
+                className={`min-w-[52.2px] rounded-[28px] px-[11px] py-[3px] border hover:underline text-[12px] ${
+                  selectedCategory
+                    ? "bg-white text-black border-[#E7EAED]"
                     : "bg-primary border-primary text-white"
                 }`}
               >
@@ -167,13 +176,29 @@ const CategoriesSection = ({
                 {t["All"]}
               </button>
               {selectedCategory && (
-                <div className="flex items-center gap-2 font-bold">
-                  <TbMathGreater size={12} />
-                  <div className="bg-primary border border-primary rounded-xl text-white pl-1 pr-2 py-[1px] flex items-center gap-2">
-                    <span className="bg-[#d9d9d9] rounded-xl text-black px-2 py-0.5 text-[10px]">
-                      {selectedCategory[0].total}
+                <div className="flex items-center gap-[10px]">
+                  {/* <TbMathGreater size={20} /> */}
+                  <Image
+                    className="min-h-[20px] min-w-[20px]"
+                    src={"/img/CaretRight.svg"}
+                    width={20}
+                    height={20}
+                    alt="CaretRight"
+                  />
+                  <div className="bg-gray-primary border border-blue-primary rounded-[40px] text-dark-primary px-[11px] py-[3px] flex items-center gap-[8px]">
+                    {selectedCategory[0]?.image_path ? (
+                      <Image
+                        className="max-h-[20px] max-w-[20px]"
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/files/getImage?image_path=${selectedCategory[0]?.image_path}`}
+                        alt="image_path"
+                        height={20}
+                        width={20}
+                      />
+                    ) : null}
+                    <span className=""> {selectedCategory[0].label}</span>
+                    <span className="text-gray-text">
+                      ({selectedCategory[0].total})
                     </span>
-                    {selectedCategory[0].label}
                   </div>
                 </div>
               )}
@@ -207,9 +232,42 @@ const CategoriesSection = ({
               >
                 <RxPinTop /> 맨위로
               </button>
+              {mobileCategoryModal && (
+                <button onClick={showMobileCategory}>
+                  <Image
+                    src={"/img/close_icon.svg"}
+                    width={20}
+                    height={20}
+                    className="min-w-[20px] min-h-[20px]"
+                    alt="close_icon"
+                  />
+                  {/* <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M15.625 4.375L4.375 15.625"
+                      stroke="#1C1E21"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M15.625 15.625L4.375 4.375"
+                      stroke="#1C1E21"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg> */}
+                </button>
+              )}
             </div>
           </div>
-          <div className="lg:grid grid-rows-8 grid-cols-5 gap-y-[4px] gap-x-[4px] grid-flow-col hidden mt-[20px]">
+          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[4px] gap-x-[4px] grid-flow-row hidden mt-[20px]">
             {filteredCategories.map((category: any, index: number) => (
               <button
                 onClick={() =>
@@ -218,6 +276,7 @@ const CategoriesSection = ({
                       value: category.category_id,
                       label: JSON.parse(category.category_name)[locale],
                       total: category.channel_count,
+                      image_path: category?.image_path,
                     },
                   ])
                 }
@@ -247,8 +306,8 @@ const CategoriesSection = ({
           <>
             <div className="z-20 bg-black bg-opacity-50 flex items-center justify-center"></div>
             {/* Modal Content */}
-            <div>
-              <div className="relative border mt-[16px] border-primary items-center py-[7px] px-[11px] rounded-full inline-flex hover:shadow-md">
+            <div className="lg:hidden w-full">
+              <div className="relative border mt-[16px] border-primary items-center py-[7px] px-[11px] rounded-full inline-flex hover:shadow-md w-full max-w-[400px]">
                 <button className="h-fit" onClick={handleSubmit} name="search">
                   <MagnifyingGlassIcon className="h-5 text-primary mr-2" />
                 </button>
@@ -264,8 +323,8 @@ const CategoriesSection = ({
                 />
               </div>
               {/* mobile categories */}
-              <div className="bg-white pb-[20px] pt-[16px] rounded-lg w-full max-h-[60svh] .max-h-[544px] overflow-y-auto">
-                <div className="flex flex-col gap-[4px] lg:hidden">
+              <div className="bg-white pb-[20px] pt-[16px] rounded-lg w-full max-h-[60svh] overflow-y-auto">
+                <div className="flex flex-col gap-[4px]">
                   {filteredCategories.map((category: any, index: number) => (
                     <button
                       key={index}

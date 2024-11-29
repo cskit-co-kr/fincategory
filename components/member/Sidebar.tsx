@@ -71,7 +71,7 @@ const Sidebar = ({ memberInfo }: any) => {
                     {t["sign-out"]}
                   </button>
                 </div>
-                <div className="space-y-5 mt-2.5">
+                {/* <div className="space-y-5 mt-2.5">
                   {menus.map((menu, index) => (
                     <Link
                       key={index}
@@ -92,7 +92,7 @@ const Sidebar = ({ memberInfo }: any) => {
                       )}
                     </Link>
                   ))}
-                </div>
+                </div> */}
               </>
             ) : (
               <>
