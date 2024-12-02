@@ -297,7 +297,7 @@ const SearchFilterBar = ({
           <button
             className={`flex justify-center items-center gap-[8px] rounded-full px-[8px] py-[4px]
           ${viewPort === "list" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
-            onClick={() => setViewPort("list")}
+            // onClick={() => setViewPort("list")}
           >
             {t["List"]}
             <svg
@@ -319,7 +319,7 @@ const SearchFilterBar = ({
           <button
             className={`flex justify-center items-center gap-[8px] rounded-full px-[8px] py-[4px]
           ${viewPort === "grid" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
-            onClick={() => setViewPort("grid")}
+            // onClick={() => setViewPort("grid")}
           >
             {t["Card"]}
             <svg
@@ -381,7 +381,7 @@ const SearchFilterBar = ({
           <button
             className={`flex justify-center items-center gap-[8px] rounded-full px-[8px] py-[4px]
           ${viewPort === "list" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
-            onClick={() => setViewPort("list")}
+            // onClick={() => setViewPort("list")}
           >
             {t["List"]}
             <svg
@@ -403,7 +403,7 @@ const SearchFilterBar = ({
           <button
             className={`flex justify-center items-center gap-[8px] rounded-full px-[8px] py-[4px]
           ${viewPort === "grid" ? "bg-primary text-white" : "bg-[#EBEAEA]"}`}
-            onClick={() => setViewPort("grid")}
+            // onClick={() => setViewPort("grid")}
           >
             {t["Card"]}
             <svg

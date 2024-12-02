@@ -228,7 +228,7 @@ const CategoriesSection = ({
                   });
                 }}
               >
-                <RxPinTop /> 맨위로
+                <RxPinTop /> {t["맨위로"]}
               </button>
               {mobileCategoryModal && (
                 <button onClick={showMobileCategory}>
