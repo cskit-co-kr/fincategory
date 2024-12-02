@@ -288,6 +288,14 @@ const CategoriesSection = ({
                     height={20}
                     width={20}
                   />
+                ) : JSON.parse(category.category_name)["en"] === "N/A" ? (
+                  <Image
+                    className="max-h-[20px] max-w-[20px]"
+                    src={`/img/n_a_category.png`}
+                    alt="image_path"
+                    height={20}
+                    width={20}
+                  />
                 ) : (
                   <div className="w-[20px] h-[20px]"></div>
                 )}

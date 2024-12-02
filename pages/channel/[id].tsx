@@ -9,15 +9,29 @@ import axios from "axios";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useEffect, useState, useTransition } from "react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { Loader } from "rsuite";
 
 import {
   ChannelDetailLeftSidebar,
   ChannelDetailLeftSidebarSkeleton,
 } from "../../components/channel/ChannelDetailLeftSidebar";
-import { ChannelDetailNav, ChannelDetailNavSkeleton } from "../../components/channel/ChannelDetailNav";
-import { EmptyPostWebSkeleton, PostWeb, PostWebSkeleton } from "../../components/channel/PostWeb";
+import {
+  ChannelDetailNav,
+  ChannelDetailNavSkeleton,
+} from "../../components/channel/ChannelDetailNav";
+import {
+  EmptyPostWebSkeleton,
+  PostWeb,
+  PostWebSkeleton,
+} from "../../components/channel/PostWeb";
 import PostDB from "../../components/channel/PostDB";
 
 import { enUS } from "../../lang/en-US";
@@ -31,9 +45,9 @@ import _ from "lodash";
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className='flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md'>
-        <span className='bg-gray-200 p-1.5'>{label}</span>
-        <span className='p-1.5'>{payload[0].value.toLocaleString()}</span>
+      <div className="flex flex-col border border-gray-200 rounded-md bg-white text-xs shadow-md">
+        <span className="bg-gray-200 p-1.5">{label}</span>
+        <span className="p-1.5">{payload[0].value.toLocaleString()}</span>
       </div>
     );
   }
@@ -79,17 +93,23 @@ const ChannelDetail = ({ channel }: any) => {
 
   useEffect(() => {
     const sub = async () => {
-      const responseSub = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`, {
-        id: channel?.channel_id,
-      });
+      const responseSub = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getSubsHistory`,
+        {
+          id: channel?.channel_id,
+        }
+      );
       const sub = responseSub.data;
       const d = sub.map((item: any) => {
         const date = new Date(item.created_at);
-        const formattedDate = date.toLocaleDateString(locale === "ko" ? "ko-KR" : "en-US", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        });
+        const formattedDate = date.toLocaleDateString(
+          locale === "ko" ? "ko-KR" : "en-US",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }
+        );
         return { name: formattedDate, sub: item.count };
       });
       setData(d);
@@ -105,11 +125,14 @@ const ChannelDetail = ({ channel }: any) => {
       let averagePosts = channel?.extra_07 || 0;
       let averageErr = channel?.extra_08 || 0;
       if (!averageViews && !averagePosts && !averageErr) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ channel_id: channel.channel_id }),
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/postsapi`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ channel_id: channel.channel_id }),
+          }
+        );
         const combinedReturn = await res.json();
         if (combinedReturn[0].total.length > 0) {
           averageViews = Math.round(
@@ -147,30 +170,41 @@ const ChannelDetail = ({ channel }: any) => {
   }, [router, channel]);
 
   const getPostsWeb = async () => {
-    setLoadMore(true);
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
-      channel: channel?.username,
-      last_id: null,
-    });
-    const result = await response.data;
-    setPostsLastId(result.last_id);
-    if (result.posts.length === 0) {
-      setMode("db");
-      getPostsDB();
-    } else {
-      result.posts.length === 0 ? setPosts("empty") : setPosts(result.posts);
-      result.posts.length < 12 && setLoadMore(false);
-      setMode("web");
+    try {
+      setLoadMore(true);
+      // console.log("channel?.username", channel?.username);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`,
+        {
+          channel: channel?.username,
+          last_id: null,
+        }
+      );
+      const result = await response.data;
+      setPostsLastId(result.last_id);
+      if (result.posts.length === 0) {
+        setMode("db");
+        getPostsDB();
+      } else {
+        result.posts.length === 0 ? setPosts("empty") : setPosts(result.posts);
+        result.posts.length < 12 && setLoadMore(false);
+        setMode("web");
+      }
+    } catch (err) {
+      console.log("err", err);
     }
   };
 
   const handleLoadMoreWeb = async (getPostData: any) => {
     setLoadMoreText(<Loader content={t["loading-text"]} />);
 
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`, {
-      channel: channel.username,
-      last_id: postsLastId,
-    });
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`,
+      {
+        channel: channel.username,
+        last_id: postsLastId,
+      }
+    );
     const result = await response.data;
 
     result.last_id === null ? setLoadMore(false) : setLoadMore(true);
@@ -250,12 +284,20 @@ const ChannelDetail = ({ channel }: any) => {
         description={channel.description}
         titleTemplate={`${channel.title} @${channel.username} `}
       />
-      <div className='md:pt-7 bg-gray-50'>
-        <div className='md:flex mx-auto px-3 md:px-0'>
-          {channel ? <ChannelDetailLeftSidebar channel={channel} /> : <ChannelDetailLeftSidebarSkeleton />}
-          <div className='w-full flex flex-col gap-4 justify-items-stretch content-start'>
-            {channel ? <ChannelDetailNav channel={channel} /> : <ChannelDetailNavSkeleton />}
-            <div className='flex flex-col lg:flex-row-reverse gap-4'>
+      <div className="md:pt-7 bg-gray-50">
+        <div className="md:flex mx-auto px-3 md:px-0">
+          {channel ? (
+            <ChannelDetailLeftSidebar channel={channel} />
+          ) : (
+            <ChannelDetailLeftSidebarSkeleton />
+          )}
+          <div className="w-full flex flex-col gap-4 justify-items-stretch content-start">
+            {channel ? (
+              <ChannelDetailNav channel={channel} />
+            ) : (
+              <ChannelDetailNavSkeleton />
+            )}
+            <div className="flex flex-col lg:flex-row-reverse gap-4">
               <RightSidebar
                 channel={channel}
                 data={data}
@@ -264,17 +306,23 @@ const ChannelDetail = ({ channel }: any) => {
                 averageErr={averageErr}
               />
 
-              <div className='gap-4 flex flex-col w-full'>
+              <div className="gap-4 flex flex-col w-full">
                 {posts === "empty" ? (
                   <EmptyPostWebSkeleton channel={channel} />
                 ) : posts?.length > 0 ? (
                   posts.map((post: any) => {
                     if (mode === "web") {
-                      return <PostWeb channel={channel} post={post} key={post.id} />;
+                      return (
+                        <PostWeb channel={channel} post={post} key={post.id} />
+                      );
                     }
 
                     if (mode === "db") {
-                      return post.post !== null ? <PostDB channel={channel} post={post} key={post.id} /> : <></>;
+                      return post.post !== null ? (
+                        <PostDB channel={channel} post={post} key={post.id} />
+                      ) : (
+                        <></>
+                      );
                     }
                   })
                 ) : (
@@ -285,10 +333,14 @@ const ChannelDetail = ({ channel }: any) => {
                     })
                 )}
                 {loadMore && (
-                  <div className='flex justify-center col-span-3'>
+                  <div className="flex justify-center col-span-3">
                     <button
-                      onClick={() => (mode === "web" ? handleLoadMoreWeb(searchEvent) : handleLoadMoreDB(searchEvent))}
-                      className='bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0'
+                      onClick={() =>
+                        mode === "web"
+                          ? handleLoadMoreWeb(searchEvent)
+                          : handleLoadMoreDB(searchEvent)
+                      }
+                      className="bg-primary px-8 rounded-full text-sm py-2 w-fit self-center text-white hover:shadow-xl active:bg-[#143A66] mb-4 md:mb-0"
                     >
                       {loadMoreText}
                     </button>
@@ -310,7 +362,10 @@ export const getServerSideProps = async (context: any) => {
   //   let averagePosts = 0;
   //   let averageErr = 0;
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`, { detail: getId });
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getDetail`,
+    { detail: getId }
+  );
 
   const channel = response.data;
 
