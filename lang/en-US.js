@@ -111,7 +111,7 @@ export const enUS = {
     "subscribers-desc": "Subscribers ",
     "subscribers-asc": "Subscribers ",
     "All-cumulative":"All",
-    "누적": "All",
+    "누적": "Total",
     "개인정보처리방침":"Privacy policy",
     "이용약관": "Terms of Use",
     "today": "Today",

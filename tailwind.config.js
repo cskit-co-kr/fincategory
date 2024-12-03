@@ -34,6 +34,7 @@ module.exports = {
         "gray-text": "#666F79",
         "gray-primary": "rgba(54, 135, 226, 0.05);",
         "gray-secondary": "#EFF2F5",
+        "gray-3": "#E7EAED",
         "dark-primary": "#1C1E21",
         "blue-primary": "#3687E2",
       },

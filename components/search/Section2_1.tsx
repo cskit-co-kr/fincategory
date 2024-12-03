@@ -36,9 +36,11 @@ const Section2_1 = ({ channels }: any) => {
                 />
                 <div className="line-clamp-1 max-w-[85%]">{channel.title}</div>
               </div>
-              <div className="text-gray-500 text-[12px] font-bold min-w-[110px] text-right">
+              <div className="text-gray-text text-[12px] font-bold min-w-[110px] text-right">
                 {t["today"]}
+                {` `}
                 {channel.today && channel.today}/{t["누적"]}
+                {` `}
                 {channel.total && channel.total}
               </div>
             </div>

@@ -33,7 +33,12 @@ const SearchFilterBar = ({
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
 
-  const data = [
+  type SortingOption = {
+    label: string;
+    value: string;
+  };
+
+  const data: SortingOption[] = [
     {
       label: `${t["subscribers-desc"]} ↓`,
       value: "subscription_desc",
@@ -115,18 +120,18 @@ const SearchFilterBar = ({
       },
       isActive: channelType[0].value === "public_group",
     },
-    {
-      key: "private_group",
-      label: t["Private Group"],
-      icon: <HiOutlineLockClosed />,
-      action: () => {
-        updateChannelType([
-          { value: "private_group", label: t["private-group"] },
-        ]);
-        setDropdownVisible(!dropdownVisible);
-      },
-      isActive: channelType[0].value === "private_group",
-    },
+    // {
+    //   key: "private_group",
+    //   label: t["Private Group"],
+    //   icon: <HiOutlineLockClosed />,
+    //   action: () => {
+    //     updateChannelType([
+    //       { value: "private_group", label: t["private-group"] },
+    //     ]);
+    //     setDropdownVisible(!dropdownVisible);
+    //   },
+    //   isActive: channelType[0].value === "private_group",
+    // },
   ];
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const handleDropdownVisibleChange = (visible: boolean) => {
@@ -134,6 +139,7 @@ const SearchFilterBar = ({
   };
 
   // console.log("selectedCategory[0].label", selectedCategory[0].label);
+  // console.log("selectedSorting", selectedSorting);
   return (
     <>
       <div className="sorting flex items-center w-full bg-white md:rounded-xl p-3 md:p-4 border border-gray-secondary">
@@ -149,10 +155,10 @@ const SearchFilterBar = ({
                   <button
                     key={key}
                     onClick={action}
-                    className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+                    className={`flex items-center text-[13px] font-semibold rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
                       isActive
                         ? "bg-primary border-primary text-white"
-                        : "border-gray-200"
+                        : "border-gray-200 text-dark-primary"
                     }`}
                   >
                     {icon && (
@@ -177,6 +183,14 @@ const SearchFilterBar = ({
                   searchable={false}
                   size="sm"
                   placement="bottomEnd"
+                  renderValue={(value, item) => (
+                    <span style={{ fontWeight: "600" }}>
+                      {(item as SortingOption)?.label}
+                    </span>
+                  )}
+                  renderMenuItem={(label, item) => (
+                    <span style={{ fontWeight: "600" }}>{label}</span>
+                  )}
                 />
               </div>
             )}
@@ -197,7 +211,7 @@ const SearchFilterBar = ({
         </div>
         {/*  */}
         {/* Desktop channel type buttons */}
-        <div className="hidden md:flex gap-2 items-center .w-full">
+        <div className="hidden md:flex gap-2 items-center font-semibold">
           <button
             className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === "all"
@@ -252,7 +266,7 @@ const SearchFilterBar = ({
             />
             {t["Public Group"]}
           </button>
-          <button
+          {/* <button
             className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
               channelType[0].value === "private_group"
                 ? "bg-primary border-primary text-white"
@@ -273,7 +287,7 @@ const SearchFilterBar = ({
               }`}
             />
             {t["Private Group"]}
-          </button>
+          </button> */}
         </div>
         {/*  */}
         {/* Desktop sorting */}
@@ -288,6 +302,15 @@ const SearchFilterBar = ({
             searchable={false}
             size="sm"
             placement="bottomEnd"
+            menuStyle={{ fontWeight: "600" }}
+            renderValue={(value, item) => (
+              <span style={{ fontWeight: "600" }}>
+                {(item as SortingOption)?.label}
+              </span>
+            )}
+            renderMenuItem={(label, item) => (
+              <span style={{ fontWeight: "600" }}>{label}</span>
+            )}
           />
         </div>
         {/*  */}

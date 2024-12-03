@@ -13,7 +13,8 @@
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: black;
+    /* color: black; */
+    color: #1c1e21;
     font-size: 14px;
   }
 }

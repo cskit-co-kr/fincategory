@@ -594,8 +594,8 @@ const Home = () => {
             <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
               <div className="bg-white md:border md:border-gray-secondary md:rounded-xl">
                 <div className="flex flex-row justify-between items-center pt-6 pb-3 px-5">
-                  <div className="font-semibold text-sm flex gap-[12px] items-center">
-                    <div className="min-w-[42.2px] h-[25px]">
+                  <div className="flex items-center font-semibold text-sm gap-[12px]">
+                    <div className="min-w-[42.2px] .h-[25px]">
                       {/* 조회수 */}
                       {t["Views"]}
                     </div>
@@ -623,7 +623,7 @@ const Home = () => {
                     </button>
                   </div>
                   <button
-                    className="flex gap-1 text-primary items-center"
+                    className="flex gap-1 text-primary items-center font-semibold"
                     onClick={() => {
                       sortType === 1
                         ? setSelectedSorting("today_desc")
@@ -659,7 +659,7 @@ const Home = () => {
                     {t["recently-added"]}
                   </div>
                   <button
-                    className="flex gap-1 text-primary items-center"
+                    className="flex gap-1 text-primary items-center font-semibold"
                     onClick={() => {
                       setSelectedSorting("created_desc");
                       doFilter("created_desc");

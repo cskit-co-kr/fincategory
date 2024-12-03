@@ -388,7 +388,7 @@ const Ranking = (prop?: any) => {
             <Cell>
               {(rowData) => (
                 <div className="flex w-full h-full justify-center items-center">
-                  <div className=" text-[#1C1E21] font-normal whitespace-nowrap text-[14px] leading-[21px] w-full text-right">
+                  <div className="font-normal whitespace-nowrap text-[14px] leading-[21px] w-full text-right">
                     {rowData.today}/{rowData.total}
                   </div>
                 </div>

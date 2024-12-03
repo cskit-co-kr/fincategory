@@ -128,7 +128,7 @@ const CategoriesSection = ({
       className={`sticky top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}`}
     >
       <div
-        className={`white-box border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
+        className={`white-box border-none lg:border border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
             : `overflow-hidden !shadow-2xl !rounded-xl border-none`
@@ -145,9 +145,9 @@ const CategoriesSection = ({
             className={`flex items-center justify-between gap-[10px] border-gray-secondary pt-[16px] pb-[16px] 
             lg:py-[19px] lg:px-[10px] ${
               pageYOffset === false ? "border-b" : `border-b-[0px]`
-            }`}
+            }  overflow-x-auto whitespace-nowrap`}
           >
-            <div className="flex items-center gap-3 min-h-[36px] font-semibold">
+            <div className="flex items-center gap-3 min-h-[36px] font-semibold pr-3 lg:pr-0">
               <Image
                 onClick={
                   window.innerWidth < 1024 ? showMobileCategory : undefined
@@ -202,9 +202,12 @@ const CategoriesSection = ({
               )}
             </div>
             <div className="flex flex-row gap-[10px]">
-              <div className="relative border border-primary items-center py-[7px] px-[11px] rounded-full hidden lg:inline-flex hover:shadow-md">
+              <div
+                className="relative border border-gray-3 items-center py-[7px] px-[11px] rounded-full hidden 
+              lg:inline-flex hover:shadow-md hover:border-primary"
+              >
                 <button className="h-fit" onClick={handleSubmit} name="search">
-                  <MagnifyingGlassIcon className="h-5 text-primary mr-2" />
+                  <MagnifyingGlassIcon className="h-5 hover:text-primary text-gray-text mr-2" />
                 </button>
                 <input
                   type="text"
@@ -218,9 +221,8 @@ const CategoriesSection = ({
                 />
               </div>
               <button
-                className={`flex items-center gap-1 text-[11px] bg-gray-50 rounded-full pl-1 pr-2 py-0.5 hover:underline ${
-                  pageYOffset === false && "hidden"
-                }`}
+                className={`flex items-center justify-center w-[65px] gap-[8px] text-[12px] bg-[#EBEAEA] rounded-full hover:underline my-[5px] ml-[12px] max-h-[24px] font-semibold
+                ${pageYOffset === false && "hidden"}`}
                 onClick={() => {
                   window.scrollTo({
                     top: 0,
@@ -228,7 +230,30 @@ const CategoriesSection = ({
                   });
                 }}
               >
-                <RxPinTop /> {t["맨위로"]}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="7"
+                  height="10"
+                  viewBox="0 0 7 10"
+                  fill="none"
+                >
+                  <path
+                    d="M1 3.9375L3.5 1.4375L6 3.9375"
+                    stroke="#1C1E21"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M3.5 8.5625V1.5625"
+                    stroke="#1C1E21"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                {/* <RxPinTop />  */}
+                {t["맨위로"]}
               </button>
               {mobileCategoryModal && (
                 <button onClick={showMobileCategory}>
@@ -265,7 +290,7 @@ const CategoriesSection = ({
               )}
             </div>
           </div>
-          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[4px] gap-x-[6px] grid-flow-row hidden mt-[20px]">
+          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[3px] gap-x-[4px] grid-flow-row hidden mt-[20px]">
             {filteredCategories.map((category: any, index: number) => (
               <button
                 onClick={() =>
@@ -278,11 +303,11 @@ const CategoriesSection = ({
                     },
                   ])
                 }
-                className="flex flex-row gap-[8px] p-[10px] max-h-[40px] text-left"
+                className="flex flex-row items-center gap-[8px] py-[8px] px-[10px] max-h-[40px] text-left leading-[18px]"
               >
                 {category?.image_path ? (
                   <Image
-                    className="max-h-[20px] max-w-[20px]"
+                    className="w-[20px] h-[20px] max-h-[20px] max-w-[20px]"
                     src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/files/getImage?image_path=${category?.image_path}`}
                     alt="image_path"
                     height={20}
@@ -290,7 +315,7 @@ const CategoriesSection = ({
                   />
                 ) : JSON.parse(category.category_name)["en"] === "N/A" ? (
                   <Image
-                    className="max-h-[20px] max-w-[20px]"
+                    className="w-[20px] h-[20px] max-h-[20px] max-w-[20px]"
                     src={`/img/n_a_category.png`}
                     alt="image_path"
                     height={20}
@@ -310,7 +335,9 @@ const CategoriesSection = ({
                       JSON.parse(category.category_name)[locale].slice(1)
                     : ""}
                 </span>
-                <span>({category?.channel_count})</span>
+                <span className="text-gray-text">
+                  ({category?.channel_count})
+                </span>
               </button>
             ))}
           </div>
@@ -322,9 +349,12 @@ const CategoriesSection = ({
             <div className="z-20 bg-black bg-opacity-50 flex items-center justify-center"></div>
             {/* Modal Content */}
             <div className="lg:hidden w-full">
-              <div className="relative border mt-[16px] border-primary items-center py-[7px] px-[11px] rounded-full inline-flex hover:shadow-md w-full max-w-[400px]">
+              <div
+                className="inline-flex relative w-full max-w-[400px] border mt-[16px] border-gray-text items-center py-[7px] px-[11px] rounded-full
+              hover:shadow-md hover:border-primary"
+              >
                 <button className="h-fit" onClick={handleSubmit} name="search">
-                  <MagnifyingGlassIcon className="h-5 text-primary mr-2" />
+                  <MagnifyingGlassIcon className="h-5 text-gray-text hover:text-primary mr-2" />
                 </button>
                 <input
                   type="text"
@@ -352,12 +382,20 @@ const CategoriesSection = ({
                           },
                         ])
                       }
-                      className="flex flex-row gap-[8px] p-[10px] max-h-[40px] text-left"
+                      className="flex flex-row items-center gap-[8px] py-[8px] px-[10px] max-h-[40px] text-left leading-[18px] rounded-[8px] hover:bg-gray-primary"
                     >
                       {category?.image_path ? (
                         <Image
-                          className="max-h-[20px] max-w-[20px]"
+                          className="w-[20px] h-[20px] max-h-[20px] max-w-[20px]"
                           src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/files/getImage?image_path=${category?.image_path}`}
+                          alt="image_path"
+                          height={20}
+                          width={20}
+                        />
+                      ) : JSON.parse(category.category_name)["en"] === "N/A" ? (
+                        <Image
+                          className="w-[20px] h-[20px] max-h-[20px] max-w-[20px]"
+                          src={`/img/n_a_category.png`}
                           alt="image_path"
                           height={20}
                           width={20}
@@ -375,7 +413,9 @@ const CategoriesSection = ({
                             JSON.parse(category.category_name)[locale].slice(1)
                           : ""}
                       </span>
-                      <span>({category?.channel_count})</span>
+                      <span className="text-gray-text">
+                        ({category?.channel_count})
+                      </span>
                     </button>
                   ))}
                 </div>

@@ -603,7 +603,7 @@ const Header = () => {
               />
               <div className="inline-flex">
                 <button
-                  className="text-xs p-[5px] flex gap-[3px] items-center rounded-full min-w-[70px] justify-center text-dark-primary"
+                  className="text-xs p-[5px] flex gap-[3px] items-center rounded-full min-w-[70px] justify-center text-dark-primary font-semibold"
                   // onClick={() => setSearchSectionMenu((prev) => !prev)}
                 >
                   {searchSection === 1 ? t["channel/group"] : t["board"]}
@@ -635,7 +635,7 @@ const Header = () => {
                   </div>
                 )}
                 <button onClick={handleSubmit} name="search">
-                  <MagnifyingGlassIcon className="h-5 text-primary" />
+                  <MagnifyingGlassIcon className="h-5 text-dark-primary hover:text-primary" />
                 </button>
               </div>
             </div>
