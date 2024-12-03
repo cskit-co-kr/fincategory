@@ -125,6 +125,7 @@ export const enUS = {
     "tags": "Hashtags",
     "recently-added": "Recently added",
     "Invalid username or password": "Invalid username or password",
+    "Cancel search": "Cancel search",
     /* add a channel */
     "add-channel": "Add a channel/group",
     "link-to": "Link to the channel or @username",

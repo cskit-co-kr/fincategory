@@ -394,7 +394,8 @@ const SearchFilterBar = ({
             onClick={() => router.push("/")}
             className="hidden md:flex items-center gap-1 bg-white text-xs font-semibold rounded-full px-4 py-1 text-primary w-fit"
           >
-            검색 취소
+            {/* 검색 취소 */}
+            {t["Cancel search"]}
             <RiCloseCircleFill className="text-gray-400" />
           </button>
         )}

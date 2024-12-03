@@ -139,6 +139,7 @@ export const koKR = {
     "Passwords must match": "비밀번호가 일치하지 않는지 확인하세요",
     "recently-added": "최근 추가",
     "Invalid username or password": "Id 또는 비밀번호를 확인해주세요.",
+    "Cancel search": "검색 취소",
     /* add a channel */
     "add-channel": "채널 및 그룹 추가",
     "link-to": "채널 또는 그룹에 대한 링크",

@@ -39,18 +39,18 @@ interface DataTags {
 const ChannelDetailLeftSidebar = ({ channel }: any) => {
   const [error, setError] = useState<boolean>(false);
   // Tags
-  const [tagsList, setTagsList] = useState<Array<string>>([]);
-  const [tags, setTags] = useState<Array<string>>([]);
-  const [data, setData] = useState<Array<string>>([]);
+  // const [tagsList, setTagsList] = useState<Array<string>>([]);
+  // const [tags, setTags] = useState<Array<string>>([]);
+  // const [data, setData] = useState<Array<string>>([]);
 
-  const [inputVisible, setInputVisible] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>("");
+  // const [inputVisible, setInputVisible] = useState<boolean>(false);
+  // const [inputValue, setInputValue] = useState<string>("");
 
-  const [editInputIndex, setEditInputIndex] = useState<number>(-1);
-  const [editInputValue, setEditInputValue] = useState<string>("");
+  // const [editInputIndex, setEditInputIndex] = useState<number>(-1);
+  // const [editInputValue, setEditInputValue] = useState<string>("");
 
-  const inputRef = useRef<PickerHandle>(null);
-  const editInputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<PickerHandle>(null);
+  // const editInputRef = useRef<HTMLInputElement>(null);
 
   const { data: session } = useSession();
   const router = useRouter();
@@ -65,9 +65,15 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     </Message>
   );
 
+  // category
   const [categoryData, setCategoryData] = useState([]);
   const [categoryLoadData, setCategoryLoadData] = useState([]);
   const [value, setValue] = useState<any>(null);
+
+  // language
+  const [languageData, setLanguageData] = useState([]);
+  const [languageLoadData, setLanguageLoadData] = useState([]);
+  const [languageValue, setLanguageValue] = useState<any>(null);
 
   const loadCategory = async () => {
     const result = await axios.get(
@@ -87,144 +93,165 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     setCategoryLoadData(cats);
     setCategoryData(cats);
   };
-  const loadTags = async () => {
-    const tags: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`
+
+  const loadLanguage = async () => {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/language/read`
     );
-
-    const tagsList = tags.data.reduce((acc: Array<string>, e: DataTags) => {
-      acc.push(e.tag);
-      return acc;
-    }, []);
-
-    setTagsList(tagsList);
+    const _categories = await result.data;
+    const cats = _categories?.map((item: any) => {
+      if (channel?.language?.id === item.id) {
+        setLanguageValue(item.id);
+      }
+      // const obj = JSON.parse(item.name);
+      return {
+        value: item.id,
+        label: item.value,
+      };
+    });
+    setLanguageLoadData(cats);
+    setLanguageData(cats);
   };
+  // const loadTags = async () => {
+  // const tags: any = await axios.get(
+  //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`
+  // );
+
+  // const tagsList = tags.data.reduce((acc: Array<string>, e: DataTags) => {
+  //   acc.push(e.tag);
+  //   return acc;
+  // }, []);
+
+  // setTagsList(tagsList);
+  // };
 
   useEffect(() => {
-    loadCategory();
-    const tags = channel.tags.reduce(
-      (
-        acc: Array<string>,
-        e: { id: number; channel_id: number; tag: string }
-      ) => {
-        acc.push(e.tag);
-        return acc;
-      },
-      []
-    );
-
-    setTags(tags);
-
     if (session?.user.type === 2) {
-      loadTags();
+      loadCategory();
+      loadLanguage();
     }
-  }, []);
+    // const tags = channel.tags.reduce(
+    //   (
+    //     acc: Array<string>,
+    //     e: { id: number; channel_id: number; tag: string }
+    //   ) => {
+    //     acc.push(e.tag);
+    //     return acc;
+    //   },
+    //   []
+    // );
 
-  const showInput = () => {
-    setInputVisible(true);
-  };
+    // setTags(tags);
 
-  const handleClose = (removedTag: string) => {
-    const newTags = tags.filter((tag) => tag !== removedTag);
-    setTags(newTags);
-  };
+    // if (session?.user.type === 2) {
+    //   loadTags();
+    // }
+  }, [session?.user]);
 
-  const handleEditInputChange = (
-    value: string,
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    const val = value
-      .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
-      .toLowerCase();
+  // const showInput = () => {
+  //   setInputVisible(true);
+  // };
 
-    setEditInputValue(val);
-  };
+  // const handleClose = (removedTag: string) => {
+  //   const newTags = tags.filter((tag) => tag !== removedTag);
+  //   setTags(newTags);
+  // };
 
-  const handleEditInputConfirm = () => {
-    const newTags = [...tags];
-    newTags[editInputIndex] = editInputValue;
-    setTags(newTags);
-    setEditInputIndex(-1);
-    setInputValue("");
-  };
+  // const handleEditInputChange = (
+  //   value: string,
+  //   e: ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const val = value
+  //     .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
+  //     .toLowerCase();
 
-  const handleInputConfirm = () => {
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      setTags([...tags, inputValue]);
-    }
-    setInputVisible(false);
-    setInputValue("");
-    setData([]);
-  };
+  //   setEditInputValue(val);
+  // };
 
-  const handleSearch = async (newValue: string) => {
-    const val = newValue
-      .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
-      .toLowerCase();
+  // const handleEditInputConfirm = () => {
+  //   const newTags = [...tags];
+  //   newTags[editInputIndex] = editInputValue;
+  //   setTags(newTags);
+  //   setEditInputIndex(-1);
+  //   setInputValue("");
+  // };
 
-    if (val && val.length > 0) {
-      const data: any = tagsList.filter((t: string) => t.startsWith(val));
-      setData(data);
-      setInputValue(val);
-    } else {
-      setData([]);
-      setInputValue("");
-    }
-  };
+  // const handleInputConfirm = () => {
+  //   if (inputValue && tags.indexOf(inputValue) === -1) {
+  //     setTags([...tags, inputValue]);
+  //   }
+  //   setInputVisible(false);
+  //   setInputValue("");
+  //   setData([]);
+  // };
 
-  const onSelect = (data: string) => {
-    if (data && tags.indexOf(data) === -1) {
-      setTags([...tags, data]);
-    }
-    setInputVisible(false);
-    setInputValue("");
-    setData([]);
-  };
+  // const handleSearch = async (newValue: string) => {
+  //   const val = newValue
+  //     .replace(/[&\/\\!@#,^+()$~%.'":;*\]\[?<>_{}=\-|` ]/g, "")
+  //     .toLowerCase();
 
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      handleInputConfirm();
-    }
-  };
+  //   if (val && val.length > 0) {
+  //     const data: any = tagsList.filter((t: string) => t.startsWith(val));
+  //     setData(data);
+  //     setInputValue(val);
+  //   } else {
+  //     setData([]);
+  //     setInputValue("");
+  //   }
+  // };
 
-  const tagInputStyle: React.CSSProperties = {
-    width: 160,
-    verticalAlign: "top",
-    marginBottom: 10,
-  };
+  // const onSelect = (data: string) => {
+  //   if (data && tags.indexOf(data) === -1) {
+  //     setTags([...tags, data]);
+  //   }
+  //   setInputVisible(false);
+  //   setInputValue("");
+  //   setData([]);
+  // };
 
-  const saveTag = async () => {
-    const res = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`,
-      {
-        tags: tags,
-        channel: channel.channel_id,
-      }
-    );
+  // const handleKeyDown = (e: any) => {
+  //   if (e.key === "Enter") {
+  //     handleInputConfirm();
+  //   }
+  // };
 
-    const data = res.data;
+  // const tagInputStyle: React.CSSProperties = {
+  //   width: 160,
+  //   verticalAlign: "top",
+  //   marginBottom: 10,
+  // };
 
-    if (res.status === 200 && data.code === 200) {
-      toaster.push(message("info", t["tag-saved"]), {
-        placement: "topEnd",
-        duration: 5000,
-      });
-    } else {
-      toaster.push(message("error", "UnSuccessfull"), {
-        placement: "topEnd",
-        duration: 5000,
-      });
-    }
-    loadTags();
-  };
+  // const saveTag = async () => {
+  //   const res = await axios.put(
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/update`,
+  //     {
+  //       tags: tags,
+  //       channel: channel.channel_id,
+  //     }
+  //   );
 
-  const updateCategoryData = () => {
-    setCategoryData(categoryLoadData);
-  };
+  //   const data = res.data;
+
+  //   if (res.status === 200 && data.code === 200) {
+  //     toaster.push(message("info", t["tag-saved"]), {
+  //       placement: "topEnd",
+  //       duration: 5000,
+  //     });
+  //   } else {
+  //     toaster.push(message("error", "UnSuccessfull"), {
+  //       placement: "topEnd",
+  //       duration: 5000,
+  //     });
+  //   }
+  //   loadTags();
+  // };
 
   const [channelCategory, setChannelCategory] = useState<any>(
     channel.category ? JSON.parse(channel.category.name)[locale] : null
   );
+  const updateCategoryData = () => {
+    setCategoryData(categoryLoadData);
+  };
   const setCategory = async (e: any) => {
     setValue(e);
     const result = await apiService.updateCategory(channel.id, e);
@@ -234,6 +261,24 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
     }
   };
 
+  // language
+  const [channelLanguage, setChannelLanguage] = useState<any>(
+    channel.language ? channel.language.value : null
+  );
+  const updateLanguageData = async (e: any) => {
+    setLanguageValue(e);
+    // console.log("e", e);
+    const result = await apiService.updateLanguage(channel.id, e);
+    if (result === "Success") {
+      const c: any = languageData.filter((c: any) => c.value === e);
+      setChannelLanguage(c[0].label);
+    }
+  };
+
+  const setLanguage = () => {
+    setLanguageData(languageLoadData);
+  };
+  // console.log("channel", channel);
   return (
     <div className="flex flex-col w-full md:w-80 md:min-w-[314px] mt-4 md:mt-0 md:mr-4">
       <div className="sticky inset-y-4 min-h-[289px]">
@@ -295,20 +340,34 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
               {t["channel-region-and-language"]}
             </span>
             <div className="flex gap-5">
-              <span>{t[channel.country?.iso as keyof typeof t]}</span>
+              {/* <span>{t[channel.country?.iso as keyof typeof t]}</span> */}
               <span>
-                {channel.language &&
-                  t[channel.language.value as keyof typeof t]}
+                {channelLanguage && t[channelLanguage as keyof typeof t]}
               </span>
             </div>
+            {session?.user.type === 2 && (
+              <div className="bg-primary/10 rounded-lg p-2 mt-2 text-xs flex items-center gap-2">
+                <div>Select Language</div>
+                <SelectPicker
+                  data={languageData}
+                  name="category"
+                  placeholder={t["select-topic"]}
+                  searchable={false}
+                  cleanable={false}
+                  value={languageValue}
+                  onChange={updateLanguageData}
+                  onOpen={setLanguage}
+                  className="min-w-[130px]"
+                />
+              </div>
+            )}
           </div>
           <div className="w-full">
             <div className="text-gray-400">{t["date-registered"]}</div>
             <div>{formatDate(channel.created_at)}</div>
           </div>
-          <div className="flex flex-col justify-between w-full">
-            <span className="text-gray-400">{t["tags"]}</span>
-            {session?.user.type === 2 ? (
+
+          {/* {session?.user.type === 2 ? (
               <div className="admin-mode mt-1">
                 <div className="mb-1 ">
                   {tags.map((tag, index: number) => {
@@ -413,8 +472,31 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                   }
                 )}
               </div>
-            )}
-          </div>
+            )} */}
+          {channel?.tags && channel?.tags.length > 0 && (
+            <div className="flex flex-col justify-between w-full">
+              {" "}
+              <span className="text-gray-400">{t["tags"]}</span>
+              <div className="hashtags flex gap-1">
+                {channel.tags.map(
+                  (
+                    tag: { id: number; channel_id: number; tag: string },
+                    index: number
+                  ) => {
+                    return (
+                      <Link
+                        href={`/?q=#${tag.tag}`}
+                        className="bg-gray-100 px-1.5 py-0.5 mx-0.5 mt-0.5 rounded-full text-xs font-semibold hover:underline text-gray-700"
+                        key={index}
+                      >
+                        #{tag.tag}
+                      </Link>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
