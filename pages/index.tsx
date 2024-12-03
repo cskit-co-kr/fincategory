@@ -57,7 +57,7 @@ const Home = () => {
     useState<string>("subscription_desc");
 
   const [searchResult, setSearchResult] = useState<any | null>(null);
-  const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
+  const [loadMoreText, setLoadMoreText] = useState<any>(t["see-more"]);
 
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
@@ -269,7 +269,7 @@ const Home = () => {
   }, [router.query.q, sorting, locale]);
 
   useEffect(() => {
-    setLoadMoreText(t["load-more"]);
+    setLoadMoreText(t["see-more"]);
     getCategoriesWithCount();
     setSelectedCategory(null);
   }, [locale]);
@@ -357,7 +357,7 @@ const Home = () => {
 
   const handleLoadMore = async (data: any) => {
     setIsLoading(true);
-    setLoadMoreText(<Loader content={t["loading-text"]} />);
+    setLoadMoreText(<Loader content={t["see-more"]} />);
     data["paginate"].limit = data["paginate"].limit + 45;
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`,
@@ -375,7 +375,7 @@ const Home = () => {
     setSearchResult(ads2Added);
     // setSearchResult(result);
     setIsLoading(false);
-    setLoadMoreText(t["load-more"]);
+    setLoadMoreText(t["see-more"]);
   };
 
   const doFilter = (e: any) => {
@@ -769,7 +769,8 @@ const Home = () => {
               <div className="flex justify-center">
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
-                  className="bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
+                  className="bg-primary px-[12px] rounded-full text-sm py-[4px] md:my-[6px] mx-7 w-full md:w-fit self-center text-white font-semibold
+                  hover:shadow-xl active:bg-[#143A66]"
                 >
                   {loadMoreText}
                 </button>

@@ -17,19 +17,22 @@ function Footer() {
   );
   const groups = resultGroup?.groups;
   return (
-    <footer className="bg-white pt-[32px] pb-[22px] bottom-0 w-full mt-[22px] hidden md:block">
+    <footer
+      className="bg-white pt-[20px] pb-[19px] bottom-0 w-full mt-[16px] block .hidden .md:block
+    md:pt-[32px] md:pb-[22px] md:mt-[34px]"
+    >
       <div className="container px-5">
-        <div className="flex items-end w-full justify-between pb-[24px] border-b-[2px] border-[#EFF2F5]">
-          <div className="font-raleway text-2xl flex gap-3 items-end">
+        <div className="flex items-end w-full justify-between border-b-[2px] border-[#EFF2F5] pb-[17px] md:pb-[24px]">
+          <div className="font-raleway text-2xl flex gap-[12px] items-end">
             <Link
               href="/"
-              className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none"
+              className="min-w-[96px] hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none"
             >
               <span className="font-bold text-primary">Fin</span>
               <span className="">Cago</span>
               {/* <span className="">go</span> */}
             </Link>
-            <div className="text-[11px] leading-none mb-[3px] text-gray-text font-segoe">
+            <div className="text-[12px] leading-[18px] .mb-[3px] text-gray-text font-segoe">
               {/* 텔레그램 채널정보, 핀카 */}
               {t["Telegram channel/group information"]}
             </div>
@@ -75,8 +78,8 @@ function Footer() {
             </Link>
           </li>
         </ul> */}
-        <div className="flex gap-[8px] text-gray-text mt-[26px] mb-[13px]">
-          <a className=".font-bold" target="_blank" href="https://cskit.co.kr/">
+        <div className="flex gap-[8px] text-gray-text mt-[16px] mb-[21px] md:mt-[26px] md:mb-[13px]">
+          <a className="" target="_blank" href="https://cskit.co.kr/">
             {/* 씨스킷주식회사 */}
             {t["Cskit"]}
           </a>
@@ -96,9 +99,9 @@ function Footer() {
         {/* <p className="mt-2">(c) 2023. CSKIT Inc. all rights reserved.</p> */}
         <div
           className="flex p-[10px] justify-center items-center rouded-[25px] bg-blue-gradient 
-        text-gray-text"
+        text-gray-text text-[12px] md:text-[14px] leading-[21px]"
         >
-          (c) 2023. CSKIT Inc. all rights reserved.
+          <span>(c) 2023. CSKIT Inc. all rights reserved.</span>
         </div>
       </div>
     </footer>
