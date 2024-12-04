@@ -9,13 +9,13 @@ import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 const CategoriesSection = ({
-  tags,
-  selectedTag,
-  setSelectedTag,
+  // tags,
+  // selectedTag,
+  // setSelectedTag,
   selectedCategory,
   setSelectedCategory,
-  selectCategory,
-  setSelectCategory,
+  // selectCategory,
+  // setSelectCategory,
   searchListRef,
   isRank,
   categories,
@@ -79,8 +79,8 @@ const CategoriesSection = ({
   }, [pageYOffset]);
 
   const handleSelectTag = (tag: any, category: any) => {
-    setSelectedTag(tag);
-    setSelectCategory(category.name);
+    // setSelectedTag(tag);
+    // setSelectCategory(category.name);
     setSelectedCategory(null);
     if (isRank) {
       window.scrollTo({
@@ -102,8 +102,8 @@ const CategoriesSection = ({
 
   const handleSelectCategory = (category: any) => {
     setSelectedCategory(category);
-    setSelectedTag("");
-    setSelectCategory("");
+    // setSelectedTag("");
+    // setSelectCategory("");
     setMobileCategoryModal(false);
     if (isRank) {
       window.scrollTo({
@@ -147,7 +147,7 @@ const CategoriesSection = ({
               pageYOffset === false ? "border-b" : `border-b-[0px]`
             }  overflow-x-auto whitespace-nowrap`}
           >
-            <div className="flex items-center gap-3 min-h-[36px] font-semibold pr-3 lg:pr-0">
+            <div className="flex items-center gap-[8px] min-h-[36px] font-semibold pr-3 lg:pr-0">
               <Image
                 onClick={
                   window.innerWidth < 1024 ? showMobileCategory : undefined
@@ -290,7 +290,7 @@ const CategoriesSection = ({
               )}
             </div>
           </div>
-          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[3px] gap-x-[4px] grid-flow-row hidden mt-[20px]">
+          <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[3px] gap-x-[4px] grid-flow-row hidden mt-[12px]">
             {filteredCategories.map((category: any, index: number) => (
               <button
                 onClick={() =>

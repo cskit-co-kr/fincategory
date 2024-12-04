@@ -10,7 +10,7 @@ import {
 import { Loader } from "rsuite";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { Section1, Section1Skeleton } from "../components/search/Section1";
+// import { Section1, Section1Skeleton } from "../components/search/Section1";
 import {
   Section2_1Skeleton,
   Section2_1,
@@ -20,13 +20,13 @@ import {
   Section2_2Skeleton,
 } from "../components/search/Section2_2";
 import { Skeleton } from "@mui/material";
-import Section3 from "../components/search/Section3";
+// import Section3 from "../components/search/Section3";
 import SearchFilterBar from "../components/search/SearchFilterBar";
-import Ads1 from "../components/search/Ads1";
+// import Ads1 from "../components/search/Ads1";
 import addAds2 from "../lib/ads2";
 import AdChannel2 from "../components/search/AdChannel2";
-import Hashtag from "../components/Hashtag";
-import HashtagMobile from "../components/HashtagMobile";
+// import Hashtag from "../components/Hashtag";
+// import HashtagMobile from "../components/HashtagMobile";
 import { NextSeo } from "next-seo";
 
 import ListChannels from "../components/channel/ListChannels";
@@ -37,14 +37,14 @@ const Home = () => {
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
   // console.log("locale", locale);
-  const [selectedTag, setSelectedTag] = useState<any>();
+  // const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   // const [searchText, setSearchText] = useState<any>("");
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
-  const [selectCategory, setSelectCategory] = useState<any>();
+  // const [selectCategory, setSelectCategory] = useState<any>();
 
   const [channelType, setChannelType] = useState<any | null>([
     { value: "all", label: t["All-cumulative"] },
@@ -68,12 +68,12 @@ const Home = () => {
   const [channelsTotalToday, setChannelsTotalToday] =
     useState<any>(channelsToday);
 
-  const [channels24, setChannels24] = useState<any>(null);
-  const [channels7d, setChannels7d] = useState<any>(null);
-  const [channels30d, setChannels30d] = useState<any>(null);
-  const [channels24_7_30, setChannels24_7_30] = useState();
+  // const [channels24, setChannels24] = useState<any>(null);
+  // const [channels7d, setChannels7d] = useState<any>(null);
+  // const [channels30d, setChannels30d] = useState<any>(null);
+  // const [channels24_7_30, setChannels24_7_30] = useState();
 
-  const [tags, setTags] = useState<any>();
+  // const [tags, setTags] = useState<any>();
   const [categories, setCategories] = useState<any>();
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
@@ -86,8 +86,8 @@ const Home = () => {
 
   useEffect(() => {
     if (!isFirstLoad) {
-      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : "";
-      doSearch(tag);
+      // const tag = selectedTag?.tag ? `#${selectedTag.tag}` : "";
+      doSearch("");
     }
     setIsFirstLoad(false);
     const data: any = {
@@ -138,7 +138,7 @@ const Home = () => {
     };
     newChannels();
     todayChannels();
-  }, [selectedTag, selectedCategory]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const data: any = {
@@ -187,54 +187,54 @@ const Home = () => {
       setChannelsTotalToday(channelsToday);
     };
 
-    const _channels24 = async () => {
-      // Get most increased subscriptions in 24h
-      data["paginate"] = { limit: 6, offset: 0 };
-      data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
-      data["channel_type"] = null;
-      const channels24h = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
-      // Get most increased subscriptions in 7d
-      data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
-      const channels7d = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
-      // Get most increased subscriptions in 30d
-      data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
-      // console.log("data123", data);
-      const channels30d = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
+    // const _channels24 = async () => {
+    //   // Get most increased subscriptions in 24h
+    //   data["paginate"] = { limit: 6, offset: 0 };
+    //   data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
+    //   data["channel_type"] = null;
+    //   const channels24h = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
+    //   // Get most increased subscriptions in 7d
+    //   data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
+    //   const channels7d = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
+    //   // Get most increased subscriptions in 30d
+    //   data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
+    //   // console.log("data123", data);
+    //   const channels30d = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
 
-      setChannels24(channels24h);
-      setChannels7d(channels7d);
-      setChannels30d(channels30d);
+    //   setChannels24(channels24h);
+    //   setChannels7d(channels7d);
+    //   setChannels30d(channels30d);
 
-      setChannels24_7_30(channels24h);
-    };
+    //   setChannels24_7_30(channels24h);
+    // };
 
-    const exec = async () => {
-      const tags = await axios
-        .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
-        .then((response) => response.data);
+    // const getTags = async () => {
+    //   const tags = await axios
+    //     .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
+    //     .then((response) => response.data);
 
-      startTransition(() => {
-        setTags(tags);
-      });
-    };
+    //   startTransition(() => {
+    //     setTags(tags);
+    //   });
+    // };
 
     const getTotal = async () => {
       data["paginate"] = { limit: 5, offset: 0 };
@@ -252,9 +252,9 @@ const Home = () => {
 
     newChannels();
     todayChannels();
-    _channels24();
+    // _channels24();
 
-    exec();
+    // getTags();
     //
     // getCategoriesWithCount();
   }, [router]);
@@ -323,9 +323,9 @@ const Home = () => {
       paginate: { limit: 45, offset: 0 },
       sort: sorting,
     };
-    if (!!selectedTag?.tag) {
-      data.query = `#${selectedTag.tag}`;
-    }
+    // if (!!selectedTag?.tag) {
+    //   data.query = `#${selectedTag.tag}`;
+    // }
     // console.log("data", data);
     setSearchEvent(data);
 
@@ -508,13 +508,13 @@ const Home = () => {
           <div className="flex flex-col gap-[16px] justify-items-stretch content-start w-full">
             {categories ? (
               <CategoriesSection
-                tags={tags}
-                selectedTag={selectedTag}
-                setSelectedTag={setSelectedTag}
+                // tags={tags}
+                // selectedTag={selectedTag}
+                // setSelectedTag={setSelectedTag}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
-                selectCategory={selectCategory}
-                setSelectCategory={setSelectCategory}
+                // selectCategory={selectCategory}
+                // setSelectCategory={setSelectCategory}
                 searchListRef={searchListRef}
                 categories={categories}
               />
@@ -699,7 +699,7 @@ const Home = () => {
                 loadBar={loadBar}
                 channelType={channelType}
                 setChannelType={setChannelType}
-                selectedTag={selectedTag?.tag}
+                // selectedTag={selectedTag?.tag}
                 handleClick={handleClick}
                 doSearch={doSearch}
                 viewPort={viewPort}
