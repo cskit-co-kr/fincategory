@@ -13,6 +13,8 @@ import { RiCloseCircleFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { Dropdown, Menu, Button } from "antd";
 import Image from "next/image";
+import ChannelsSortIcon from "./icons/channels_sort";
+import PublicGroupSortIcon from "./icons/public_groups_sort";
 
 const SearchFilterBar = ({
   totalChannels,
@@ -101,7 +103,11 @@ const SearchFilterBar = ({
     {
       key: "channel",
       label: t["channel"],
-      icon: <HiOutlineMegaphone />,
+      icon: (
+        <ChannelsSortIcon
+          fill={channelType[0].value === "channel" ? "white" : "#3687E2"}
+        />
+      ),
       action: () => {
         updateChannelType([{ value: "channel", label: t["channel"] }]);
         setDropdownVisible(!dropdownVisible);
@@ -111,7 +117,11 @@ const SearchFilterBar = ({
     {
       key: "public_group",
       label: t["Public Group"],
-      icon: <HiOutlineUsers />,
+      icon: (
+        <PublicGroupSortIcon
+          fill={channelType[0].value === "public_group" ? "#3687E2" : "white"}
+        />
+      ),
       action: () => {
         updateChannelType([
           { value: "public_group", label: t["public-group"] },
@@ -225,7 +235,7 @@ const SearchFilterBar = ({
             {t["All"]}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-[6px] whitespace-nowrap ${
               channelType[0].value === "channel"
                 ? "bg-primary border-primary text-white"
                 : "border-gray-200"
@@ -234,18 +244,13 @@ const SearchFilterBar = ({
               updateChannelType([{ value: "channel", label: t["channel"] }])
             }
           >
-            <HiOutlineMegaphone
-              size={16}
-              className={`${
-                channelType[0].value === "channel"
-                  ? "text-white"
-                  : "text-[#3886E2]"
-              }`}
+            <ChannelsSortIcon
+              fill={channelType[0].value === "channel" ? "white" : "#3687E2"}
             />
             {t["channel"]}
           </button>
           <button
-            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-1 whitespace-nowrap ${
+            className={`flex items-center text-[13px] rounded-lg border px-3 md:px-4 py-2 gap-[4px] whitespace-nowrap ${
               channelType[0].value === "public_group"
                 ? "bg-primary border-primary text-white"
                 : "border-gray-200"
@@ -256,13 +261,10 @@ const SearchFilterBar = ({
               ])
             }
           >
-            <HiOutlineUsers
-              size={16}
-              className={`${
-                channelType[0].value === "public_group"
-                  ? "text-white"
-                  : "text-[#FF7171]"
-              }`}
+            <PublicGroupSortIcon
+              fill={
+                channelType[0].value === "public_group" ? "#3687E2" : "white"
+              }
             />
             {t["Public Group"]}
           </button>
