@@ -32,24 +32,26 @@ const CategoriesSection = ({
   const [filteredCategories, setFilteredCategories] = useState(categories);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
+    // if (e.key === "Enter") {
+    handleSubmit();
+    // }
   };
 
-  const filterCategories = () => {
+  const filterCategories = (value: any) => {
+    // console.log("value", value);
     const filtered = categories.filter((category: any) =>
       JSON.parse(category.category_name)
         [locale]?.toLowerCase()
-        .includes(searchField.toLowerCase())
+        // .includes(searchField.toLowerCase())
+        .includes(value?.toLowerCase())
     );
     setFilteredCategories(filtered);
     // console.log("filterCategories");
   };
 
-  const handleSubmit = () => {
-    filterCategories();
-    if (pageYOffset) {
+  const handleSubmit = (e?: any) => {
+    filterCategories(e.target.value);
+    if (pageYOffset && mobileCategoryModal === false) {
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -59,13 +61,31 @@ const CategoriesSection = ({
 
   useEffect(() => {
     // Re-filter categories when `categories`, `locale`, or `searchField` changes
-    filterCategories();
+    filterCategories("");
   }, [categories]);
 
+  // const handleScroll = () => {
+  //   console.log("window.scrollY", window.scrollY);
+  //   if (window.scrollY > 180) {
+  //     pageYOffset !== true ? setPageYOffset(true) : null;
+  //   } else if (window.scrollY > 10) {
+  //     pageYOffset !== true ? setPageYOffset(true) : null;
+  //   } else {
+  //     pageYOffset !== false ? setPageYOffset(false) : null;
+  //   }
+  // };
   const handleScroll = () => {
-    if (window.scrollY > 180) {
-      pageYOffset !== true ? setPageYOffset(true) : null;
-    } else if (window.scrollY > 10) {
+    // console.log("window.scrollY", window.scrollY);
+
+    // Check if screen height is within the specified range (1064px to 1480px)
+    if (window.innerHeight > 1064 && window.innerHeight < 1480) {
+      pageYOffset !== false ? setPageYOffset(false) : null;
+      // Don't trigger setPageYOffset(true) in this screen height range
+      return;
+    }
+
+    // Otherwise, continue with your original scroll logic
+    if (window.scrollY > 180 || window.scrollY > 10) {
       pageYOffset !== true ? setPageYOffset(true) : null;
     } else {
       pageYOffset !== false ? setPageYOffset(false) : null;
@@ -125,7 +145,9 @@ const CategoriesSection = ({
 
   return (
     <div
-      className={`sticky top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}`}
+      className={`top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}  ${
+        pageYOffset === false ? "" : `sticky`
+      }`}
     >
       <div
         className={`white-box border-none lg:border border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
@@ -213,8 +235,14 @@ const CategoriesSection = ({
                   type="text"
                   name="search"
                   value={searchField}
-                  onChange={(e) => setSearchField(e.target.value)}
-                  onKeyDown={handleKeyDown}
+                  // onChange={(e) => {
+                  //   setSearchField(e.target.value);
+                  // }}
+                  // onKeyDown={handleKeyDown}
+                  onChange={(e) => {
+                    setSearchField(e.target.value);
+                    handleSubmit(e);
+                  }}
                   className="outline-none w-24 md:w-[300px] lg:w-[348px] text-sm category-search-input"
                   aria-label="Search"
                   placeholder="Search"
@@ -360,8 +388,12 @@ const CategoriesSection = ({
                   type="text"
                   name="search"
                   value={searchField}
-                  onChange={(e) => setSearchField(e.target.value)}
-                  onKeyDown={handleKeyDown}
+                  // onChange={(e) => setSearchField(e.target.value)}
+                  // onKeyDown={handleKeyDown}
+                  onChange={(e) => {
+                    setSearchField(e.target.value);
+                    handleSubmit(e);
+                  }}
                   className="outline-none w-24 md:w-[300px] lg:w-[348px] text-sm category-search-input"
                   aria-label="Search"
                   placeholder="Search"
