@@ -19,8 +19,9 @@ const CategoriesSection = ({
   searchListRef,
   isRank,
   categories,
+  searchResult,
 }: any) => {
-  // console.log("categories", categories);
+  // console.log("searchResult", searchResult);
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
@@ -31,11 +32,11 @@ const CategoriesSection = ({
   const [mobileCategoryModal, setMobileCategoryModal] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState(categories);
 
-  const handleKeyDown = (e: any) => {
-    // if (e.key === "Enter") {
-    handleSubmit();
-    // }
-  };
+  // const handleKeyDown = (e: any) => {
+  //   // if (e.key === "Enter") {
+  //   handleSubmit();
+  //   // }
+  // };
 
   const filterCategories = (value: any) => {
     // console.log("value", value);
@@ -76,19 +77,24 @@ const CategoriesSection = ({
   // };
   const handleScroll = () => {
     // console.log("window.scrollY", window.scrollY);
+    // console.log("searchResult?.length", searchResult?.length);
 
     // Check if screen height is within the specified range (1064px to 1480px)
-    if (window.innerHeight > 1064 && window.innerHeight < 1480) {
-      pageYOffset !== false ? setPageYOffset(false) : null;
-      // Don't trigger setPageYOffset(true) in this screen height range
-      return;
-    }
+    // if (window.innerHeight > 1064 && window.innerHeight < 1480) {
+    //   pageYOffset !== false ? setPageYOffset(false) : null;
+    //   // Don't trigger setPageYOffset(true) in this screen height range
+    //   return;
+    // }
 
-    // Otherwise, continue with your original scroll logic
-    if (window.scrollY > 180 || window.scrollY > 10) {
-      pageYOffset !== true ? setPageYOffset(true) : null;
-    } else {
+    if (searchResult?.length < 6) {
       pageYOffset !== false ? setPageYOffset(false) : null;
+      // return;
+    } else {
+      if (window.scrollY > 180 || window.scrollY > 10) {
+        pageYOffset !== true ? setPageYOffset(true) : null;
+      } else {
+        pageYOffset !== false ? setPageYOffset(false) : null;
+      }
     }
   };
   useEffect(() => {
@@ -96,7 +102,7 @@ const CategoriesSection = ({
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [pageYOffset]);
+  }, [pageYOffset, searchResult]);
 
   const handleSelectTag = (tag: any, category: any) => {
     // setSelectedTag(tag);

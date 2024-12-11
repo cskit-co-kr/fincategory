@@ -517,6 +517,7 @@ const Home = () => {
                 // setSelectCategory={setSelectCategory}
                 searchListRef={searchListRef}
                 categories={categories}
+                searchResult={searchResult}
               />
             ) : null}
             {/*  */}
