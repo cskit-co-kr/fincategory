@@ -170,11 +170,9 @@ const CategoriesSection = ({
         className={`white-box border-none lg:border border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
-            : `overflow-hidden .!shadow-2xl categorySec-boxShadow !rounded-xl border-none`
-        } max-[1023px]:rounded-none max-[1023px]:shadow-none  ${
-          mobileCategoryModal
-            ? ".!shadow-2xl categorySec-boxShadow !rounded-xl"
-            : ""
+            : `overflow-hidden categorySec-boxShadow rounded-xl border-none`
+        } max-[1023px]:!rounded-none max-[1023px]:shadow-none  ${
+          mobileCategoryModal ? "categorySec-boxShadow !rounded-xl" : ""
         }`}
       >
         <div
@@ -326,7 +324,7 @@ const CategoriesSection = ({
 
           {/* DESKTOP SEARCH */}
           <div
-            className="relative border border-gray-3 items-center py-[7px] px-[11px] rounded-full hidden  w-full
+            className="relative border border-gray-3 items-center py-[9px] px-[11px] rounded-full hidden  w-full
               lg:inline-flex hover:shadow-md hover:border-primary mt-[12px]"
           >
             <button className="h-fit" onClick={handleSubmit} name="search">
@@ -340,9 +338,9 @@ const CategoriesSection = ({
                 setSearchField(e.target.value);
                 handleSubmit(e);
               }}
-              className="outline-none .w-24 .md:w-[300px] .lg:w-[348px] w-full text-sm category-search-input"
+              className="outline-none w-full text-sm category-search-input"
               aria-label="Search"
-              placeholder="Search"
+              placeholder="Category Search"
             />
           </div>
           <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[3px] gap-x-[4px] grid-flow-row hidden mt-[12px]">

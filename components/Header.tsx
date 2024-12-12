@@ -488,18 +488,18 @@ const Header = () => {
             </div>
 
             {/* Desktop search */}
-            <div className="relative border border-primary items-center py-2 px-3 rounded-full hidden lg:inline-flex hover:shadow-md">
+            <div className="relative border border-primary items-center py-[10px] px-[16px] rounded-full hidden lg:inline-flex hover:shadow-md w-full max-w-[555px]">
               <input
                 type="text"
                 name="search"
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm"
+                className="outline-none pl-[3px] w-full text-sm"
                 aria-label="Search"
-                placeholder="Search..."
+                placeholder="Channel / Group"
               />
-              <button
+              {/* <button
                 className="text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center text-dark-primary"
                 // onClick={() => setSearchSectionMenu((prev) => !prev)}
               >
@@ -530,9 +530,9 @@ const Header = () => {
                     {t["board"]}
                   </button>
                 </div>
-              )}
+              )} */}
               <button onClick={handleSubmit} name="search">
-                <MagnifyingGlassIcon className="h-5 text-primary mr-1" />
+                <MagnifyingGlassIcon className="h-5 text-primary" />
               </button>
             </div>
 
