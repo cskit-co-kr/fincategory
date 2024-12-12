@@ -171,7 +171,7 @@ const CategoriesSection = ({
           pageYOffset === false
             ? ""
             : `overflow-hidden categorySec-boxShadow rounded-xl border-none`
-        } max-[1023px]:!rounded-none max-[1023px]:shadow-none  ${
+        } max-[1023px]:rounded-none max-[1023px]:shadow-none  ${
           mobileCategoryModal ? "categorySec-boxShadow !rounded-xl" : ""
         }`}
       >
