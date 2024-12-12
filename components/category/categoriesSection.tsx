@@ -126,6 +126,17 @@ const CategoriesSection = ({
     //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleCategoryClose = (tag: any, category: any) => {
+    // setSelectedTag(tag);
+    // setSelectCategory(category.name);
+    setSelectedCategory(null);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleSelectCategory = (category: any) => {
     setSelectedCategory(category);
     // setSelectedTag("");
@@ -159,9 +170,11 @@ const CategoriesSection = ({
         className={`white-box border-none lg:border border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
-            : `overflow-hidden !shadow-2xl !rounded-xl border-none`
+            : `overflow-hidden .!shadow-2xl categorySec-boxShadow !rounded-xl border-none`
         } max-[1023px]:rounded-none max-[1023px]:shadow-none  ${
-          mobileCategoryModal ? "!shadow-2xl !rounded-xl" : ""
+          mobileCategoryModal
+            ? ".!shadow-2xl categorySec-boxShadow !rounded-xl"
+            : ""
         }`}
       >
         <div
@@ -225,12 +238,20 @@ const CategoriesSection = ({
                     <span className="text-gray-text">
                       ({selectedCategory[0].total})
                     </span>
+                    <Image
+                      className="w-[16px] min-w-[16px] min-h-[16px] cursor-pointer"
+                      src="/img/close_icon_grey.svg"
+                      width={16}
+                      height={16}
+                      alt="close_icon_grey"
+                      onClick={() => handleCategoryClose("", "")}
+                    />
                   </div>
                 </div>
               )}
             </div>
             <div className="flex flex-row gap-[10px]">
-              <div
+              {/* <div
                 className="relative border border-gray-3 items-center py-[7px] px-[11px] rounded-full hidden 
               lg:inline-flex hover:shadow-md hover:border-primary"
               >
@@ -253,7 +274,7 @@ const CategoriesSection = ({
                   aria-label="Search"
                   placeholder="Search"
                 />
-              </div>
+              </div> */}
               <button
                 className={`flex items-center justify-center w-[65px] gap-[8px] text-[12px] bg-[#EBEAEA] rounded-full hover:underline my-[5px] ml-[12px] max-h-[24px] font-semibold
                 ${pageYOffset === false && "hidden"}`}
@@ -298,31 +319,31 @@ const CategoriesSection = ({
                     className="min-w-[20px] min-h-[20px]"
                     alt="close_icon"
                   />
-                  {/* <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      d="M15.625 4.375L4.375 15.625"
-                      stroke="#1C1E21"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M15.625 15.625L4.375 4.375"
-                      stroke="#1C1E21"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg> */}
                 </button>
               )}
             </div>
+          </div>
+
+          {/* DESKTOP SEARCH */}
+          <div
+            className="relative border border-gray-3 items-center py-[7px] px-[11px] rounded-full hidden  w-full
+              lg:inline-flex hover:shadow-md hover:border-primary mt-[12px]"
+          >
+            <button className="h-fit" onClick={handleSubmit} name="search">
+              <MagnifyingGlassIcon className="h-5 hover:text-primary text-gray-text mr-2" />
+            </button>
+            <input
+              type="text"
+              name="search"
+              value={searchField}
+              onChange={(e) => {
+                setSearchField(e.target.value);
+                handleSubmit(e);
+              }}
+              className="outline-none .w-24 .md:w-[300px] .lg:w-[348px] w-full text-sm category-search-input"
+              aria-label="Search"
+              placeholder="Search"
+            />
           </div>
           <div className="lg:grid .grid-rows-8 .grid-flow-col grid-cols-5 gap-y-[3px] gap-x-[4px] grid-flow-row hidden mt-[12px]">
             {filteredCategories.map((category: any, index: number) => (
