@@ -65,6 +65,7 @@ export const enUS = {
     "핀코인": "Fincoin",
     "Email not found!": "Email not found!",
     "내정보": "My information",
+    "Profile": "Profile",
     "board": "Board",
     "view-all-articles": "View all articles",
     "new-channel-registration": "New channel/group registration",

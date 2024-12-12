@@ -41,6 +41,7 @@ export const koKR = {
     "sign-up": "회원 가입",
     "sign-out": "로그아웃",
     "내정보": "내정보",
+    "Profile": "내정보",
     "username": "아이디",
     "password": "비밀번호",
     "forgot-password": "비밀번호 찾기",

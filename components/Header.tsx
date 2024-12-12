@@ -125,38 +125,38 @@ const Header = () => {
     }
   }
 
-  const menus = [
-    {
-      id: 1,
-      title: t["내정보"],
-      icon: <UserIcon className="h-5" />,
-      link: "/board/profile",
-    },
-    {
-      id: 2,
-      title: t["핀코인"],
-      icon: <StopCircleIcon className="h-5" />,
-      link: "/board/wallet",
-    },
-    {
-      id: 3,
-      title: t["상품구매내역"],
-      icon: <DocumentTextIcon className="h-5" />,
-      link: "/board/ads-history",
-    },
-    {
-      id: 4,
-      title: t["내가 쓴 글"],
-      icon: <PencilSquareIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=posts`,
-    },
-    {
-      id: 5,
-      title: t["내가 쓴 댓글"],
-      icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=comments`,
-    },
-  ];
+  // const menus = [
+  //   {
+  //     id: 1,
+  //     title: t["내정보"],
+  //     icon: <UserIcon className="h-5" />,
+  //     link: "/board/profile",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: t["핀코인"],
+  //     icon: <StopCircleIcon className="h-5" />,
+  //     link: "/board/wallet",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: t["상품구매내역"],
+  //     icon: <DocumentTextIcon className="h-5" />,
+  //     link: "/board/ads-history",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: t["내가 쓴 글"],
+  //     icon: <PencilSquareIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=posts`,
+  //   },
+  //   {
+  //     id: 5,
+  //     title: t["내가 쓴 댓글"],
+  //     icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=comments`,
+  //   },
+  // ];
 
   const [mobileSearch, setMobileSearch] = useState(false);
   const [searchSectionMenuMobile, setSearchSectionMenuMobile] = useState(false);
@@ -562,7 +562,7 @@ const Header = () => {
                           className="flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl"
                         >
                           <UserCircleIcon className="h-4" />
-                          {t["내정보"]}
+                          {t["Profile"]}
                         </Link>
 
                         <Link
@@ -597,43 +597,11 @@ const Header = () => {
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="outline-none max-[370px]:max-w-[120px] text-sm"
+                className="outline-none max-[370px]:max-w-[120px] text-sm h-[24px]"
                 aria-label="Search"
-                placeholder="Search..."
+                placeholder="Channel / Group"
               />
               <div className="inline-flex">
-                <button
-                  className="text-xs p-[5px] flex gap-[3px] items-center rounded-full min-w-[70px] justify-center text-dark-primary font-semibold"
-                  // onClick={() => setSearchSectionMenu((prev) => !prev)}
-                >
-                  {searchSection === 1 ? t["channel/group"] : t["board"]}
-                  <FaCaretDown size={14} />
-                </button>
-                {searchSectionMenu && (
-                  <div
-                    className="absolute top-9 right-10 border shadow-md bg-white flex flex-col rounded-xl min-w-[50px] text-xs"
-                    ref={searchRef}
-                  >
-                    <button
-                      onClick={() => {
-                        setSearchSection(1);
-                        setSearchSectionMenu((prev) => !prev);
-                      }}
-                      className="px-3 py-2 hover:bg-gray-50 rounded-xl"
-                    >
-                      {t["channel/group"]}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSearchSection(2);
-                        setSearchSectionMenu((prev) => !prev);
-                      }}
-                      className="px-3 py-2 hover:bg-gray-50 rounded-xl"
-                    >
-                      {t["board"]}
-                    </button>
-                  </div>
-                )}
                 <button onClick={handleSubmit} name="search">
                   <MagnifyingGlassIcon className="h-5 text-dark-primary hover:text-primary" />
                 </button>
