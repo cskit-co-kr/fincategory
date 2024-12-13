@@ -66,7 +66,7 @@ const Sidebar = ({ memberInfo }: any) => {
                     <Link href="/auth/profile">{session?.user.nickname}</Link>
                   </span>
                   <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => signOut({ callbackUrl: `/${locale}/` })}
                     className="bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto"
                   >
                     {t["sign-out"]}

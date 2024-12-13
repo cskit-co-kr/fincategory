@@ -174,7 +174,7 @@ const Header = () => {
                 <span className="font-bold text-primary">Fin</span>
                 <span className="">Cago</span>
               </Link>
-              <h1 className="text-[12px] leading-[11px] leading-none mb-[3px] text-gray-text font-segoe">
+              <h1 className="text-[12px] leading-[11px] mb-[3px] text-gray-text font-segoe">
                 {t["Telegram channel/group information"]}
                 {/* 텔레그램 채널/그룹 정보 핀카 */}
               </h1>
@@ -305,7 +305,8 @@ const Header = () => {
                         <button
                           className="bg-[#EBEAEA] font-semibold text-dark-primary pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
                           onClick={() => {
-                            signOut({ callbackUrl: "/" });
+                            // signOut({ callbackUrl: "/" });
+                            signOut({ callbackUrl: `/${locale}/` });
                             handleClick();
                           }}
                         >
@@ -369,15 +370,21 @@ const Header = () => {
                           <UserCircleIcon className="h-[35px] text-black" />
                           <span className="font-normal">ID {t["sign-in"]}</span>
                         </div>
-                        <button
+                        {/* <button
                           className="bg-primary font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
                           onClick={() => {
                             signIn();
                             handleClick();
                           }}
                         >
+                            {t["sign-in"]}
+                        </button> */}
+                        <Link
+                          href="/auth/signin"
+                          className="bg-primary font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
+                        >
                           {t["sign-in"]}
-                        </button>
+                        </Link>
                       </div>
                     )}
                     {/* <div className="text-sm">
@@ -569,7 +576,10 @@ const Header = () => {
 
                         <Link
                           href="#"
-                          onClick={() => signOut({ callbackUrl: "/" })}
+                          // onClick={() => signOut({ callbackUrl: "/" })}
+                          onClick={() =>
+                            signOut({ callbackUrl: `/${locale}/` })
+                          }
                           className="flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl"
                         >
                           <ArrowRightOnRectangleIcon className="h-4" />
@@ -579,12 +589,18 @@ const Header = () => {
                     )}
                   </div>
                 ) : (
-                  <button
-                    onClick={() => signIn()}
+                  // <button
+                  //   onClick={() => signIn()}
+                  //   className="bg-primary font-semibold text-white rounded-full py-1 px-5 text-sm hover:text-white"
+                  // >
+                  //   {t["sign-in"]}
+                  // </button>
+                  <Link
+                    href="/auth/signin"
                     className="bg-primary font-semibold text-white rounded-full py-1 px-5 text-sm hover:text-white"
                   >
                     {t["sign-in"]}
-                  </button>
+                  </Link>
                 )}
               </div>
             </div>

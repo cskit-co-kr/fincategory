@@ -75,7 +75,7 @@ const ResetPassword = () => {
             <button
               onClick={() =>
                 router.push(
-                  "/auth/signin?callbackUrl=https%3A%2F%2Ffincago.com"
+                  `${locale}/auth/signin?callbackUrl=https%3A%2F%2Ffincago.com`
                 )
               }
               className={`cursor-pointer bg-primary font-semibold text-white py-3 px-5 text-base mt-10 w-full rounded-md flex gap-1 items-center justify-center`}
