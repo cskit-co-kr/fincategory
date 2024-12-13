@@ -52,7 +52,7 @@ const Ads1 = () => {
       setData(rows);
     })();
   }, []);
-  console.log("data", data);
+  // console.log("data", data);
   return (
     <div className="grid md:grid-cols-3 gap-4 mt-4 md:mt-0 ">
       {data.length === 0 && !emptyAd && (

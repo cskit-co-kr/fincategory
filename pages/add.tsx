@@ -272,8 +272,8 @@ export const getServerSideProps = async () => {
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`
   );
   const _languages = await resLanguage.data;
-  console.log("--------------------------------------->");
-  console.log(_languages);
+  // console.log("--------------------------------------->");
+  // console.log(_languages);
 
   return {
     props: { _categories, _countries, _languages },
