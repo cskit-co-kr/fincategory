@@ -39,6 +39,8 @@ export const koKR = {
     "US": "United States, US",
     "sign-in": "로그인",
     "sign-up": "회원 가입",
+    "sign-in-seo": "핀카고 | 로그인",
+    "sign-up-seo": "핀카고 | 회원 가입",
     "sign-out": "로그아웃",
     "내정보": "내정보",
     "Profile": "내정보",
@@ -143,6 +145,7 @@ export const koKR = {
     "Cancel search": "검색 취소",
     /* add a channel */
     "add-channel": "채널 및 그룹 추가",
+    "add-channel-seo": "채널/그룹추가",
     "link-to": "채널 또는 그룹에 대한 링크",
     "country": "국가",
     "choose-country": "국가를 선택하세요...",
@@ -271,5 +274,8 @@ export const koKR = {
     "맨위로": "맨위로",
     "회원가입": "회원가입",
     // seo
-    "Fincago  | Home - Telegram Channel/Group Information": "핀카텔레 | 홈-텔레그램 채널/그룹 정보"
+    "Fincago  | Home - Telegram Channel/Group Information": "핀카텔레 | 홈-텔레그램 채널/그룹 정보",
+    "The largest database of Telegram channels around the world": "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에.",
+    "seo-keywords": "텔레그램, 유빈아카이브, 코인텔레그램, 주식, 취미, k pop,  비트코인, 메타버스, NFT, 취미생활방, 코인왕, DeFi 농부 조선생, 크립토 트랜드, 코인 공지방, 주식급등일보, 가치투자클럽, 여의도스토리, 야뎊저장용, 🤍여캠&인스타&인플 모음🤍, 로직파일, 지옥열차, 심기불편한 시팡이 공부방",
+    "Fincago | profile edit": "핀카고 | 정보 수정"
 }

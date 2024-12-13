@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { Loader } from "rsuite";
 import Sidebar from "../../components/member/Sidebar";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { NextSeo } from "next-seo";
 
 const Profile = ({ memberInfo }: any) => {
   const router = useRouter();
@@ -168,6 +169,11 @@ const Profile = ({ memberInfo }: any) => {
 
   return (
     <>
+      <NextSeo
+        title={`${t["Fincago | profile edit"]}`}
+        titleTemplate={`${t["Fincago | profile edit"]}`}
+        description={`${t["Fincago | profile edit"]}`}
+      />
       <div className="flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50">
         <Sidebar memberInfo={memberInfo} />
         <div className="mx-auto w-full px-5 md:px-0 gap-4">

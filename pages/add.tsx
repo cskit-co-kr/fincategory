@@ -143,11 +143,11 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
   return (
     <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
       <NextSeo
-        title={`광고 | ${t["add-channel"]}`}
-        titleTemplate={`광고 | ${t["add-channel"]}`}
-        description={
-          "채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."
-        }
+        title={`${t["add-channel-seo"]}`}
+        titleTemplate={`${t["add-channel-seo"]}`}
+        // description={
+        //   "채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."
+        // }
       />
       <div className="md:flex md:flex-col w-full xl:w-[1280px] mx-auto">
         <div className="text-xl font-bold text-center">{t["add-channel"]}</div>

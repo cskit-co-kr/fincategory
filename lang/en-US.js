@@ -38,7 +38,9 @@ export const enUS = {
     "KR": "대한민국, KR",
     "US": "United States, US",
     "sign-in": "Sign in",
-    "sign-up": "Sign up",
+    "sign-up": "Sign up ",
+    "sign-in-seo": "Fincago | sign in",
+    "sign-up-seo": "Fincago | sign up ",
     "sign-out": "Sign Out",
     "username": "Username",
     "password": "Password",
@@ -129,6 +131,7 @@ export const enUS = {
     "Cancel search": "Cancel search",
     /* add a channel */
     "add-channel": "Add a channel/group",
+    "add-channel-seo": "Add a channel/group",
     "link-to": "Link to the channel or @username",
     "country": "Country",
     "choose-country": "Choose a country...",
@@ -271,5 +274,8 @@ export const enUS = {
     "맨위로": "Top",
     "회원가입": "Sign up",
     // seo
-    "Fincago  | Home - Telegram Channel/Group Information": "Fincago  | Home - Telegram Channel/Group Information"
+    "Fincago  | Home - Telegram Channel/Group Information": "Fincago  | Home - Telegram Channel/Group Information",
+    "The largest database of Telegram channels around the world": "The largest database of Telegram channels around the world",
+    "seo-keywords": "fincago, telegram, database, coin, cryptocurrency, bitcoin, Ethereum, kpop, community, news, announcement, catalog telegram, catalog, catalog telegram channels, telegram-channels, top channels, best channels",
+    "Fincago | profile edit": "Fincago | profile edit"
 }

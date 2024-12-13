@@ -498,10 +498,9 @@ const Home = () => {
         titleTemplate={
           t["Fincago  | Home - Telegram Channel/Group Information"]
         }
-        // description={
-        //   "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
-        // }
-        description={t["Fincago  | Home - Telegram Channel/Group Information"]}
+        description={
+          t["The largest database of Telegram channels around the world"]
+        }
       />
       <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
         <div className="flex .grid .md:flex">
