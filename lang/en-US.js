@@ -66,7 +66,7 @@ export const enUS = {
     "search": "Search",
     "핀코인": "Fincoin",
     "Email not found!": "Email not found!",
-    "내정보": "My information",
+    "핀카고 | 내 정보": "My information",
     "Profile": "Profile",
     "board": "Board",
     "view-all-articles": "View all articles",
@@ -131,7 +131,7 @@ export const enUS = {
     "Cancel search": "Cancel search",
     /* add a channel */
     "add-channel": "Add a channel/group",
-    "add-channel-seo": "Add a channel/group",
+    "add-channel-seo": "핀카고 | 채널/그룹추가",
     "link-to": "Link to the channel or @username",
     "country": "Country",
     "choose-country": "Choose a country...",

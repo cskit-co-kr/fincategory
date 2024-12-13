@@ -42,7 +42,7 @@ export const koKR = {
     "sign-in-seo": "핀카고 | 로그인",
     "sign-up-seo": "핀카고 | 회원 가입",
     "sign-out": "로그아웃",
-    "내정보": "내정보",
+    "핀카고 | 내 정보": "핀카고 | 내 정보",
     "Profile": "내정보",
     "username": "아이디",
     "password": "비밀번호",
@@ -145,7 +145,7 @@ export const koKR = {
     "Cancel search": "검색 취소",
     /* add a channel */
     "add-channel": "채널 및 그룹 추가",
-    "add-channel-seo": "채널/그룹추가",
+    "add-channel-seo": "핀카고 | 채널/그룹추가",
     "link-to": "채널 또는 그룹에 대한 링크",
     "country": "국가",
     "choose-country": "국가를 선택하세요...",

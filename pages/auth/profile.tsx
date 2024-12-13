@@ -68,8 +68,8 @@ const Profile = ({ memberInfo, wallet }: any) => {
   return (
     <>
       <NextSeo
-        title={t["내정보"]}
-        titleTemplate={t["내정보"]}
+        title={t["핀카고 | 내 정보"]}
+        titleTemplate={t["핀카고 | 내 정보"]}
         noindex={true}
         nofollow={true}
         description={session?.user.nickname + ` ${session?.user.email}...`}
