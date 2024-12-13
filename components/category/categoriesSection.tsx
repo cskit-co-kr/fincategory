@@ -51,7 +51,10 @@ const CategoriesSection = ({
   };
 
   const handleSubmit = (e?: any) => {
-    filterCategories(e.target.value);
+    const value = e?.target?.value || ""; // Use empty string as default if undefined or null
+    console.log("e?.target?.value", value);
+    filterCategories(value);
+
     if (pageYOffset && mobileCategoryModal === false) {
       window.scrollTo({
         top: 0,
@@ -75,6 +78,7 @@ const CategoriesSection = ({
   //     pageYOffset !== false ? setPageYOffset(false) : null;
   //   }
   // };
+
   const handleScroll = () => {
     // console.log("window.scrollY", window.scrollY);
     // console.log("searchResult?.length", searchResult?.length);
@@ -104,37 +108,38 @@ const CategoriesSection = ({
     };
   }, [pageYOffset, searchResult]);
 
-  const handleSelectTag = (tag: any, category: any) => {
-    // setSelectedTag(tag);
-    // setSelectCategory(category.name);
-    setSelectedCategory(null);
-    if (isRank) {
-      window.scrollTo({
-        top: 100,
-        behavior: "smooth",
-      });
-    } else {
-      // window.scrollTo({
-      //   top: 1110,
-      //   behavior: "smooth",
-      // });
-      window.scrollTo({
-        top: 500,
-        behavior: "smooth",
-      });
-    }
-    //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // const handleSelectTag = (tag: any, category: any) => {
+  //   // setSelectedTag(tag);
+  //   // setSelectCategory(category.name);
+  //   setSelectedCategory(null);
+  //   if (isRank) {
+  //     window.scrollTo({
+  //       top: 100,
+  //       behavior: "smooth",
+  //     });
+  //   } else {
+  //     // window.scrollTo({
+  //     //   top: 1110,
+  //     //   behavior: "smooth",
+  //     // });
+  //     window.scrollTo({
+  //       top: 500,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  //   //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  // };
 
   const handleCategoryClose = (tag: any, category: any) => {
     // setSelectedTag(tag);
     // setSelectCategory(category.name);
     setSelectedCategory(null);
+    handleSubmit(null);
+    setSearchField("");
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    //searchListRef?.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleSelectCategory = (category: any) => {
@@ -202,7 +207,8 @@ const CategoriesSection = ({
               </div>
               |
               <button
-                onClick={() => handleSelectTag("", "")}
+                // onClick={() => handleSelectTag("", "")}
+                onClick={() => handleCategoryClose("", "")}
                 className={`min-w-[52.2px] rounded-[28px] px-[11px] py-[3px] border hover:underline text-[12px] ${
                   selectedCategory
                     ? "bg-white text-black border-[#E7EAED]"
@@ -327,7 +333,11 @@ const CategoriesSection = ({
             className="relative border border-gray-3 items-center py-[9px] px-[11px] rounded-full hidden  w-full
               lg:inline-flex hover:shadow-md hover:border-primary mt-[12px]"
           >
-            <button className="h-fit" onClick={handleSubmit} name="search">
+            <button
+              className="h-fit"
+              // onClick={handleSubmit}
+              name="search"
+            >
               <MagnifyingGlassIcon className="h-5 hover:text-primary text-gray-text mr-2" />
             </button>
             <input
@@ -406,7 +416,11 @@ const CategoriesSection = ({
                 className="inline-flex relative w-full max-w-[400px] border mt-[16px] border-gray-text items-center py-[7px] px-[11px] rounded-full
               hover:shadow-md hover:border-primary"
               >
-                <button className="h-fit" onClick={handleSubmit} name="search">
+                <button
+                  className="h-fit"
+                  // onClick={handleSubmit}
+                  name="search"
+                >
                   <MagnifyingGlassIcon className="h-5 text-gray-text hover:text-primary mr-2" />
                 </button>
                 <input
