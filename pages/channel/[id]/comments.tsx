@@ -244,7 +244,8 @@ const Comments = ({
                           className="bg-primary text-white py-2 px-5 text-center hover:text-white"
                           onClick={() =>
                             router.push(
-                              `/board/signin?callbackUrl=/channel/${channel.username}/comments`
+                              // `/board/signin?callbackUrl=/channel/${channel.username}/comments`
+                              `/auth/signin?callbackUrl=/channel/${channel.username}/comments`
                             )
                           }
                         >

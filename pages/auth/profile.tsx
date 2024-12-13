@@ -24,7 +24,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/board/signin");
+      router.push("/auth/signin");
     },
   });
 
@@ -99,7 +99,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
               <div>
                 <button
                   className="blue-button"
-                  onClick={() => router.push("/board/profile-edit")}
+                  onClick={() => router.push("/auth/profile-edit")}
                 >
                   {t["edit-basic-info"]}
                 </button>

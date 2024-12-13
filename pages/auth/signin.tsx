@@ -158,7 +158,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className="px-4">
-                  <Link href={`/board/signup`} className="underline">
+                  <Link href={`/auth/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -206,7 +206,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className="px-4">
-                  <Link href={`/board/signup`} className="underline">
+                  <Link href={`/auth/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -225,7 +225,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/board/profile",
+        destination: "/auth/profile",
         permanent: false,
       },
     };

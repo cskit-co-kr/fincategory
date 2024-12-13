@@ -293,7 +293,8 @@ const Header = () => {
                       <div className="flex flex-col gap-[16px] text-sm bg-white py-[16px]">
                         <Link
                           className="flex gap-2 items-center min-h-[50px]"
-                          href="/board/profile"
+                          // href="/board/profile"
+                          href="/auth/profile"
                           onClick={handleClick}
                         >
                           <UserCircleIcon className="h-[35px] text-black" />
@@ -557,7 +558,8 @@ const Header = () => {
                         ref={browseRef}
                       >
                         <Link
-                          href="/board/profile"
+                          // href="/board/profile"
+                          href="/auth/profile"
                           onClick={() => setUserMenu(false)}
                           className="flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl"
                         >

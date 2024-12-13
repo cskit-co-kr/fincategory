@@ -112,7 +112,7 @@ const MemberSignUp = () => {
     );
     const result = await response.json();
     if (result.code === 200 && result.message === "Inserted") {
-      router.push("/board/success");
+      router.push("/auth/success");
     }
   };
 
@@ -202,7 +202,7 @@ const MemberSignUp = () => {
               ?
             </div>
             <div className="px-4">
-              <Link href={`/board/signin`} className="underline">
+              <Link href={`/auth/signin`} className="underline">
                 {t["sign-in"]}
               </Link>
             </div>
@@ -219,7 +219,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/board/profile", // Redirect to the login page if not logged in
+        destination: "/auth/profile", // Redirect to the login page if not logged in
         permanent: false,
       },
     };

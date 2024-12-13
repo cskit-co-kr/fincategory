@@ -422,7 +422,7 @@ export const getServerSideProps = async (context: any) => {
   if (!session?.user) {
     return {
       redirect: {
-        destination: "/board/signin", // Redirect to the login page if not logged in
+        destination: "/auth/signin", // Redirect to the login page if not logged in
         permanent: false,
       },
     };

@@ -9,10 +9,11 @@ module.exports = {
     "/board",
     "/board/wallet",
     "/board/ads-history",
-    "/ads",
-    "/fincoin-purchase",
-    "/board/wallet",
+    "/board/ads-purchase",
+    "/board/fincoin-purchase",
     "/board/write",
+    "/ads",
+    "/auth/wallet",
   ], // Exclude specific pages (optional)
   // REST CODE READ DOCS  ...
 };

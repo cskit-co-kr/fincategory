@@ -17,7 +17,7 @@ const Profile = ({ memberInfo }: any) => {
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/board/signin");
+      router.push("/auth/signin");
     },
   });
 

@@ -8,10 +8,11 @@ export function middleware(req: NextRequest) {
     "/board",
     "/board/wallet",
     "/board/ads-history",
-    "/ads",
-    "/fincoin-purchase",
-    "/board/wallet",
+    "/board/ads-purchase",
+    "/board/fincoin-purchase",
     "/board/write",
+    "/ads",
+    "/auth/wallet",
   ]; // Define restricted routes
   const path = req.nextUrl.pathname;
 
@@ -29,9 +30,10 @@ export const config = {
     "/board",
     "/board/wallet",
     "/board/ads-history",
-    "/ads",
-    "/fincoin-purchase",
-    "/board/wallet",
+    "/board/ads-purchase",
+    "/board/fincoin-purchase",
     "/board/write",
+    "/ads",
+    "/auth/wallet",
   ], // Match restricted routes
 };
