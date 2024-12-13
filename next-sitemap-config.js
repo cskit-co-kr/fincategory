@@ -15,6 +15,8 @@ module.exports = {
     "/board/write",
     "/ads",
     "/auth/wallet",
+    "/privacy-policy",
+    "/terms",
   ], // Exclude specific pages (optional)
   // REST CODE READ DOCS  ...
 };

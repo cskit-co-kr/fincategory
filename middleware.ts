@@ -13,6 +13,8 @@ export function middleware(req: NextRequest) {
     "/board/write",
     "/ads",
     "/auth/wallet",
+    "/privacy-policy",
+    "/terms",
   ]; // Define restricted routes
   const path = req.nextUrl.pathname;
 
@@ -35,5 +37,7 @@ export const config = {
     "/board/write",
     "/ads",
     "/auth/wallet",
+    "/privacy-policy",
+    "/terms",
   ], // Match restricted routes
 };
