@@ -56,9 +56,9 @@ const ResetPassword = () => {
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | ${t["reset password"]}`}
-        titleTemplate={`핀카텔레 | ${t["reset password"]}`}
-        description={`핀카텔레 | ${t["reset password"]}`}
+        title={`${t["reset password"]}`}
+        titleTemplate={`${t["reset password"]}`}
+        description={`${t["reset password"]}`}
       />
       <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
         {seccussfully ? (
