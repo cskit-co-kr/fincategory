@@ -59,8 +59,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         // title={"핀카텔레"}
         title={"Fincago"}
         additionalLinkTags={[
-          { rel: "icon", href: "/img/fincago_logo.png", type: "image/x-icon" },
-          { rel: "apple-touch-icon", href: "/img/fincago_logo.png" },
+          // { rel: "icon", href: "/img/fincago_logo.png", type: "image/x-icon" },
+          { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+          { rel: "apple-touch-icon", href: "/logo.png" },
         ]}
         openGraph={{
           type: "website",

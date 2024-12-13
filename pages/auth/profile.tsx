@@ -160,7 +160,7 @@ export const getServerSideProps = async (context: any) => {
   let memberInfo = "";
   let wallet = "";
   const session = await getSession(context);
-  console.log(">>>>>>>", session?.user);
+  // console.log(">>>>>>>", session?.user);
   if (!!session?.user) {
     const responseMember = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,
