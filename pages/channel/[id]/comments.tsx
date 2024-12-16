@@ -245,7 +245,7 @@ const Comments = ({
                           onClick={() =>
                             router.push(
                               // `/board/signin?callbackUrl=/channel/${channel.username}/comments`
-                              `${locale}/auth/signin?callbackUrl=/channel/${channel.username}/comments`
+                              `/${locale}/auth/signin?callbackUrl=/channel/${channel.username}/comments`
                             )
                           }
                         >

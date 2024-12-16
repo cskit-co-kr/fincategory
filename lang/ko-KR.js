@@ -12,6 +12,8 @@ export const koKR = {
 "Set password": "비밀번호 설정",
 "Cancel": "취소",
 "Password don’t match": "비밀번호 일치하지 않습니다.",
+"Link is expired": "링크 유효 기간이 만료되었습니다.",
+"Error occurred": "오류가 발생했습니다",
 "Password changed successfully !": "비밀번호가 변경되었습니다.",
 "Please login to your email account again": "이메일 계정으로 다시 로그인하세요",
 "Login now": "로그인",

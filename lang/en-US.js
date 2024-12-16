@@ -12,6 +12,8 @@ export const enUS = {
 "Set password": "Set password",
 "Cancel": "Cancel",
 "Password don’t match": "Password don’t match",
+"Link is expired": "Link is expired",
+"Error occurred": "Error occurred",
 "Password changed successfully !": "Password changed successfully !",
 "Please login to your email account again": "Please login to your email account again",
 "Login now": "Login now",
