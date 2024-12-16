@@ -92,7 +92,7 @@ const AdChannel2: FunctionComponent<Props> = ({
               {JSON.parse(channel.category.name)[locale]}
             </div>
           )}
-          <div className="tags flex flex-wrap">
+          {/* <div className="tags flex flex-wrap">
             {channel.tags &&
               channel.tags.map(
                 (tag: { id: number; channel_id: number; tag: string }) => {
@@ -112,7 +112,7 @@ const AdChannel2: FunctionComponent<Props> = ({
                   );
                 }
               )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

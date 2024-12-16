@@ -473,7 +473,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 )}
               </div>
             )} */}
-          {channel?.tags && channel?.tags.length > 0 && (
+          {/* {channel?.tags && channel?.tags.length > 0 && (
             <div className="flex flex-col justify-between w-full">
               {" "}
               <span className="text-gray-400">{t["tags"]}</span>
@@ -496,7 +496,7 @@ const ChannelDetailLeftSidebar = ({ channel }: any) => {
                 )}
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

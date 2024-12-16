@@ -121,7 +121,7 @@ const GetChannels: FunctionComponent<Props> = ({
                 JSON.parse(channels.category.name)[locale]}
             </div>
           )}
-          <div className="tags flex flex-wrap">
+          {/* <div className="tags flex flex-wrap">
             {channels.tags &&
               tag === true &&
               channels.tags.map(
@@ -142,7 +142,7 @@ const GetChannels: FunctionComponent<Props> = ({
                   );
                 }
               )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
