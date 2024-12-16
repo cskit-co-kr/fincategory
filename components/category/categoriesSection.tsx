@@ -52,7 +52,7 @@ const CategoriesSection = ({
 
   const handleSubmit = (e?: any) => {
     const value = e?.target?.value || ""; // Use empty string as default if undefined or null
-    console.log("e?.target?.value", value);
+    // console.log("e?.target?.value", value);
     filterCategories(value);
 
     if (pageYOffset && mobileCategoryModal === false) {
@@ -172,7 +172,7 @@ const CategoriesSection = ({
       }`}
     >
       <div
-        className={`white-box border-none lg:border border-gray-secondary max-[1023px]:!px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
+        className={`white-box py-[0px] px-[20px] border-none lg:border border-gray-secondary max-[1023px]:px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
             : `overflow-hidden categorySec-boxShadow rounded-xl border-none`
@@ -181,7 +181,7 @@ const CategoriesSection = ({
         }`}
       >
         <div
-          className={`transition-all transform duration-150 lg:pb-[19px] ${
+          className={`transition-all transform duration-150 lg:pb-[14px] ${
             pageYOffset === false ? "h-[68px] lg:h-fit" : `h-[68px] lg:h-[76px]`
           }`}
         >
@@ -413,7 +413,7 @@ const CategoriesSection = ({
             {/* Modal Content */}
             <div className="lg:hidden w-full">
               <div
-                className="inline-flex relative w-full max-w-[400px] border mt-[16px] border-gray-text items-center py-[7px] px-[11px] rounded-full
+                className="inline-flex relative w-full .max-w-[400px] border mt-[16px] border-gray-3 items-center py-[7px] px-[11px] rounded-full
               hover:shadow-md hover:border-primary"
               >
                 <button
@@ -433,9 +433,9 @@ const CategoriesSection = ({
                     setSearchField(e.target.value);
                     handleSubmit(e);
                   }}
-                  className="outline-none w-24 md:w-[300px] lg:w-[348px] text-sm category-search-input"
+                  className="outline-none w-full .w-24 .md:w-[300px] .lg:w-[348px] text-sm category-search-input"
                   aria-label="Search"
-                  placeholder="Search"
+                  placeholder="Category Search"
                 />
               </div>
               {/* mobile categories */}

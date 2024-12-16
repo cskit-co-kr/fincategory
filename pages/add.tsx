@@ -36,9 +36,13 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
       value: item.id,
     };
   });
+  // console.log("_languages", _languages);
   const languages = _languages?.map((item: any) => {
+    const label = t[item.value as keyof typeof t]
+      ? t[item.value as keyof typeof t]
+      : item.value;
     return {
-      label: t[item.value as keyof typeof t],
+      label,
       value: item.id,
     };
   });
@@ -139,7 +143,6 @@ const add = ({ _categories, _countries, _languages }: AddComponentProps) => {
     setInput(e.target.value);
     setErrorInput(null);
   };
-
   return (
     <div className="flex flex-col pt-7 bg-gray-50 min-h-screen">
       <NextSeo

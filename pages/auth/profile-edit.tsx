@@ -232,7 +232,8 @@ const Profile = ({ memberInfo }: any) => {
                 </p>
               </div>
               <button className="blue-button place-self-center" type="submit">
-                {loading && <Loader />}등록
+                {loading && <Loader />}
+                {t["등록"]}
               </button>
             </form>
           </div>
@@ -282,7 +283,8 @@ const Profile = ({ memberInfo }: any) => {
                 </p>
               </div>
               <button className="blue-button place-self-center" type="submit">
-                {loading2 && <Loader />}등록
+                {loading2 && <Loader />}
+                {t["등록"]}
               </button>
             </form>
           </div>
