@@ -19,7 +19,7 @@ const ChannelDetailNav = ({ channel }: any) => {
   const liNormal =
     "bg-gray-50 border border-gray-300 hover:bg-primary hover:text-white hover:border-primary";
   const aNormal =
-    "py-2 px-3.5 hover:no-underline flex gap-2 justify-center items-center hover:text-white";
+    "py-2 px-3.5 cursor-pointer hover:no-underline flex gap-2 justify-center items-center hover:text-white";
   return (
     <>
       <ul className="w-full text-sm grid sm:flex gap-2 bg-[#f2f2f2] rounded-md p-2 mt-4 md:mt-0">
