@@ -95,9 +95,9 @@ const MemberSignIn = () => {
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | ${t["sign-in"]}`}
-        titleTemplate={`핀카텔레 | ${t["sign-in"]}`}
-        description={`핀카텔레 | ${t["sign-in"]}`}
+        title={`${t["sign-in-seo"]}`}
+        titleTemplate={`${t["sign-in-seo"]}`}
+        description={`${t["sign-in-seo"]}`}
       />
       <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
         <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">
@@ -157,7 +157,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className="px-4">
-                  <Link href={`/board/signup`} className="underline">
+                  <Link href={`/auth/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -205,7 +205,7 @@ const MemberSignIn = () => {
                   </button>
                 </div>
                 <div className="px-4">
-                  <Link href={`/board/signup`} className="underline">
+                  <Link href={`/auth/signup`} className="underline">
                     {t["sign-up"]}
                   </Link>
                 </div>
@@ -224,7 +224,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/board/profile",
+        destination: "/auth/profile",
         permanent: false,
       },
     };

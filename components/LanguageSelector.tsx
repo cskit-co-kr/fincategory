@@ -31,9 +31,9 @@ function LanguageSelector() {
   }, [isOpen]);
 
   const handleClick = (lang: string) => {
-    console.log("router.asPath", router.asPath);
+    // console.log("router.asPath", router.asPath);
     router.push(router.asPath, router.asPath, { locale: lang });
-    console.log("router", router);
+    // console.log("router", router);
     setIsOpen(false);
   };
 
@@ -42,12 +42,12 @@ function LanguageSelector() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex gap-1 min-w-[66px] items-center text-[12px] font-bold"
+        className="flex gap-1 lg:min-w-[66px] items-center text-[12px] font-bold px-[12px] lg:px-[0px]"
       >
         {locale !== "en" ? (
           <div className="flex gap-1 items-center">
             <Image src="/south-korea.png" width={20} height={20} alt="Korean" />
-            {t["Korean"]}
+            <span className="hidden lg:inline-flex">{t["Korean"]}</span>
           </div>
         ) : (
           <div className="flex gap-1">
@@ -57,20 +57,21 @@ function LanguageSelector() {
               height={20}
               alt="English"
             />
-            {t["English"]}
+            <span className="hidden lg:inline-flex">{t["English"]}</span>
           </div>
         )}
-
-        {!isOpen ? (
-          <ChevronDownIcon className="h-3" />
-        ) : (
-          <ChevronUpIcon className="h-3" />
-        )}
+        <div className="hidden lg:inline-flex">
+          {!isOpen ? (
+            <ChevronDownIcon className="h-3" />
+          ) : (
+            <ChevronUpIcon className="h-3" />
+          )}
+        </div>
       </button>
 
       {isOpen && (
         <div
-          className="absolute top-7 border shadow-md bg-white flex flex-col rounded-md w-[110px]"
+          className="absolute max-[1023px]:right-0 top-7 border shadow-md bg-white flex flex-col rounded-md w-[110px]"
           ref={browseRef}
         >
           <button

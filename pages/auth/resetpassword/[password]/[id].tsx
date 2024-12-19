@@ -46,8 +46,15 @@ const ResetPassword = () => {
       setLoading(false);
       if (result.code === 200 && result.message === "Password Changed") {
         setSeccussfully(true);
-      } else if (result.code === 201) {
-        setErrorMessage(t["Password don’t match"]);
+      } else if (
+        result.code === 201 &&
+        result.message === "Old Password incorrect"
+      ) {
+        setErrorMessage(t["Link is expired"]);
+      } else if (result.code === 201 && result.message === "User not found") {
+        setErrorMessage(t["Link is expired"]);
+      } else {
+        setErrorMessage(t["Error occurred"]);
       }
     } else {
       setErrorMessage(t["Password don’t match"]);
@@ -56,9 +63,9 @@ const ResetPassword = () => {
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | ${t["reset password"]}`}
-        titleTemplate={`핀카텔레 | ${t["reset password"]}`}
-        description={`핀카텔레 | ${t["reset password"]}`}
+        title={`${t["reset password"]}`}
+        titleTemplate={`${t["reset password"]}`}
+        description={`${t["reset password"]}`}
       />
       <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
         {seccussfully ? (
@@ -75,7 +82,7 @@ const ResetPassword = () => {
             <button
               onClick={() =>
                 router.push(
-                  "/board/signin?callbackUrl=https%3A%2F%2Ffinca.co.kr"
+                  `/${locale}/auth/signin?callbackUrl=https%3A%2F%2Ffincago.com`
                 )
               }
               className={`cursor-pointer bg-primary font-semibold text-white py-3 px-5 text-base mt-10 w-full rounded-md flex gap-1 items-center justify-center`}
@@ -170,7 +177,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/board/profile",
+        destination: "/auth/profile",
         permanent: false,
       },
     };

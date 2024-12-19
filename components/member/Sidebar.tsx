@@ -19,38 +19,39 @@ const Sidebar = ({ memberInfo }: any) => {
 
   const { data: session, status } = useSession();
 
-  const menus = [
-    {
-      id: 1,
-      title: t["내정보"],
-      icon: <UserIcon className="h-5" />,
-      link: "/board/profile",
-    },
-    {
-      id: 2,
-      title: t["핀코인"],
-      icon: <StopCircleIcon className="h-5" />,
-      link: "/board/wallet",
-    },
-    {
-      id: 3,
-      title: t["상품구매내역"],
-      icon: <DocumentTextIcon className="h-5" />,
-      link: "/board/ads-history",
-    },
-    {
-      id: 4,
-      title: t["내가 쓴 글"],
-      icon: <PencilSquareIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=posts`,
-    },
-    {
-      id: 5,
-      title: t["내가 쓴 댓글"],
-      icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=comments`,
-    },
-  ];
+  // const menus = [
+  //   {
+  //     id: 1,
+  //     title: t["내정보"],
+  //     icon: <UserIcon className="h-5" />,
+  //     // link: "/board/profile",
+  //     link: "/auth/profile",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: t["핀코인"],
+  //     icon: <StopCircleIcon className="h-5" />,
+  //     link: "/board/wallet",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: t["상품구매내역"],
+  //     icon: <DocumentTextIcon className="h-5" />,
+  //     link: "/board/ads-history",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: t["내가 쓴 글"],
+  //     icon: <PencilSquareIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=posts`,
+  //   },
+  //   {
+  //     id: 5,
+  //     title: t["내가 쓴 댓글"],
+  //     icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=comments`,
+  //   },
+  // ];
 
   return (
     <>
@@ -62,16 +63,16 @@ const Sidebar = ({ memberInfo }: any) => {
                 <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
                   <UserCircleIcon className="h-6 text-black" />
                   <span className="font-semibold">
-                    <Link href="/board/profile">{session?.user.nickname}</Link>
+                    <Link href="/auth/profile">{session?.user.nickname}</Link>
                   </span>
                   <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => signOut({ callbackUrl: `/${locale}/` })}
                     className="bg-gray-100 rounded-full text-[10px] px-2 py-1 ml-auto"
                   >
                     {t["sign-out"]}
                   </button>
                 </div>
-                <div className="space-y-5 mt-2.5">
+                {/* <div className="space-y-5 mt-2.5">
                   {menus.map((menu, index) => (
                     <Link
                       key={index}
@@ -92,7 +93,7 @@ const Sidebar = ({ memberInfo }: any) => {
                       )}
                     </Link>
                   ))}
-                </div>
+                </div> */}
               </>
             ) : (
               <>

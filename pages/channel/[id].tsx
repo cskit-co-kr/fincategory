@@ -170,23 +170,28 @@ const ChannelDetail = ({ channel }: any) => {
   }, [router, channel]);
 
   const getPostsWeb = async () => {
-    setLoadMore(true);
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`,
-      {
-        channel: channel?.username,
-        last_id: null,
+    try {
+      setLoadMore(true);
+      // console.log("channel?.username", channel?.username);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channel/posts`,
+        {
+          channel: channel?.username,
+          last_id: null,
+        }
+      );
+      const result = await response.data;
+      setPostsLastId(result.last_id);
+      if (result.posts.length === 0) {
+        setMode("db");
+        getPostsDB();
+      } else {
+        result.posts.length === 0 ? setPosts("empty") : setPosts(result.posts);
+        result.posts.length < 12 && setLoadMore(false);
+        setMode("web");
       }
-    );
-    const result = await response.data;
-    setPostsLastId(result.last_id);
-    if (result.posts.length === 0) {
-      setMode("db");
-      getPostsDB();
-    } else {
-      result.posts.length === 0 ? setPosts("empty") : setPosts(result.posts);
-      result.posts.length < 12 && setLoadMore(false);
-      setMode("web");
+    } catch (err) {
+      console.log("err", err);
     }
   };
 

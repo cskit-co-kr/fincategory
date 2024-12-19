@@ -26,6 +26,7 @@ import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
 import { GroupType } from "../typings";
 import LanguageSelector from "./LanguageSelector";
+import Image from "next/image";
 var moment = require("moment-timezone");
 
 const Header = () => {
@@ -113,8 +114,8 @@ const Header = () => {
   useEffect(() => {
     const s = router.query.q === undefined ? "" : (router.query.q as string);
     setSearchField(s);
-    const ss = router.asPath.includes("/board") ? 2 : 1;
-    setSearchSection(ss);
+    // const ss = router.asPath.includes("/board") ? 2 : 1;
+    // setSearchSection(ss);
   }, [router]);
 
   function handleClick() {
@@ -124,38 +125,38 @@ const Header = () => {
     }
   }
 
-  const menus = [
-    {
-      id: 1,
-      title: t["내정보"],
-      icon: <UserIcon className="h-5" />,
-      link: "/board/profile",
-    },
-    {
-      id: 2,
-      title: t["핀코인"],
-      icon: <StopCircleIcon className="h-5" />,
-      link: "/board/wallet",
-    },
-    {
-      id: 3,
-      title: t["상품구매내역"],
-      icon: <DocumentTextIcon className="h-5" />,
-      link: "/board/ads-history",
-    },
-    {
-      id: 4,
-      title: t["내가 쓴 글"],
-      icon: <PencilSquareIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=posts`,
-    },
-    {
-      id: 5,
-      title: t["내가 쓴 댓글"],
-      icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
-      link: `/board?member=${session?.user.nickname}&show=comments`,
-    },
-  ];
+  // const menus = [
+  //   {
+  //     id: 1,
+  //     title: t["내정보"],
+  //     icon: <UserIcon className="h-5" />,
+  //     link: "/board/profile",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: t["핀코인"],
+  //     icon: <StopCircleIcon className="h-5" />,
+  //     link: "/board/wallet",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: t["상품구매내역"],
+  //     icon: <DocumentTextIcon className="h-5" />,
+  //     link: "/board/ads-history",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: t["내가 쓴 글"],
+  //     icon: <PencilSquareIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=posts`,
+  //   },
+  //   {
+  //     id: 5,
+  //     title: t["내가 쓴 댓글"],
+  //     icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
+  //     link: `/board?member=${session?.user.nickname}&show=comments`,
+  //   },
+  // ];
 
   const [mobileSearch, setMobileSearch] = useState(false);
   const [searchSectionMenuMobile, setSearchSectionMenuMobile] = useState(false);
@@ -164,16 +165,16 @@ const Header = () => {
     <>
       <header className="bg-white z-20">
         <div className="container">
-          <div className="flex py-5 justify-between items-center border-b">
-            <div className="font-raleway text-2xl pl-4 md:pl-0 flex gap-3 items-end">
+          <div className="flex py-[16px] lg:py-5 justify-between items-center lg:border-b px-[16px] lg:px-[0px]">
+            <div className="font-raleway text-2xl flex gap-3 items-end">
               <Link
                 href="/"
-                className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none w-[94px]"
+                className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none w-[94px] whitespace-pre"
               >
                 <span className="font-bold text-primary">Fin</span>
                 <span className="">Cago</span>
               </Link>
-              <h1 className="text-[11px] leading-none mb-[3px] text-gray-text font-segoe">
+              <h1 className="text-[12px] leading-[11px] mb-[3px] text-gray-text font-segoe">
                 {t["Telegram channel/group information"]}
                 {/* 텔레그램 채널/그룹 정보 핀카 */}
               </h1>
@@ -181,7 +182,7 @@ const Header = () => {
 
             {/* Mobile */}
 
-            {mobileSearch && (
+            {/* {mobileSearch && (
               <div className="fixed top-0 left-0 w-full bg-white md:hidden z-[999999] h-full">
                 <div className="flex items-center px-4 py-4 shadow-md">
                   <MagnifyingGlassIcon className="h-6 text-gray-500 mr-1" />
@@ -244,21 +245,24 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
 
-            <div className="md:hidden drawer w-fit z-50">
-              <button onClick={() => setMobileSearch(true)}>
+            <div className="lg:hidden drawer w-fit z-50">
+              {/* <button onClick={() => setMobileSearch(true)}>
                 <MagnifyingGlassIcon className="h-5 mr-4" />
-              </button>
+              </button> */}
+              <div className="flex items-center">
+                <LanguageSelector />
+              </div>
               <input
                 id="my-drawer-4"
                 type="checkbox"
                 className="drawer-toggle"
               />
-              <div className="drawer-content ml-auto pr-4">
+              <div className="drawer-content ml-auto">
                 {/* Page content here */}
                 <label htmlFor="my-drawer-4" className="">
-                  <Bars3Icon className="h-7" />
+                  <Bars3Icon className="h-[24px]" />
                 </label>
               </div>
               <div className="drawer-side ">
@@ -266,80 +270,124 @@ const Header = () => {
                   htmlFor="my-drawer-4"
                   className="drawer-overlay !fixed w-full top-0 right-0 !h-full"
                 ></label>
-                <div className="menu p-2 w-80 min-h-screen bg-gray-100">
+                <div className="menu py-[0px] px-[16px] w-80 min-h-screen bg-white ..bg-gray-100">
+                  <div className="flex justify-between text-[24px] leading-[24px] py-[16px]">
+                    <Link
+                      href="/"
+                      className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none w-[94px] whitespace-pre"
+                    >
+                      <span className="font-bold text-primary">Fin</span>
+                      <span className="">Cago</span>
+                    </Link>
+                    <Image
+                      onClick={handleClick}
+                      src={"/img/close_icon.svg"}
+                      width={20}
+                      height={20}
+                      className="min-w-[20px] max-h-[20px]"
+                      alt="close_icon"
+                    />
+                  </div>
                   <div className="grid mb-10">
                     {session?.user ? (
-                      <div className="flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4">
-                        <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
-                          <UserCircleIcon className="h-6 text-black" />
-                          <span className="font-semibold text-base">
-                            <Link
-                              href="/board/profile"
-                              className="flex gap-1"
-                              onClick={handleClick}
-                            >
-                              {session?.user.nickname}
-                              <Cog6ToothIcon className="h-4" />
-                            </Link>
+                      <div className="flex flex-col gap-[16px] text-sm bg-white py-[16px]">
+                        <Link
+                          className="flex gap-2 items-center min-h-[50px]"
+                          // href="/board/profile"
+                          href="/auth/profile"
+                          onClick={handleClick}
+                        >
+                          <UserCircleIcon className="h-[35px] text-black" />
+                          <span className="font-normal">
+                            {session?.user?.email}
                           </span>
-                          <button
-                            onClick={() => {
-                              signOut({ callbackUrl: "/" });
-                              handleClick();
-                            }}
-                            className="bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs"
-                          >
-                            {t["sign-out"]}
-                          </button>
-                        </div>
-
-                        <div className="space-y-5 mt-2.5">
-                          {menus.map((menu, index) => (
-                            <Link
-                              key={index}
-                              className={`flex items-center gap-2.5 font-semibold text-sm ${
-                                menu.link === router.asPath
-                                  ? "text-black"
-                                  : "text-gray-500"
-                              }`}
-                              href={menu.link}
-                            >
-                              {menu.icon}
-                              {menu.title}
-                              {menu.id === 4 && (
-                                <div className="ml-auto">
-                                  {memberInfo?.post}
-                                </div>
-                              )}
-                              {menu.id === 5 && (
-                                <div className="ml-auto">
-                                  {memberInfo?.comment}
-                                </div>
-                              )}
-                            </Link>
-                          ))}
-                        </div>
+                        </Link>
+                        <button
+                          className="bg-[#EBEAEA] font-semibold text-dark-primary pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
+                          onClick={() => {
+                            // signOut({ callbackUrl: "/" });
+                            signOut({ callbackUrl: `/${locale}/` });
+                            handleClick();
+                          }}
+                        >
+                          {t["sign-out"]}
+                        </button>
                       </div>
                     ) : (
-                      <div className="flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4">
-                        <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
-                          <UserCircleIcon className="h-6 text-black" />
-                          <span className="font-semibold">
-                            ID {t["sign-in"]}
-                          </span>
+                      // <div className="flex flex-col gap-2 text-sm bg-white shadow-sm rounded-xl p-4">
+                      //   <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
+                      //     <UserCircleIcon className="h-6 text-black" />
+                      //     <span className="font-semibold text-base">
+                      //       <Link
+                      //         href="/board/profile"
+                      //         className="flex gap-1"
+                      //         onClick={handleClick}
+                      //       >
+                      //         {session?.user.nickname}
+                      //         <Cog6ToothIcon className="h-4" />
+                      //       </Link>
+                      //     </span>
+                      //     <button
+                      //       onClick={() => {
+                      //         signOut({ callbackUrl: "/" });
+                      //         handleClick();
+                      //       }}
+                      //       className="bg-gray-100 rounded-full px-2 py-1 ml-auto text-xs"
+                      //     >
+                      //       {t["sign-out"]}
+                      //     </button>
+                      //   </div>
+
+                      //   <div className="space-y-5 mt-2.5">
+                      //     {menus.map((menu, index) => (
+                      //       <Link
+                      //         key={index}
+                      //         className={`flex items-center gap-2.5 font-semibold text-sm ${
+                      //           menu.link === router.asPath
+                      //             ? "text-black"
+                      //             : "text-gray-500"
+                      //         }`}
+                      //         href={menu.link}
+                      //       >
+                      //         {menu.icon}
+                      //         {menu.title}
+                      //         {menu.id === 4 && (
+                      //           <div className="ml-auto">
+                      //             {memberInfo?.post}
+                      //           </div>
+                      //         )}
+                      //         {menu.id === 5 && (
+                      //           <div className="ml-auto">
+                      //             {memberInfo?.comment}
+                      //           </div>
+                      //         )}
+                      //       </Link>
+                      //     ))}
+                      //   </div>
+                      // </div>
+                      <div className="flex flex-col gap-[16px] text-sm bg-white py-[16px]">
+                        <div className="flex gap-2 items-center min-h-[50px]">
+                          <UserCircleIcon className="h-[35px] text-black" />
+                          <span className="font-normal">ID {t["sign-in"]}</span>
                         </div>
-                        <button
-                          className="bg-primary font-semibold text-white py-2 px-5 text-base rounded-md"
+                        {/* <button
+                          className="bg-primary font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
                           onClick={() => {
                             signIn();
                             handleClick();
                           }}
                         >
+                            {t["sign-in"]}
+                        </button> */}
+                        <Link
+                          href="/auth/signin"
+                          className="bg-primary font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
+                        >
                           {t["sign-in"]}
-                        </button>
+                        </Link>
                       </div>
                     )}
-                    <div className="text-sm">
+                    {/* <div className="text-sm">
                       <div className="grid gap-2 my-3 bg-white p-4 rounded-xl shadow-sm">
                         <Link
                           className="font-semibold flex gap-2 items-center"
@@ -417,9 +465,9 @@ const Header = () => {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="mt-auto font-raleway text-2xl flex gap-3 items-end mx-auto my-5">
+                  {/* <div className="mt-auto font-raleway text-2xl flex gap-3 items-end mx-auto my-5">
                     <Link
                       href="/"
                       className="hover:no-underline hover:text-current focus:no-underline focus:text-current leading-none"
@@ -442,25 +490,26 @@ const Header = () => {
                       (c) {moment.utc().tz("Asia/Seoul").format("YYYY")} CSKIT
                       Inc. all rights reserved.
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
 
-            <div className="relative border border-primary items-center py-2 px-3 rounded-full hidden md:inline-flex hover:shadow-md">
+            {/* Desktop search */}
+            <div className="relative border border-primary items-center py-[10px] px-[16px] rounded-full hidden lg:inline-flex hover:shadow-md w-full max-w-[555px]">
               <input
                 type="text"
                 name="search"
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="outline-none pl-3 w-24 md:w-80 xl:w-96 text-sm"
+                className="outline-none pl-[3px] w-full text-sm"
                 aria-label="Search"
-                placeholder="Search..."
+                placeholder="Channel / Group"
               />
-              <button
+              {/* <button
                 className="text-xs py-1 px-2 flex gap-1 items-center rounded-full min-w-[70px] justify-center text-dark-primary"
-                onClick={() => setSearchSectionMenu((prev) => !prev)}
+                // onClick={() => setSearchSectionMenu((prev) => !prev)}
               >
                 {searchSection === 1 ? t["channel/group"] : t["board"]}
                 <FaCaretDown size={14} />
@@ -489,12 +538,13 @@ const Header = () => {
                     {t["board"]}
                   </button>
                 </div>
-              )}
+              )} */}
               <button onClick={handleSubmit} name="search">
-                <MagnifyingGlassIcon className="h-5 text-primary mr-1" />
+                <MagnifyingGlassIcon className="h-5 text-primary" />
               </button>
             </div>
-            <div className="hidden md:flex gap-4 items-center">
+
+            <div className="hidden lg:flex gap-4 items-center">
               <div>
                 <LanguageSelector />
               </div>
@@ -515,16 +565,21 @@ const Header = () => {
                         ref={browseRef}
                       >
                         <Link
-                          href="/board/profile"
+                          // href="/board/profile"
+                          href="/auth/profile"
                           onClick={() => setUserMenu(false)}
                           className="flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl"
                         >
-                          <UserCircleIcon className="h-4" />내 정보
+                          <UserCircleIcon className="h-4" />
+                          {t["Profile"]}
                         </Link>
 
                         <Link
                           href="#"
-                          onClick={() => signOut({ callbackUrl: "/" })}
+                          // onClick={() => signOut({ callbackUrl: "/" })}
+                          onClick={() =>
+                            signOut({ callbackUrl: `/${locale}/` })
+                          }
                           className="flex gap-2 items-center px-3 py-2 hover:bg-gray-50 rounded-xl"
                         >
                           <ArrowRightOnRectangleIcon className="h-4" />
@@ -534,20 +589,47 @@ const Header = () => {
                     )}
                   </div>
                 ) : (
-                  <button
-                    onClick={() => signIn()}
+                  // <button
+                  //   onClick={() => signIn()}
+                  //   className="bg-primary font-semibold text-white rounded-full py-1 px-5 text-sm hover:text-white"
+                  // >
+                  //   {t["sign-in"]}
+                  // </button>
+                  <Link
+                    href="/auth/signin"
                     className="bg-primary font-semibold text-white rounded-full py-1 px-5 text-sm hover:text-white"
                   >
                     {t["sign-in"]}
-                  </button>
+                  </Link>
                 )}
               </div>
             </div>
           </div>
-          <nav className="text-sm font-bold items-center hidden md:flex flex-nowrap break-keep">
+
+          {/* Mobile search */}
+          <div className="flex items-center justify-center w-full pb-[15px] border-b lg:border-none px-[16px] lg:hidden">
+            <div className="flex justify-between relative border border-primary items-center py-[8px] px-[15px] rounded-full hover:shadow-md w-full max-w-[560px]">
+              <input
+                type="text"
+                name="search"
+                value={searchField}
+                onChange={(e) => setSearchField(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="outline-none max-[370px]:max-w-[120px] text-sm h-[24px]"
+                aria-label="Search"
+                placeholder="Channel / Group"
+              />
+              <div className="inline-flex">
+                <button onClick={handleSubmit} name="search">
+                  <MagnifyingGlassIcon className="h-5 text-dark-primary hover:text-primary" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <nav className="text-sm font-bold items-center flex flex-nowrap break-keep max-[1023px]:px-[16px] max-[1023px]:py-[12px]">
             {/* active users */}
-            <div className="flex flex-row items-center gap-[10px] py-[12px] container h-[47px]">
-              <svg
+            <div className="flex flex-row items-center gap-[10px] container lg:h-[47px]">
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"
                 height="10"
@@ -558,7 +640,7 @@ const Header = () => {
               </svg>
               <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
                 Online : {"82"}
-              </span>
+              </span> */}
             </div>
             {/* <ul className="flex">
               <li>

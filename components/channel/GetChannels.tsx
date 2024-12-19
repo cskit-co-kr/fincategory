@@ -42,14 +42,14 @@ const GetChannels: FunctionComponent<Props> = ({
 
   const style =
     bordered === true
-      ? "p-4 border-b md:border border-gray-200 hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300"
+      ? "p-[16px] border border border-gray-secondary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300"
       : "";
 
   // const style2 = 'text-white border-b md:border border-primary hover:shadow-sm transition ease-in-out hover:border-gray-400 duration-300';
   // background = 'bg-primary';
   return (
     <div
-      className={`${style} relative flex md:rounded-xl gap-2.5 text-black ${background}`}
+      className={`${style} relative flex md:rounded-xl gap-[12px] .text-black ${background}`}
     >
       {/* <div className='absolute bottom-0 right-0 bg-primary/80 px-2 py-[1px] text-[10px] rounded-tl-lg rounded-br-lg text-white'>ad</div> */}
       <Link href={`/channel/${channels.username}`} target="_blank">
@@ -84,13 +84,18 @@ const GetChannels: FunctionComponent<Props> = ({
             )}
           </h2>
 
-          {desc === true && (
-            <p className="break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1">
-              {channels.description}
-            </p>
-          )}
+          {desc === true &&
+            (channels.description ? (
+              <p className="break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1 min-h-[32px]">
+                {channels.description}
+              </p>
+            ) : (
+              <p className="break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1 min-h-[32px] text-gray-text">
+                No description yet
+              </p>
+            ))}
         </Link>
-        <div className="flex items-center justify-between text-xs text-gray-500 font-semibold">
+        <div className="flex items-center justify-between text-xs text-gray-text font-semibold h-[18px]">
           <span className="flex gap-0.5 items-center">
             <LiaUserSolid size={16} />
             {t["subscribers"]} {channels.subscription?.toLocaleString()}
@@ -98,19 +103,25 @@ const GetChannels: FunctionComponent<Props> = ({
           {views === true && (
             <span>
               {t["today"]}
-              {channels.today && channels.today}/{t["누적"]}
+              {/* {t["Click per day"]} */}
+              {` `}
+              {channels.today && channels.today}
+              {` `}/{` `}
+              {t["누적"]}
+              {/* {t["Total"]} */}
+              {` `}
               {channels.total && channels.total}
             </span>
           )}
         </div>
         <div className="flex gap-1">
           {channels.category && showCategory && (
-            <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
+            <div className="bg-gray-100 px-[7px] py-[1px] rounded-full text-[12px] leading-[17px] text-[#71B2FF] font-semibold border border-[#71B2FF] whitespace-nowrap h-fit">
               {channels.category.name !== undefined &&
                 JSON.parse(channels.category.name)[locale]}
             </div>
           )}
-          <div className="tags flex flex-wrap">
+          {/* <div className="tags flex flex-wrap">
             {channels.tags &&
               tag === true &&
               channels.tags.map(
@@ -131,7 +142,7 @@ const GetChannels: FunctionComponent<Props> = ({
                   );
                 }
               )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

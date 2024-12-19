@@ -32,9 +32,11 @@ module.exports = {
       colors: {
         gray: colors.neutral,
         "gray-text": "#666F79",
+        "gray-primary": "rgba(54, 135, 226, 0.05);",
+        "gray-secondary": "#EFF2F5",
+        "gray-3": "#E7EAED",
         "dark-primary": "#1C1E21",
         "blue-primary": "#3687E2",
-        "gray-primary": "rgba(54, 135, 226, 0.05);",
       },
       aspectRatio: {
         "4/3": "4 / 3",
@@ -56,6 +58,9 @@ module.exports = {
         },
         ".dropdown-boxShadow": {
           "box-shadow": "0px 4px 13.1px 0px rgba(0, 0, 0, 0.25)",
+        },
+        ".categorySec-boxShadow": {
+          "box-shadow": "0px 4px 13.1px 0px rgba(0, 0, 0, 0.25) !important",
         },
       });
     }),

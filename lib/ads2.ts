@@ -1,29 +1,34 @@
 import apiService from "./apiService";
 
 async function addAds2(channels: any) {
-  const ads = await apiService.getAds2();
+  try {
+    const ads = await apiService.getAds2();
 
-  // const getRandomIndex = (max: any) => Math.floor(Math.random() * (max + 1));
+    // const getRandomIndex = (max: any) => Math.floor(Math.random() * (max + 1));
 
-  let newArray = channels;
+    let newArray = channels;
 
-  // Remove items from the end of the main array based on the length of the additional array
-  if (channels.length > ads.length && channels.length + ads.length > 45) {
-    newArray = channels.slice(0, channels.length - ads.length);
+    // Remove items from the end of the main array based on the length of the additional array
+    if (channels.length > ads.length && channels.length + ads.length > 45) {
+      newArray = channels.slice(0, channels.length - ads.length);
+    }
+
+    // console.log("ads2Added", ads);
+
+    // Insert the additional array into random positions in the new array
+    // ads.forEach((item: any) => {
+    //   const randomIndex = getRandomIndex(newArray.length > 45 ? 45 : newArray.length);
+    //   newArray.splice(randomIndex, 0, item);
+    // });
+
+    // Prepend the ads array to the top of the new array
+    newArray = [...ads, ...newArray];
+
+    return newArray;
+  } catch (err) {
+    console.log("err", err);
+    return channels;
   }
-
-  // console.log("ads2Added", ads);
-
-  // Insert the additional array into random positions in the new array
-  // ads.forEach((item: any) => {
-  //   const randomIndex = getRandomIndex(newArray.length > 45 ? 45 : newArray.length);
-  //   newArray.splice(randomIndex, 0, item);
-  // });
-
-  // Prepend the ads array to the top of the new array
-  newArray = [...ads, ...newArray];
-
-  return newArray;
 }
 
 export default addAds2;

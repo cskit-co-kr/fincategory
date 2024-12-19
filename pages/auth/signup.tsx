@@ -112,16 +112,16 @@ const MemberSignUp = () => {
     );
     const result = await response.json();
     if (result.code === 200 && result.message === "Inserted") {
-      router.push("/board/success");
+      router.push("/auth/success");
     }
   };
 
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | ${t["sign-up"]}`}
-        titleTemplate={`핀카텔레 | ${t["sign-up"]}`}
-        description={`핀카텔레 | ${t["sign-up"]}`}
+        title={`${t["sign-up-seo"]}`}
+        titleTemplate={`${t["sign-up-seo"]}`}
+        description={`${t["sign-up-seo"]}`}
       />
       <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
         <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">
@@ -202,7 +202,7 @@ const MemberSignUp = () => {
               ?
             </div>
             <div className="px-4">
-              <Link href={`/board/signin`} className="underline">
+              <Link href={`/auth/signin`} className="underline">
                 {t["sign-in"]}
               </Link>
             </div>
@@ -219,7 +219,7 @@ export async function getServerSideProps(context: any) {
   if (session) {
     return {
       redirect: {
-        destination: "/board/profile", // Redirect to the login page if not logged in
+        destination: "/auth/profile", // Redirect to the login page if not logged in
         permanent: false,
       },
     };

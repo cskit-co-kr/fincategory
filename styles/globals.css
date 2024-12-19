@@ -13,8 +13,11 @@
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: black;
+    /* color: black; */
+    color: #1c1e21;
     font-size: 14px;
+
+    /* height: 100vh; */
   }
 }
 
@@ -73,7 +76,7 @@
     @apply lg:static !important;
   }
   .white-box {
-    @apply w-full border border-gray-100 bg-white rounded-xl px-[20px] shadow-sm;
+    @apply w-full border border-gray-100 bg-white rounded-xl p-[30px] shadow-sm;
   }
   .blue-button {
     @apply bg-primary font-semibold text-white py-2 px-5 text-sm w-fit rounded-md items-center gap-2 flex justify-center whitespace-nowrap hover:underline;

@@ -1,33 +1,43 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import KakaoProvider from 'next-auth/providers/kakao';
-import jwt from 'jsonwebtoken';
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import KakaoProvider from "next-auth/providers/kakao";
+import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
-  secret: '9FZID6AKGFVV4J99T3HJ',
+  secret: "9FZID6AKGFVV4J99T3HJ",
   providers: [
     CredentialsProvider({
-      type: 'credentials',
+      type: "credentials",
       credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'Username' },
-        password: { label: 'Password', type: 'password', placeholder: 'Password' },
+        username: { label: "Username", type: "text", placeholder: "Username" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Password",
+        },
       },
       async authorize(credentials, req) {
         const { username, password } = credentials as any;
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/login`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/user/login`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          }
+        );
         const user = await response.json();
         if (response.ok && user.code === 200) {
-          const decodedToken = jwt.verify(user.accessToken, '9FZID6AKGFVV4J99T3HJ');
+          const decodedToken = jwt.verify(
+            user.accessToken,
+            "9FZID6AKGFVV4J99T3HJ"
+          );
           return decodedToken;
         } else return null;
       },
@@ -38,11 +48,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/board/signin',
+    // signIn: '/board/signin',
+    signIn: "/auth/signin",
   },
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      if (trigger === 'update') {
+      if (trigger === "update") {
         return { ...token, ...session.user };
       }
       return { ...token, ...user };
@@ -53,7 +64,7 @@ export const authOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;

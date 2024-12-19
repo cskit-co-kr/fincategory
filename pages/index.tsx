@@ -10,7 +10,7 @@ import {
 import { Loader } from "rsuite";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { Section1, Section1Skeleton } from "../components/search/Section1";
+// import { Section1, Section1Skeleton } from "../components/search/Section1";
 import {
   Section2_1Skeleton,
   Section2_1,
@@ -20,13 +20,13 @@ import {
   Section2_2Skeleton,
 } from "../components/search/Section2_2";
 import { Skeleton } from "@mui/material";
-import Section3 from "../components/search/Section3";
+// import Section3 from "../components/search/Section3";
 import SearchFilterBar from "../components/search/SearchFilterBar";
-import Ads1 from "../components/search/Ads1";
+// import Ads1 from "../components/search/Ads1";
 import addAds2 from "../lib/ads2";
 import AdChannel2 from "../components/search/AdChannel2";
-import Hashtag from "../components/Hashtag";
-import HashtagMobile from "../components/HashtagMobile";
+// import Hashtag from "../components/Hashtag";
+// import HashtagMobile from "../components/HashtagMobile";
 import { NextSeo } from "next-seo";
 
 import ListChannels from "../components/channel/ListChannels";
@@ -37,17 +37,17 @@ const Home = () => {
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
   // console.log("locale", locale);
-  const [selectedTag, setSelectedTag] = useState<any>();
+  // const [selectedTag, setSelectedTag] = useState<any>();
   const [sortType, setSortType] = useState(1);
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   // const [searchText, setSearchText] = useState<any>("");
   const [selectedCategory, setSelectedCategory] = useState<any | null>(null);
-  const [selectCategory, setSelectCategory] = useState<any>();
+  // const [selectCategory, setSelectCategory] = useState<any>();
 
   const [channelType, setChannelType] = useState<any | null>([
-    { value: "all", label: t["All"] },
+    { value: "all", label: t["All-cumulative"] },
   ]);
   const [sorting, setSorting] = useState({
     field: "subscription",
@@ -57,7 +57,7 @@ const Home = () => {
     useState<string>("subscription_desc");
 
   const [searchResult, setSearchResult] = useState<any | null>(null);
-  const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
+  const [loadMoreText, setLoadMoreText] = useState<any>(t["see-more"]);
 
   const [searchEvent, setSearchEvent] = useState<any | null>(null);
 
@@ -68,12 +68,12 @@ const Home = () => {
   const [channelsTotalToday, setChannelsTotalToday] =
     useState<any>(channelsToday);
 
-  const [channels24, setChannels24] = useState<any>(null);
-  const [channels7d, setChannels7d] = useState<any>(null);
-  const [channels30d, setChannels30d] = useState<any>(null);
-  const [channels24_7_30, setChannels24_7_30] = useState();
+  // const [channels24, setChannels24] = useState<any>(null);
+  // const [channels7d, setChannels7d] = useState<any>(null);
+  // const [channels30d, setChannels30d] = useState<any>(null);
+  // const [channels24_7_30, setChannels24_7_30] = useState();
 
-  const [tags, setTags] = useState<any>();
+  // const [tags, setTags] = useState<any>();
   const [categories, setCategories] = useState<any>();
 
   const [loadMore, setLoadMore] = useState<boolean>(false);
@@ -86,11 +86,59 @@ const Home = () => {
 
   useEffect(() => {
     if (!isFirstLoad) {
-      const tag = selectedTag?.tag ? `#${selectedTag.tag}` : "";
-      doSearch(tag);
+      // const tag = selectedTag?.tag ? `#${selectedTag.tag}` : "";
+      doSearch("");
     }
     setIsFirstLoad(false);
-  }, [selectedTag, selectedCategory]);
+    const data: any = {
+      query: null, //searchText === '' ? null : searchText,
+      withDesc: false,
+      category: selectedCategory === null ? [] : selectedCategory,
+      // country: [{ value: 113, label: "Korea, Republic of" }],
+      language: [{ value: locale }],
+      channel_type: channelType[0].value === "all" ? [] : channelType,
+      channel_age: 0,
+      erp: 0,
+      subscribers_from: null,
+      subscribers_to: null,
+      paginate: { limit: 45, offset: 0 },
+      sort: sorting,
+    };
+
+    const newChannels = async () => {
+      // Get recently added channels
+      data["sort"] = { field: "created_at", order: "desc" };
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["channel_type"] = null;
+      const channelsNew = await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
+        .then((response) => response.data?.channel)
+        .catch((e) => console.log(e));
+      setChannelsNew(channelsNew);
+    };
+
+    const todayChannels = async () => {
+      // Get most viewed channels today
+      data["paginate"] = { limit: 5, offset: 0 };
+      data["sort"] = { field: "today", order: "desc" };
+      data["channel_type"] = null;
+      const channelsToday = await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+          data
+        )
+        .then((response) => response.data.channel)
+        .catch((e) => console.log(e));
+
+      setChannelsToday(channelsToday);
+      setChannelsTotalToday(channelsToday);
+    };
+    newChannels();
+    todayChannels();
+  }, [selectedCategory]);
 
   useEffect(() => {
     const data: any = {
@@ -139,65 +187,54 @@ const Home = () => {
       setChannelsTotalToday(channelsToday);
     };
 
-    const _channels24 = async () => {
-      // Get most increased subscriptions in 24h
-      data["paginate"] = { limit: 6, offset: 0 };
-      data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
-      data["channel_type"] = null;
-      const channels24h = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
-      // Get most increased subscriptions in 7d
-      data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
-      const channels7d = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
-      // Get most increased subscriptions in 30d
-      data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
-      const channels30d = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
-          data
-        )
-        .then((response) => response.data.channel)
-        .catch((e) => console.log(e));
+    // const _channels24 = async () => {
+    //   // Get most increased subscriptions in 24h
+    //   data["paginate"] = { limit: 6, offset: 0 };
+    //   data["sort"] = { field: "extra_02", order: "desc", type: "integer" };
+    //   data["channel_type"] = null;
+    //   const channels24h = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
+    //   // Get most increased subscriptions in 7d
+    //   data["sort"] = { field: "extra_03", order: "desc", type: "integer" };
+    //   const channels7d = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
+    //   // Get most increased subscriptions in 30d
+    //   data["sort"] = { field: "extra_04", order: "desc", type: "integer" };
+    //   // console.log("data123", data);
+    //   const channels30d = await axios
+    //     .post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+    //       data
+    //     )
+    //     .then((response) => response.data.channel)
+    //     .catch((e) => console.log(e));
 
-      setChannels24(channels24h);
-      setChannels7d(channels7d);
-      setChannels30d(channels30d);
+    //   setChannels24(channels24h);
+    //   setChannels7d(channels7d);
+    //   setChannels30d(channels30d);
 
-      setChannels24_7_30(channels24h);
-    };
+    //   setChannels24_7_30(channels24h);
+    // };
 
-    const exec = async () => {
-      const tags = await axios
-        .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
-        .then((response) => response.data);
+    // const getTags = async () => {
+    //   const tags = await axios
+    //     .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/tag/get`)
+    //     .then((response) => response.data);
 
-      startTransition(() => {
-        setTags(tags);
-      });
-    };
-
-    const getCategoriesWithCount = async () => {
-      const resCat = await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`
-        )
-        .then((response) => response.data);
-      // console.log("resCat", resCat);
-      startTransition(() => {
-        setCategories(resCat);
-      });
-    };
+    //   startTransition(() => {
+    //     setTags(tags);
+    //   });
+    // };
 
     const getTotal = async () => {
       data["paginate"] = { limit: 5, offset: 0 };
@@ -215,11 +252,11 @@ const Home = () => {
 
     newChannels();
     todayChannels();
-    _channels24();
+    // _channels24();
 
-    exec();
+    // getTags();
     //
-    getCategoriesWithCount();
+    // getCategoriesWithCount();
   }, [router]);
 
   useEffect(() => {
@@ -228,11 +265,46 @@ const Home = () => {
     } else {
       doSearch("");
     }
+    // getCategoriesWithCount();
   }, [router.query.q, sorting, locale]);
 
   useEffect(() => {
-    setLoadMoreText(t["load-more"]);
+    setLoadMoreText(t["see-more"]);
+    getCategoriesWithCount();
+    setSelectedCategory(null);
   }, [locale]);
+
+  const getCategoriesWithCount = async () => {
+    const data = {
+      language: locale,
+    };
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/category/getCategoriesWithCount`,
+        // "http://localhost:8080/v1/category/getCategoriesWithCount",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      // console.log("response", response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // console.log("response", response);
+      const resCat = await response.json();
+
+      startTransition(() => {
+        setCategories(resCat);
+      });
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const doSearch = async (q: string) => {
     // q.length > 0 && setSearchText(q);
@@ -251,10 +323,10 @@ const Home = () => {
       paginate: { limit: 45, offset: 0 },
       sort: sorting,
     };
-    if (!!selectedTag?.tag) {
-      data.query = `#${selectedTag.tag}`;
-    }
-
+    // if (!!selectedTag?.tag) {
+    //   data.query = `#${selectedTag.tag}`;
+    // }
+    // console.log("data", data);
     setSearchEvent(data);
 
     const response = await fetch(
@@ -285,14 +357,14 @@ const Home = () => {
 
   const handleLoadMore = async (data: any) => {
     setIsLoading(true);
-    setLoadMoreText(<Loader content={t["loading-text"]} />);
+    setLoadMoreText(<Loader content={t["see-more"]} />);
     data["paginate"].limit = data["paginate"].limit + 45;
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`,
       data
     );
     const resultData = await response.data;
-    console.log("handleLoadMore >>> resultData", resultData);
+    // console.log("handleLoadMore >>> resultData", resultData);
     const result = resultData.channel;
     result.length - searchResult.length < 45 && setLoadMore(false);
 
@@ -303,7 +375,7 @@ const Home = () => {
     setSearchResult(ads2Added);
     // setSearchResult(result);
     setIsLoading(false);
-    setLoadMoreText(t["load-more"]);
+    setLoadMoreText(t["see-more"]);
   };
 
   const doFilter = (e: any) => {
@@ -366,25 +438,25 @@ const Home = () => {
 
   const searchListRef = useRef(null);
 
-  const [channelRankingUrl, setChannelRankingUrl] = useState(
-    "?column=increase24h"
-  );
-  const [text24730, setText24730] = useState(1);
-  const change24_7_30 = (x: number) => {
-    if (x === 24) {
-      setChannels24_7_30(channels24);
-      setText24730(1);
-      setChannelRankingUrl("?column=increase24h");
-    } else if (x === 7) {
-      setChannels24_7_30(channels7d);
-      setText24730(2);
-      setChannelRankingUrl("?column=increase7d");
-    } else if (x === 30) {
-      setChannels24_7_30(channels30d);
-      setText24730(3);
-      setChannelRankingUrl("?column=increase30d");
-    }
-  };
+  // const [channelRankingUrl, setChannelRankingUrl] = useState(
+  //   "?column=increase24h"
+  // );
+  // const [text24730, setText24730] = useState(1);
+  // const change24_7_30 = (x: number) => {
+  //   if (x === 24) {
+  //     setChannels24_7_30(channels24);
+  //     setText24730(1);
+  //     setChannelRankingUrl("?column=increase24h");
+  //   } else if (x === 7) {
+  //     setChannels24_7_30(channels7d);
+  //     setText24730(2);
+  //     setChannelRankingUrl("?column=increase7d");
+  //   } else if (x === 30) {
+  //     setChannels24_7_30(channels30d);
+  //     setText24730(3);
+  //     setChannelRankingUrl("?column=increase30d");
+  //   }
+  // };
   const useWindowDimensions = () => {
     const hasWindow = typeof window !== "undefined";
 
@@ -416,41 +488,35 @@ const Home = () => {
   const { width } = useWindowDimensions();
 
   // console.log("searchResult", searchResult);
+  // console.log("channelsToday", channelsToday);
   return (
     <>
       <NextSeo
-        title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
-        titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        // title={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        // titleTemplate={`핀카텔레 | 홈-텔레그램 채널/그룹 정보`}
+        title={t["Fincago  | Home - Telegram Channel/Group Information"]}
+        titleTemplate={
+          t["Fincago  | Home - Telegram Channel/Group Information"]
+        }
         description={
-          "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에"
+          t["The largest database of Telegram channels around the world"]
         }
       />
-      <div className="flex flex-1 flex-col md:pt-[30px]">
+      <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
         <div className="flex .grid .md:flex">
-          <div className="flex flex-col .gap-0 gap-4 justify-items-stretch content-start w-full">
-            {/* <div
-              className='flex items-center gap-2 sticky top-0 z-20 bg-gray-50 py-4 md:py-2 px-4 md:px-0 border-b border-gray-200 md:border-none'
-              ref={ref}
-            >
-              <div className='font-bold text-xl'>#</div>
-              <div className='relative block md:w-[98%] max-w-[360px] md:max-w-[1000px] lg:max-w-[1300px]'>
-                <div className='ml-2'>
-                  <HashtagScroll tags={tags} selectedTag={selectedTag} setSelectedTag={setSelectedTag} searchListRef={searchListRef} />
-                </div>
-              </div>
-            </div> */}
-            {/* {(width || 0) >= 1024 && tags ? ( */}
+          <div className="flex flex-col gap-[16px] justify-items-stretch content-start w-full">
             {categories ? (
               <CategoriesSection
-                tags={tags}
-                selectedTag={selectedTag}
-                setSelectedTag={setSelectedTag}
+                // tags={tags}
+                // selectedTag={selectedTag}
+                // setSelectedTag={setSelectedTag}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
-                selectCategory={selectCategory}
-                setSelectCategory={setSelectCategory}
+                // selectCategory={selectCategory}
+                // setSelectCategory={setSelectCategory}
                 searchListRef={searchListRef}
                 categories={categories}
+                searchResult={searchResult}
               />
             ) : null}
             {/*  */}
@@ -526,10 +592,10 @@ const Home = () => {
             </div> */}
 
             <div className="grid md:grid-cols-2 gap-4 min-h-[281px]">
-              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+              <div className="bg-white md:border md:border-gray-secondary md:rounded-xl">
                 <div className="flex flex-row justify-between items-center pt-6 pb-3 px-5">
-                  <div className="font-semibold text-sm flex gap-[12px] items-center">
-                    <div className="min-w-[42.2px] h-[25px]">
+                  <div className="flex items-center font-semibold text-sm gap-[12px]">
+                    <div className="min-w-[42.2px] .h-[25px]">
                       {/* 조회수 */}
                       {t["Views"]}
                     </div>
@@ -553,11 +619,11 @@ const Home = () => {
                       }}
                     >
                       {/* 누적 */}
-                      {t["All"]}
+                      {t["All-cumulative"]}
                     </button>
                   </div>
                   <button
-                    className="flex gap-1 text-primary items-center"
+                    className="flex gap-1 text-primary items-center font-semibold"
                     onClick={() => {
                       sortType === 1
                         ? setSelectedSorting("today_desc")
@@ -565,11 +631,15 @@ const Home = () => {
                       sortType === 1
                         ? doFilter("today_desc")
                         : doFilter("total_desc");
-                      if (searchListRef.current) {
-                        (searchListRef.current as HTMLElement).scrollIntoView({
-                          behavior: "smooth",
-                        });
-                      }
+                      window.scrollTo({
+                        top: 500,
+                        behavior: "smooth",
+                      });
+                      // if (searchListRef.current) {
+                      //   (searchListRef.current as HTMLElement).scrollIntoView({
+                      //     behavior: "smooth",
+                      //   });
+                      // }
                     }}
                   >
                     {t["see-more"]}
@@ -583,21 +653,25 @@ const Home = () => {
                 )}
               </div>
 
-              <div className="bg-white md:border md:border-gray-200 md:rounded-xl">
+              <div className="bg-white md:border md:border-gray-secondary md:rounded-xl">
                 <div className="flex justify-between items-center pt-5 pb-2 px-5">
                   <div className="font-semibold text-sm">
                     {t["recently-added"]}
                   </div>
                   <button
-                    className="flex gap-1 text-primary items-center"
+                    className="flex gap-1 text-primary items-center font-semibold"
                     onClick={() => {
                       setSelectedSorting("created_desc");
                       doFilter("created_desc");
-                      if (searchListRef.current) {
-                        (searchListRef.current as HTMLElement).scrollIntoView({
-                          behavior: "smooth",
-                        });
-                      }
+                      window.scrollTo({
+                        top: 500,
+                        behavior: "smooth",
+                      });
+                      // if (searchListRef.current) {
+                      //   (searchListRef.current as HTMLElement).scrollIntoView({
+                      //     behavior: "smooth",
+                      //   });
+                      // }
                     }}
                   >
                     {t["see-more"]}
@@ -625,11 +699,12 @@ const Home = () => {
                 loadBar={loadBar}
                 channelType={channelType}
                 setChannelType={setChannelType}
-                selectedTag={selectedTag?.tag}
+                // selectedTag={selectedTag?.tag}
                 handleClick={handleClick}
                 doSearch={doSearch}
                 viewPort={viewPort}
                 setViewPort={setViewPort}
+                selectedCategory={selectedCategory}
               />
             ) : (
               <Skeleton
@@ -642,39 +717,29 @@ const Home = () => {
             {searchResult ? (
               searchResult.length > 0 ? (
                 viewPort === "grid" ? (
-                  <div className="grid md:grid-cols-3 gap-0 md:gap-4">
-                    {
-                      // [
-                      //   ...searchResult?.filter(
-                      //     (channel: any) => channel.prod_section
-                      //   ),
-                      //   ...searchResult?.filter(
-                      //     (channel: any) => !channel.prod_section
-                      //   ),
-                      // ]
-                      searchResult.map((channel: any, index: number) => {
-                        return channel.prod_section ? (
-                          <AdChannel2
-                            channel={channel}
-                            key={index}
-                            showType={!!channel.type}
-                            typeIcon={true}
-                            showCategory={false}
-                          />
-                        ) : (
-                          <GetChannels
-                            channels={channel}
-                            desc={true}
-                            key={index}
-                            showType
-                            background="px-8 md:px-4 bg-white"
-                            typeIcon={false}
-                            typeStyle="px-1 mt-3 border-0"
-                            showCategory={true}
-                          />
-                        );
-                      })
-                    }
+                  <div className="grid md:grid-cols-3 gap-[8px] md:gap-[16px]">
+                    {searchResult.map((channel: any, index: number) => {
+                      return channel.prod_section ? (
+                        <AdChannel2
+                          channel={channel}
+                          key={index}
+                          showType={!!channel.type}
+                          typeIcon={true}
+                          showCategory={false}
+                        />
+                      ) : (
+                        <GetChannels
+                          channels={channel}
+                          desc={true}
+                          key={index}
+                          showType
+                          background=".px-8 .md:px-4 px-4 bg-white"
+                          typeIcon={false}
+                          typeStyle="px-1 mt-3 border-0"
+                          showCategory={true}
+                        />
+                      );
+                    })}
                   </div>
                 ) : (
                   <div>
@@ -692,7 +757,7 @@ const Home = () => {
               )
             ) : (
               // Loading skeletons while fetching
-              <div className="grid md:grid-cols-3 gap-0 md:gap-4">
+              <div className="grid md:grid-cols-3 gap-0 md:gap-[16px]">
                 {Array(10)
                   .fill(1)
                   .map((_, index) => (
@@ -704,7 +769,8 @@ const Home = () => {
               <div className="flex justify-center">
                 <button
                   onClick={() => handleLoadMore(searchEvent)}
-                  className="bg-primary px-8 rounded-full text-sm py-2 my-7 mx-7 md:my-0 w-full md:w-fit self-center text-white hover:shadow-xl active:bg-[#143A66]"
+                  className="bg-primary px-[12px] rounded-full text-sm py-[4px] md:my-[6px] mx-7 w-full md:w-fit self-center text-white font-semibold
+                  hover:shadow-xl active:bg-[#143A66]"
                 >
                   {loadMoreText}
                 </button>

@@ -24,7 +24,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
   const { data: session, update } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/board/signin");
+      router.push("/auth/signin");
     },
   });
 
@@ -68,8 +68,8 @@ const Profile = ({ memberInfo, wallet }: any) => {
   return (
     <>
       <NextSeo
-        title={t["내정보"]}
-        titleTemplate={t["내정보"]}
+        title={t["핀카고 | 내 정보"]}
+        titleTemplate={t["핀카고 | 내 정보"]}
         noindex={true}
         nofollow={true}
         description={session?.user.nickname + ` ${session?.user.email}...`}
@@ -99,7 +99,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
               <div>
                 <button
                   className="blue-button"
-                  onClick={() => router.push("/board/profile-edit")}
+                  onClick={() => router.push("/auth/profile-edit")}
                 >
                   {t["edit-basic-info"]}
                 </button>
@@ -107,7 +107,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-[30px]">
+          {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-[30px]">
             {cards.map((card, index) => (
               <Link
                 href={card.link}
@@ -133,7 +133,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
                 <div className="text-gray-400 mt-4">{card.title}</div>
               </Link>
             ))}
-          </div>
+          </div> */}
 
           <div className="white-box mt-[30px] grid justify-center">
             <div className="bg-primary rounded-3xl p-2.5 w-fit justify-self-center">
@@ -160,7 +160,7 @@ export const getServerSideProps = async (context: any) => {
   let memberInfo = "";
   let wallet = "";
   const session = await getSession(context);
-  console.log(">>>>>>>", session?.user);
+  // console.log(">>>>>>>", session?.user);
   if (!!session?.user) {
     const responseMember = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/member?f=getmember&userid=${session?.user.id}`,

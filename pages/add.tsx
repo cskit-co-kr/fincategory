@@ -64,7 +64,7 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
         break;
     }
     return {
-      label: t[item.value as keyof typeof t],
+      label: t[item.iso as keyof typeof t],
       value: item.id,
       icon: icon,
     };
@@ -158,15 +158,14 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
     setInput(e.target.value);
     setErrorInput(null);
   };
-
   return (
     <div className="flex text-[#1C1E21] flex-col pt-7 bg-gray-50 min-h-screen">
       <NextSeo
-        title={`광고 | ${t["add-channel"]}`}
-        titleTemplate={`광고 | ${t["add-channel"]}`}
-        description={
-          "채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."
-        }
+        title={`${t["add-channel-seo"]}`}
+        titleTemplate={`${t["add-channel-seo"]}`}
+        // description={
+        //   "채널 그룹을 누구나 자유롭게 추가할수 있습니다. 채널, 그룹은 관리자의 승인 후 등록됩니다."
+        // }
       />
       <div className="md:flex w-full xl:w-[1300px] gap-4 mx-auto">
         {/* <div className="text-xl font-bold text-center">{t["add-channel"]}</div> */}
@@ -376,8 +375,8 @@ export const getServerSideProps = async () => {
     `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/getLanguages`
   );
   const _languages = await resLanguage.data;
-  console.log("--------------------------------------->");
-  console.log(_languages);
+  // console.log("--------------------------------------->");
+  // console.log(_languages);
 
   return {
     props: { _categories, _languages },
