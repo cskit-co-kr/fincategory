@@ -64,7 +64,7 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
         break;
     }
     return {
-      label: t[item.iso as keyof typeof t],
+      label: item?.value,
       value: item.id,
       icon: icon,
     };
