@@ -4,21 +4,17 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const restrictedRoutes = [
     "/ranking",
-    "/board/post",
-    "/board",
-    "/board/wallet",
-    "/board/ads-history",
-    "/board/ads-purchase",
-    "/board/fincoin-purchase",
-    "/board/write",
     "/ads",
     "/auth/wallet",
     "/privacy-policy",
     "/terms",
-  ]; // Define restricted routes
+  ]; // Define explicitly restricted routes
   const path = req.nextUrl.pathname;
 
-  if (restrictedRoutes.includes(path)) {
+  // console.log("req.nextUrl.pathname", path);
+
+  // Check if the path is explicitly restricted or starts with "/board"
+  if (restrictedRoutes.includes(path) || path.startsWith("/board")) {
     return NextResponse.redirect(new URL("/404", req.nextUrl));
   }
 
@@ -28,16 +24,10 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/ranking",
-    "/board/post",
-    "/board",
-    "/board/wallet",
-    "/board/ads-history",
-    "/board/ads-purchase",
-    "/board/fincoin-purchase",
-    "/board/write",
     "/ads",
     "/auth/wallet",
     "/privacy-policy",
     "/terms",
-  ], // Match restricted routes
+    "/board/:path*", // Matches all routes under "/board"
+  ],
 };

@@ -68,28 +68,7 @@ const CategoriesSection = ({
     filterCategories("");
   }, [categories]);
 
-  // const handleScroll = () => {
-  //   console.log("window.scrollY", window.scrollY);
-  //   if (window.scrollY > 180) {
-  //     pageYOffset !== true ? setPageYOffset(true) : null;
-  //   } else if (window.scrollY > 10) {
-  //     pageYOffset !== true ? setPageYOffset(true) : null;
-  //   } else {
-  //     pageYOffset !== false ? setPageYOffset(false) : null;
-  //   }
-  // };
-
   const handleScroll = () => {
-    // console.log("window.scrollY", window.scrollY);
-    // console.log("searchResult?.length", searchResult?.length);
-
-    // Check if screen height is within the specified range (1064px to 1480px)
-    // if (window.innerHeight > 1064 && window.innerHeight < 1480) {
-    //   pageYOffset !== false ? setPageYOffset(false) : null;
-    //   // Don't trigger setPageYOffset(true) in this screen height range
-    //   return;
-    // }
-
     if (searchResult?.length < 6) {
       pageYOffset !== false ? setPageYOffset(false) : null;
       // return;
@@ -209,7 +188,7 @@ const CategoriesSection = ({
               <button
                 // onClick={() => handleSelectTag("", "")}
                 onClick={() => handleCategoryClose("", "")}
-                className={`min-w-[52.2px] rounded-[28px] px-[11px] py-[3px] border hover:underline text-[12px] ${
+                className={`min-w-[52.2px] rounded-[28px] px-[11px] py-[3px] border hover:underline text-[12px] leading-[21px] ${
                   selectedCategory
                     ? "bg-white text-black border-[#E7EAED]"
                     : "bg-primary border-primary text-white"
@@ -217,6 +196,13 @@ const CategoriesSection = ({
               >
                 {/* 전체 */}
                 {t["All"]}
+                {/* <span
+                  className={`text-gray-text ml-[8px] hover:!no-underline !no-underline ${
+                    selectedCategory ? "text-gray-text" : "text-white"
+                  }`}
+                >
+                  ({totalAllChannels})
+                </span> */}
               </button>
               {selectedCategory && (
                 <div className="flex items-center gap-[10px]">

@@ -11,6 +11,7 @@ module.exports = {
     "/board/ads-history",
     "/board/ads-purchase",
     "/board/fincoin-purchase",
+    "/board/stock",
     "/board/success",
     "/board/write",
     "/ads",
