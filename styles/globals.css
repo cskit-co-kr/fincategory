@@ -21,6 +21,31 @@
   }
 }
 
+.scrollThin ::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+/* Track */
+.scrollThin ::-webkit-scrollbar-track {
+  background: none !important;
+}
+
+/* Handle */
+.scrollThin ::-webkit-scrollbar-thumb {
+  background: #cecece !important;
+  border-radius: 24px;
+}
+
+.rs-modal-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* Handle on hover */
+.scrollThin ::-webkit-scrollbar-thumb:hover {
+  background: none !important;
+}
+
 @layer components {
   .bg-primary {
     /* @apply bg-[#3886E2]; */

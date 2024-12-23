@@ -82,7 +82,7 @@ export const enUS = {
     "channel-country": "Channel Country",
     "select-country": "Select Country...",
     "channel-language": "Channel Language",
-    "contents-language": "Contents Language",
+    "contents-language": "Language",
     "select-language": "Select Language...",
     "channel-type": "Channel Type",
     "select-type": "Select Channel/Group Type...",
