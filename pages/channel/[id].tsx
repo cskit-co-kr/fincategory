@@ -276,13 +276,26 @@ const ChannelDetail = ({ channel }: any) => {
   //   });
   //   setData(d);
   // }, []);
-
+  const avatar = `${process.env.NEXT_PUBLIC_IMAGE_URL}/v1/image/get/300/${channel.channel_id}/avatar.jfif`;
   return (
     <>
       <NextSeo
         title={`${channel.title} @${channel.username} `}
         description={channel.description}
         titleTemplate={`${channel.title} @${channel.username} `}
+        openGraph={{
+          title: `${channel.title} @${channel.username} `,
+          description: channel.description,
+          images: [
+            {
+              url: avatar,
+              width: 1200,
+              height: 630,
+              alt: `@${channel.username}`,
+            },
+          ],
+          site_name: "FinCago", // Optional
+        }}
       />
       <div className="md:pt-7 bg-gray-50">
         <div className="md:flex mx-auto px-3 md:px-0">
