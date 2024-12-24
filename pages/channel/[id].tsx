@@ -289,8 +289,8 @@ const ChannelDetail = ({ channel }: any) => {
           images: [
             {
               url: avatar,
-              width: 1200,
-              height: 630,
+              width: 200,
+              height: 200,
               alt: `@${channel.username}`,
             },
           ],
