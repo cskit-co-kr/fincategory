@@ -86,11 +86,11 @@ const GetChannels: FunctionComponent<Props> = ({
 
           {desc === true &&
             (channels.description ? (
-              <p className="break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1 min-h-[32px]">
+              <p className="break-all md:break-words text-sm line-clamp-2 overflow-hidden mt-1 min-h-[32px]">
                 {channels.description}
               </p>
             ) : (
-              <p className="break-all md:break-words text-xs line-clamp-2 overflow-hidden mt-1 min-h-[32px] text-gray-text">
+              <p className="break-all md:break-words text-sm line-clamp-2 overflow-hidden mt-1 min-h-[32px] text-gray-text">
                 No description yet
               </p>
             ))}

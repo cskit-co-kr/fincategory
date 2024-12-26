@@ -152,7 +152,7 @@ const HashtagMobile = ({
           </div>
         </div>
       </div>
-      <div aria-label="close sidebar" className="drawer-side z-30">
+      <div aria-label="close sidebar" className="drawer-side">
         <label
           htmlFor="my-drawer"
           aria-label="close sidebar"

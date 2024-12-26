@@ -17,7 +17,6 @@ import LanguageSelector from "./LanguageSelector";
 
 const Header = () => {
   const router = useRouter();
-  const getPath = useRouter().pathname;
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
 
@@ -366,8 +365,9 @@ const Header = () => {
                             {t["sign-in"]}
                         </button> */}
                         <Link
+                          onClick={handleClick}
                           href="/auth/signin"
-                          className="bg-primary font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
+                          className="bg-primary text-center font-semibold text-white pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
                         >
                           {t["sign-in"]}
                         </Link>
@@ -624,44 +624,7 @@ const Header = () => {
                 {t["new-channel-registration"]}
                 </button> */}
         </div>
-        <FixedBarSection
-          addButton={
-            getPath !== "/add" ? (
-              <button
-                onClick={(e) => {
-                  router.push("/add");
-                  e.stopPropagation();
-                }}
-                className={`flex flex-row gap-[4px] items-center 
-                      bg-primary font-semibold text-white rounded-full py-[6px] px-[12px] text-sm hover:text-white`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="11"
-                  height="11"
-                  viewBox="0 0 11 11"
-                  fill="none"
-                >
-                  <path
-                    d="M1 5.5H10"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M5.5 1V10"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="whitespace-pre">{t["Add channel"]}</span>
-              </button>
-            ) : null
-          }
-        />
+        <FixedBarSection />
       </header>
     </>
   );
