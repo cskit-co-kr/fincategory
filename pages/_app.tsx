@@ -69,7 +69,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           title: "Fincago",
           description:
             t["The largest database of Telegram channels around the world"],
-          images: [{ url: "/favicon.ico" }],
+          images: [
+            {
+              url: "/logo.png",
+              width: 300,
+              height: 300,
+              alt: "Og Image Alt",
+            },
+          ],
           site_name: "Fincago",
         }}
         additionalMetaTags={[
