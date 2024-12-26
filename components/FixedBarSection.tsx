@@ -36,7 +36,7 @@ const FixedBarSection = ({ addButton }: any) => {
       <div
         className={`${
           isHide
-            ? "-right-[145px] lg:right-5 2xl:right-[5%]"
+            ? "duration-300 -right-[145px] lg:right-5 2xl:right-[5%]"
             : "right-5 2xl:right-[5%]"
         } fixed z-50 top-1/2 -translate-y-1/2 lg:translate-y-0 lg:top-[113px] gap-3 w-[145px] p-3 transition-all shadow-xl items-center bg-white rounded-xl  flex flex-col`}
       >
