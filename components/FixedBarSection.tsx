@@ -17,6 +17,9 @@ function ActiveUsers() {
       setActiveUsers(data.activeUsers || 0);
     }
     fetchActiveUsers();
+    const interval = setInterval(fetchActiveUsers, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
