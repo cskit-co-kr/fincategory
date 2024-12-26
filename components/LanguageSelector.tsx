@@ -71,7 +71,7 @@ function LanguageSelector() {
 
       {isOpen && (
         <div
-          className="absolute max-[1023px]:right-0 p-2 top-7 gap-2 z-50 border border-[#EFF2F5] shadow-md bg-white flex flex-col rounded-md w-[181px]"
+          className="absolute max-[1023px]:-left-full -left-[17px] p-2 top-7 gap-2 z-50 border border-[#EFF2F5] shadow-md bg-white flex flex-col rounded-md w-[181px]"
           ref={browseRef}
         >
           <button

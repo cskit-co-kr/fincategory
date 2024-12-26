@@ -196,12 +196,6 @@ const MemberSignUp = () => {
 
           <div className="mt-4 flex divide-x place-content-center">
             <div className="px-4">
-              <Link href="/" className="underline">
-                {t["forgot-password"]}
-              </Link>
-              ?
-            </div>
-            <div className="px-4">
               <Link href={`/auth/signin`} className="underline">
                 {t["sign-in"]}
               </Link>
