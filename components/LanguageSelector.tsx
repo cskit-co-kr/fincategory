@@ -75,7 +75,7 @@ function LanguageSelector() {
           ref={browseRef}
         >
           <button
-            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px] font-bold ${
+            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px] ${
               locale === "en" ? "bg-[#3687E21A] font-bold" : "font-normal"
             }`}
             onClick={() => handleClick("en")}
@@ -90,7 +90,7 @@ function LanguageSelector() {
             <span className="text-[#666F79] font-semibold ml-auto">EN</span>
           </button>
           <button
-            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px]  ${
+            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px] ${
               locale === "ko" ? "bg-[#3687E21A] font-bold" : "font-normal"
             }`}
             onClick={() => handleClick("ko")}
