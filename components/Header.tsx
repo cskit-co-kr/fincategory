@@ -27,6 +27,7 @@ import { koKR } from "../lang/ko-KR";
 import { GroupType } from "../typings";
 import LanguageSelector from "./LanguageSelector";
 import Image from "next/image";
+import FixedBarSection from "./FixedBarSection";
 var moment = require("moment-timezone");
 
 const Header = () => {
@@ -165,7 +166,7 @@ const Header = () => {
     <>
       <header className="bg-white z-20">
         <div className="container">
-          <div className="flex py-[16px] lg:py-5 justify-between items-center lg:border-b px-[16px] lg:px-[0px]">
+          <div className="flex py-[16px] lg:py-5 justify-between items-center px-[16px] lg:px-[0px]">
             <div className="font-raleway text-2xl flex gap-3 items-end">
               <Link
                 href="/"
@@ -626,70 +627,27 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <nav className="text-sm font-bold items-center flex flex-nowrap break-keep max-[1023px]:px-[16px] max-[1023px]:py-[12px]">
-            {/* active users */}
-            <div className="flex flex-row items-center gap-[10px] container lg:h-[47px]">
-              {/* <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-                fill="none"
-              >
-                <circle cx="5" cy="5" r="5" fill="#18D166" />
-              </svg>
-              <span className="font-[Roboto] text-center text-[12px] leading-[14px] text-[#18D166]">
-                Online : {"82"}
-              </span> */}
-            </div>
-            {/* <ul className="flex">
-              <li>
-                <button
-                  className={getPath === "/" ? activePath : normalPath}
-                  onClick={() => router.push("/")}
+
+          {/* <button
+              className={`${
+                getPath === "/new-channel"
+                ? activePath + " ml-auto"
+                : normalPath + " ml-auto"
+                }`}
+                onClick={() => router.push("/add")}
                 >
-                  {t["home"]}
-                </button>
-              </li>
-              <li>
-                <button
-                  className={getPath === "/ranking" ? activePath : normalPath}
-                  onClick={() => router.push("/ranking")}
-                >
-                  {t["rank"]}
-                </button>
-              </li>
-              <Nav
-                className="mt-1 custom-nav-menu z-30 flex"
-                appearance="subtle"
-              >
-                <Nav.Menu title={t["board"]}>
-                  {groups?.map((group: GroupType) =>
-                    group.boards.map((board: any) => (
-                      <Nav.Item
-                        key={board.id}
-                        as={Link}
-                        href={`/board/${board.name}`}
-                      >
-                        {board.title}
-                      </Nav.Item>
-                    ))
-                  )}
-                </Nav.Menu>
-              </Nav>
-              <li>
-                <button
-                  className={getPath === "/ads" ? activePath : normalPath}
-                  onClick={() => router.push("/ads")}
-                >
-                  {t["Ads"]}
-                </button>
-              </li>
-            </ul> */}
+                {t["new-channel-registration"]}
+                </button> */}
+        </div>
+        <FixedBarSection
+          addButton={
             <button
-              onClick={() => router.push("/add")}
+              onClick={(e) => {
+                router.push("/add");
+                e.stopPropagation();
+              }}
               className={`flex flex-row gap-[4px] items-center 
-                bg-primary font-semibold text-white rounded-full py-[6px] px-[12px] text-sm hover:text-white`}
+                      bg-primary font-semibold text-white rounded-full py-[6px] px-[12px] text-sm hover:text-white`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -715,18 +673,8 @@ const Header = () => {
               </svg>
               <span className="whitespace-pre">{t["Add channel"]}</span>
             </button>
-            {/* <button
-              className={`${
-                getPath === "/new-channel"
-                  ? activePath + " ml-auto"
-                  : normalPath + " ml-auto"
-              }`}
-              onClick={() => router.push("/add")}
-            >
-              {t["new-channel-registration"]}
-            </button> */}
-          </nav>
-        </div>
+          }
+        />
       </header>
     </>
   );
