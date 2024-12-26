@@ -26,28 +26,35 @@ function ActiveUsers() {
 const FixedBarSection = ({ addButton }: any) => {
   const [isHide, setIsHide] = useState(true);
   return (
-    <div
-      onMouseLeave={() => setIsHide(true)}
-      className={`${
-        isHide
-          ? "-right-[145px] lg:right-5 2xl:right-[5%]"
-          : "right-5 2xl:right-[5%]"
-      } fixed z-50 top-1/2 -translate-y-1/2 lg:translate-y-0 lg:top-[113px] gap-3 w-[145px] p-3 transition-all shadow-xl items-center bg-white rounded-xl  flex flex-col`}
-    >
+    <>
       <div
-        onMouseEnter={() => setIsHide(false)}
+        onClick={() => setIsHide(true)}
+        className={`fixed h-screen w-screen bg-black opacity-5 lg:hidden z-40 top-0 ${
+          isHide ? "invisible opacity-0" : "opacity-5"
+        }`}
+      ></div>
+      <div
         className={`${
-          isHide ? "" : "hidden"
-        } absolute lg:hidden top-1/2 -translate-y-1/2 bg-primary rounded-l-full px-1 py-2 text-white text-5xl right-full`}
+          isHide
+            ? "-right-[145px] lg:right-5 2xl:right-[5%]"
+            : "right-5 2xl:right-[5%]"
+        } fixed z-50 top-1/2 -translate-y-1/2 lg:translate-y-0 lg:top-[113px] gap-3 w-[145px] p-3 transition-all shadow-xl items-center bg-white rounded-xl  flex flex-col`}
       >
-        <LuArrowBigLeft />
+        <div
+          onClick={() => setIsHide(false)}
+          className={`${
+            isHide ? "" : "hidden"
+          } absolute lg:hidden top-1/2 -translate-y-1/2 bg-primary rounded-l-full px-1 py-2 text-white text-5xl right-full`}
+        >
+          <LuArrowBigLeft />
+        </div>
+        <div className="flex gap-[10px] p-[10px] items-center ">
+          <div className="w-[10px] h-[10px] rounded-full bg-[#18D166]" />
+          {ActiveUsers()}
+        </div>{" "}
+        {addButton}
       </div>
-      <div className="flex gap-[10px] p-[10px] items-center ">
-        <div className="w-[10px] h-[10px] rounded-full bg-[#18D166]" />
-        {ActiveUsers()}
-      </div>{" "}
-      {addButton}
-    </div>
+    </>
   );
 };
 
