@@ -1,34 +1,19 @@
 import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
-  ChatBubbleBottomCenterTextIcon,
-  Cog6ToothIcon,
-  DocumentTextIcon,
   MagnifyingGlassIcon,
-  PencilSquareIcon,
-  PlusIcon,
-  StopCircleIcon,
   UserCircleIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
-import { ChartBarIcon } from "@heroicons/react/24/solid";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { FaCaretDown, FaTelegramPlane } from "react-icons/fa";
-import { HiArrowUp } from "react-icons/hi2";
-import { PiCurrencyKrwBold } from "react-icons/pi";
-import { RiBarChartHorizontalFill } from "react-icons/ri";
-import { Nav } from "rsuite";
 import useData from "../hooks/useData";
 import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
-import { GroupType } from "../typings";
-import LanguageSelector from "./LanguageSelector";
-import Image from "next/image";
 import FixedBarSection from "./FixedBarSection";
-var moment = require("moment-timezone");
+import LanguageSelector from "./LanguageSelector";
 
 const Header = () => {
   const router = useRouter();

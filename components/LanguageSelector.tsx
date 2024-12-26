@@ -45,12 +45,12 @@ function LanguageSelector() {
         className="flex gap-1 lg:min-w-[66px] items-center text-[12px] font-bold px-[12px] lg:px-[0px]"
       >
         {locale !== "en" ? (
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-[6px] items-center">
             <Image src="/south-korea.png" width={20} height={20} alt="Korean" />
             <span className="hidden lg:inline-flex">{t["Korean"]}</span>
           </div>
         ) : (
-          <div className="flex gap-1">
+          <div className="flex gap-[6px]">
             <Image
               src="/united-states.png"
               width={20}
@@ -60,7 +60,7 @@ function LanguageSelector() {
             <span className="hidden lg:inline-flex">{t["English"]}</span>
           </div>
         )}
-        <div className="hidden lg:inline-flex">
+        <div className="hidden ml-[6px] lg:inline-flex">
           {!isOpen ? (
             <ChevronDownIcon className="h-3" />
           ) : (
@@ -71,19 +71,13 @@ function LanguageSelector() {
 
       {isOpen && (
         <div
-          className="absolute max-[1023px]:right-0 top-7 border shadow-md bg-white flex flex-col rounded-md w-[110px]"
+          className="absolute max-[1023px]:right-0 p-2 top-7 gap-2 z-50 border border-[#EFF2F5] shadow-md bg-white flex flex-col rounded-md w-[181px]"
           ref={browseRef}
         >
           <button
-            className="flex gap-1 hover:bg-gray-50 py-1 pt-2 px-3 text-[12px] font-bold"
-            onClick={() => handleClick("ko")}
-          >
-            <Image src="/south-korea.png" width={20} height={20} alt="Korean" />
-            {t["Korean"]}
-            <span className="text-gray-400">KO</span>
-          </button>
-          <button
-            className="flex gap-1 hover:bg-gray-50 py-1 pb-2 px-3 text-[12px] font-bold"
+            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px] font-bold ${
+              locale === "en" ? "bg-[#3687E21A] font-bold" : "font-normal"
+            }`}
             onClick={() => handleClick("en")}
           >
             <Image
@@ -93,7 +87,17 @@ function LanguageSelector() {
               alt="English"
             />
             {t["English"]}
-            <span className="text-gray-400">EN</span>
+            <span className="text-[#666F79] font-semibold ml-auto">EN</span>
+          </button>
+          <button
+            className={`flex gap-[6px] hover:bg-gray-50 rounded-lg p-2 text-[14px]  ${
+              locale === "ko" ? "bg-[#3687E21A] font-bold" : "font-normal"
+            }`}
+            onClick={() => handleClick("ko")}
+          >
+            <Image src="/south-korea.png" width={20} height={20} alt="Korean" />
+            {t["Korean"]}
+            <span className="text-[#666F79] font-semibold ml-auto">KR</span>
           </button>
         </div>
       )}
