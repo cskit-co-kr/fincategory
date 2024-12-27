@@ -358,26 +358,41 @@ const Home = () => {
   const handleLoadMore = async (data: any) => {
     setIsLoading(true);
     setLoadMoreText(<Loader content={t["see-more"]} />);
-    data["paginate"].limit = data["paginate"].limit + 45;
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/search`,
-      data
+    data["paginate"].limit = 45;
+    data["paginate"].offset = data["paginate"].offset + 45;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/client/telegram/searchChannel`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      }
     );
-    const resultData = await response.data;
+    const resultData = await response.json();
     // console.log("handleLoadMore >>> resultData", resultData);
     const result = resultData.channel;
-    result.length - searchResult.length < 45 && setLoadMore(false);
+    const total = resultData.total;
+    if (
+      total <= searchResult.length + result.length ||
+      data["paginate"].offset > total
+    ) {
+      setLoadMore(false);
+    }
 
+    var ads2Added = [...searchResult, ...result];
     // add ad section 2 channels --------------------------------------
-    const ads2Added = await addAds2(result);
+    if (searchResult?.length <= 45 || !searchResult?.length) {
+      ads2Added = await addAds2([...searchResult, ...result]);
+    } else ads2Added = [...searchResult, ...result];
+
     // ----------------------------------------------------------------
 
     setSearchResult(ads2Added);
     // setSearchResult(result);
-    setIsLoading(false);
     setLoadMoreText(t["see-more"]);
+    setIsLoading(false);
   };
-
+  console.log(searchResult?.length);
   const doFilter = (e: any) => {
     switch (e) {
       case "subscription_desc":
@@ -434,7 +449,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [loadMore, searchEvent]);
+  }, [loadMore, searchEvent, searchResult, isLoading]);
 
   const searchListRef = useRef(null);
 
