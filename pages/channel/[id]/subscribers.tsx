@@ -283,6 +283,7 @@ const subscribers = ({ channel, sub }: any) => {
                   <YAxis
                     axisLine={false}
                     tickCount={5}
+                    width={80}
                     tickLine={false}
                     type="number"
                     domain={["dataMin-100", "dataMax+100"]}
@@ -407,6 +408,7 @@ const subscribers = ({ channel, sub }: any) => {
                   <XAxis dataKey="name" tick={<CustomizedAxisTick />} />
                   <YAxis
                     axisLine={false}
+                    width={80}
                     tickCount={5}
                     tickLine={false}
                     type="number"
