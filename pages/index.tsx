@@ -392,7 +392,7 @@ const Home = () => {
     setLoadMoreText(t["see-more"]);
     setIsLoading(false);
   };
-  console.log(searchResult?.length);
+
   const doFilter = (e: any) => {
     switch (e) {
       case "subscription_desc":
