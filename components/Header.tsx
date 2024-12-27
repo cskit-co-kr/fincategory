@@ -14,9 +14,32 @@ import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
 import FixedBarSection from "./FixedBarSection";
 import LanguageSelector from "./LanguageSelector";
+function ActiveUsers() {
+  const [activeUsers, setActiveUsers] = useState(0);
 
+  useEffect(() => {
+    async function fetchActiveUsers() {
+      const response = await fetch(
+        "https://test-backend.fincago.com/v1/user/active-users"
+      );
+      const data = await response.json();
+      setActiveUsers(data.activeUsers || 0);
+    }
+    fetchActiveUsers();
+    const interval = setInterval(fetchActiveUsers, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="text-xs font-semibold flex items-center text-[#18D166]">
+      Online : {activeUsers}
+    </div>
+  );
+}
 const Header = () => {
   const router = useRouter();
+  const getPath = useRouter().pathname;
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
 
@@ -144,7 +167,6 @@ const Header = () => {
   // ];
 
   const [mobileSearch, setMobileSearch] = useState(false);
-  const [searchSectionMenuMobile, setSearchSectionMenuMobile] = useState(false);
 
   return (
     <>
@@ -623,6 +645,43 @@ const Header = () => {
                 >
                 {t["new-channel-registration"]}
                 </button> */}
+          <div className="flex w-full lg:hidden justify-between py-2 px-5">
+            {ActiveUsers()}
+            {getPath !== "/add" ? (
+              <button
+                onClick={(e) => {
+                  router.push("/add");
+                  e.stopPropagation();
+                }}
+                className={`flex flex-row gap-[4px] items-center 
+                      bg-primary font-semibold text-white rounded-full py-[6px] px-[12px] text-sm hover:text-white`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 11 11"
+                  fill="none"
+                >
+                  <path
+                    d="M1 5.5H10"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5.5 1V10"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="whitespace-pre">{t["Add channel"]}</span>
+              </button>
+            ) : null}
+          </div>
         </div>
         <FixedBarSection />
       </header>
