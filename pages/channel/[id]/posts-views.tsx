@@ -198,6 +198,95 @@ const postsViews = ({ channel, totalViews, averageViews, errPercent }: any) => {
             <ChannelDetailNav channel={channel} />
             <div className="w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
               <div className="text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2">
+                Number of posts per day
+              </div>
+
+              <ResponsiveContainer
+                width="95%"
+                style={{ margin: "auto" }}
+                height={420}
+              >
+                <AreaChart width={270} height={420} data={averageViews}>
+                  <defs>
+                    <linearGradient id="color0" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#a05fff" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#9333ff" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <Tooltip content={<CustomTooltip which="1" />} />
+                  <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                  <YAxis
+                    type="number"
+                    domain={[0, "dataMax + 10"]}
+                    axisLine={false}
+                    tickCount={7}
+                    width={60}
+                    tickLine={false}
+                    fontSize={10}
+                    tick={<CustomizedYAxisTick />}
+                  />
+                  <CartesianGrid
+                    vertical={false}
+                    strokeDasharray="6 2"
+                    strokeWidth={1}
+                    strokeOpacity={0.5}
+                  />
+                  <Brush
+                    dataKey="date"
+                    stroke="#9333ff"
+                    startIndex={0}
+                    endIndex={averageViews.length - 1}
+                    height={35}
+                    travellerWidth={15}
+                    traveller={<CustomTraveller />}
+                  >
+                    <AreaChart height={35} data={averageViews}>
+                      <rect
+                        x={0}
+                        y={0}
+                        width="100%"
+                        height="100%"
+                        fill="#f2f2f2"
+                      />
+                      <defs>
+                        <linearGradient id="color0" x1="0" y1="0" x2="0" y2="1">
+                          <stop
+                            offset="5%"
+                            stopColor="#9b84d8"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#9b84d8"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <Area
+                        type="monotone"
+                        dataKey="posts"
+                        stroke="#9333ff"
+                        strokeWidth={1}
+                        fillOpacity={1}
+                        fill="url(#color0)"
+                        baseValue="dataMin"
+                      />
+                    </AreaChart>
+                  </Brush>
+                  <Area
+                    type="monotone"
+                    dataKey="posts"
+                    stroke="#9333ff"
+                    strokeWidth={1}
+                    fillOpacity={1}
+                    fill="url(#color0)"
+                    baseValue="dataMin"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="w-full mt-4 md:mt-0 gap-2 flex flex-col border border-gray-200 rounded-md p-5 pl-0 bg-white">
+              <div className="text-base font-bold mt-2 ml-16 mb-10 flex items-center gap-2">
                 {t["Average-post-reach"]}
 
                 <AntTooltip
