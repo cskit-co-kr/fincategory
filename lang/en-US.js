@@ -133,7 +133,7 @@ export const enUS = {
     "Cancel search": "Cancel search",
     /* add a channel */
     "add-channel": "Add a channel/group",
-    "add-channel-seo": "핀카고 | 채널/그룹추가",
+    "add-channel-seo": "Fincago | add channel ",
     "link-to": "Link to the channel or @username",
     "country": "Country",
     "choose-country": "Choose a country...",
