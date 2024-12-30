@@ -23,10 +23,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const data = await resp.data;
 
     if (resp.status === 200) {
-      res.status(200).json('OK');
+      res.status(200).json(data);
     } else {
-      console.log(resp);
-      res.status(resp.status).json('NO');
+      console.log(resp.data);
+      res.status(resp.status).json(data);
     }
   }
 }

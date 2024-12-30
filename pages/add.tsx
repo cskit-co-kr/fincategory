@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Modal, SelectPicker } from "rsuite";
 import { enUS } from "../lang/en-US";
 import { koKR } from "../lang/ko-KR";
+import { Button } from "antd";
 
 // type Languages = Array<Language>;
 
@@ -72,16 +73,14 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
 
   const [input, setInput] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<any>("");
-  const [selectedCountry, setSelectedCountry] = useState<any>("");
+  const [loading, setLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<any>("");
-  const [isSeccuss, setIsSeccuss] = useState(false);
+  const [isSeccuss, setIsSeccuss] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [errorInput, setErrorInput] = useState<string | null>(null);
   const [errorCountry, setErrorCountry] = useState<string | null>(null);
   const [errorLanguage, setErrorLanguage] = useState<string | null>(null);
   const [errorCategory, setErrorCategory] = useState<string | null>(null);
-
-  const [resultState, setResultState] = useState<string | null>(null);
 
   async function handleSubmit() {
     input === ""
@@ -97,11 +96,12 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
       : setErrorCategory(null);
 
     if (!errorInput && !errorCountry && !errorLanguage && !errorCategory) {
+      setLoading(true);
       let text = extractUsername(input);
       if (input !== "" && selectedLanguage !== "" && selectedCategory !== "") {
         const data = {
           title: text.trim(),
-          country: selectedCountry,
+          language: selectedLanguage,
           category: selectedCategory,
         };
         const response = await fetch(
@@ -113,14 +113,18 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
           }
         );
         const result = await response.json();
-        if (result === "OK") {
-          setResultState(`${text} ${t["channel-add"]}`);
+        if (!!result?.message && response.status === 200) {
           setInput("");
-          setSelectedCountry("");
           setSelectedLanguage("");
           setSelectedCategory("");
+          setLoading(false);
+          setIsSeccuss(result?.message);
         } else {
-          setResultState(`"${text}" ${t["channel-add-error"]}`);
+          setInput("");
+          setSelectedLanguage("");
+          setLoading(false);
+          setSelectedCategory("");
+          setErrorMessage(result?.message);
         }
       }
     }
@@ -174,13 +178,6 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
             <img src="/addChannel.png" className="h-[150px] w-[150px]" />
             <div className="font-semibold text-xl">{t["Add channel"]}</div>
           </div>
-          {resultState !== null ? (
-            <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md font-semibold justify-center">
-              {resultState}
-            </div>
-          ) : (
-            ""
-          )}
           <div className="font-semibold">
             {t["link-to"]}
             <span className="text-red-500">*</span>
@@ -207,6 +204,7 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
               <SelectPicker
                 className="w-full"
                 placement="topStart"
+                value={selectedCategory}
                 renderMenuItem={(label, item) => (
                   <div className="flex gap-3 py-2 text-[#1C1E21]">
                     <Image
@@ -250,6 +248,7 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
                 onChange={setSelectedLanguage}
                 name="language"
                 data={languages}
+                value={selectedLanguage}
                 placeholder={t["choose-language"]}
                 searchable={false}
               />
@@ -270,12 +269,15 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
               ""
             )}
           </div>
-          <button
+          <Button
+            loading={loading}
+            disabled={loading}
+            type="primary"
             onClick={() => handleSubmit()}
-            className="mt-5 bg-primary px-8 rounded-full text-sm py-3 w-fit mx-auto text-white active:bg-[#143A66]"
+            className="mt-5 bg-primary px-8 rounded-full text-sm  w-fit mx-auto text-white active:bg-[#143A66]"
           >
             {t["등록"]}
-          </button>
+          </Button>
         </div>
         <div className="p-5 md:p-10 md:pb-0 gap-4 flex flex-col items-center rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
           <div className="w-full text-center font-semibold text-xl">
@@ -299,13 +301,13 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
         backdropClassName=""
         dialogStyle={{ width: "495px" }}
         role="contentinfo"
-        open={isSeccuss}
-        onClose={() => setIsSeccuss(false)}
+        open={!!isSeccuss}
+        onClose={() => setIsSeccuss(null)}
         size="xs"
       >
         <Modal.Body className="flex items-center flex-col !overflow-visible relative w-full p-5 pt-0 gap-5">
           <img
-            onClick={() => setIsSeccuss(false)}
+            onClick={() => setIsSeccuss(null)}
             src="/X.png"
             className="absolute cursor-pointer -top-5 right-0"
           />
@@ -318,7 +320,10 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center py-5 gap-2">
-          <button className="bg-primary px-10 py-2 rounded-full text-white hover:underline">
+          <button
+            onClick={() => router.push("/channel/" + isSeccuss)}
+            className="bg-primary px-10 py-2 rounded-full text-white hover:underline"
+          >
             {t["ok"]}
           </button>
         </Modal.Footer>
