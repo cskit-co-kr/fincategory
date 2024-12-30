@@ -178,7 +178,7 @@ export const enUS = {
 "구매 날짜":"Date of purchase",
 "만료 날짜": "Expiration date",
     /* detail */
-    "date-registered": "Registered date on Finca",
+    "date-registered": "Registered date on FincaGo",
     "views-per-post": "Views per post",
     "posts-per-month": "Posts per day",
     "ERR": "ERR",
