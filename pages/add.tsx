@@ -173,34 +173,30 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
       />
       <div className="md:flex w-full xl:w-[1300px] gap-4 mx-auto">
         {/* <div className="text-xl font-bold text-center">{t["add-channel"]}</div> */}
-        <div className="p-5 md:p-10 gap-4 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
+        <div className="p-5 md:p-[30px] gap-3 grid rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
           <div className="w-full flex justify-center items-center gap-4 mb-5 flex-col">
             <img src="/addChannel.png" className="h-[150px] w-[150px]" />
             <div className="font-semibold text-xl">{t["Add channel"]}</div>
           </div>
-          <div className="font-semibold">
-            {t["link-to"]}
-            <span className="text-red-500">*</span>
+          <div className="w-full flex flex-col gap-3">
+            <div className="font-semibold leading-5 h-5">{t["link-to"]}</div>
+            <input
+              value={input}
+              onChange={onChangeInput}
+              onMouseLeave={(e) => checkUsername(e)}
+              type="text"
+              placeholder="@username, t.me/ASRJIfjdk..., t.me/+ABCD12345"
+              className="border border-gray-200 rounded-md px-2 h-[45px] outline-non"
+            />
+            {errorInput !== null ? (
+              <div className="text-red-500 -mt-3 italic">{errorInput}</div>
+            ) : (
+              ""
+            )}
           </div>
-          <input
-            value={input}
-            onChange={onChangeInput}
-            onMouseLeave={(e) => checkUsername(e)}
-            type="text"
-            placeholder="@username, t.me/ASRJIfjdk..., t.me/+ABCD12345"
-            className="border border-gray-200 rounded-md p-2 outline-non"
-          />
-          {errorInput !== null ? (
-            <div className="text-red-500 -mt-3 italic">{errorInput}</div>
-          ) : (
-            ""
-          )}
-          <div className="flex mt-5 w-full gap-4">
+          <div className="flex flex-col md:flex-row md:mt-5 w-full gap-4">
             <div className="flex w-full flex-col gap-2">
-              <div className="font-semibold min-w-[140px]">
-                {t["category"]}
-                <span className="text-red-500">*</span>
-              </div>
+              <div className="font-semibold min-w-[140px]">{t["category"]}</div>
               <SelectPicker
                 className="w-full"
                 placement="topStart"
@@ -225,10 +221,7 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
               />
             </div>
             <div className="flex flex-col w-full gap-2">
-              <div className="font-semibold ">
-                {t["contents-language"]}
-                <span className="text-red-500">*</span>
-              </div>
+              <div className="font-semibold ">{t["contents-language"]}</div>
               <SelectPicker
                 className="w-full"
                 placement="topStart"
@@ -274,12 +267,12 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
             disabled={loading}
             type="primary"
             onClick={() => handleSubmit()}
-            className="mt-5 bg-primary px-8 rounded-full text-sm  w-fit mx-auto text-white active:bg-[#143A66]"
+            className="mt-5 bg-primary px-8 rounded-full text-sm h-[44px] w-fit mx-auto text-white active:bg-[#143A66]"
           >
             {t["등록"]}
           </Button>
         </div>
-        <div className="p-5 md:p-10 md:pb-0 gap-4 flex flex-col items-center rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
+        <div className="p-5 md:p-10 md:pb-0 gap-4 mb-10 flex flex-col items-center rounded-lg bg-white md:w-2/4 mx-5 md:mx-auto mt-4">
           <div className="w-full text-center font-semibold text-xl">
             Copy channel link
           </div>
