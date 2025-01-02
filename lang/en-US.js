@@ -70,6 +70,7 @@ export const enUS = {
     "Email not found!": "Email not found!",
     "핀카고 | 내 정보": "My information",
     "Profile": "Profile",
+    // "Profile": "Profile",
     "board": "Board",
     "view-all-articles": "View all articles",
     "new-channel-registration": "New channel/group registration",
@@ -279,5 +280,15 @@ export const enUS = {
     "Fincago  | Home - Telegram Channel/Group Information": "Fincago  | Home - Telegram Channel/Group Information",
     "The largest database of Telegram channels around the world": "The largest database of Telegram channels around the world",
     "seo-keywords": "fincago, telegram, database, coin, cryptocurrency, bitcoin, Ethereum, kpop, community, news, announcement, catalog telegram, catalog, catalog telegram channels, telegram-channels, top channels, best channels",
-    "Fincago | profile edit": "Fincago | profile edit"
+    "Fincago | profile edit": "Fincago | profile edit",
+    // transaction_name
+    "Purchase product": "Purchase product",
+    "Write post": "Write post",
+    "Write comment": "Write comment",
+    "Read post": "Read post",
+    "New channel registration": "New channel registration",
+    "Withdraw": "Withdraw",
+    "Deposit": "Deposit",
+    // adds
+    "Add ads": "Add ads",
 }

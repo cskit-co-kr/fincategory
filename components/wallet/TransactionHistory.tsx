@@ -60,23 +60,30 @@ const TransactionHistory = () => {
             {(rowData) => {
               switch (rowData.transaction_type.transaction_name) {
                 case "Purchase product":
-                  return "광고상픔 구매";
+                  // return "광고상픔 구매";
+                  return t["Purchase product"];
                 case "Write post":
-                  return "게시판 글쓰기";
+                  // return "게시판 글쓰기";
+                  return t["Write post"];
                 case "Write comment":
-                  return "게시판 댓글쓰기";
+                  // return "게시판 댓글쓰기";
+                  return t["Write comment"];
                 case "Read post":
-                  return "게시판 글 읽기";
+                  // return "게시판 글 읽기";
+                  return t["Read post"];
                 case "New channel registration":
-                  return "신규채널등록";
+                  // return "신규채널등록";
+                  return t["New channel registration"];
                 case "Signup":
                   return t["회원가입"];
                 case "Withdraw":
-                  return "회수";
+                  // return "회수";
+                  return t["Withdraw"];
                 case "Deposit":
-                  return "지급";
+                  // return "지급";
+                  return t["Deposit"];
                 default:
-                  return "핀코인 구매";
+                  return t["핀코인 구매"];
               }
             }}
           </Cell>

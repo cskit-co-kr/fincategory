@@ -15,7 +15,7 @@ module.exports = {
     "/board/success",
     "/board/write",
     "/ads",
-    "/auth/wallet",
+    // "/auth/wallet",
     "/privacy-policy",
     "/terms",
   ], // Exclude specific pages (optional)

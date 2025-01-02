@@ -65,9 +65,9 @@ const Wallet = ({ memberInfo, wallet }: any) => {
             <div className="ml-auto mt-auto">
               <button
                 className="gradient-button"
-                onClick={() => router.push("/board/fincoin-purchase")}
+                onClick={() => router.push("/auth/fincoin-purchase")}
               >
-                핀코인 구매
+                {t["핀코인 구매"]}
               </button>
             </div>
           </div>

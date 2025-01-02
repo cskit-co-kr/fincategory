@@ -4,8 +4,8 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const restrictedRoutes = [
     "/ranking",
-    "/ads",
-    "/auth/wallet",
+    // "/ads",
+    // "/auth/wallet",
     "/privacy-policy",
     "/terms",
   ]; // Define explicitly restricted routes
@@ -24,8 +24,8 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/ranking",
-    "/ads",
-    "/auth/wallet",
+    // "/ads",
+    // "/auth/wallet",
     "/privacy-policy",
     "/terms",
     "/board/:path*", // Matches all routes under "/board"

@@ -19,39 +19,40 @@ const Sidebar = ({ memberInfo }: any) => {
 
   const { data: session, status } = useSession();
 
-  // const menus = [
-  //   {
-  //     id: 1,
-  //     title: t["내정보"],
-  //     icon: <UserIcon className="h-5" />,
-  //     // link: "/board/profile",
-  //     link: "/auth/profile",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: t["핀코인"],
-  //     icon: <StopCircleIcon className="h-5" />,
-  //     link: "/board/wallet",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: t["상품구매내역"],
-  //     icon: <DocumentTextIcon className="h-5" />,
-  //     link: "/board/ads-history",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: t["내가 쓴 글"],
-  //     icon: <PencilSquareIcon className="h-5" />,
-  //     link: `/board?member=${session?.user.nickname}&show=posts`,
-  //   },
-  //   {
-  //     id: 5,
-  //     title: t["내가 쓴 댓글"],
-  //     icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
-  //     link: `/board?member=${session?.user.nickname}&show=comments`,
-  //   },
-  // ];
+  const menus = [
+    {
+      id: 1,
+      // title: t["내정보"],
+      title: t["Profile"],
+      icon: <UserIcon className="h-5" />,
+      // link: "/board/profile",
+      link: "/auth/profile",
+    },
+    {
+      id: 2,
+      title: t["핀코인"],
+      icon: <StopCircleIcon className="h-5" />,
+      link: "/auth/wallet",
+    },
+    {
+      id: 3,
+      title: t["상품구매내역"],
+      icon: <DocumentTextIcon className="h-5" />,
+      link: "/auth/ads-history",
+    },
+    // {
+    //   id: 4,
+    //   title: t["내가 쓴 글"],
+    //   icon: <PencilSquareIcon className="h-5" />,
+    //   link: `/board?member=${session?.user.nickname}&show=posts`,
+    // },
+    // {
+    //   id: 5,
+    //   title: t["내가 쓴 댓글"],
+    //   icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
+    //   link: `/board?member=${session?.user.nickname}&show=comments`,
+    // },
+  ];
 
   return (
     <>
@@ -72,7 +73,7 @@ const Sidebar = ({ memberInfo }: any) => {
                     {t["sign-out"]}
                   </button>
                 </div>
-                {/* <div className="space-y-5 mt-2.5">
+                <div className="space-y-5 mt-2.5">
                   {menus.map((menu, index) => (
                     <Link
                       key={index}
@@ -93,7 +94,7 @@ const Sidebar = ({ memberInfo }: any) => {
                       )}
                     </Link>
                   ))}
-                </div> */}
+                </div>
               </>
             ) : (
               <>

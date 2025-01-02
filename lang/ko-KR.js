@@ -279,5 +279,15 @@ export const koKR = {
     "Fincago  | Home - Telegram Channel/Group Information": "핀카고 | 홈-텔레그램 채널/그룹 정보",
     "The largest database of Telegram channels around the world": "2000개 이상의 대한민국 코인, 금융, 정보취미, 정치사회 텔레그램 채널이 한자리에.",
     "seo-keywords": "텔레그램, 유빈아카이브, 코인텔레그램, 주식, 취미, k pop,  비트코인, 메타버스, NFT, 취미생활방, 코인왕, DeFi 농부 조선생, 크립토 트랜드, 코인 공지방, 주식급등일보, 가치투자클럽, 여의도스토리, 야뎊저장용, 🤍여캠&인스타&인플 모음🤍, 로직파일, 지옥열차, 심기불편한 시팡이 공부방",
-    "Fincago | profile edit": "핀카고 | 정보 수정"
+    "Fincago | profile edit": "핀카고 | 정보 수정",
+    // transaction_name
+    "Purchase product": "광고상픔 구매",
+    "Write post": "게시판 글쓰기",
+    "Write comment": "게시판 댓글쓰기",
+    "Read post": "게시판 글 읽기",
+    "New channel registration": "신규채널등록",
+    "Withdraw": "회수",
+    "Deposit": "지급",
+    // adds
+    "Add ads": "광고 추가",
 }

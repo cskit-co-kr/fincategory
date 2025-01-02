@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 import { Skeleton } from "@mui/material";
+import { HiOutlineMegaphone } from "react-icons/hi2";
 
 const ChannelDetailNav = ({ channel }: any) => {
   const router = useRouter();
@@ -81,6 +82,20 @@ const ChannelDetailNav = ({ channel }: any) => {
           >
             <ChatBubbleLeftRightIcon className="h-3 hidden md:inline" />
             {t["Comments"]} ({channel.comment})
+          </div>
+        </li>
+        <li
+          className={`rounded-lg ml-auto ${
+            router.pathname == "/channel/[id]/comments"
+              ? "bg-primary text-white border border-primary"
+              : "bg-gray-50 border border-gray-300 hover:bg-primary text-blue-primary hover:text-white hover:border-primary"
+          }`}
+        >
+          <div
+            className={`font-semibold px-4 py-2 cursor-pointer hover:no-underline flex gap-2 justify-center items-center`}
+          >
+            <HiOutlineMegaphone className="h-4 w-4 hidden md:inline" />
+            <span className="">{t["Add ads"]}</span>
           </div>
         </li>
       </ul>
