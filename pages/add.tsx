@@ -21,55 +21,65 @@ const add = ({ _categories, _languages }: AddComponentProps) => {
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
 
-  const cats = _categories?.map((item: any) => {
-    const obj = JSON.parse(item.name);
-    return {
-      label: locale === "ko" ? obj.ko : obj.en,
-      value: item.id,
-      icon: item.image_path,
-    };
-  });
+  const cats = _categories
+    ?.map((item: any) => {
+      const obj = JSON.parse(item.name);
+      return {
+        label: locale === "ko" ? obj.ko : obj.en,
+        value: item.id,
+        icon: item.image_path,
+      };
+    })
+    ?.sort((a: any, b: any) => a.label.localeCompare(b.label, locale));
 
-  const languages = _languages?.map((item: any) => {
-    var icon = undefined;
-    console.log(item?.value);
-    switch (item?.value) {
-      case "English":
-        icon = "US.png";
-        break;
-      case "Chinese":
-        icon = "CN.png";
-        break;
-      case "Japanese":
-        icon = "JP.png";
-        break;
-      case "Kazakh":
-        icon = "KZ.png";
-        break;
-      case "Hindi":
-        icon = "IN.png";
-        break;
-      case "German":
-        icon = "DE.png";
-        break;
-      case "Korean":
-        icon = "KR.png";
-        break;
-      case "Mongolian":
-        icon = "MN.png";
-        break;
-      case "Russian":
-        icon = "RU.png";
-        break;
-      default:
-        break;
-    }
-    return {
-      label: item?.value,
-      value: item.id,
-      icon: icon,
-    };
-  });
+  // console.log(_languages);
+  const languages = _languages
+    ?.map((item: { value: string; id: any }) => {
+      let icon = undefined;
+
+      switch (item?.value) {
+        case "English":
+          icon = "US.png";
+          break;
+        case "Korean":
+          icon = "KR.png";
+          break;
+        // case "Chinese":
+        //   icon = "CN.png";
+        //   break;
+        // case "Japanese":
+        //   icon = "JP.png";
+        //   break;
+        // case "Kazakh":
+        //   icon = "KZ.png";
+        //   break;
+        // case "Hindi":
+        //   icon = "IN.png";
+        //   break;
+        // case "German":
+        //   icon = "DE.png";
+        //   break;
+        // case "Mongolian":
+        //   icon = "MN.png";
+        //   break;
+        // case "Russian":
+        //   icon = "RU.png";
+        //   break;
+        default:
+          break;
+      }
+
+      if (icon != undefined) {
+        return {
+          // label: t[item?.value as keyof typeof t], // Safely access the label
+          label: item?.value,
+          value: item.id,
+          icon: icon,
+        };
+      }
+      return null; // Return null for items without icons
+    })
+    .filter((item: { value: string; id: any }) => item !== null); // Filter out null values
 
   const [input, setInput] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<any>("");
