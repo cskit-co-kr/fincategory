@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { NextSeo } from "next-seo";
 
-const Profile = ({ memberInfo, wallet }: any) => {
+const Profile = ({ memberInfo, wallet, purchaseHistory }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
@@ -27,7 +27,9 @@ const Profile = ({ memberInfo, wallet }: any) => {
       router.push("/auth/signin");
     },
   });
-
+  // console.log("wallet", wallet);
+  // console.log("memberInfo", memberInfo);
+  // console.log("purchaseHistory", purchaseHistory);
   const balance = wallet ? wallet.balance.toLocaleString() : 0;
 
   const cards = [
@@ -45,7 +47,7 @@ const Profile = ({ memberInfo, wallet }: any) => {
       iconBg: "bg-[#F7E1FF]",
       link: "",
       tooltip: "",
-      content: 0,
+      content: purchaseHistory.length || 0,
     },
     // {
     //   title: t["내가 쓴 글"],
@@ -159,6 +161,7 @@ export const getServerSideProps = async (context: any) => {
   // Get Member Information
   let memberInfo = "";
   let wallet = "";
+  let purchaseHistory = [];
   const session = await getSession(context);
   // console.log(">>>>>>>", session?.user);
   if (!!session?.user) {
@@ -176,11 +179,17 @@ export const getServerSideProps = async (context: any) => {
     );
     const result = await response.json();
     wallet = result.wallet;
+
+    const response2 = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductUserId/${session?.user.id}`
+    );
+    const result2 = await response2.json();
+    purchaseHistory = result2.data;
   }
 
   // Return
   return {
-    props: { memberInfo, wallet },
+    props: { memberInfo, wallet, purchaseHistory },
   };
 };
 
