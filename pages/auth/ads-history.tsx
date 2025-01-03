@@ -54,11 +54,12 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
   return (
     <>
       <NextSeo
-        title={`광고 | 핀카 상단광고, 첫페이지 광고`}
-        titleTemplate={`핀카 상단광고, 첫페이지 광고`}
-        description={
-          "핀카 상단광고, 첫페이지 광고를 할수 있습니다. 핀코인 구매후 자유롭게 광고를 게제하세요."
-        }
+        title={t["Fincago | Advertisement history"]}
+        titleTemplate={t["Fincago | Advertisement history"]}
+        // description={
+        //   "핀카 상단광고, 첫페이지 광고를 할수 있습니다. 핀코인 구매후 자유롭게 광고를 게제하세요."
+        // }
+        description={t["ads-history-seo-desc"]}
       />
       <div className="flex gap-4 pt-7 pb-7 md:pb-0 bg-gray-50">
         <Sidebar memberInfo={memberInfo} />
@@ -74,7 +75,10 @@ const AdsHistory = ({ purchaseHistory, memberInfo }: AdsHistoryProps) => {
             >
               <Column minWidth={250} flexGrow={1}>
                 <HeaderCell>{t["상품명"]}</HeaderCell>
-                <Cell dataKey="product_name" />
+                <Cell>
+                  {(rowData) => JSON.parse(rowData.product_name)[locale]}
+                </Cell>
+                {/* JSON.parse(category.category_name)[locale] */}
               </Column>
 
               <Column width={150}>

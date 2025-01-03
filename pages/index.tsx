@@ -344,7 +344,7 @@ const Home = () => {
       setTotalChannels(resultData.total);
 
       // add ad section 2 channels --------------------------------------
-      const ads2Added = await addAds2(result);
+      const ads2Added = await addAds2(result, locale);
       // ----------------------------------------------------------------
 
       setSearchResult(ads2Added);
@@ -382,7 +382,7 @@ const Home = () => {
     var ads2Added = [...searchResult, ...result];
     // add ad section 2 channels --------------------------------------
     if (searchResult?.length <= 45 || !searchResult?.length) {
-      ads2Added = await addAds2([...searchResult, ...result]);
+      ads2Added = await addAds2([...searchResult, ...result], locale);
     } else ads2Added = [...searchResult, ...result];
 
     // ----------------------------------------------------------------

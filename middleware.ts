@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const restrictedRoutes = [
     "/ranking",
-    // "/ads",
+    "/ads",
     // "/auth/wallet",
     "/privacy-policy",
     "/terms",
@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/ranking",
-    // "/ads",
+    "/ads",
     // "/auth/wallet",
     "/privacy-policy",
     "/terms",

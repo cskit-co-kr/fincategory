@@ -53,19 +53,25 @@ const PurchaseHistory = () => {
         </Column>
 
         <Column width={120} align="center">
-          <HeaderCell>구입한 핀코인</HeaderCell>
+          <HeaderCell>{t["구입한 핀코인"]}</HeaderCell>
           <Cell>{(rowData) => rowData.coin.toLocaleString()}</Cell>
         </Column>
 
         <Column width={120} align="center">
-          <HeaderCell>입금 금액</HeaderCell>
+          <HeaderCell>{t["입금액"]}</HeaderCell>
           <Cell>
-            {(rowData) => <>{rowData.coin_transit.toLocaleString()}원</>}
+            {(rowData) => (
+              <>
+                {rowData.coin_transit.toLocaleString()} {t["원"]}
+              </>
+            )}
           </Cell>
         </Column>
 
         <Column minWidth={170} flexGrow={1}>
-          <HeaderCell>입력한 연락처/{t["email"]}</HeaderCell>
+          <HeaderCell>
+            {t["입력한 연락처"]} / {t["email"]}
+          </HeaderCell>
           <Cell>
             {(rowData) => (
               <>
@@ -76,7 +82,7 @@ const PurchaseHistory = () => {
         </Column>
 
         <Column width={170} align="center">
-          <HeaderCell>입금자 명</HeaderCell>
+          <HeaderCell>{t["입금자 명"]}</HeaderCell>
           <Cell>{(rowData) => rowData.sender_name}</Cell>
         </Column>
 
@@ -86,18 +92,26 @@ const PurchaseHistory = () => {
             {(rowData) => {
               if (rowData.state === "waiting") {
                 return (
-                  <div className="text-yellow-500 font-semibold">대기</div>
+                  <div className="text-yellow-500 font-semibold">
+                    {t["대기"]}
+                  </div>
                 );
               } else if (rowData.state === "success") {
                 return (
-                  <div className="text-green-500 font-semibold">입금완료</div>
+                  <div className="text-green-500 font-semibold">
+                    {t["입금완료"]}
+                  </div>
                 );
               } else if (rowData.state === "noincome") {
                 return (
-                  <div className="text-orange-500 font-semibold">미입금</div>
+                  <div className="text-orange-500 font-semibold">
+                    {t["미입금"]}
+                  </div>
                 );
               } else if (rowData.state === "return") {
-                return <div className="text-red-500 font-semibold">환불</div>;
+                return (
+                  <div className="text-red-500 font-semibold">{t["환불"]}</div>
+                );
               }
             }}
           </Cell>

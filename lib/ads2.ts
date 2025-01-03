@@ -1,8 +1,8 @@
 import apiService from "./apiService";
 
-async function addAds2(channels: any) {
+async function addAds2(channels: any, locale: any) {
   try {
-    const ads = await apiService.getAds2();
+    const ads = await apiService.getAds2(locale);
 
     // const getRandomIndex = (max: any) => Math.floor(Math.random() * (max + 1));
 

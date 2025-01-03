@@ -43,8 +43,8 @@ export class ApiService {
     return result;
   }
 
-  async getAds2() {
-    const response = await axios.get(`/api/get-ads2`);
+  async getAds2(locale: any) {
+    const response = await axios.post("/api/get-ads2", { locale });
     const result = await response.data;
     return result;
   }
