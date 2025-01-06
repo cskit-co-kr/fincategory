@@ -33,45 +33,6 @@ const ModalAdsPurchaseConfirm = ({
   const [startDate, setStartDate] = useState<any | null>(null);
   // const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-  const extractUsername = (input: any) => {
-    let arr = [];
-    let text = "";
-
-    if (input.includes("+")) {
-      arr = input.split("+");
-      text = arr.reverse()[0];
-    } else if (input.includes("@")) {
-      arr = input.split("@");
-      text = arr.reverse()[0];
-    } else if (input.includes("/")) {
-      arr = input.split("/");
-      text = arr.reverse()[0];
-    } else {
-      text = input;
-    }
-    return text;
-  };
-  // const checkUsername = async () => {
-  //   if (channel !== "") {
-  //     setCheckUsernameLoading(true);
-  //     setCheckUser(null);
-  //     setCheckChannel(null);
-  //     setChannelError(null);
-  //     const username = extractUsername(channel);
-  //     const res = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_CLIENT_API_URL}/api/resolvechannel?username=${username}`
-  //     );
-  //     const data = await res.data;
-  //     if (data.existed) {
-  //       setCheckUser("Channel existed in our database!");
-  //       setCheckChannel(data);
-  //     } else {
-  //       setCheckUser("입력하신 채널/그룹은 핀카에 없습니다. ");
-  //     }
-  //     setCheckUsernameLoading(false);
-  //   }
-  // };
-
   const submitPurchase = async (channel_id: any, ad2: any, startDate: any) => {
     // console.log("ad2", ad2);
     // console.log("channel_id", channel_id);
@@ -89,7 +50,7 @@ const ModalAdsPurchaseConfirm = ({
       }
     }
     if (balance < ad2?.coin) {
-      return setLowBalance(t["You don't have enough balance"]);
+      return setLowBalance("You don't have enough balance");
     } else {
       setLowBalance("");
       const date = new Date(startDate);
@@ -130,6 +91,7 @@ const ModalAdsPurchaseConfirm = ({
 
         setSelectedProduct(null);
         setStartDate(null);
+        setLowBalance(null);
         fetchWallet();
       }
     }
@@ -163,6 +125,11 @@ const ModalAdsPurchaseConfirm = ({
       <div className="modal-box !max-w-[370px] pb-[30px] pt-[20px] px-[20px] sm:!max-w-[600px] sm:py-[30px] sm:px-[42px]">
         <form method="dialog">
           <button
+            onClick={() => {
+              setSelectedProduct(null);
+              setStartDate(null);
+              setLowBalance(null);
+            }}
             className="btn btn-sm btn-circle btn-ghost absolute border-none right-[24px] top-[24px] text-[18px] !w-[20px] !h-[20px] !min-h-[20px]
           sm:!h-[30px] sm:!min-h-[30px] sm:!w-[30px] sm:text-[24px]"
           >
@@ -293,7 +260,10 @@ const ModalAdsPurchaseConfirm = ({
               </Link>
             </div>
             {lowBalance && (
-              <div className="text-red-500 italic text-xs">{lowBalance}</div>
+              <div className="text-red-500 italic text-xs">
+                {" "}
+                {t[lowBalance as keyof typeof t] || lowBalance}
+              </div>
             )}
             {error && (
               <div className="text-red-500 italic text-sm">{error}</div>
@@ -316,6 +286,7 @@ const ModalAdsPurchaseConfirm = ({
                 onClick={() => {
                   setSelectedProduct(null);
                   setStartDate(null);
+                  setLowBalance(null);
                 }}
                 className="rounded-full border border-gray-3 w-[107px] h-[40px] sm:h-[36px]"
               >
