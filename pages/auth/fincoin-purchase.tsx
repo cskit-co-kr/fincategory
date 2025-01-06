@@ -122,7 +122,7 @@ const FincoinPurchaseGuide = ({ memberInfo }: any) => {
           </button>
           <div className="white-box">
             <div className="text-xl font-bold">{t["핀코인 구매 안내"]}</div>
-            <div className="grid justify-center mt-[30px]">
+            <div className="flex justify-center mt-[30px] w-full overflow-x-scroll">
               <Table
                 data={data}
                 width={690}

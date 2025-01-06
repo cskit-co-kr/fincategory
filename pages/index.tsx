@@ -739,15 +739,15 @@ const Home = () => {
                           channel={channel}
                           key={index}
                           showType={!!channel.type}
-                          typeIcon={true}
-                          showCategory={false}
+                          typeIcon={false}
+                          showCategory={true}
                         />
                       ) : (
                         <GetChannels
                           channels={channel}
                           desc={true}
                           key={index}
-                          showType
+                          showType={!!channel.type}
                           background=".px-8 .md:px-4 px-4 bg-white"
                           typeIcon={false}
                           typeStyle="px-1 mt-3 border-0"

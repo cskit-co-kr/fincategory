@@ -49,7 +49,7 @@ const GetChannels: FunctionComponent<Props> = ({
   // background = 'bg-primary';
   return (
     <div
-      className={`${style} relative flex md:rounded-xl gap-[12px] .text-black ${background}`}
+      className={`${style} relative flex md:rounded-xl gap-[12px] ${background} md:max-w-[422px] md:max-h-[154px]`}
     >
       {/* <div className='absolute bottom-0 right-0 bg-primary/80 px-2 py-[1px] text-[10px] rounded-tl-lg rounded-br-lg text-white'>ad</div> */}
       <Link href={`/channel/${channels.username}`} target="_blank">

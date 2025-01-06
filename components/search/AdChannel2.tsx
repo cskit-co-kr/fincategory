@@ -26,12 +26,12 @@ const AdChannel2: FunctionComponent<Props> = ({
 
   const style =
     "p-4 px-8 md:px-4 border border-primary hover:shadow-sm transition ease-in-out duration-300";
-
+  // console.log("channel.category_id", channel);
   return (
     // <div className={`${style} relative flex md:rounded-xl gap-2.5 text-black bg-white min-h-[131px]`}>
     <div
       className={`p-4 px-4 border border-blue-primary hover:shadow-sm transition ease-in-out duration-300
-    relative flex md:rounded-xl gap-2.5 text-black bg-gray-primary min-h-[131px]`}
+    relative flex md:rounded-xl gap-2.5 text-black bg-gray-primary min-h-[131px] md:max-w-[422px] md:h-[153px]`}
     >
       <div className="absolute bottom-0 right-0 bg-blue-primary rounded-tl-lg md:rounded-br-lg text-white text-[10px] px-2.5 py-[1px]">
         ad
@@ -48,7 +48,7 @@ const AdChannel2: FunctionComponent<Props> = ({
             title={channel.title}
             type={channel.type}
             showType={showType}
-            typeStyle="-bottom-1 absolute z-10 -right-1"
+            typeStyle="px-1 mt-3 border-0"
             size="50"
             shape="rounded-full"
             typeIcon={typeIcon}
@@ -67,7 +67,7 @@ const AdChannel2: FunctionComponent<Props> = ({
           className="hover:no-underline hover:text-black"
           target="_blank"
         >
-          <h2 className="break-all md:break-words font-semibold line-clamp-1 text-ellipsis overflow-hidden">
+          <h2 className="break-all md:break-words font-semibold line-clamp-1 text-ellipsis overflow-hidden leading-[19px] md:leading-normal">
             {channel.title}
           </h2>
           <p

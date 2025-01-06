@@ -7,6 +7,8 @@ import { TbMathGreater } from "react-icons/tb";
 import { RxPinTop } from "react-icons/rx";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { debounce } from "lodash";
+import { useCallback } from "react";
 
 const CategoriesSection = ({
   // tags,
@@ -69,17 +71,19 @@ const CategoriesSection = ({
   }, [categories]);
 
   const handleScroll = () => {
+    // console.log("window.scrollY", window.scrollY);
     if (searchResult?.length < 6) {
       pageYOffset !== false ? setPageYOffset(false) : null;
       // return;
     } else {
-      if (window.scrollY > 180 || window.scrollY > 10) {
+      if (window.scrollY > 180 || window.scrollY > 25) {
         pageYOffset !== true ? setPageYOffset(true) : null;
       } else {
         pageYOffset !== false ? setPageYOffset(false) : null;
       }
     }
   };
+  // console.log("pageYOffset", pageYOffset);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {

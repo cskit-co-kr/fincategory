@@ -38,9 +38,10 @@ import { enUS } from "../../lang/en-US";
 import { koKR } from "../../lang/ko-KR";
 import { Skeleton } from "@mui/material";
 import { start } from "repl";
+import _ from "lodash";
+import { getSession, useSession } from "next-auth/react";
 import SubscriberChartMini from "../../components/channel/SubscriberChartMini";
 import RightSidebar from "../../components/channel/RightSidebar";
-import _ from "lodash";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -58,6 +59,7 @@ const ChannelDetail = ({ channel }: any) => {
   const router = useRouter();
   const { locale }: any = router;
   const t = locale === "ko" ? koKR : enUS;
+
   const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
   const [posts, setPosts] = useState<any>(null);
   // const [channel, setChannel] = useState<any>(null);

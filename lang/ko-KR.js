@@ -318,4 +318,18 @@ export const koKR = {
     "입금완료": "입금완료",
     "미입금": "미입금",
     "환불": "환불",
+    // Channel Advertisement
+    "Channel Advertisement": "채널 광고",
+    "Channel name": "채널명",
+    "Period": "기간",
+    "month": "개월",
+    "Start date": "시작 일자",
+    "My Balance": "내 잔액",
+    "Your balance is insufficient": "잔액이 부족합니다.",
+    "Sold Out": "매진",
+    "Your purchase of the advertised product has been completed": "광고상품 구매 완료하였습니다",
+    "You need to be signed in to purchase ads!": "광고를 구매하려면 로그인해야 합니다!",
+    "If you purchase a product,": "제품을 구매하면 코인 보유량에서",
+    "will be deducted from your coin holdings. Would you like to purchase?": "개의 코인이 차감됩니다. 구매하시겠습니까?",
+    "Purchase": "구매",
 }

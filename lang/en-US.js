@@ -319,4 +319,18 @@ export const enUS = {
     "입금완료": "Completed",
     "미입금": "Not received",
     "환불": "Refunded",
+    // Channel Advertisement
+    "Channel Advertisement": "Channel Advertisement",
+    "Channel name": "Channel name",
+    "Period": "Period",
+    "month": "month",
+    "Start date": "Start date",
+    "My Balance": "My Balance",
+    "Your balance is insufficient": "Your balance is insufficient",
+    "Sold Out": "Sold Out",
+    "Your purchase of the advertised product has been completed": "Your purchase of the advertised product has been completed",
+    "You need to be signed in to purchase ads!": "You need to be signed in to purchase ads!",
+    "If you purchase a product,": "If you purchase a product, ",
+    "will be deducted from your coin holdings. Would you like to purchase?": " will be deducted from your coin holdings. Would you like to purchase?",
+    "Purchase": "Purchase",
 }
