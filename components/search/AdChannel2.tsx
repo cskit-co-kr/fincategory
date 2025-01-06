@@ -70,26 +70,46 @@ const AdChannel2: FunctionComponent<Props> = ({
           <h2 className="break-all md:break-words font-semibold line-clamp-1 text-ellipsis overflow-hidden leading-[19px] md:leading-normal">
             {channel.title}
           </h2>
-          <p
-            className={`break-all md:break-words text-xs overflow-hidden mt-1 ${
-              channel.channel_id && "line-clamp-2"
-            }`}
-          >
-            {channel.description}
-          </p>
+          {channel.description ? (
+            <p className="break-all md:break-words text-sm line-clamp-2 overflow-hidden mt-1 min-h-[32px]">
+              {channel.description}
+            </p>
+          ) : (
+            <p className="break-all md:break-words text-sm line-clamp-2 overflow-hidden mt-1 min-h-[32px] text-gray-text">
+              No description yet
+            </p>
+          )}
         </Link>
-        {channel.channel_id && (
+        <div className="flex items-center justify-between text-xs text-gray-text font-semibold h-[18px]">
+          <span className="flex gap-0.5 items-center">
+            <LiaUserSolid size={16} />
+            {t["subscribers"]} {channel.subscription?.toLocaleString()}
+          </span>
+          <span>
+            {t["today"]}
+            {/* {t["Click per day"]} */}
+            {` `}
+            {channel.today && channel.today}
+            {` `}/{` `}
+            {t["누적"]}
+            {/* {t["Total"]} */}
+            {` `}
+            {channel.total && channel.total}
+          </span>
+        </div>
+        {/* {channel.channel_id && (
           <div className="flex items-center justify-between text-xs text-gray-500 font-semibold">
             <span className="flex gap-0.5 items-center">
               <LiaUserSolid size={16} />
               {t["subscribers"]} {channel.subscription?.toLocaleString()}
             </span>
           </div>
-        )}
+        )} */}
         <div className="flex items-center gap-1">
           {channel.category_id && showCategory && (
             <div className="bg-[#f5f5f5] px-1.5 py-[1px] rounded-full text-sm md:text-xs text-[#71B2FF] font-semibold border border-[#71B2FF]">
-              {JSON.parse(channel.category.name)[locale]}
+              {channel.category.name !== undefined &&
+                JSON.parse(channel.category.name)[locale]}
             </div>
           )}
           {/* <div className="tags flex flex-wrap">

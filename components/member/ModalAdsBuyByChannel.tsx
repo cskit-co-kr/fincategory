@@ -89,7 +89,7 @@ const ModalAdsPurchaseConfirm = ({
       }
     }
     if (balance < ad2?.coin) {
-      return setLowBalance(t["Your balance is insufficient"]);
+      return setLowBalance(t["You don't have enough balance"]);
     } else {
       setLowBalance("");
       const date = new Date(startDate);
@@ -257,29 +257,6 @@ const ModalAdsPurchaseConfirm = ({
                   </div>
                 ))}
               </div>
-              {/* Antd DatePicker */}
-              {/* <div className="grid sm:w-[192px] h-[31px]">
-                <DatePicker
-                  value={startDate}
-                  onChange={handleDateChange}
-                  format="YYYY-MM-DD"
-                  placeholder="Start date"
-                  className="w-full h-full !z-[1050]"
-                  disabledDate={disabledDate}
-                  getPopupContainer={() =>
-                    document.getElementById(`${adsGroup}_modal_${modalId}`)!
-                  }
-                  suffixIcon={
-                    <Image
-                      src={"/img/chevron_down.svg"}
-                      width={12.3}
-                      height={16}
-                      className="max-w-[12.3px] max-h-[16px] h-[16px] margin-none"
-                      alt="chevron_down"
-                    />
-                  }
-                />
-              </div> */}
             </div>
           </div>
           <div className="flex flex-col mt-[24px] gap-[4px]">

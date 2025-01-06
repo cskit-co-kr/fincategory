@@ -326,7 +326,7 @@ export const enUS = {
     "month": "month",
     "Start date": "Start date",
     "My Balance": "My Balance",
-    "Your balance is insufficient": "Your balance is insufficient",
+    "You don't have enough balance": "You don't have enough balance",
     "Sold Out": "Sold Out",
     "Your purchase of the advertised product has been completed": "Your purchase of the advertised product has been completed",
     "You need to be signed in to purchase ads!": "You need to be signed in to purchase ads!",
