@@ -65,7 +65,7 @@ const ModalAdsPurchaseConfirm = ({
         const adStartedAt = new Date(ad.started_at);
         const adEndedAt = new Date(ad.ended_at);
 
-        // Check if `calculatedEndedAt` is within the range of `started_at` and `ended_at`
+        // Check if either of the two conditions is true (overlap or covering)
         return (
           (calculatedEndedAt > adStartedAt && calculatedEndedAt <= adEndedAt) ||
           (startDateObj < adStartedAt && calculatedEndedAt >= adEndedAt)
@@ -77,9 +77,6 @@ const ModalAdsPurchaseConfirm = ({
           "Your selected advertisement's period overlaps with channel's other advertisement's period"
         );
       } else {
-        console.log(
-          "The calculated end date does not overlap with any ad range."
-        );
         setLowBalance("");
         // const date = new Date(startDate);
 
@@ -313,7 +310,9 @@ const ModalAdsPurchaseConfirm = ({
               </div>
             )}
             {error && (
-              <div className="text-red-500 italic text-sm">{error}</div>
+              <div className="text-red-500 italic text-sm">
+                {t[error as keyof typeof t] || error}
+              </div>
             )}
           </div>
           <div className="mt-[24px] leading-[22px] text-gray-text">
