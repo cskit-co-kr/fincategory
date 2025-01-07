@@ -25,7 +25,7 @@ const MemberSuccess = () => {
             <div className="">{t["account-created"]}</div>
             <div>
               <Link
-                href={`/${locale}/auth/signin?callbackUrl=/auth`}
+                href={`/${locale}/auth/signin?callbackUrl=/auth/profile`}
                 className="underline"
               >
                 {t["go-to-login-page"]}

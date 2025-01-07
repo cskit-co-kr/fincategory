@@ -146,6 +146,7 @@ const ModalAdsPurchaseConfirm = ({
             showType={!!channelDetail.type}
             typeIcon={false}
             showCategory={true}
+            channelAdd={true}
           />
         </div>
         <div className="mx-auto grid">
