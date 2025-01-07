@@ -818,7 +818,7 @@ const Home = () => {
               behavior: "smooth",
             });
           }}
-          className="fixed right-[16px] bottom-[30px] bg-[#EBEAEA] rounded-[50px] py-[13px] text-black
+          className="fixed right-[16px] bottom-[30px] bg-[#EBEAEA] topArrow-boxShadow rounded-[50px] py-[13px] text-black
       flex items-center justify-center gap-[8px] w-[57px] h-[57px] focus:bg-blue-primary focus:text-white
       transition-all duration-700 ease-in-out lg:hidden"
         >
