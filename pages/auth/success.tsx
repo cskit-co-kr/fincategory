@@ -10,6 +10,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { getSession } from "next-auth/react";
+import Image from "next/image";
 
 const MemberSuccess = () => {
   const router = useRouter();
@@ -17,24 +18,48 @@ const MemberSuccess = () => {
   const t = locale === "ko" ? koKR : enUS;
 
   return (
-    <>
-      <div className="gap-4 pt-7 bg-gray-50">
-        <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">
-          <div className="text-center gap-1 grid">
-            <div className="font-semibold">{t["congratulations"]}</div>
-            <div className="">{t["account-created"]}</div>
-            <div>
-              <Link
-                href={`/${locale}/auth/signin?callbackUrl=/auth/profile`}
-                className="underline"
-              >
-                {t["go-to-login-page"]}
-              </Link>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col items-center justify-center gap-[20px] py-[60px] sm:py-[100px] sm:mt-[40px] sm:mb-[90px] bg-gray-50">
+      <Image
+        src="/img/CheckCircle.svg"
+        width={80}
+        height={80}
+        alt="CheckCircle"
+      />
+      <h1 className="font-semibold text-[30px] leading-[32px]">
+        {t["congratulations"]}
+      </h1>
+      <div className="flex items-center justify-center max-w-[513px] text-center text-gray-text leading-[20px] h-[90px]">
+        {locale === "en" ? (
+          <p>
+            {t["account-created"]}
+            <br /> We have paid you{" "}
+            <span className="text-blue-primary">20,000</span> coins to promote
+            your channel for free for 1 month.  Check it out on your{" "}
+            <Link href={`/${locale}/auth/profile`} className="underline">
+              profile page.
+            </Link>
+          </p>
+        ) : (
+          <p>
+            {t["account-created"]}
+            <br />
+            귀하의 채널홍보를 위해 한 달간 무료로{" "}
+            <span className="text-blue-primary">20,000</span>개의 코인을
+            지급했습니다.{" "}
+            <Link href={`/${locale}/auth/profile`} className="underline">
+              프로필 페이지
+            </Link>
+            에서 확인하세요.
+          </p>
+        )}
       </div>
-    </>
+      <Link
+        href={`/${locale}/auth/signin?callbackUrl=/auth/profile`}
+        className="bg-blue-primary px-[24px] py-[10px] rounded-[35px] text-white font-semibold leading-[20px]"
+      >
+        {t["go-to-login-page"]}
+      </Link>
+    </div>
   );
 };
 

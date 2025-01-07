@@ -39,9 +39,9 @@ const Section2_2 = ({ channelsNew }: any) => {
               </div>
               <div className="text-[12px] text-gray-text font-bold flex gap-0.5 items-center min-w-[110px] justify-end">
                 <LiaUserSolid size={16} />
-                {channel.type === "channel"
-                  ? t["subscribers"]
-                  : t["members"]}{" "}
+                <span className="hidden sm:inline">
+                  {channel.type === "channel" ? t["subscribers"] : t["members"]}{" "}
+                </span>
                 {channel.subscription?.toLocaleString()}
               </div>
             </div>

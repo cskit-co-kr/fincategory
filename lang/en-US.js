@@ -49,7 +49,7 @@ export const enUS = {
     "password-confirm": "Password Confirm",
     "forgot-password": "Forgot Password?",
     "nickname": "Nickname",
-    "congratulations": "Congratulations!",
+    "congratulations": "Congratulations !",
     "account-created": "Your account is successfully created!",
     "go-to-login-page": "Go to Login Page",
     "go-to-login-1" : "You can write a post after logging in.",

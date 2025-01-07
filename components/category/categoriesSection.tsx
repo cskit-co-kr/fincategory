@@ -150,18 +150,18 @@ const CategoriesSection = ({
 
   return (
     <div
-      className={`top-0 z-20 ${mobileCategoryModal ? "px-[16px]" : ""}  ${
-        pageYOffset === false ? "" : `sticky`
-      }`}
+      className={`top-0 z-20 max-[1023px]:px-[16px] ${
+        mobileCategoryModal ? ".px-[16px]" : ""
+      }  ${pageYOffset === false ? "" : `sticky`}`}
     >
       <div
-        className={`white-box py-[0px] px-[20px] border-none lg:border border-gray-secondary max-[1023px]:px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
+        className={`white-box py-[0px] px-[20px] .border-none lg:border border-gray-secondary max-[1023px]:px-[16px] transition-all transform duration-150 overflow-hidden h-fit ${
           pageYOffset === false
             ? ""
             : `overflow-hidden categorySec-boxShadow rounded-xl border-none`
         } max-[1023px]:rounded-none max-[1023px]:shadow-none  ${
           mobileCategoryModal ? "categorySec-boxShadow !rounded-xl" : ""
-        }`}
+        } max-[1023px]:!rounded-xl max-[1023px]:!border max-[1023px]:!border-[#F1F1F1] max-[1023px]:!px-[15px]`}
       >
         <div
           className={`transition-all transform duration-150 lg:pb-[14px] ${
@@ -244,7 +244,7 @@ const CategoriesSection = ({
                 </div>
               )}
             </div>
-            <div className="flex flex-row gap-[10px]">
+            <div className="flex flex-row justify-end gap-[10px] w-full">
               {/* <div
                 className="relative border border-gray-3 items-center py-[7px] px-[11px] rounded-full hidden 
               lg:inline-flex hover:shadow-md hover:border-primary"
@@ -271,7 +271,7 @@ const CategoriesSection = ({
               </div> */}
               <button
                 className={`flex items-center justify-center w-[65px] gap-[8px] text-[12px] bg-[#EBEAEA] rounded-full hover:underline my-[5px] ml-[12px] max-h-[24px] font-semibold
-                ${pageYOffset === false && "hidden"}`}
+                ${pageYOffset === false && "hidden"} max-[1023px]:hidden`}
                 onClick={() => {
                   window.scrollTo({
                     top: 0,
@@ -301,17 +301,29 @@ const CategoriesSection = ({
                     stroke-linejoin="round"
                   />
                 </svg>
-                {/* <RxPinTop />  */}
                 {t["맨위로"]}
               </button>
-              {mobileCategoryModal && (
-                <button onClick={showMobileCategory}>
+              {mobileCategoryModal ? (
+                <button className="lg:hidden" onClick={showMobileCategory}>
                   <Image
                     src={"/img/close_icon.svg"}
                     width={20}
                     height={20}
                     className="min-w-[20px] min-h-[20px]"
                     alt="close_icon"
+                  />
+                </button>
+              ) : (
+                <button
+                  className="flex justify-end w-full lg:hidden"
+                  onClick={showMobileCategory}
+                >
+                  <Image
+                    src={"/img/CaretUp.svg"}
+                    width={20}
+                    height={20}
+                    className="min-w-[20px] min-h-[20px]"
+                    alt="CaretUp"
                   />
                 </button>
               )}

@@ -10,6 +10,7 @@ import {
 import { Loader } from "rsuite";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 // import { Section1, Section1Skeleton } from "../components/search/Section1";
 import {
   Section2_1Skeleton,
@@ -65,6 +66,7 @@ const Home = () => {
   const [channelsNew, setChannelsNew] = useState<any>(null);
   const [channelsToday, setChannelsToday] = useState<any>(null);
   const [channelsTotal, setChannelsTotal] = useState<any>(null);
+  const [showArrow, setShowArrow] = useState(false);
   const [channelsTotalToday, setChannelsTotalToday] =
     useState<any>(channelsToday);
 
@@ -446,12 +448,17 @@ const Home = () => {
       ) {
         handleLoadMore(searchEvent);
       }
+      if (window.scrollY > 0) {
+        showArrow !== true ? setShowArrow(true) : null;
+      } else {
+        showArrow !== false ? setShowArrow(false) : null;
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [loadMore, searchEvent, searchResult, isLoading]);
+  }, [loadMore, searchEvent, searchResult, isLoading, showArrow]);
 
   const searchListRef = useRef(null);
 
@@ -519,7 +526,13 @@ const Home = () => {
           t["The largest database of Telegram channels around the world"]
         }
       />
-      <div className="flex flex-1 flex-col pt-[16px] lg:pt-[30px]">
+      {/* <div
+        className="flex py-[12px] justify-center items-center rouded-[25px] bg-blue-gradient my-[20px]
+        text-gray-text text-[12px] md:text-[14px] leading-[20px]"
+      >
+        <span>(c) 2023. CSKIT Inc. all rights reserved.</span>
+      </div> */}
+      <div className="flex flex-1 flex-col .pt-[16px] .lg:pt-[30px]">
         <div className="flex .grid .md:flex">
           <div className="flex flex-col gap-[16px] justify-items-stretch content-start w-full">
             {categories ? (
@@ -796,6 +809,31 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {showArrow && (
+        <button
+          // href="#"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
+          className="fixed right-[16px] bottom-[30px] bg-[#EBEAEA] topArrow-boxShadow rounded-[50px] py-[13px] text-black
+      flex items-center justify-center gap-[8px] w-[57px] h-[57px] focus:bg-blue-primary focus:text-white
+      transition-all duration-700 ease-in-out lg:hidden"
+        >
+          <Image
+            // className="z-10"
+            src={"/img/upArrow.svg"}
+            alt="upArrow"
+            height={9}
+            width={7}
+          />
+          <span className="text-[12px] font-semibold leading-[21px] min-w-[20px]">
+            {t["맨위로"]}
+          </span>
+        </button>
+      )}
     </>
   );
 };

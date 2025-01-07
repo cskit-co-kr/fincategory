@@ -62,6 +62,9 @@ module.exports = {
         ".categorySec-boxShadow": {
           "box-shadow": "0px 4px 13.1px 0px rgba(0, 0, 0, 0.25) !important",
         },
+        ".topArrow-boxShadow": {
+          "box-shadow": "0px 4px 4.4px 0px rgba(0, 0, 0, 0.20); !important",
+        },
       });
     }),
   ],
