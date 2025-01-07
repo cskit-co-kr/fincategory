@@ -13,14 +13,16 @@ import { DatePicker } from "antd";
 
 const ModalAdsPurchaseConfirm = ({
   ads2,
-  balance,
   modalId,
   adsGroup,
   userId,
   channelDetail,
+  channelAds,
+  getChannelAds,
+  balance,
   fetchWallet,
 }: any) => {
-  // console.log("ads2", ads2);
+  // console.log("channelAds", channelAds);
   const toaster = useToaster();
   const router = useRouter();
   const { locale }: any = router;
@@ -34,74 +36,100 @@ const ModalAdsPurchaseConfirm = ({
   // const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   const submitPurchase = async (channel_id: any, ad2: any, startDate: any) => {
+    // console.log("selectedProduct", selectedProduct);
+    // console.log("channelAds", channelAds);
+
     // console.log("ad2", ad2);
     // console.log("channel_id", channel_id);
     // console.log("startDate", startDate);
     // console.log("ad2?.coin", ad2?.coin);
     // console.log("balance", balance);
 
-    if (!channel_id || !ad2) {
-      return setError("Please fill Period field!");
+    if (!channel_id || !ad2 || !startDate) {
+      return setError("Please fill all fields!");
     } else {
-      if (!startDate) {
-        return setError("Please fill Start Date field!");
-      } else {
-        setError("");
-      }
+      setError("");
     }
+
     if (balance < ad2?.coin) {
       return setLowBalance("You don't have enough balance");
     } else {
-      setLowBalance("");
-      const date = new Date(startDate);
+      const startDateObj = new Date(startDate);
+      const calculatedEndedAt = new Date(startDateObj);
+      calculatedEndedAt.setMonth(
+        calculatedEndedAt.getMonth() + parseInt(selectedProduct.duration, 10)
+      );
+      // console.log("calculatedEndedAt", calculatedEndedAt);
 
-      // Set time to 00:00:00.000
-      date.setHours(0, 0, 0, 0);
+      const isOverlapping = channelAds.some((ad: any) => {
+        const adStartedAt = new Date(ad.started_at);
+        const adEndedAt = new Date(ad.ended_at);
 
-      // Convert the date to UTC
-      const started_at_utcDate = new Date(date.toUTCString());
-
-      const body = {
-        product_info_id: ad2?.id,
-        channel_id: channel_id,
-        started_at: started_at_utcDate,
-        user_id: userId,
-      };
-
-      // console.log("body", body);
-      const result = await apiService.saveAdsPurchase(body);
-
-      if (result.code === 400) {
-        alert(t["Sold Out"]);
-      } else if (result.code === 201) {
-        const modal = document.getElementById(
-          `${adsGroup}_modal_${modalId}`
-        ) as any;
-        modal?.close();
-
-        const message = (
-          <Notification type="info" closable>
-            <div className="flex items-center gap-2">
-              <Image src="/party.svg" width={24} height={24} alt="Success" />
-              {t["Your purchase of the advertised product has been completed"]}
-            </div>
-          </Notification>
+        // Check if `calculatedEndedAt` is within the range of `started_at` and `ended_at`
+        return (
+          (calculatedEndedAt > adStartedAt && calculatedEndedAt <= adEndedAt) ||
+          (startDateObj < adStartedAt && calculatedEndedAt >= adEndedAt)
         );
-        toaster.push(message, { placement: "topCenter" });
+      });
 
-        setSelectedProduct(null);
-        setStartDate(null);
-        setLowBalance(null);
-        fetchWallet();
+      if (isOverlapping) {
+        return setError(
+          "Your selected advertisement's period overlaps with channel's other advertisement's period"
+        );
+      } else {
+        console.log(
+          "The calculated end date does not overlap with any ad range."
+        );
+        setLowBalance("");
+        // const date = new Date(startDate);
+
+        // Set time to 00:00:00.000
+        startDateObj.setHours(0, 0, 0, 0);
+
+        // Convert the date to UTC
+        const started_at_utcDate = new Date(startDateObj.toUTCString());
+
+        const body = {
+          product_info_id: ad2?.id,
+          channel_id: channel_id,
+          started_at: started_at_utcDate,
+          user_id: userId,
+        };
+
+        // console.log("body", body);
+        const result = await apiService.saveAdsPurchase(body);
+
+        if (result.code === 400) {
+          alert(t["Sold Out"]);
+        } else if (result.code === 201) {
+          const modal = document.getElementById(
+            `${adsGroup}_modal_${modalId}`
+          ) as any;
+          modal?.close();
+
+          const message = (
+            <Notification type="info" closable>
+              <div className="flex items-center gap-2">
+                <Image src="/party.svg" width={24} height={24} alt="Success" />
+                {
+                  t[
+                    "Your purchase of the advertised product has been completed"
+                  ]
+                }
+              </div>
+            </Notification>
+          );
+          toaster.push(message, { placement: "topCenter" });
+
+          setSelectedProduct(null);
+          setStartDate(null);
+          setLowBalance(null);
+          fetchWallet();
+          getChannelAds();
+        }
       }
     }
   };
-
-  // const handleKeyDown = (e: any) => {
-  //   if (e.key === "Enter") {
-  //     checkUsername();
-  //   }
-  // };
 
   const handleAdSelection = (ad: any) => {
     setSelectedProduct(ad);
@@ -111,13 +139,31 @@ const ModalAdsPurchaseConfirm = ({
     setStartDate(date);
   };
 
+  // const disabledDate = (current: any) => {
+  //   const today = new Date();
+  //   // Reset time portion for today (set hours, minutes, and seconds to 0)
+  //   today.setHours(0, 0, 0, 0);
+
+  //   // Disable dates before today
+  //   return current && current < today;
+  // };
+
   const disabledDate = (current: any) => {
     const today = new Date();
-    // Reset time portion for today (set hours, minutes, and seconds to 0)
     today.setHours(0, 0, 0, 0);
 
-    // Disable dates before today
-    return current && current < today;
+    if (!channelAds || channelAds.length === 0) {
+      return current && current < today;
+    }
+
+    const isWithinAnyRange = channelAds.some((ad: any) => {
+      const startDate = new Date(ad.started_at);
+      const endDate = new Date(ad.ended_at);
+      return current >= startDate && current <= endDate;
+    });
+
+    // Combine logic: disable dates before today and outside ad ranges
+    return current && (current < today || isWithinAnyRange);
   };
 
   return (

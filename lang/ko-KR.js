@@ -332,4 +332,6 @@ export const koKR = {
     "If you purchase a product,": "제품을 구매하면 코인 보유량에서",
     "will be deducted from your coin holdings. Would you like to purchase?": "개의 코인이 차감됩니다. 구매하시겠습니까?",
     "Purchase": "구매",
+    "Please fill all fields!": "모든 항목을 채워주세요!",
+    "Your selected advertisement's period overlaps with channel's other advertisement's period": "선택한 광고의 기간이 채널의 다른 광고의 기간과 겹칩니다.",
 }

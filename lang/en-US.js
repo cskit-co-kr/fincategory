@@ -333,4 +333,6 @@ export const enUS = {
     "If you purchase a product,": "If you purchase a product, ",
     "will be deducted from your coin holdings. Would you like to purchase?": " will be deducted from your coin holdings. Would you like to purchase?",
     "Purchase": "Purchase",
+    "Please fill all fields!": "Please fill all fields!",
+    "Your selected advertisement's period overlaps with channel's other advertisement's period": "Your selected advertisement's period overlaps with channel's other advertisement's period",
 }

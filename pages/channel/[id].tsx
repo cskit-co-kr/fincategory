@@ -62,6 +62,7 @@ const ChannelDetail = ({ channel }: any) => {
 
   const [loadMoreText, setLoadMoreText] = useState<any>(t["load-more"]);
   const [posts, setPosts] = useState<any>(null);
+  // const [channelAds, setChannelAds] = useState<any>(null);
   // const [channel, setChannel] = useState<any>(null);
   const [sub, setSub] = useState<any>();
   const [averageViews, setAverageViews] = useState<any>();

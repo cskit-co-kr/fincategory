@@ -31,20 +31,7 @@ const ChannelDetailNav = ({ channel }: any) => {
   const { data: session, status } = useSession();
   const [wallet, setWallet] = useState<any>(null);
   const [ads2, setAds2] = useState<any>(null);
-
-  const fetchWallet = async () => {
-    if (session?.user) {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session.user.id}`
-        );
-        const result = await response.json();
-        setWallet(result.wallet); // Update state with the fetched wallet
-      } catch (error) {
-        console.error("Error fetching wallet:", error);
-      }
-    }
-  };
+  const [channelAds, setChannelAds] = useState<any>(null);
 
   useEffect(() => {
     // const fetchWallet = async () => {
@@ -80,10 +67,41 @@ const ChannelDetailNav = ({ channel }: any) => {
 
     fetchWallet();
     fetchAds2();
+    getChannelAds();
   }, [session]);
+
+  const fetchWallet = async () => {
+    if (session?.user) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/point/getWallet/${session.user.id}`
+        );
+        const result = await response.json();
+        setWallet(result.wallet); // Update state with the fetched wallet
+      } catch (error) {
+        console.error("Error fetching wallet:", error);
+      }
+    }
+  };
+
+  const getChannelAds = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/product/getProductActiveSection2ByChannelId/${channel.id}`
+      );
+      const result = await response.json();
+      // setPostsLastId(result.last_id);
+      if (result.data.length !== 0) {
+        setChannelAds(result.data);
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
 
   // console.log("wallet", wallet);
   // console.log("ads2", ads2);
+  // console.log("channelAds", channelAds);
 
   const balance = wallet ? wallet?.balance : 0;
 
@@ -188,11 +206,13 @@ const ChannelDetailNav = ({ channel }: any) => {
         <ModalAdsBuyByChannel
           // data={ad}
           ads2={ads2}
-          balance={balance}
           modalId={channel?.channel_id}
           adsGroup="ads2"
           userId={session?.user.id}
           channelDetail={channel}
+          channelAds={channelAds}
+          getChannelAds={getChannelAds}
+          balance={balance}
           fetchWallet={fetchWallet}
         />
       ) : null}
