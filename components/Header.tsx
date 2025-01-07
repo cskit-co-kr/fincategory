@@ -623,7 +623,7 @@ const Header = () => {
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="outline-none max-[370px]:max-w-[120px] text-sm h-[24px]"
+                className="outline-none Src370:max-w-[120px] text-sm h-[24px]"
                 aria-label="Search"
                 placeholder="Channel / Group"
               />

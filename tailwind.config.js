@@ -44,6 +44,7 @@ module.exports = {
       screens: {
         // Custom screen sizes
         Mlg: { max: "1023px" },
+        Src370: { max: "370px" },
       },
     },
     fontFamily: {
@@ -65,9 +66,6 @@ module.exports = {
         },
         ".categorySec-boxShadow": {
           "box-shadow": "0px 4px 13.1px 0px rgba(0, 0, 0, 0.25) !important",
-        },
-        ".topArrow-boxShadow": {
-          "box-shadow": "0px 4px 4.4px 0px rgba(0, 0, 0, 0.20); !important",
         },
       });
     }),
