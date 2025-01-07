@@ -41,6 +41,10 @@ module.exports = {
       aspectRatio: {
         "4/3": "4 / 3",
       },
+      screens: {
+        // Custom screen sizes
+        Mlg: { max: "1023px" },
+      },
     },
     fontFamily: {
       raleway: "Raleway, sans-serif",
