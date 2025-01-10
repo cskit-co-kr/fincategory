@@ -290,3 +290,11 @@ a:hover .emoji > b {
   padding-left: 12px;
   padding-right: 12px;
 }
+.ads-datepicker {
+  border-radius: 4px !important;
+  border: 1px solid rgba(28, 30, 33, 0.3);
+  background: #f3f3f3 !important;
+}
+.ads-datepicker .ant-picker-input input::placeholder {
+  color: #1c1e21 !important;
+}

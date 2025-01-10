@@ -3,7 +3,7 @@ import apiService from "../../lib/apiService";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { koKR } from "../../lang/ko-KR";
 import { enUS } from "../../lang/en-US";
@@ -165,7 +165,14 @@ const ModalAdsPurchaseConfirm = ({
     // Combine logic: disable dates before today and outside ad ranges
     return current && (current < today || isWithinAnyRange);
   };
+  const [isDatePickerInitiallyOpen, setDatePickerInitiallyOpen] =
+    useState(false);
 
+  useEffect(() => {
+    if (selectedProduct?.id) {
+      setDatePickerInitiallyOpen(true); // Open the DatePicker initially
+    }
+  }, [selectedProduct]); // Trigger only when relevant props change
   return (
     <dialog id={`${adsGroup}_modal_${modalId}`} className="modal">
       <div className="modal-box !max-w-[370px] pb-[30px] pt-[20px] px-[20px] sm:!max-w-[600px] sm:py-[30px] sm:px-[42px]">
@@ -249,13 +256,18 @@ const ModalAdsPurchaseConfirm = ({
                           onChange={handleDateChange}
                           format="YYYY-MM-DD"
                           placeholder="Start date"
-                          className="w-full h-full !z-[1050]"
+                          className="w-full h-full !z-[1050] ads-datepicker"
                           disabledDate={disabledDate}
+                          // open={true}
                           getPopupContainer={() =>
                             document.getElementById(
                               `${adsGroup}_modal_${modalId}`
                             )!
                           }
+                          open={isDatePickerInitiallyOpen || undefined} // Open initially, then fallback to default
+                          onOpenChange={(open) => {
+                            if (!open) setDatePickerInitiallyOpen(false); // Disable initial open if closed manually
+                          }}
                           suffixIcon={
                             <Image
                               src={"/img/chevron_down.svg"}
