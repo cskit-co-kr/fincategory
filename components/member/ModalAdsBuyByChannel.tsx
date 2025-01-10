@@ -22,7 +22,7 @@ const ModalAdsPurchaseConfirm = ({
   balance,
   fetchWallet,
 }: any) => {
-  // console.log("channelAds", channelAds);
+  console.log("channelAds", channelAds);
   const toaster = useToaster();
   const router = useRouter();
   const { locale }: any = router;
@@ -60,17 +60,20 @@ const ModalAdsPurchaseConfirm = ({
         calculatedEndedAt.getMonth() + parseInt(selectedProduct.duration, 10)
       );
       // console.log("calculatedEndedAt", calculatedEndedAt);
+      let isOverlapping = false;
+      if (channelAds && channelAds.length > 0) {
+        isOverlapping = channelAds.some((ad: any) => {
+          const adStartedAt = new Date(ad.started_at);
+          const adEndedAt = new Date(ad.ended_at);
 
-      const isOverlapping = channelAds.some((ad: any) => {
-        const adStartedAt = new Date(ad.started_at);
-        const adEndedAt = new Date(ad.ended_at);
-
-        // Check if either of the two conditions is true (overlap or covering)
-        return (
-          (calculatedEndedAt > adStartedAt && calculatedEndedAt <= adEndedAt) ||
-          (startDateObj < adStartedAt && calculatedEndedAt >= adEndedAt)
-        );
-      });
+          // Check if either of the two conditions is true (overlap or covering)
+          return (
+            (calculatedEndedAt > adStartedAt &&
+              calculatedEndedAt <= adEndedAt) ||
+            (startDateObj < adStartedAt && calculatedEndedAt >= adEndedAt)
+          );
+        });
+      }
 
       if (isOverlapping) {
         return setError(
