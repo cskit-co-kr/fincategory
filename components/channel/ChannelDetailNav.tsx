@@ -169,7 +169,7 @@ const ChannelDetailNav = ({ channel }: any) => {
           </div>
         </li>
         <li
-          className={`rounded-lg ml-auto bg-gray-50 border border-gray-300 hover:bg-primary hover:border-primary w-full sm:w-fit`}
+          className={`rounded-lg ml-auto bg-white border border-gray-300 hover:bg-primary hover:border-primary w-full sm:w-fit`}
           onClick={() => {
             if (session?.user.id) {
               const modalId = `ads2_modal_${channel?.channel_id}`;
@@ -179,12 +179,6 @@ const ChannelDetailNav = ({ channel }: any) => {
               const message = (
                 <Notification type="info" closable>
                   <div className="flex items-center gap-2 font-bold">
-                    {/* <Image
-                      src="/party.svg"
-                      width={24}
-                      height={24}
-                      alt="Success"
-                    /> */}
                     {t["You need to be signed in to purchase ads!"]}
                   </div>
                 </Notification>
@@ -197,8 +191,15 @@ const ChannelDetailNav = ({ channel }: any) => {
           <div
             className={`font-semibold px-4 py-2 cursor-pointer hover:no-underline flex gap-2 justify-center items-center text-blue-primary hover:text-white`}
           >
-            <HiOutlineMegaphone className="h-4 w-4" />
-            <span className="text-dark-primary">{t["Add ads"]}</span>
+            {/* <HiOutlineMegaphone className="h-4 w-4" /> */}
+            <Image
+              src={"/img/megaphone.gif"}
+              width={30}
+              height={27}
+              alt="megaphone"
+              className="max-w-[30px] max-h-[27px] h-[27px] w-[30px] rounded-full"
+            />
+            <span className="">{t["Add ads"]}</span>
           </div>
         </li>
       </ul>
