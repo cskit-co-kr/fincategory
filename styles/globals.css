@@ -292,7 +292,7 @@ a:hover .emoji > b {
 }
 .ads-datepicker {
   border-radius: 4px !important;
-  border: 1px solid rgba(28, 30, 33, 0.3);
+  border: 1px solid #3687e2;
   background: #f3f3f3 !important;
 }
 .ads-datepicker .ant-picker-input input::placeholder {
