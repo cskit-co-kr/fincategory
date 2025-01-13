@@ -123,7 +123,10 @@ const MemberSignUp = () => {
         titleTemplate={`${t["sign-up-seo"]}`}
         description={`${t["sign-up-seo"]}`}
       />
-      <div className="gap-4 pt-7 h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50">
+      <div
+        className="gap-4 pt-7 .h-[calc(100vh-250px)] flex items-center justify-center bg-gray-50
+      Msm:px-[15px] Msm:py-[30px] Msm:my-[16px]"
+      >
         <div className="w-full xl:w-[500px] mx-auto border border-gray-200 bg-white rounded-md p-[30px] shadow-sm">
           <div className="flex gap-2 items-center border-b border-gray-200 pb-2.5">
             <UserCircleIcon className="h-6 text-black" />

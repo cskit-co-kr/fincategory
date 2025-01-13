@@ -3,6 +3,10 @@ import {
   Bars3Icon,
   MagnifyingGlassIcon,
   UserCircleIcon,
+  StopCircleIcon,
+  DocumentTextIcon,
+  PencilSquareIcon,
+  ChatBubbleBottomCenterTextIcon,
 } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -42,7 +46,6 @@ const Header = () => {
   const getPath = useRouter().pathname;
   const { locale } = router;
   const t = locale === "ko" ? koKR : enUS;
-
   const { data: session, status } = useSession();
 
   const normalPath =
@@ -133,38 +136,38 @@ const Header = () => {
     }
   }
 
-  // const menus = [
-  //   {
-  //     id: 1,
-  //     title: t["내정보"],
-  //     icon: <UserIcon className="h-5" />,
-  //     link: "/board/profile",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: t["핀코인"],
-  //     icon: <StopCircleIcon className="h-5" />,
-  //     link: "/board/wallet",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: t["상품구매내역"],
-  //     icon: <DocumentTextIcon className="h-5" />,
-  //     link: "/board/ads-history",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: t["내가 쓴 글"],
-  //     icon: <PencilSquareIcon className="h-5" />,
-  //     link: `/board?member=${session?.user.nickname}&show=posts`,
-  //   },
-  //   {
-  //     id: 5,
-  //     title: t["내가 쓴 댓글"],
-  //     icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
-  //     link: `/board?member=${session?.user.nickname}&show=comments`,
-  //   },
-  // ];
+  const menus = [
+    // {
+    //   id: 1,
+    //   title: t["내정보"],
+    //   icon: <UserIcon className="h-5" />,
+    //   link: "/board/profile",
+    // },
+    {
+      id: 2,
+      title: t["핀코인"],
+      icon: <StopCircleIcon className="h-5" />,
+      link: "/auth/wallet",
+    },
+    {
+      id: 3,
+      title: t["상품구매내역"],
+      icon: <DocumentTextIcon className="h-5" />,
+      link: "/auth/ads-history",
+    },
+    // {
+    //   id: 4,
+    //   title: t["내가 쓴 글"],
+    //   icon: <PencilSquareIcon className="h-5" />,
+    //   link: `/board?member=${session?.user.nickname}&show=posts`,
+    // },
+    // {
+    //   id: 5,
+    //   title: t["내가 쓴 댓글"],
+    //   icon: <ChatBubbleBottomCenterTextIcon className="h-5" />,
+    //   link: `/board?member=${session?.user.nickname}&show=comments`,
+    // },
+  ];
 
   const [mobileSearch, setMobileSearch] = useState(false);
 
@@ -309,6 +312,32 @@ const Header = () => {
                             {session?.user?.email}
                           </span>
                         </Link>
+                        <div className="flex flex-col gap-[16px]">
+                          {menus.map((menu, index) => (
+                            <Link
+                              key={index}
+                              className={`flex items-center gap-2.5 font-semibold text-sm ${
+                                menu.link === router.asPath
+                                  ? "text-black"
+                                  : "text-gray-500"
+                              }`}
+                              href={menu.link}
+                            >
+                              {menu.icon}
+                              {menu.title}
+                              {menu.id === 4 && (
+                                <div className="ml-auto">
+                                  {memberInfo?.post}
+                                </div>
+                              )}
+                              {menu.id === 5 && (
+                                <div className="ml-auto">
+                                  {memberInfo?.comment}
+                                </div>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
                         <button
                           className="bg-[#EBEAEA] font-semibold text-dark-primary pt-[4px] pb-[5px] text-[14px] leading-[27px] rounded-full"
                           onClick={() => {
@@ -615,7 +644,14 @@ const Header = () => {
           </div>
 
           {/* Mobile search */}
-          <div className="flex items-center justify-center w-full pb-[15px] border-b lg:border-none px-[16px] lg:hidden">
+          <div
+            className={`flex items-center justify-center w-full pb-[15px] border-b lg:border-none px-[16px] lg:hidden 
+            ${
+              getPath === "/auth/signin" || "/auth/signup"
+                ? "hidden sm:flex"
+                : ""
+            }`}
+          >
             <div className="flex justify-between relative border border-primary items-center py-[8px] px-[15px] rounded-full hover:shadow-md w-full max-w-[560px]">
               <input
                 type="text"
@@ -645,7 +681,14 @@ const Header = () => {
                 >
                 {t["new-channel-registration"]}
                 </button> */}
-          <div className="flex w-full lg:hidden justify-between py-2 px-5">
+          <div
+            className={`flex w-full lg:hidden justify-between py-2 px-5 
+              ${
+                getPath === "/auth/signin" || "/auth/signup"
+                  ? "hidden sm:flex"
+                  : ""
+              }`}
+          >
             {ActiveUsers()}
             {getPath !== "/add" ? (
               <button

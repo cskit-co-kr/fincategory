@@ -45,6 +45,7 @@ module.exports = {
         // Custom screen sizes
         Mlg: { max: "1023px" },
         Src370: { max: "370px" },
+        Msm: { max: "639px" },
       },
     },
     fontFamily: {

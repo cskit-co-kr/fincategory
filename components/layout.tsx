@@ -25,8 +25,12 @@ const Layout = ({ children }: any) => {
         <main>
           {/* PROMOTION */}
           <div
-            className="flex gap-[6px] justify-center py-[10px] items-center rouded-[25px] bg-blue-gradient my-[15px] leading-[20px] text-black
-        text-[12px] md:text-[15px] md:gap-[8px] md:py-[12px] md:my-[20px]"
+            className={`flex gap-[6px] justify-center py-[10px] items-center rouded-[25px] bg-blue-gradient my-[15px] leading-[20px] text-black
+        text-[12px] md:text-[15px] md:gap-[8px] md:py-[12px] md:my-[20px] ${
+          router.pathname === "/auth/signin" || "/auth/signup"
+            ? "hidden sm:flex"
+            : ""
+        }`}
           >
             <Image src={"/img/Gift.svg"} width={20} height={20} alt="Gift" />
             {locale === "en" ? (
