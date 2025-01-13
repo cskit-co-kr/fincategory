@@ -647,7 +647,7 @@ const Header = () => {
           <div
             className={`flex items-center justify-center w-full pb-[15px] border-b lg:border-none px-[16px] lg:hidden 
             ${
-              getPath === "/auth/signin" || "/auth/signup"
+              getPath === "/auth/signin" || getPath === "/auth/signup"
                 ? "hidden sm:flex"
                 : ""
             }`}
@@ -684,7 +684,7 @@ const Header = () => {
           <div
             className={`flex w-full lg:hidden justify-between py-2 px-5 
               ${
-                getPath === "/auth/signin" || "/auth/signup"
+                getPath === "/auth/signin" || getPath === "/auth/signup"
                   ? "hidden sm:flex"
                   : ""
               }`}

@@ -27,7 +27,8 @@ const Layout = ({ children }: any) => {
           <div
             className={`flex gap-[6px] justify-center py-[10px] items-center rouded-[25px] bg-blue-gradient my-[15px] leading-[20px] text-black
         text-[12px] md:text-[15px] md:gap-[8px] md:py-[12px] md:my-[20px] ${
-          router.pathname === "/auth/signin" || "/auth/signup"
+          router.pathname === "/auth/signin" ||
+          router.pathname === "/auth/signup"
             ? "hidden sm:flex"
             : ""
         }`}
