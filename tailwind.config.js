@@ -46,6 +46,7 @@ module.exports = {
         Mlg: { max: "1023px" },
         Src370: { max: "370px" },
         Msm: { max: "639px" },
+        // Mxl: { max: "1279px" },
       },
     },
     fontFamily: {
