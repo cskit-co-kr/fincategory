@@ -37,7 +37,7 @@ const Profile = ({ memberInfo, wallet, purchaseHistory }: any) => {
       title: t["핀코인"],
       icon: <StopCircleIcon className="h-6 text-[#25A510]" />,
       iconBg: "bg-[#EAFFE7]",
-      link: "/board/wallet",
+      link: "/auth/wallet",
       tooltip: "",
       content: balance,
     },

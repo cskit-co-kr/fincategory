@@ -32,7 +32,6 @@ const ChannelDetailNav = ({ channel }: any) => {
   const [wallet, setWallet] = useState<any>(null);
   const [ads2, setAds2] = useState<any>(null);
   const [channelAds, setChannelAds] = useState<any>(null);
-
   useEffect(() => {
     // const fetchWallet = async () => {
     //   if (session?.user) {
@@ -174,7 +173,7 @@ const ChannelDetailNav = ({ channel }: any) => {
             if (session?.user.id) {
               const modalId = `ads2_modal_${channel?.channel_id}`;
               const modal = document.getElementById(modalId) as any;
-              modal?.showModal();
+              modal.showModal();
             } else {
               const message = (
                 <Notification type="info" closable>
@@ -203,7 +202,7 @@ const ChannelDetailNav = ({ channel }: any) => {
           </div>
         </li>
       </ul>
-      {balance && ads2?.[0] ? (
+      {session?.user.id && ads2?.[0] ? (
         <ModalAdsBuyByChannel
           // data={ad}
           ads2={ads2}
