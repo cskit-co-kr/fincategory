@@ -82,7 +82,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         additionalMetaTags={[
           {
             name: "naver-site-verification",
-            content: "42d7d5e1feda204b892be0e4ef58262cc9de279b",
+            // content: "42d7d5e1feda204b892be0e4ef58262cc9de279b",
+            content: "5abf6f337003ecbad42acb6985d6a4fc22689993",
           },
           { name: "author", content: "Fincago" },
           {
